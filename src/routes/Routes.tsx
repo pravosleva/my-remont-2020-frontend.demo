@@ -5,7 +5,9 @@ import {
 } from 'react-router-dom';
 
 // PAGES:
-import { Home } from '../pages/index';
+import { Home } from '~/pages/index';
+import { Projects } from '~/pages/projects';
+import { TheProject } from '~/pages/projects/[id]'
 
 interface IRoute {
   path: string
@@ -14,6 +16,8 @@ interface IRoute {
 }
 const routes: IRoute[] = [
   { path: '/', exact: true, component: () => <Home /> },
+  { path: '/projects', exact: true, component: () => <Projects /> },
+  { path: '/projects/:id', exact: true, component: () => <TheProject /> },
 ];
 
 export const Routes = () => {
