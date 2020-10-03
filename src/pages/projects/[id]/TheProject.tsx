@@ -2,6 +2,7 @@ import React from 'react'
 import { useRemoteDataByFetch, TAns } from '~/common/hooks/useRemoteDataByFetch'
 import { getApiUrl } from '~/utils/getApiUrl'
 import { Link, useParams } from 'react-router-dom'
+import { Joblist } from './components/Joblist'
 
 const apiUrl = getApiUrl()
 
@@ -28,7 +29,7 @@ export const TheProject = () => {
       }
       {
         isLoaded && (
-          <pre>{JSON.stringify(project, null, 2)}</pre>
+          <Joblist joblist={project.joblist} />
         )
       }
     </div>
