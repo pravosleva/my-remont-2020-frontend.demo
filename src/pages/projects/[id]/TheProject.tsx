@@ -4,8 +4,7 @@ import { getApiUrl } from '~/utils/getApiUrl'
 import { Link, useParams } from 'react-router-dom'
 import { Joblist } from './components/Joblist'
 import { Grid } from '@material-ui/core'
-
-import { makeStyles } from '@material-ui/core/styles'
+import { TotalInfo } from './components/TotalInfo'
 
 const apiUrl = getApiUrl()
 
@@ -33,6 +32,7 @@ export const TheProject = () => {
       <Grid container spacing={2}>
         <Grid item xs={12} md={6}>
           {isLoading && <b>Loading...</b>}
+          {isLoaded && <TotalInfo joblist={project.joblist} />}
         </Grid>
         <Grid item xs={12} md={6}>
           {isLoaded && <Joblist joblist={project.joblist} />}
