@@ -1,18 +1,19 @@
-import React from 'react';
+import React from 'react'
 import {
-  HashRouter as Router
-} from 'react-router-dom';
-import { Routes } from '~/routes';
+  // BrowserRouter,
+  HashRouter,
+} from 'react-router-dom'
+import { Routes } from '~/routes'
 import { SiteLayout } from '~/common/mui/SiteLayout'
 
 function App() {
   return (
-    <SiteLayout>
-      <Router>
+    <HashRouter>
+      <SiteLayout>
         <Routes />
-      </Router>
-    </SiteLayout>
-  );
+      </SiteLayout>
+    </HashRouter>
+  )
 }
 
-export default App;
+export default App

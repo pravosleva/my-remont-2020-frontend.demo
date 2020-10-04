@@ -20,21 +20,21 @@ export const Projects = () => {
 
   return (
     <div>
-      <h1>🔙 <Link to='/'>Home</Link></h1>
-      {
-        isLoading && (
-          <b>Loading...</b>
-        )
-      }
-      {
-        isLoaded && projects.length > 0 && (
-          <ul>
-            {
-              projects.map(({ id, name }: IProject) => <li key={id}><Link to={`/projects/${id}`}>{name}</Link></li>)
-            }
-          </ul>
-        )
-      }
+      <h1>Проекы</h1>
+      <div>
+        🔙 <Link to="/">Главная</Link>
+      </div>
+      <hr />
+      {isLoading && <b>Loading...</b>}
+      {isLoaded && projects.length > 0 && (
+        <ul>
+          {projects.map(({ id, name }: IProject) => (
+            <li key={id}>
+              <Link to={`/projects/${id}`}>{name}</Link>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   )
 }

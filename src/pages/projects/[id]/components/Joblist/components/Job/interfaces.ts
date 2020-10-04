@@ -1,4 +1,5 @@
 export interface IJob {
   name: string
-  id: string
+  _id: string
+  comment?: string
 }
