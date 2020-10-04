@@ -21,10 +21,6 @@ export const Projects = () => {
   return (
     <div>
       <h1>Проекы</h1>
-      <div>
-        🔙 <Link to="/">Главная</Link>
-      </div>
-      <hr />
       {isLoading && <b>Loading...</b>}
       {isLoaded && projects.length > 0 && (
         <ul>

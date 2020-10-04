@@ -7,4 +7,5 @@ export interface IJob {
   priceJobs: number
   priceMaterials: number
   priceDelivery: number
+  isDone: boolean
 }

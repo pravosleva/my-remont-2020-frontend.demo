@@ -3,6 +3,7 @@ import { useStyles } from './styles'
 import { Typography, Paper } from '@material-ui/core'
 import { IJob } from '~/pages/projects/[id]/components/Joblist/components/Job/interfaces'
 import { getPrettyPrice } from '~/utils/getPrettyPrice'
+import { Grid } from '@material-ui/core'
 
 interface IProps {
   joblist: IJob[]
@@ -26,11 +27,16 @@ export const TotalInfo = ({ joblist }: IProps) => {
 
   return (
     <Paper className={classes.paper}>
-      <Typography variant="h4">Всего оплачено на текущий момент</Typography>
-      <hr />
-      <Typography variant="h1" component="h2">
-        {getPrettyPrice(totalPayed)}
-      </Typography>
+      <Grid container direction="column" spacing={2}>
+        <Grid item xs>
+          <Typography variant="h4">Всего оплачено на текущий момент</Typography>
+        </Grid>
+        <Grid item xs>
+          <Typography variant="h1" component="h2">
+            {getPrettyPrice(totalPayed)}
+          </Typography>
+        </Grid>
+      </Grid>
     </Paper>
   )
 }

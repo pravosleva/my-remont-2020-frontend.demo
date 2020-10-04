@@ -1,3 +1,4 @@
+import { red } from '@material-ui/core/colors'
 import { makeStyles } from '@material-ui/core/styles'
 
 export const useStyles = makeStyles((theme) => ({
@@ -6,5 +7,14 @@ export const useStyles = makeStyles((theme) => ({
   },
   paper: {
     padding: theme.spacing(2),
+  },
+  disabled: {
+    opacity: '0.4',
+  },
+  redText: {
+    color: 'red',
+  },
+  greenText: {
+    color: 'green',
   },
 }))

@@ -6,7 +6,9 @@ export const Home = () => {
     <div>
       <h1>Home</h1>
       <ul>
-        <li><Link to="/projects">Projects</Link></li>
+        <li>
+          <Link to="/projects">Projects</Link>
+        </li>
       </ul>
     </div>
   )
