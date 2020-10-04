@@ -3,12 +3,15 @@ import {
   HashRouter as Router
 } from 'react-router-dom';
 import { Routes } from '~/routes';
+import { SiteLayout } from '~/common/mui/SiteLayout'
 
 function App() {
   return (
-    <Router>
-      <Routes />
-    </Router>
+    <SiteLayout>
+      <Router>
+        <Routes />
+      </Router>
+    </SiteLayout>
   );
 }
 
