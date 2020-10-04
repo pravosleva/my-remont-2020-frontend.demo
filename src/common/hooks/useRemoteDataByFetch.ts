@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, MutableRefObject } from 'react';
+import { useState, useEffect, useRef, MutableRefObject } from 'react'
 // import { httpErrorHandler } from '~/utils/errors/http/fetch';
 
 interface IProps {
@@ -25,26 +25,26 @@ export const useRemoteDataByFetch = ({
   debounce = 0,
   responseValidator,
 }: IProps): TAns => {
-  const [dataFromServer, setDataFromServer] = useState(null);
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const isStartedImperativeRef = useRef<boolean>(false);
-  const shouldBeForceArortedImperativeRef = useRef(false);
+  const [dataFromServer, setDataFromServer] = useState(null)
+  const [isLoaded, setIsLoaded] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const isStartedImperativeRef = useRef<boolean>(false)
+  const shouldBeForceArortedImperativeRef = useRef(false)
   const forceAbortToggler = (val: boolean) => {
-    shouldBeForceArortedImperativeRef.current = val;
-  };
+    shouldBeForceArortedImperativeRef.current = val
+  }
 
   useEffect(() => {
-    isStartedImperativeRef.current = false;
-    const abortController = new AbortController();
-    setIsLoading(false);
+    isStartedImperativeRef.current = false
+    const abortController = new AbortController()
+    setIsLoading(false)
 
     const fetchData = () => {
       if (!!window) {
-        setIsLoading(true);
-        setIsLoaded(false);
-        isStartedImperativeRef.current = true;
-        if (!!onCall) onCall();
+        setIsLoading(true)
+        setIsLoaded(false)
+        isStartedImperativeRef.current = true
+        if (!!onCall) onCall()
         window
           .fetch(url, {
             // headers: { Authorization: `Bearer ${accessToken}` },
@@ -54,62 +54,59 @@ export const useRemoteDataByFetch = ({
           })
           .then(async (res) => {
             if (abortController.signal.aborted) {
-              setIsLoading(false);
-              throw Error('Already aborted');
+              setIsLoading(false)
+              throw Error('Already aborted')
             }
             if (shouldBeForceArortedImperativeRef.current) {
-              setIsLoading(false);
-              throw Error('Force abort');
+              setIsLoading(false)
+              throw Error('Force abort')
             }
-            return res;
+            return res
           })
           // .then(httpErrorHandler)
           .then((res) => {
             try {
-              return res.json();
+              return res.json()
             } catch (err) {
-              throw new Error(err.message);
+              throw new Error(err.message)
             }
           })
           .then((resData: any) => {
             if (!responseValidator(resData)) {
-              setIsLoaded(false);
-              setIsLoading(false);
-              throw new Error('Data is not correct');
+              setIsLoaded(false)
+              setIsLoading(false)
+              throw new Error('Data is not correct')
             }
             console.log(resData)
-            setDataFromServer(resData);
-            setIsLoaded(true);
-            setIsLoading(false);
-            if (!!onSuccess) onSuccess(resData);
-            isStartedImperativeRef.current = false;
+            setDataFromServer(resData)
+            setIsLoaded(true)
+            setIsLoading(false)
+            if (!!onSuccess) onSuccess(resData)
+            isStartedImperativeRef.current = false
           })
           .catch((error) => {
-            if (!!onFail) onFail(error);
-            isStartedImperativeRef.current = false;
-          });
+            if (!!onFail) onFail(error)
+            isStartedImperativeRef.current = false
+          })
       }
-    };
+    }
 
-    const debouncedHandler = setTimeout(fetchData, debounce);
+    const debouncedHandler = setTimeout(fetchData, debounce)
 
     return function cancel() {
-      clearTimeout(debouncedHandler);
-      abortController.abort();
-      if (
-        !!isStartedImperativeRef.current
-        && !!onAbortIfRequestStarted
-      ) {
-        onAbortIfRequestStarted(isStartedImperativeRef.current);
+      clearTimeout(debouncedHandler)
+      abortController.abort()
+      if (!!isStartedImperativeRef.current && !!onAbortIfRequestStarted) {
+        onAbortIfRequestStarted(isStartedImperativeRef.current)
       }
-    };
+    }
   }, [
     // accessToken,
     url,
     debounce,
     onCall,
     onAbortIfRequestStarted,
-  ]);
+  ])
 
-  return [dataFromServer, isLoaded, isLoading, forceAbortToggler];
+  return [dataFromServer, isLoaded, isLoading, forceAbortToggler]
 }
