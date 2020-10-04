@@ -79,7 +79,7 @@
     "postbuild": "bash ./postbuild.sh",
     "test": "node scripts/test.js"
   },
-  "homepage": "/client/",
+  "homepage": "/demo/",
   "eslintConfig": {
     "extends": "react-app"
   },
