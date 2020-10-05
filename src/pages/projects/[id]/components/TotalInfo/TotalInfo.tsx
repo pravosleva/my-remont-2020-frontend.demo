@@ -1,40 +1,41 @@
 import React, { useMemo } from 'react'
 import { useStyles } from './styles'
-import { Typography, Paper } from '@material-ui/core'
+import { Paper } from '@material-ui/core'
 import { IJob } from '~/pages/projects/[id]/components/Joblist/components/Job/interfaces'
 import { getPrettyPrice } from '~/utils/getPrettyPrice'
 import { Grid } from '@material-ui/core'
+import { getTotalDifference, getTotalPriceMaterials, getTotalPayed, getTotalPriceJobs } from '~/utils/getDifference'
+import clsx from 'clsx'
 
 interface IProps {
   joblist: IJob[]
 }
 
-const getTotalPayed = (joblist: IJob[]) => {
-  let res = 0
-
-  for (let i = 0, max = joblist.length; i < max; i++) {
-    if (joblist[i].payed > 0) {
-      res += joblist[i].payed
-    }
-  }
-
-  return res
-}
-
 export const TotalInfo = ({ joblist }: IProps) => {
   const classes = useStyles()
+  const totalPriceJobs = useMemo(() => getTotalPriceJobs(joblist), [joblist])
   const totalPayed = useMemo(() => getTotalPayed(joblist), [joblist])
+  const totalMaterials = useMemo(() => getTotalPriceMaterials(joblist), [joblist])
+  const totalDifferecne = useMemo(() => getTotalDifference(joblist), [joblist])
 
   return (
     <Paper className={classes.paper}>
       <Grid container direction="column" spacing={2}>
-        <Grid item xs>
-          <Typography variant="h4">Всего оплачено на текущий момент</Typography>
+        <Grid item xs style={{ opacity: '0.5' }}>
+          <b>Ценник за работу: {getPrettyPrice(totalPriceJobs)}</b>
+        </Grid>
+        <Grid item xs style={{ opacity: '0.5' }}>
+          <b>Ценник за материалы: {getPrettyPrice(totalMaterials)}</b>
         </Grid>
         <Grid item xs>
-          <Typography variant="h1" component="h2">
-            {getPrettyPrice(totalPayed)}
-          </Typography>
+          <b>Всего оплачено на текущий момент: {getPrettyPrice(totalPayed)}</b>
+        </Grid>
+        <Grid
+          item
+          xs
+          className={clsx({ [classes.redText]: totalDifferecne < 0, [classes.greenText]: totalDifferecne >= 0 })}
+        >
+          <b>Кредиторская задолженность: {getPrettyPrice(totalDifferecne)}</b>
         </Grid>
       </Grid>
     </Paper>

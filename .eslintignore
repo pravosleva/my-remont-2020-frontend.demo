@@ -8,3 +8,4 @@
 # Git hooks & others:
 scripts/*
 build/*
+src/serviceWorker.ts

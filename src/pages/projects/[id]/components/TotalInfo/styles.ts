@@ -7,4 +7,10 @@ export const useStyles = makeStyles((theme) => ({
   paper: {
     padding: theme.spacing(2),
   },
+  redText: {
+    color: 'red',
+  },
+  greenText: {
+    color: 'green',
+  },
 }))
