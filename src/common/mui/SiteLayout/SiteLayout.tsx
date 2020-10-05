@@ -23,6 +23,7 @@ export const SiteLayout: React.FC = ({ children }) => {
             width: '100%',
             maxWidth: '1000px',
             margin: '0 auto',
+            padding: '0 10px 0 10px',
             height: '70px',
             display: 'flex',
             alignItems: 'center',
