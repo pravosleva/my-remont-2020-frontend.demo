@@ -4,11 +4,13 @@ import { IRoute } from './interfaces'
 import { Home } from '~/pages/index'
 import { Projects } from '~/pages/projects'
 import { TheProject } from '~/pages/projects/[id]'
+import { Login } from '~/pages/auth/login'
 
 const routes: IRoute[] = [
   { path: '/', exact: true, component: Home },
   { path: '/projects', exact: true, component: Projects },
   { path: '/projects/:id', exact: true, component: TheProject },
+  { path: '/auth/login', exact: true, component: Login },
 ]
 
 export const Routes = () => {

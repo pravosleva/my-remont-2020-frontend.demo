@@ -1,13 +1,61 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import { Grid } from '@material-ui/core'
 import { BreadCrumbs } from './components/BreadCrumbs'
-import { MainContext } from '~/common/context/MainContext'
+import { MainContext, IUserData } from '~/common/context/MainContext'
+import { useRemoteDataByFetch } from '~/common/hooks/useRemoteDataByFetch'
+import { getApiUrl } from '~/utils/getApiUrl'
+import { useCookies } from 'react-cookie'
+
+const apiUrl = getApiUrl()
+const getNormalizedAns = (originalRes: any): IUserData => {
+  const result = {}
+  const keys = Object.keys(originalRes)
+  const max1 = keys.length
+  for (let i = 0; i < max1; i++) {
+    if (keys[i] === 'role') {
+      // @ts-ignore
+      result[keys[i]] = getNormalizedAns(originalRes[keys[i]])
+    } else if (keys[i] === 'createdAt' || keys[i] === 'updatedAt') {
+      // @ts-ignore
+      result[keys[i]] = new Date(originalRes[keys[i]])
+    } else {
+      // @ts-ignore
+      result[keys[i]] = originalRes[keys[i]]
+    }
+  }
+  // @ts-ignore
+  return result
+}
 
 export const SiteLayout: React.FC = ({ children }) => {
   const [projectName, setProjectName] = useState<string | null>(null)
   const handleResetCurrentProject = useCallback(() => {
     setProjectName(null)
   }, [setProjectName])
+  const [userData, setUserData] = useState<IUserData | null>(null)
+  const [cookies, setCookie, removeCookie] = useCookies(['jwt'])
+  const handleSetUserData = (originalUserData: any, jwt?: string) => {
+    const modifiedUserData = getNormalizedAns(originalUserData)
+
+    setUserData(modifiedUserData)
+    if (!!jwt) {
+      setCookie('jwt', jwt, { maxAge: 60 * 60 * 24 * 5 })
+    }
+  }
+  const [, isUserDataLoaded, isUserDataLoading]: any = useRemoteDataByFetch({
+    url: `${apiUrl}/users/me`,
+    method: 'GET',
+    accessToken: cookies.jwt,
+    onSuccess: (originalUserData) => {
+      handleSetUserData(originalUserData)
+    },
+    responseValidator: (res) => !!res.id,
+  })
+  const handleLogout = () => {
+    setUserData(null)
+    removeCookie('jwt')
+    return Promise.resolve(true)
+  }
 
   return (
     <MainContext.Provider
@@ -15,6 +63,12 @@ export const SiteLayout: React.FC = ({ children }) => {
         projectName,
         setProjectName,
         resetProjectName: handleResetCurrentProject,
+        // USER AUTH DATA:
+        userData,
+        onLogout: handleLogout,
+        isUserDataLoading,
+        isUserDataLoaded,
+        setUserData: handleSetUserData,
       }}
     >
       <Grid container spacing={0}>

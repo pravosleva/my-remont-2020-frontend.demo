@@ -6,6 +6,7 @@ import { Joblist } from './components/Joblist'
 import { Grid } from '@material-ui/core'
 import { TotalInfo } from './components/TotalInfo'
 import { MainContext } from '~/common/context/MainContext'
+import { useCookies } from 'react-cookie'
 
 const apiUrl = getApiUrl()
 
@@ -16,9 +17,11 @@ interface IPageParams {
 export const TheProject = () => {
   const { id }: IPageParams = useParams()
   const { setProjectName, resetProjectName } = useContext(MainContext)
+  const [cookies, setCookie, removeCookie] = useCookies(['jwt'])
   const [project, isLoaded, isLoading]: TAns = useRemoteDataByFetch({
     url: `${apiUrl}/remonts/${id}`,
     method: 'GET',
+    accessToken: cookies.jwt,
     onSuccess: (data) => {
       setProjectName(data.name)
     },

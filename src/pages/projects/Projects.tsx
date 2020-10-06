@@ -1,7 +1,9 @@
-import React from 'react'
+import React, { useContext, useCallback } from 'react'
 import { useRemoteDataByFetch, TAns } from '~/common/hooks/useRemoteDataByFetch'
 import { getApiUrl } from '~/utils/getApiUrl'
 import { Link } from 'react-router-dom'
+import { useCookies } from 'react-cookie'
+import { MainContext } from '~/common/context/MainContext'
 
 const apiUrl = getApiUrl()
 
@@ -11,11 +13,15 @@ interface IProject {
 }
 
 export const Projects = () => {
+  const { userData } = useContext(MainContext)
+  const [cookies, setCookie, removeCookie] = useCookies(['jwt'])
+  const responseValidator = useCallback((res) => Array.isArray(res), [userData])
   const [projects, isLoaded, isLoading]: TAns = useRemoteDataByFetch({
     url: `${apiUrl}/remonts`,
     method: 'GET',
+    accessToken: cookies.jwt,
     // onSuccess: (data) => {},
-    responseValidator: (res) => Array.isArray(res),
+    responseValidator,
   })
 
   return (

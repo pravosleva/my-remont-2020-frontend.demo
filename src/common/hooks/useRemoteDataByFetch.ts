@@ -4,7 +4,7 @@ import { useState, useEffect, useRef, MutableRefObject } from 'react'
 interface IProps {
   url: string
   method: string
-  // accessToken,
+  accessToken?: string
   onCall?: () => void
   onAbortIfRequestStarted?: (val: boolean) => void
   onSuccess?: (res: any) => void
@@ -17,7 +17,7 @@ export type TAns = [any, boolean, boolean, (val: boolean) => void]
 export const useRemoteDataByFetch = ({
   url,
   method,
-  // accessToken,
+  accessToken,
   onCall,
   onAbortIfRequestStarted,
   onSuccess,
@@ -45,10 +45,21 @@ export const useRemoteDataByFetch = ({
         setIsLoaded(false)
         isStartedImperativeRef.current = true
         if (!!onCall) onCall()
+
+        let headers = {
+          'Content-Type': 'application/json',
+        }
+        if (!!accessToken) {
+          headers = {
+            ...headers,
+            // @ts-ignore
+            Authorization: `Bearer ${accessToken}`,
+          }
+        }
         window
           .fetch(url, {
-            // headers: { Authorization: `Bearer ${accessToken}` },
             method,
+            headers,
             mode: 'cors',
             signal: abortController.signal,
           })
@@ -77,7 +88,7 @@ export const useRemoteDataByFetch = ({
               setIsLoading(false)
               throw new Error('Data is not correct')
             }
-            console.log(resData)
+            // console.log(resData)
             setDataFromServer(resData)
             setIsLoaded(true)
             setIsLoading(false)
