@@ -1,6 +1,6 @@
 {
   "parser": "@typescript-eslint/parser",
-  "extends": ["plugin:prettier/recommended", "plugin:@typescript-eslint/eslint-recommended"],
+  "extends": ["react-app", "prettier", "plugin:@typescript-eslint/eslint-recommended"],
   "plugins": ["react", "prettier", "standard", "@typescript-eslint", "react-hooks"],
   "rules": {
     "prettier/prettier": "error",

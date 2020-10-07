@@ -1,10 +1,11 @@
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useState, useCallback, useReducer } from 'react'
 import { Grid } from '@material-ui/core'
 import { BreadCrumbs } from './components/BreadCrumbs'
-import { MainContext, IUserData } from '~/common/context/MainContext'
+import { MainContext, IUserData, IJob } from '~/common/context/MainContext'
 import { useRemoteDataByFetch } from '~/common/hooks/useRemoteDataByFetch'
 import { getApiUrl } from '~/utils/getApiUrl'
 import { useCookies } from 'react-cookie'
+import { reducer } from './reducer'
 
 const apiUrl = getApiUrl()
 const getNormalizedAns = (originalRes: any): IUserData => {
@@ -28,6 +29,21 @@ const getNormalizedAns = (originalRes: any): IUserData => {
 }
 
 export const SiteLayout: React.FC = ({ children }) => {
+  // --- JOBLIST STATE:
+  const [joblist, dispatch] = useReducer(reducer, [])
+  const handleChangeJobField = useCallback(
+    (id, fieldName: string, value: number) => () => {
+      dispatch({ type: 'UPDATE_JOB_FIELD', id, fieldName, payload: value })
+    },
+    [dispatch]
+  )
+  const handleUpdateJoblist = useCallback(
+    (payload: IJob[]) => {
+      dispatch({ type: 'UPDATE_JOBLIST', payload })
+    },
+    [dispatch]
+  )
+  // ---
   const [projectName, setProjectName] = useState<string | null>(null)
   const handleResetCurrentProject = useCallback(() => {
     setProjectName(null)
@@ -69,6 +85,9 @@ export const SiteLayout: React.FC = ({ children }) => {
         isUserDataLoading,
         isUserDataLoaded,
         setUserData: handleSetUserData,
+        joblist,
+        changeJobField: handleChangeJobField,
+        updateJoblist: handleUpdateJoblist,
       }}
     >
       <Grid container spacing={0}>

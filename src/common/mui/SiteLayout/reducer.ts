@@ -1,30 +1,24 @@
-import { IJob } from './components/Job/interfaces'
+import { IJob } from '~/common/context/MainContext'
 
-export type IState = IJob[]
-interface IAction {
-  type: 'UPDATE_JOB_FIELD'
-  id: string
-  fieldName: string
-  payload: number
-}
+export type TState = IJob[]
+type TAction =
+  | { type: 'UPDATE_JOB_FIELD'; id: string; fieldName: string; payload: number }
+  | { type: 'UPDATE_JOBLIST'; payload: IJob[] }
 
-export function reducer(state: IState, action: IAction): IState {
+export function reducer(state: TState, action: TAction): TState {
   switch (action.type) {
     case 'UPDATE_JOB_FIELD':
       const targetJobIndex = state.findIndex(({ _id }) => action.id === _id)
       const newState = [...state]
 
-      console.log(targetJobIndex)
-
       if (targetJobIndex !== -1) {
-        console.log(newState[targetJobIndex])
         // @ts-ignore
         newState[targetJobIndex][action.fieldName] = action.payload
-
-        console.log(newState)
       }
 
       return [...newState]
+    case 'UPDATE_JOBLIST':
+      return action.payload
     default:
       return state
   }

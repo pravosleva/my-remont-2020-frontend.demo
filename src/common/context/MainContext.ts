@@ -23,6 +23,18 @@ export interface IUserData {
   role: IRole
   id: string
 }
+export interface IJob {
+  name: string
+  _id: string
+  comment?: string
+  description?: string
+  payed: number
+  priceJobs: number
+  priceMaterials: number
+  priceDelivery: number
+  isDone: boolean
+}
+
 interface IMainContext {
   projectName: string | null
   setProjectName: (name: string | null) => void
@@ -32,6 +44,9 @@ interface IMainContext {
   isUserDataLoading: boolean
   isUserDataLoaded: boolean
   setUserData: (uData: IUserData | null, jwt?: string) => void
+  joblist: IJob[]
+  changeJobField: (id: string, fieldName: string, value: number) => () => void
+  updateJoblist: (joblist: IJob[]) => void
 }
 
 export const MainContext = createContext<IMainContext>({
@@ -50,5 +65,12 @@ export const MainContext = createContext<IMainContext>({
   isUserDataLoaded: false,
   setUserData: () => {
     throw new Error('setUserData method should be implemented')
+  },
+  joblist: [],
+  changeJobField: () => () => {
+    throw new Error('changeJobField method should be implemented')
+  },
+  updateJoblist: () => () => {
+    throw new Error('updateJoblist method should be implemented')
   },
 })
