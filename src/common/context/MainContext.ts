@@ -33,6 +33,7 @@ export interface IJob {
   priceMaterials: number
   priceDelivery: number
   isDone: boolean
+  isStarted: boolean
 }
 
 interface IMainContext {
@@ -45,7 +46,7 @@ interface IMainContext {
   isUserDataLoaded: boolean
   setUserData: (uData: IUserData | null, jwt?: string) => void
   joblist: IJob[]
-  changeJobField: (id: string, fieldName: string, value: number) => () => void
+  changeJobField: (id: string, fieldName: string, value: number | boolean) => () => void
   updateJoblist: (joblist: IJob[]) => void
 }
 

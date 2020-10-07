@@ -8,4 +8,5 @@ export interface IJob {
   priceMaterials: number
   priceDelivery: number
   isDone: boolean
+  isStarted: boolean
 }

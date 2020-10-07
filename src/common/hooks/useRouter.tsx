@@ -1,14 +1,23 @@
-import { useMemo } from 'react'
-import { useParams, useLocation, useHistory, useRouteMatch } from 'react-router-dom'
+import { useMemo, useEffect } from 'react'
+import {
+  useParams,
+  useLocation,
+  useHistory,
+  useRouteMatch,
+} from 'react-router-dom'
 import queryString from 'query-string'
 
 // See also: https://usehooks.com/useRouter/
-
+// let count = 0
 export function useRouter() {
   const params = useParams()
   const location = useLocation()
   const history = useHistory()
   const match = useRouteMatch()
+
+  // useEffect(() => {
+  //   console.log(count++)
+  // })
 
   // Return our custom router object
   // Memoize so that a new object is only returned if something changes

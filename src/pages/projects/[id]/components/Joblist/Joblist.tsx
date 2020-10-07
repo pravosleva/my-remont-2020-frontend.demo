@@ -1,5 +1,6 @@
 import React, { useCallback, useContext, useState, useRef } from 'react'
 import { IJob, Job } from './components/Job'
+import { IProps } from './interfaces'
 import {
   Accordion,
   AccordionSummary,
@@ -8,35 +9,49 @@ import {
   Divider,
   TextField,
   CircularProgress,
+  withStyles,
 } from '@material-ui/core'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { useStyles } from './styles'
 import clsx from 'clsx'
 import { MainContext } from '~/common/context/MainContext'
-import { Button } from '@material-ui/core'
+import { Button as MuiButton } from '@material-ui/core'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import { useCookies } from 'react-cookie'
 import { getApiUrl } from '~/utils/getApiUrl'
+import FormControl from '@material-ui/core/FormControl';
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
+import { getPrettyPrice } from '~/utils/getPrettyPrice'
+
+const Button = withStyles((theme) => ({
+  root: {
+    paddingTop: theme.spacing(1)
+  }
+}))
+  (MuiButton)
 
 const apiUrl = getApiUrl()
-interface IProps {
-  joblist: IJob[]
-  remontId: string
-}
 const getUniqueKey = (data: IJob): string => {
   return `${data._id}_${data.payed}_${data.priceDelivery}_${data.priceJobs}_${data.priceMaterials}`
 }
 
 export const Joblist = ({ remontId, joblist: j }: IProps) => {
   const [expanded, setExpanded] = React.useState<string | false>(false)
-  const handleChangeAccoddionItem = (panel: string) => (_event: React.ChangeEvent<{}>, isExpanded: boolean) => {
+  const handleChangeAccoddionItem = (panel: string) => (
+    _event: React.ChangeEvent<{}>,
+    isExpanded: boolean
+  ) => {
     setExpanded(isExpanded ? panel : false)
   }
   const classes = useStyles()
-  const { userData, changeJobField, joblist, updateJoblist } = useContext(MainContext)
+  const { userData, changeJobField, joblist, updateJoblist } = useContext(
+    MainContext
+  )
   const [openedEditorId, setOpenedEditorId] = useState<string | null>(null)
   const handleOpenEditor = useCallback(
     (id: string) => () => {
@@ -68,7 +83,11 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
         if (!!data.id) {
           setIsLoading(false)
           handleCloseEditor()
-          if (!!data.joblist && Array.isArray(data.joblist) && data.joblist.length > 0) {
+          if (
+            !!data.joblist &&
+            Array.isArray(data.joblist) &&
+            data.joblist.length > 0
+          ) {
             updateJoblist(data.joblist)
           }
           return
@@ -108,7 +127,7 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
                   <>
                     <Divider />
                     <AccordionActions>
-                      <Button size="small" onClick={handleOpenEditor(data._id)}>
+                      <Button size="small" variant="outlined" onClick={handleOpenEditor(data._id)}>
                         Редактировать
                       </Button>
                     </AccordionActions>
@@ -120,7 +139,9 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
                   scroll="paper"
                   aria-labelledby={`scroll-dialog-title_${data._id}`}
                 >
-                  <DialogTitle id={`scroll-dialog-title_${data._id}`}>{data.name}</DialogTitle>
+                  <DialogTitle id={`scroll-dialog-title_${data._id}`}>
+                    {data.name}
+                  </DialogTitle>
                   <DialogContent dividers={true}>
                     {/*
                       {
@@ -150,7 +171,11 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
                         variant="outlined"
                         value={data.priceJobs}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                          changeJobField(data._id, 'priceJobs', Number(e.target.value))()
+                          changeJobField(
+                            data._id,
+                            'priceJobs',
+                            Number(e.target.value)
+                          )()
                         }}
                       />
                       <TextField
@@ -160,7 +185,11 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
                         variant="outlined"
                         value={data.priceMaterials}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                          changeJobField(data._id, 'priceMaterials', Number(e.target.value))()
+                          changeJobField(
+                            data._id,
+                            'priceMaterials',
+                            Number(e.target.value)
+                          )()
                         }}
                       />
                       <TextField
@@ -170,29 +199,79 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
                         variant="outlined"
                         value={data.payed}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                          changeJobField(data._id, 'payed', Number(e.target.value))()
+                          changeJobField(
+                            data._id,
+                            'payed',
+                            Number(e.target.value)
+                          )()
                         }}
                       />
+
                       <Divider />
+                      <div className={classes.checkboxWrapper}>
+                        <FormControl component="fieldset" className={classes.formControl}>
+                          <FormGroup>
+                            <FormControlLabel
+                              control={<Checkbox color="primary" checked={data.isDone} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                changeJobField(
+                                  data._id,
+                                  'isDone',
+                                  e.target.checked
+                                )()
+                              }} name="isDone" />}
+                              label="Работы завершены"
+                            />
+                          </FormGroup>
+                        </FormControl>
+                        <FormControl component="fieldset" className={classes.formControl}>
+                          <FormGroup>
+                            <FormControlLabel
+                              control={<Checkbox color="primary" checked={data.isStarted} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                changeJobField(
+                                  data._id,
+                                  'isStarted',
+                                  e.target.checked
+                                )()
+                              }} name="isStarted" />}
+                              label="Работы были начаты"
+                            />
+                          </FormGroup>
+                        </FormControl>
+                      </div>
                       <h3
                         style={{
                           marginLeft: 'auto',
-                          color: data.payed - (data.priceMaterials + data.priceJobs) < 0 ? 'red' : 'green',
+                          color:
+                            data.payed -
+                              (data.priceMaterials + data.priceJobs) <
+                              0
+                              ? 'red'
+                              : 'green',
                         }}
                       >
-                        Остаток: {data.payed - (data.priceMaterials + data.priceJobs)}
+                        Остаток:{' '}
+                        {getPrettyPrice(data.payed - (data.priceMaterials + data.priceJobs))}
                       </h3>
                     </div>
                   </DialogContent>
                   <DialogActions>
-                    <Button onClick={handleCloseEditor} color="secondary">
+                    <Button onClick={handleCloseEditor} size="small" variant="outlined" color="secondary">
                       Отмена
                     </Button>
                     <Button
                       onClick={handleSubmit}
+                      // variant="contained"
+                      variant="outlined"
                       color="primary"
+                      size="small"
                       endIcon={
-                        isLoading && <CircularProgress size={20} color="primary" style={{ marginLeft: 'auto' }} />
+                        isLoading && (
+                          <CircularProgress
+                            size={20}
+                            color="primary"
+                            style={{ marginLeft: 'auto' }}
+                          />
+                        )
                       }
                     >
                       Сохранить
@@ -203,7 +282,8 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
             </React.Fragment>
           ))}
         </>
-      )}
+      )
+      }
     </>
   )
 }

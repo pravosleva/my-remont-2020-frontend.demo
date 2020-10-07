@@ -2,7 +2,7 @@ import { IJob } from '~/common/context/MainContext'
 
 export type TState = IJob[]
 type TAction =
-  | { type: 'UPDATE_JOB_FIELD'; id: string; fieldName: string; payload: number }
+  | { type: 'UPDATE_JOB_FIELD'; id: string; fieldName: string; payload: number | boolean }
   | { type: 'UPDATE_JOBLIST'; payload: IJob[] }
 
 export function reducer(state: TState, action: TAction): TState {

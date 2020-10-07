@@ -37,5 +37,16 @@ export const useStyles = makeStyles((theme: Theme) =>
         marginBottom: theme.spacing(2),
       },
     },
+    // Checkbox:
+    checkboxWrapper: {
+      marginTop: theme.spacing(1),
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center'
+    },
+    formControl: {
+      // marginTop: theme.spacing(1),
+
+    },
   })
 )

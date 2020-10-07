@@ -1,77 +1,86 @@
-import React, { useContext, useMemo } from 'react'
+import React, { useCallback, useContext, useMemo } from 'react'
 // import { NavLink } from 'react-router-dom'
-import { Link, withRouter } from 'react-router-dom'
+import { Link, NavLink, withRouter } from 'react-router-dom'
 import { MainContext } from '~/common/context/MainContext'
 // import { useCookies } from 'react-cookie'
-import { useRouter } from '~/common/hooks/useRouter'
+// import { useRouter } from '~/common/hooks/useRouter'
 import { Button } from '@material-ui/core'
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
-export const BreadCrumbs = withRouter(({ location }) => {
+export const BreadCrumbs = withRouter(({ location, history }) => {
   // const { ...rest }: IPageParams = useParams()
-  const { projectName, isUserDataLoading, isUserDataLoaded, userData, onLogout } = useContext(MainContext)
+  const { projectName, isUserDataLoading, userData, onLogout } = useContext(
+    MainContext
+  )
   const { pathname } = location
-  const router = useRouter()
-  const logoutRenderer = () => (
-    <Button
-      style={{ marginLeft: '10px' }}
-      onClick={() =>
-        onLogout().then(() => {
-          router.push('/auth/login')
-        })
-      }
-      size="small"
-      variant="contained"
-      color="primary"
-    >
-      Выход
-    </Button>
-  )
-  const userDataRenderer = ({ userData }: { userData: any }) => {
-    if (!userData) {
-      return <Link to="/auth/login">Вход</Link>
-    } else {
-      return (
-        <div>
-          {`Logged as ${userData?.username}`}
-          {logoutRenderer()}
-        </div>
-      )
-    }
-  }
+  // const router = useRouter()
+  // const handleLogout = useCallback(() => {
+  //   onLogout().then(() => {
+  //     router.push('/auth/login')
+  //   })
+  // }, [onLogout, router])
   // const [cookies, setCookie, removeCookie] = useCookies(['jwt'])
-  const memoizedUserInfo = useMemo(
-    () => (
-      <div style={{ marginLeft: 'auto' }}>
-        {isUserDataLoading ? <span>Loading...</span> : userDataRenderer({ userData })}
-      </div>
-    ),
-    [isUserDataLoading, isUserDataLoaded, userData]
-  )
+  // const { location: { pathname } } = router
+  const handleLogout = useCallback(() => {
+    onLogout().then(() => {
+      history.push('/auth/login')
+    })
+  }, [onLogout, history])
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', width: '100%' }}>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        width: '100%',
+      }}
+    >
       {pathname === '/' && (
-        <div>
+        <div style={{ paddingTop: '4px' }}>
           <Link to="/">Главная</Link>
         </div>
       )}
       {(pathname === '/projects' || pathname === '/projects/') && (
-        <div>
-          <Link to="/">Главная</Link> / <span style={{ opacity: '0.5' }}>Проекты</span>
+        <div style={{ paddingTop: '4px' }}>
+          <Link to="/">Главная</Link> /{' '}
+          <span style={{ opacity: '0.5' }}>Проекты</span>
         </div>
       )}
       {pathname.includes('/projects/') && pathname.length > 10 && (
-        <div>
+        <div style={{ paddingTop: '4px' }}>
           <Link to="/">Главная</Link> / <Link to="/projects">Проекты</Link> /{' '}
-          <span style={{ opacity: '0.5' }}>{projectName || 'Please wait...'}</span>
+          <span style={{ opacity: '0.5' }}>
+            {projectName || 'Please wait...'}
+          </span>
         </div>
       )}
       {pathname.includes('/auth') && (
-        <div>
-          <Link to="/">Главная</Link> / <span style={{ opacity: '0.5' }}>Вход</span>
+        <div style={{ paddingTop: '4px' }}>
+          <Link to="/">Главная</Link> /{' '}
+          <span style={{ opacity: '0.5' }}>Вход</span>
         </div>
       )}
-      {memoizedUserInfo}
+      <div style={{ marginLeft: 'auto' }}>
+        {isUserDataLoading ? <span>Loading...</span> : (
+          !userData ? (
+            <NavLink to="/auth/login">Вход</NavLink>
+          ) : (
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <Button
+                  style={{ marginLeft: '10px' }}
+                  onClick={handleLogout}
+                  size="small"
+                  variant="contained"
+                  color="primary"
+                  endIcon={<ExitToAppIcon />}
+                >
+                  <span style={{ paddingTop: '4px' }}>{userData?.username}</span>
+                </Button>
+              </div>
+            )
+        )}
+      </div>
     </div>
   )
 })

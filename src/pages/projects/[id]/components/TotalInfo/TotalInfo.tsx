@@ -3,7 +3,12 @@ import { useStyles } from './styles'
 // import { Paper } from '@material-ui/core'
 import { getPrettyPrice } from '~/utils/getPrettyPrice'
 import { Grid, Divider } from '@material-ui/core'
-import { getTotalDifference, getTotalPriceMaterials, getTotalPayed, getTotalPriceJobs } from '~/utils/getDifference'
+import {
+  getTotalDifference,
+  getTotalPriceMaterials,
+  getTotalPayed,
+  getTotalPriceJobs,
+} from '~/utils/getDifference'
 import clsx from 'clsx'
 import { MainContext } from '~/common/context/MainContext'
 
@@ -12,9 +17,14 @@ export const TotalInfo = () => {
   const classes = useStyles()
   const totalPriceJobs = useMemo(() => getTotalPriceJobs(joblist), [joblist])
   const totalPayed = useMemo(() => getTotalPayed(joblist), [joblist])
-  const totalMaterials = useMemo(() => getTotalPriceMaterials(joblist), [joblist])
+  const totalMaterials = useMemo(() => getTotalPriceMaterials(joblist), [
+    joblist,
+  ])
   const totalDifferecne = useMemo(() => getTotalDifference(joblist), [joblist])
-  const comletedJobsCount = useMemo(() => joblist.filter(({ isDone }) => isDone).length, [joblist])
+  const comletedJobsCount = useMemo(
+    () => joblist.filter(({ isDone }) => isDone).length,
+    [joblist]
+  )
 
   return (
     <div className={classes.paper}>
@@ -26,6 +36,11 @@ export const TotalInfo = () => {
         </Grid>
         <Divider />
         <Grid item xs style={{ opacity: '0.5', marginTop: '20px' }}>
+          <b>
+            ИТОГО оплачено: {getPrettyPrice(totalPayed)}
+          </b>
+        </Grid>
+        <Grid item xs style={{ opacity: '0.5' }}>
           <b>Ценник за работу: {getPrettyPrice(totalPriceJobs)}</b>
         </Grid>
         <Grid item xs style={{ opacity: '0.5' }}>
@@ -34,13 +49,12 @@ export const TotalInfo = () => {
         <Grid
           item
           xs
-          className={clsx({ [classes.redText]: totalDifferecne < 0, [classes.greenText]: totalDifferecne >= 0 })}
+          className={clsx({
+            [classes.redText]: totalDifferecne < 0,
+            [classes.greenText]: totalDifferecne >= 0,
+          })}
         >
           <b>Кредиторская задолженность: {getPrettyPrice(totalDifferecne)}</b>
-        </Grid>
-        <Divider />
-        <Grid item xs>
-          <h3 style={{ opacity: '0.5' }}>ИТОГО оплачено на текущий момент: {getPrettyPrice(totalPayed)}</h3>
         </Grid>
       </Grid>
     </div>

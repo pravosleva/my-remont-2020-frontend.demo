@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useReducer } from 'react'
+import React, { useState, useCallback, useReducer, useEffect } from 'react'
 import { Grid } from '@material-ui/core'
 import { BreadCrumbs } from './components/BreadCrumbs'
 import { MainContext, IUserData, IJob } from '~/common/context/MainContext'
@@ -27,12 +27,12 @@ const getNormalizedAns = (originalRes: any): IUserData => {
   // @ts-ignore
   return result
 }
-
+let count = 0
 export const SiteLayout: React.FC = ({ children }) => {
   // --- JOBLIST STATE:
   const [joblist, dispatch] = useReducer(reducer, [])
   const handleChangeJobField = useCallback(
-    (id, fieldName: string, value: number) => () => {
+    (id, fieldName: string, value: number | boolean) => () => {
       dispatch({ type: 'UPDATE_JOB_FIELD', id, fieldName, payload: value })
     },
     [dispatch]
@@ -50,33 +50,40 @@ export const SiteLayout: React.FC = ({ children }) => {
   }, [setProjectName])
   const [userData, setUserData] = useState<IUserData | null>(null)
   const [cookies, setCookie, removeCookie] = useCookies(['jwt'])
-  const handleSetUserData = (originalUserData: any, jwt?: string) => {
+  // const cookies = {}
+  // const setCookie = (a: any, b: any, c: any) => { }
+  // const removeCookie = () => { }
+  const handleSetUserData = useCallback((originalUserData: any, jwt?: string) => {
     const modifiedUserData = getNormalizedAns(originalUserData)
 
     setUserData(modifiedUserData)
     if (!!jwt) {
       setCookie('jwt', jwt, { maxAge: 60 * 60 * 24 * 5 })
     }
-  }
+  }, [setCookie, setUserData])
   const [, isUserDataLoaded, isUserDataLoading]: any = useRemoteDataByFetch({
     url: `${apiUrl}/users/me`,
     method: 'GET',
     accessToken: cookies.jwt,
     onSuccess: (originalUserData) => {
+      // window.alert(JSON.stringify(originalUserData))
       handleSetUserData(originalUserData)
     },
     on401: (msg: string) => {
       // TODO: Уведомления!
-      window.alert(msg)
-      handleLogout()
+      // window.alert(msg)
+      // handleLogout()
     },
     responseValidator: (res) => !!res.id,
   })
-  const handleLogout = () => {
+  const handleLogout = useCallback(() => {
     setUserData(null)
     removeCookie('jwt')
     return Promise.resolve(true)
-  }
+  }, [setUserData, removeCookie])
+  // useEffect(() => {
+  //   alert(1)
+  // }, [userData])
 
   return (
     <MainContext.Provider

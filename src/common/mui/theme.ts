@@ -1,5 +1,10 @@
 import red from '@material-ui/core/colors/red'
-import { createMuiTheme, ThemeOptions, Theme, withStyles } from '@material-ui/core/styles'
+import {
+  createMuiTheme,
+  ThemeOptions,
+  Theme,
+  withStyles,
+} from '@material-ui/core/styles'
 // import { Breakpoint } from '@material-ui/core/styles/createBreakpoints'
 // See also: https://material-ui.com/guides/typescript/#customization-of-theme
 

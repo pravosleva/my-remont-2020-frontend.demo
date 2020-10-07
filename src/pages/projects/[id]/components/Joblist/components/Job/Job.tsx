@@ -60,7 +60,12 @@ export const Job = ({ data }: IProps) => {
           <Grid>{<pre style={{ whiteSpace: 'pre-wrap' }}>{JSON.stringify(data, null, 2)}</pre>}</Grid>
         */}
         <Grid item>
-          <b className={clsx({ [classes.redText]: diff < 0, [classes.greenText]: diff >= 0 })}>
+          <b
+            className={clsx({
+              [classes.redText]: diff < 0,
+              [classes.greenText]: diff >= 0,
+            })}
+          >
             Остаток: {getPrettyPrice(diff)}
           </b>
         </Grid>

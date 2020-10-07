@@ -79,7 +79,8 @@
     "prebuild": "prettier --write .",
     "build": "node scripts/build.js",
     "postbuild": "bash ./postbuild.sh",
-    "test": "node scripts/test.js"
+    "test": "node scripts/test.js",
+    "format": "prettier --write \"**/*.{js,ts,tsx}\""
   },
   "homepage": "/demo/",
   "eslintConfig": {

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, MutableRefObject } from 'react'
 // import { httpErrorHandler } from '~/utils/errors/http/fetch';
 
-interface IProps {
+interface IUseRemoteDataByFetchProps {
   url: string
   method: string
   accessToken?: string
@@ -26,7 +26,7 @@ export const useRemoteDataByFetch = ({
   debounce = 0,
   responseValidator,
   on401,
-}: IProps): TAns => {
+}: IUseRemoteDataByFetchProps): TAns => {
   const [dataFromServer, setDataFromServer] = useState(null)
   const [isLoaded, setIsLoaded] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -103,6 +103,7 @@ export const useRemoteDataByFetch = ({
             setIsLoading(false)
             if (!!onSuccess) onSuccess(resData)
             isStartedImperativeRef.current = false
+            abortController.abort()
           })
           .catch((error) => {
             if (!!onFail) onFail(error)
@@ -112,6 +113,7 @@ export const useRemoteDataByFetch = ({
     }
 
     const debouncedHandler = setTimeout(fetchData, debounce)
+    // fetchData()
 
     return function cancel() {
       clearTimeout(debouncedHandler)
@@ -120,7 +122,18 @@ export const useRemoteDataByFetch = ({
         onAbortIfRequestStarted(isStartedImperativeRef.current)
       }
     }
-  }, [url, debounce, onCall, onAbortIfRequestStarted, accessToken, method, on401, responseValidator, onSuccess, onFail])
+  }, [
+    // url,
+    // debounce,
+    // onCall,
+    // onAbortIfRequestStarted,
+    // accessToken,
+    // method,
+    // on401,
+    // responseValidator,
+    // onSuccess,
+    // onFail,
+  ])
 
   return [dataFromServer, isLoaded, isLoading, forceAbortToggler]
 }
