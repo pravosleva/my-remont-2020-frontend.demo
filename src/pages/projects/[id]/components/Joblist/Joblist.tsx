@@ -47,7 +47,7 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
   const handleCloseEditor = useCallback(() => {
     setOpenedEditorId(null)
   }, [setOpenedEditorId])
-  const descriptionElementRef = useRef<HTMLElement>(null)
+  // const descriptionElementRef = useRef<HTMLElement>(null)
   const [cookies] = useCookies(['jwt'])
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const handleSubmit = useCallback(() => {

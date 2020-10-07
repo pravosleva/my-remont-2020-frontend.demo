@@ -11,6 +11,7 @@ interface IProps {
   onFail?: (err: any) => void
   debounce?: number
   responseValidator: (res: any) => boolean
+  on401?: (msg: string) => void
 }
 export type TAns = [any, boolean, boolean, (val: boolean) => void]
 
@@ -24,6 +25,7 @@ export const useRemoteDataByFetch = ({
   onFail,
   debounce = 0,
   responseValidator,
+  on401,
 }: IProps): TAns => {
   const [dataFromServer, setDataFromServer] = useState(null)
   const [isLoaded, setIsLoaded] = useState(false)
@@ -77,7 +79,14 @@ export const useRemoteDataByFetch = ({
           // .then(httpErrorHandler)
           .then((res) => {
             try {
-              return res.json()
+              // TODO: Стандартный валидатор ошибок!
+              if (res.status === 200) {
+                return res.json()
+              } else if (res.status === 401) {
+                if (!!on401) {
+                  on401(res.statusText)
+                }
+              }
             } catch (err) {
               throw new Error(err.message)
             }
@@ -111,13 +120,7 @@ export const useRemoteDataByFetch = ({
         onAbortIfRequestStarted(isStartedImperativeRef.current)
       }
     }
-  }, [
-    // accessToken,
-    url,
-    debounce,
-    onCall,
-    onAbortIfRequestStarted,
-  ])
+  }, [url, debounce, onCall, onAbortIfRequestStarted, accessToken, method, on401, responseValidator, onSuccess, onFail])
 
   return [dataFromServer, isLoaded, isLoading, forceAbortToggler]
 }

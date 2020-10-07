@@ -1,3 +1,17 @@
+# my-remont-2020 frontend (CRA based)
+
+## Roadmap
+- [ ] Standard errors handlers
+  - [ ] network
+  - [ ] http
+  - [ ] api
+- [ ] UX
+  - [ ] side header: one btn
+  - [ ] logout on 401 (bad jwt)
+- [ ] UI
+  - [ ] Done job checkbox
+  - [ ] Уведомления!
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts

@@ -65,6 +65,11 @@ export const SiteLayout: React.FC = ({ children }) => {
     onSuccess: (originalUserData) => {
       handleSetUserData(originalUserData)
     },
+    on401: (msg: string) => {
+      // TODO: Уведомления!
+      window.alert(msg)
+      handleLogout()
+    },
     responseValidator: (res) => !!res.id,
   })
   const handleLogout = () => {
