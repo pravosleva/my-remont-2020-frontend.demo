@@ -45,7 +45,7 @@ export const TheProject = () => {
           {isLoaded && <TotalInfo joblist={project.joblist} />}
         </Grid>
         <Grid item xs={12} md={6}>
-          {isLoaded && <Joblist joblist={project.joblist} />}
+          {isLoaded && <Joblist remontId={project.id} joblist={project.joblist} />}
         </Grid>
       </Grid>
     </>

@@ -4,6 +4,7 @@ import { Link, withRouter } from 'react-router-dom'
 import { MainContext } from '~/common/context/MainContext'
 // import { useCookies } from 'react-cookie'
 import { useRouter } from '~/common/hooks/useRouter'
+import { Button } from '@material-ui/core'
 
 export const BreadCrumbs = withRouter(({ location }) => {
   // const { ...rest }: IPageParams = useParams()
@@ -11,16 +12,19 @@ export const BreadCrumbs = withRouter(({ location }) => {
   const { pathname } = location
   const router = useRouter()
   const logoutRenderer = () => (
-    <button
+    <Button
       style={{ marginLeft: '10px' }}
       onClick={() =>
         onLogout().then(() => {
           router.push('/auth/login')
         })
       }
+      size="small"
+      variant="contained"
+      color="primary"
     >
       Выход
-    </button>
+    </Button>
   )
   const userDataRenderer = ({ userData }: { userData: any }) => {
     if (!userData) {
