@@ -71,8 +71,8 @@ export const SiteLayout: React.FC = ({ children }) => {
     },
     on401: (msg: string) => {
       // TODO: Уведомления!
-      // window.alert(msg)
-      // handleLogout()
+      window.alert(msg)
+      handleLogout()
     },
     responseValidator: (res) => !!res.id,
   })
