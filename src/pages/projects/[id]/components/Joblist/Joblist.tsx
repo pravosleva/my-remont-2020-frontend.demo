@@ -1,6 +1,14 @@
 import React, { useCallback, useContext, useState, useRef } from 'react'
 import { IJob, Job } from './components/Job'
-import { Accordion, AccordionSummary, AccordionDetails, AccordionActions, Divider } from '@material-ui/core'
+import {
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  AccordionActions,
+  Divider,
+  TextField,
+  CircularProgress,
+} from '@material-ui/core'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { useStyles } from './styles'
 import clsx from 'clsx'
@@ -10,7 +18,6 @@ import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
-import { Input, CircularProgress } from '@material-ui/core'
 import { useCookies } from 'react-cookie'
 import { getApiUrl } from '~/utils/getApiUrl'
 
@@ -18,6 +25,9 @@ const apiUrl = getApiUrl()
 interface IProps {
   joblist: IJob[]
   remontId: string
+}
+const getUniqueKey = (data: IJob): string => {
+  return `${data._id}_${data.payed}_${data.priceDelivery}_${data.priceJobs}_${data.priceMaterials}`
 }
 
 export const Joblist = ({ remontId, joblist: j }: IProps) => {
@@ -92,7 +102,7 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
                 </AccordionSummary>
                 <Divider />
                 <AccordionDetails className={classes.details}>
-                  <Job data={data} />
+                  <Job data={data} key={getUniqueKey(data)} />
                 </AccordionDetails>
                 {!!userData && (
                   <>
@@ -110,7 +120,7 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
                   scroll="paper"
                   aria-labelledby={`scroll-dialog-title_${data._id}`}
                 >
-                  <DialogTitle id={`scroll-dialog-title_${data._id}`}>Edit</DialogTitle>
+                  <DialogTitle id={`scroll-dialog-title_${data._id}`}>{data.name}</DialogTitle>
                   <DialogContent dividers={true}>
                     {/*
                       {
@@ -132,16 +142,47 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
                           "id": "5f7901e014e0008700d02545"
                         }
                     */}
-                    <Input
-                      id={`payed_${data._id}`}
-                      // label="Оплачено"
-                      type="number"
-                      // variant="outlined"
-                      value={data.payed}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        changeJobField(data._id, 'payed', Number(e.target.value))()
-                      }}
-                    />
+                    <div className={classes.inputsBox}>
+                      <TextField
+                        id={`priceJobs_${data._id}`}
+                        label="Ценник за работу"
+                        type="number"
+                        variant="outlined"
+                        value={data.priceJobs}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                          changeJobField(data._id, 'priceJobs', Number(e.target.value))()
+                        }}
+                      />
+                      <TextField
+                        id={`priceMaterials_${data._id}`}
+                        label="Ценник за материалы"
+                        type="number"
+                        variant="outlined"
+                        value={data.priceMaterials}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                          changeJobField(data._id, 'priceMaterials', Number(e.target.value))()
+                        }}
+                      />
+                      <TextField
+                        id={`payed_${data._id}`}
+                        label="Оплачено"
+                        type="number"
+                        variant="outlined"
+                        value={data.payed}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                          changeJobField(data._id, 'payed', Number(e.target.value))()
+                        }}
+                      />
+                      <Divider />
+                      <h3
+                        style={{
+                          marginLeft: 'auto',
+                          color: data.payed - (data.priceMaterials + data.priceJobs) < 0 ? 'red' : 'green',
+                        }}
+                      >
+                        Остаток: {data.payed - (data.priceMaterials + data.priceJobs)}
+                      </h3>
+                    </div>
                   </DialogContent>
                   <DialogActions>
                     <Button onClick={handleCloseEditor} color="secondary">

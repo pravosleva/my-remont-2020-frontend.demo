@@ -30,5 +30,12 @@ export const useStyles = makeStyles((theme: Theme) =>
     disabled: {
       opacity: '0.4',
     },
+    inputsBox: {
+      display: 'flex',
+      flexDirection: 'column',
+      '& > div:not(:last-child)': {
+        marginBottom: theme.spacing(2),
+      },
+    },
   })
 )

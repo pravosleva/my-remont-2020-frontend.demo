@@ -1,6 +1,6 @@
 import React, { useMemo, useContext } from 'react'
 import { useStyles } from './styles'
-import { Paper } from '@material-ui/core'
+// import { Paper } from '@material-ui/core'
 import { getPrettyPrice } from '~/utils/getPrettyPrice'
 import { Grid, Divider } from '@material-ui/core'
 import { getTotalDifference, getTotalPriceMaterials, getTotalPayed, getTotalPriceJobs } from '~/utils/getDifference'
@@ -17,7 +17,7 @@ export const TotalInfo = () => {
   const comletedJobsCount = useMemo(() => joblist.filter(({ isDone }) => isDone).length, [joblist])
 
   return (
-    <Paper className={classes.paper}>
+    <div className={classes.paper}>
       <Grid container direction="column" spacing={2}>
         <Grid item xs>
           <h3>
@@ -31,9 +31,6 @@ export const TotalInfo = () => {
         <Grid item xs style={{ opacity: '0.5' }}>
           <b>Ценник за материалы: {getPrettyPrice(totalMaterials)}</b>
         </Grid>
-        <Grid item xs>
-          <b>ИТОГО оплачено на текущий момент: {getPrettyPrice(totalPayed)}</b>
-        </Grid>
         <Grid
           item
           xs
@@ -41,7 +38,11 @@ export const TotalInfo = () => {
         >
           <b>Кредиторская задолженность: {getPrettyPrice(totalDifferecne)}</b>
         </Grid>
+        <Divider />
+        <Grid item xs>
+          <h3 style={{ opacity: '0.5' }}>ИТОГО оплачено на текущий момент: {getPrettyPrice(totalPayed)}</h3>
+        </Grid>
       </Grid>
-    </Paper>
+    </div>
   )
 }
