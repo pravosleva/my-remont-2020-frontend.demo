@@ -100,16 +100,17 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
                 <AccordionDetails className={classes.details}>
                   <Job data={data} />
                 </AccordionDetails>
-                <Divider />
-                <AccordionActions>
-                  {!!userData && (
-                    <Button size="small" onClick={handleOpenEditor(data._id)}>
-                      Редактировать
-                    </Button>
-                  )}
-                </AccordionActions>
+                {!!userData && (
+                  <>
+                    <Divider />
+                    <AccordionActions>
+                      <Button size="small" onClick={handleOpenEditor(data._id)}>
+                        Редактировать
+                      </Button>
+                    </AccordionActions>
+                  </>
+                )}
                 <Dialog
-                  // key={data._id}
                   open={openedEditorId === data._id}
                   onClose={handleCloseEditor}
                   scroll="paper"

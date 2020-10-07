@@ -17,7 +17,9 @@ interface IPageParams {
 export const TheProject = () => {
   const { id }: IPageParams = useParams()
   const { setProjectName, resetProjectName } = useContext(MainContext)
-  const [cookies, setCookie, removeCookie] = useCookies(['jwt'])
+  const [cookies, _setCookie, _removeCookie] = useCookies(['jwt'])
+  // TODO: Подписаться на сокет, запрашивать обновления при каждом изменении.
+  // Либо поместить в контекст
   const [project, isLoaded, isLoading]: TAns = useRemoteDataByFetch({
     url: `${apiUrl}/remonts/${id}`,
     method: 'GET',
