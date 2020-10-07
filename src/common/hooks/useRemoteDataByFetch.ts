@@ -108,6 +108,8 @@ export const useRemoteDataByFetch = ({
             })
             .catch((error) => {
               if (!!onFail) onFail(error)
+              setIsLoaded(false)
+              setIsLoading(false)
               isStartedImperativeRef.current = false
             })
         }
