@@ -36,9 +36,7 @@ export const TotalInfo = () => {
         </Grid>
         <Divider />
         <Grid item xs style={{ opacity: '0.5', marginTop: '20px' }}>
-          <b>
-            ИТОГО оплачено: {getPrettyPrice(totalPayed)}
-          </b>
+          <b>ИТОГО оплачено: {getPrettyPrice(totalPayed)}</b>
         </Grid>
         <Grid item xs style={{ opacity: '0.5' }}>
           <b>Ценник за работу: {getPrettyPrice(totalPriceJobs)}</b>

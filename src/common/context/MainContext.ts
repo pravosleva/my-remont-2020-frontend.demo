@@ -46,7 +46,11 @@ interface IMainContext {
   isUserDataLoaded: boolean
   setUserData: (uData: IUserData | null, jwt?: string) => void
   joblist: IJob[]
-  changeJobField: (id: string, fieldName: string, value: number | boolean) => () => void
+  changeJobField: (
+    id: string,
+    fieldName: string,
+    value: number | boolean
+  ) => () => void
   updateJoblist: (joblist: IJob[]) => void
 }
 

@@ -53,14 +53,17 @@ export const SiteLayout: React.FC = ({ children }) => {
   // const cookies = {}
   // const setCookie = (a: any, b: any, c: any) => { }
   // const removeCookie = () => { }
-  const handleSetUserData = useCallback((originalUserData: any, jwt?: string) => {
-    const modifiedUserData = getNormalizedAns(originalUserData)
+  const handleSetUserData = useCallback(
+    (originalUserData: any, jwt?: string) => {
+      const modifiedUserData = getNormalizedAns(originalUserData)
 
-    setUserData(modifiedUserData)
-    if (!!jwt) {
-      setCookie('jwt', jwt, { maxAge: 60 * 60 * 24 * 5 })
-    }
-  }, [setCookie, setUserData])
+      setUserData(modifiedUserData)
+      if (!!jwt) {
+        setCookie('jwt', jwt, { maxAge: 60 * 60 * 24 * 5 })
+      }
+    },
+    [setCookie, setUserData]
+  )
   const [, isUserDataLoaded, isUserDataLoading]: any = useRemoteDataByFetch({
     url: `${apiUrl}/users/me`,
     method: 'GET',

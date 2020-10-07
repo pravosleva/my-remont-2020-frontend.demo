@@ -42,11 +42,10 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginTop: theme.spacing(1),
       display: 'flex',
       flexDirection: 'column',
-      justifyContent: 'center'
+      justifyContent: 'center',
     },
     formControl: {
       // marginTop: theme.spacing(1),
-
     },
   })
 )

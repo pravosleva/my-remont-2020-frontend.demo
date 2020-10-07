@@ -1,5 +1,11 @@
 import React, { useCallback, useState, useContext } from 'react'
-import { Typography, Container, Avatar, TextField, Button } from '@material-ui/core'
+import {
+  Typography,
+  Container,
+  Avatar,
+  TextField,
+  Button,
+} from '@material-ui/core'
 import { useStyles } from './styles'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import { getNormalizedInputs } from '~/utils/strapi/getNormalizedInputs'
@@ -83,7 +89,12 @@ export const Login = () => {
               setPassword(e.target.value)
             }}
           />
-          <Button variant="contained" color="primary" fullWidth onClick={handleSubmit}>
+          <Button
+            variant="contained"
+            color="primary"
+            fullWidth
+            onClick={handleSubmit}
+          >
             Войти
           </Button>
         </form>

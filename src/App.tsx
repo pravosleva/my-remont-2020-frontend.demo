@@ -12,7 +12,7 @@ function App() {
       <SiteLayout>
         <Routes />
       </SiteLayout>
-    </HashRouter >
+    </HashRouter>
   )
 }
 

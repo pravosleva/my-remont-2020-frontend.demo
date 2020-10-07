@@ -22,18 +22,17 @@ import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import { useCookies } from 'react-cookie'
 import { getApiUrl } from '~/utils/getApiUrl'
-import FormControl from '@material-ui/core/FormControl';
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
+import FormControl from '@material-ui/core/FormControl'
+import FormGroup from '@material-ui/core/FormGroup'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import Checkbox from '@material-ui/core/Checkbox'
 import { getPrettyPrice } from '~/utils/getPrettyPrice'
 
 const Button = withStyles((theme) => ({
   root: {
-    paddingTop: theme.spacing(1)
-  }
-}))
-  (MuiButton)
+    paddingTop: theme.spacing(1),
+  },
+}))(MuiButton)
 
 const apiUrl = getApiUrl()
 const getUniqueKey = (data: IJob): string => {
@@ -127,7 +126,11 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
                   <>
                     <Divider />
                     <AccordionActions>
-                      <Button size="small" variant="outlined" onClick={handleOpenEditor(data._id)}>
+                      <Button
+                        size="small"
+                        variant="outlined"
+                        onClick={handleOpenEditor(data._id)}
+                      >
                         Редактировать
                       </Button>
                     </AccordionActions>
@@ -209,30 +212,54 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
 
                       <Divider />
                       <div className={classes.checkboxWrapper}>
-                        <FormControl component="fieldset" className={classes.formControl}>
+                        <FormControl
+                          component="fieldset"
+                          className={classes.formControl}
+                        >
                           <FormGroup>
                             <FormControlLabel
-                              control={<Checkbox color="primary" checked={data.isDone} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                changeJobField(
-                                  data._id,
-                                  'isDone',
-                                  e.target.checked
-                                )()
-                              }} name="isDone" />}
+                              control={
+                                <Checkbox
+                                  color="primary"
+                                  checked={data.isDone}
+                                  onChange={(
+                                    e: React.ChangeEvent<HTMLInputElement>
+                                  ) => {
+                                    changeJobField(
+                                      data._id,
+                                      'isDone',
+                                      e.target.checked
+                                    )()
+                                  }}
+                                  name="isDone"
+                                />
+                              }
                               label="Работы завершены"
                             />
                           </FormGroup>
                         </FormControl>
-                        <FormControl component="fieldset" className={classes.formControl}>
+                        <FormControl
+                          component="fieldset"
+                          className={classes.formControl}
+                        >
                           <FormGroup>
                             <FormControlLabel
-                              control={<Checkbox color="primary" checked={data.isStarted} onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                changeJobField(
-                                  data._id,
-                                  'isStarted',
-                                  e.target.checked
-                                )()
-                              }} name="isStarted" />}
+                              control={
+                                <Checkbox
+                                  color="primary"
+                                  checked={data.isStarted}
+                                  onChange={(
+                                    e: React.ChangeEvent<HTMLInputElement>
+                                  ) => {
+                                    changeJobField(
+                                      data._id,
+                                      'isStarted',
+                                      e.target.checked
+                                    )()
+                                  }}
+                                  name="isStarted"
+                                />
+                              }
                               label="Работы были начаты"
                             />
                           </FormGroup>
@@ -244,18 +271,25 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
                           color:
                             data.payed -
                               (data.priceMaterials + data.priceJobs) <
-                              0
+                            0
                               ? 'red'
                               : 'green',
                         }}
                       >
                         Остаток:{' '}
-                        {getPrettyPrice(data.payed - (data.priceMaterials + data.priceJobs))}
+                        {getPrettyPrice(
+                          data.payed - (data.priceMaterials + data.priceJobs)
+                        )}
                       </h3>
                     </div>
                   </DialogContent>
                   <DialogActions>
-                    <Button onClick={handleCloseEditor} size="small" variant="outlined" color="secondary">
+                    <Button
+                      onClick={handleCloseEditor}
+                      size="small"
+                      variant="outlined"
+                      color="secondary"
+                    >
                       Отмена
                     </Button>
                     <Button
@@ -282,8 +316,7 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
             </React.Fragment>
           ))}
         </>
-      )
-      }
+      )}
     </>
   )
 }

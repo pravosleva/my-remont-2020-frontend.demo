@@ -5,7 +5,7 @@ import { MainContext } from '~/common/context/MainContext'
 // import { useCookies } from 'react-cookie'
 // import { useRouter } from '~/common/hooks/useRouter'
 import { Button } from '@material-ui/core'
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 
 export const BreadCrumbs = withRouter(({ location, history }) => {
   // const { ...rest }: IPageParams = useParams()
@@ -62,23 +62,23 @@ export const BreadCrumbs = withRouter(({ location, history }) => {
         </div>
       )}
       <div style={{ marginLeft: 'auto' }}>
-        {isUserDataLoading ? <span>Loading...</span> : (
-          !userData ? (
-            <NavLink to="/auth/login">Вход</NavLink>
-          ) : (
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                <Button
-                  style={{ marginLeft: '10px' }}
-                  onClick={handleLogout}
-                  size="small"
-                  variant="contained"
-                  color="primary"
-                  endIcon={<ExitToAppIcon />}
-                >
-                  <span style={{ paddingTop: '4px' }}>{userData?.username}</span>
-                </Button>
-              </div>
-            )
+        {isUserDataLoading ? (
+          <span>Loading...</span>
+        ) : !userData ? (
+          <NavLink to="/auth/login">Вход</NavLink>
+        ) : (
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <Button
+              style={{ marginLeft: '10px' }}
+              onClick={handleLogout}
+              size="small"
+              variant="contained"
+              color="primary"
+              endIcon={<ExitToAppIcon />}
+            >
+              <span style={{ paddingTop: '4px' }}>{userData?.username}</span>
+            </Button>
+          </div>
         )}
       </div>
     </div>
