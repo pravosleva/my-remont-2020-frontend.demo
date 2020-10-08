@@ -1,16 +1,21 @@
-# my-remont-2020 frontend (CRA based)
+# my-remont-2020 frontend.demo (CRA based)
 
 ## Roadmap
+
 - [ ] Standard errors handlers
   - [ ] network
   - [ ] http
   - [ ] api
 - [ ] UX
-  - [ ] side header: one btn
-  - [ ] logout on 401 (bad jwt)
+  - [ ] add new job
+  - [ ] авториз. пользователь должен видеть только свои ремонты
+  - [ ] неавториз. польз. должен видеть только общую информацию о ремонтах
+    - [ ] общая аналитика по всем ремонтам на главной
+  - [x] logout on 401 (bad jwt)
 - [ ] UI
-  - [ ] Done job checkbox
-  - [ ] Уведомления!
+  - [ ] стандартные уведомления!
+  - [x] markdown editor
+  - [x] done job checkbox
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

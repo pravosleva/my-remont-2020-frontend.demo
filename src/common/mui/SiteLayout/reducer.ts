@@ -6,7 +6,7 @@ type TAction =
       type: 'UPDATE_JOB_FIELD'
       id: string
       fieldName: string
-      payload: number | boolean
+      payload: number | boolean | string
     }
   | { type: 'UPDATE_JOBLIST'; payload: IJob[] }
 

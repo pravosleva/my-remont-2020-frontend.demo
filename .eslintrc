@@ -1,18 +1,8 @@
 {
   "parser": "@typescript-eslint/parser",
-  "presets": [
-    "@babel/env",
-    "@babel/typescript"
-  ],
-  "extends": [
-    "prettier"
-  ],
-  "plugins": [
-    "react",
-    "standard",
-    "@typescript-eslint",
-    "react-hooks"
-  ],
+  "presets": ["@babel/env", "@babel/typescript"],
+  "extends": ["prettier"],
+  "plugins": ["react", "standard", "@typescript-eslint", "react-hooks"],
   "rules": {
     "prettier/prettier": "error",
     "semi": "off",

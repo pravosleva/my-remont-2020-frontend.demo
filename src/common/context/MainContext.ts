@@ -49,7 +49,7 @@ interface IMainContext {
   changeJobField: (
     id: string,
     fieldName: string,
-    value: number | boolean
+    value: number | boolean | string
   ) => () => void
   updateJoblist: (joblist: IJob[]) => void
 }

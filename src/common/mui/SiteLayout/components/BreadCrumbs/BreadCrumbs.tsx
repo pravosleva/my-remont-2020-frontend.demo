@@ -14,7 +14,9 @@ export const BreadCrumbs = () => {
   )
   const router = useRouter()
   // const [cookies, setCookie, removeCookie] = useCookies(['jwt'])
-  const { location: { pathname } } = router
+  const {
+    location: { pathname },
+  } = router
   const handleLogout = useCallback(() => {
     onLogout().then(() => {
       router.push('/auth/login')
@@ -61,19 +63,19 @@ export const BreadCrumbs = () => {
         ) : !userData ? (
           <NavLink to="/auth/login">Вход</NavLink>
         ) : (
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                <Button
-                  style={{ marginLeft: '10px' }}
-                  onClick={handleLogout}
-                  size="small"
-                  variant="contained"
-                  color="primary"
-                  endIcon={<ExitToAppIcon />}
-                >
-                  <span>{userData?.username}</span>
-                </Button>
-              </div>
-            )}
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <Button
+              style={{ marginLeft: '10px' }}
+              onClick={handleLogout}
+              size="small"
+              variant="contained"
+              color="primary"
+              endIcon={<ExitToAppIcon />}
+            >
+              <span>{userData?.username}</span>
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   )

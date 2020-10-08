@@ -27,6 +27,34 @@ import FormGroup from '@material-ui/core/FormGroup'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Checkbox from '@material-ui/core/Checkbox'
 import { getPrettyPrice } from '~/utils/getPrettyPrice'
+import EditIcon from '@material-ui/icons/Edit'
+import SaveIcon from '@material-ui/icons/Save'
+// import MDEditor from '@uiw/react-md-editor'
+import MarkdownIt from 'markdown-it'
+import MDEditor from 'react-markdown-editor-lite'
+import 'react-markdown-editor-lite/lib/index.css';
+import Slide from '@material-ui/core/Slide';
+
+// Register plugins if required
+// MdEditor.use(YOUR_PLUGINS_HERE);
+
+// Initialize a markdown parser
+// See also: https://markdown-it.github.io/markdown-it/
+// https://github.com/HarryChen0506/react-markdown-editor-lite/blob/HEAD/docs/configure.md
+const mdParser = new MarkdownIt({
+  html: false,
+  langPrefix: 'language-',
+});
+const TransitionUp = React.forwardRef(function Transition(props, ref) {
+  // @ts-ignore
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+// const TransitionRight = React.forwardRef(function Transition(props, ref) {
+//   return <Slide direction="right" ref={ref} {...props} />;
+// });
+// const TransitionLeft = React.forwardRef(function Transition(props, ref) {
+//   return <Slide direction="left" ref={ref} {...props} />;
+// });
 
 const Button = withStyles((theme) => ({
   root: {
@@ -55,12 +83,26 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
   const handleOpenEditor = useCallback(
     (id: string) => () => {
       setOpenedEditorId(id)
+      setOpenedMarkdownEditorId(null)
     },
     [setOpenedEditorId]
   )
   const handleCloseEditor = useCallback(() => {
     setOpenedEditorId(null)
   }, [setOpenedEditorId])
+  const [openedMarkdownEditorId, setOpenedMarkdownEditorId] = useState<
+    string | null
+  >(null)
+  const handleOpenMarkdownEditor = useCallback(
+    (id: string) => () => {
+      setOpenedEditorId(null)
+      setOpenedMarkdownEditorId(id)
+    },
+    [setOpenedEditorId, setOpenedMarkdownEditorId]
+  )
+  const handleCloseMarkdownEditor = useCallback(() => {
+    setOpenedMarkdownEditorId(null)
+  }, [setOpenedMarkdownEditorId])
   // const descriptionElementRef = useRef<HTMLElement>(null)
   const [cookies] = useCookies(['jwt'])
   const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -82,6 +124,7 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
         if (!!data.id) {
           setIsLoading(false)
           handleCloseEditor()
+          handleCloseMarkdownEditor()
           if (
             !!data.joblist &&
             Array.isArray(data.joblist) &&
@@ -116,7 +159,10 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
                   aria-controls={`panel${data._id}bh-content`}
                   id={`panel${data._id}bh-header`}
                 >
-                  <b>{data.name}</b>
+                  <b className={clsx({
+                    [classes.dangerText]: data.payed - (data.priceMaterials + data.priceJobs) < 0,
+                    [classes.successText]: data.payed - (data.priceMaterials + data.priceJobs) >= 0,
+                  })}>{data.name}</b>
                 </AccordionSummary>
                 <Divider />
                 <AccordionDetails className={classes.details}>
@@ -129,13 +175,86 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
                       <Button
                         size="small"
                         variant="outlined"
-                        onClick={handleOpenEditor(data._id)}
+                        onClick={handleOpenMarkdownEditor(data._id)}
+                        endIcon={<EditIcon />}
                       >
-                        Редактировать
+                        Edit md
+                      </Button>
+                      <Button
+                        size="small"
+                        variant="outlined"
+                        onClick={handleOpenEditor(data._id)}
+                        endIcon={<EditIcon />}
+                      >
+                        Edit values
                       </Button>
                     </AccordionActions>
                   </>
                 )}
+                {/* DIALOG FOR MARKDOWN */}
+                <Dialog
+                  open={openedMarkdownEditorId === data._id}
+                  onClose={handleCloseEditor}
+                  scroll="paper"
+                  aria-labelledby={`scroll-dialog-title_${data._id}`}
+                  fullScreen
+                  // @ts-ignore
+                  TransitionComponent={TransitionUp}
+                >
+                  <DialogTitle id={`scroll-dialog-title_${data._id}`}>
+                    {data.name}
+                  </DialogTitle>
+                  <DialogContent dividers={true} className={classes.dialogMDContent}>
+                    <MDEditor
+                      value={data.description}
+                      style={{ minHeight: "300px" }}
+                      renderHTML={(text) => mdParser.render(text)}
+                      onChange={({ text }) => {
+                        // console.log('handleEditorChange', html, text)
+                        if (!!text) {
+                          changeJobField(data._id, 'description', text)()
+                        }
+                      }}
+                      config={{
+                        view: { menu: false, md: true, html: false },
+                        canView: { menu: false, md: true, html: false, fullScreen: true, hideMenu: true }
+                      }}
+                    />
+                  </DialogContent>
+                  <DialogActions>
+                    <Button
+                      onClick={handleCloseMarkdownEditor}
+                      size="small"
+                      variant="outlined"
+                      color="secondary"
+                      disabled={isLoading}
+                    >
+                      Отмена
+                    </Button>
+                    <Button
+                      onClick={handleSubmit}
+                      // variant="contained"
+                      variant="outlined"
+                      color="primary"
+                      size="small"
+                      disabled={isLoading}
+                      endIcon={
+                        isLoading ? (
+                          <CircularProgress
+                            size={20}
+                            color="primary"
+                            style={{ marginLeft: 'auto' }}
+                          />
+                        ) : (
+                            <SaveIcon />
+                          )
+                      }
+                    >
+                      Сохранить
+                    </Button>
+                  </DialogActions>
+                </Dialog>
+                {/* DIALOG FOR VALUES */}
                 <Dialog
                   open={openedEditorId === data._id}
                   onClose={handleCloseEditor}
@@ -266,15 +385,10 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
                         </FormControl>
                       </div>
                       <h3
-                        style={{
-                          marginLeft: 'auto',
-                          color:
-                            data.payed -
-                              (data.priceMaterials + data.priceJobs) <
-                              0
-                              ? 'red'
-                              : 'green',
-                        }}
+                         className={clsx({
+                          [classes.dangerText]: data.payed - (data.priceMaterials + data.priceJobs) < 0,
+                          [classes.successText]: data.payed - (data.priceMaterials + data.priceJobs) >= 0,
+                        })}
                       >
                         Остаток:{' '}
                         {getPrettyPrice(
@@ -289,6 +403,7 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
                       size="small"
                       variant="outlined"
                       color="secondary"
+                      disabled={isLoading}
                     >
                       Отмена
                     </Button>
@@ -298,14 +413,17 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
                       variant="outlined"
                       color="primary"
                       size="small"
+                      disabled={isLoading}
                       endIcon={
-                        isLoading && (
+                        isLoading ? (
                           <CircularProgress
                             size={20}
                             color="primary"
                             style={{ marginLeft: 'auto' }}
                           />
-                        )
+                        ) : (
+                            <SaveIcon />
+                          )
                       }
                     >
                       Сохранить

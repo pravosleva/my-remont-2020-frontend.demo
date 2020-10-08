@@ -1,5 +1,6 @@
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
-// import grey from '@material-ui/core/colors/grey'
+import red from '@material-ui/core/colors/red'
+import green from '@material-ui/core/colors/green'
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -47,5 +48,15 @@ export const useStyles = makeStyles((theme: Theme) =>
     formControl: {
       // marginTop: theme.spacing(1),
     },
+    // Dialog:
+    dialogMDContent: {
+      padding: theme.spacing(0)
+    },
+    dangerText: {
+      color: red[500]
+    },
+    successText: {
+      color: green[500]
+    }
   })
 )

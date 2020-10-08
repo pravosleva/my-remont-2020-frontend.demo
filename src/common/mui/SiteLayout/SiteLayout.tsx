@@ -32,7 +32,7 @@ export const SiteLayout: React.FC = ({ children }) => {
   // --- JOBLIST STATE:
   const [joblist, dispatch] = useReducer(reducer, [])
   const handleChangeJobField = useCallback(
-    (id, fieldName: string, value: number | boolean) => () => {
+    (id, fieldName: string, value: number | boolean | string) => () => {
       dispatch({ type: 'UPDATE_JOB_FIELD', id, fieldName, payload: value })
     },
     [dispatch]

@@ -13,7 +13,6 @@
     "forceConsistentCasingInFileNames": true,
     "module": "esnext",
     "moduleResolution": "node",
-    "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "preserve",
@@ -28,9 +27,11 @@
     ]
   },
   "include": [
-    "src"
+    "src/**/*"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "**/*.spec.ts",
+    "node_modules/@uiw/react-markdown-preview/lib/cjs/index.d.ts"
   ]
 }

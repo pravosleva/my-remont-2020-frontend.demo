@@ -30,26 +30,26 @@ export const TotalInfo = () => {
     <div className={classes.paper}>
       <Grid container direction="column" spacing={2}>
         <Grid item xs>
-          <h3>
+          <h3 className={classes.infoText}>
             Работ принято: {comletedJobsCount} из {joblist.length}
           </h3>
         </Grid>
         <Divider />
-        <Grid item xs style={{ opacity: '0.5', marginTop: '20px' }}>
+        <Grid className={classes.secondaryText} item xs style={{ marginTop: '20px' }}>
           <b>ИТОГО оплачено: {getPrettyPrice(totalPayed)}</b>
         </Grid>
-        <Grid item xs style={{ opacity: '0.5' }}>
+        <Grid item xs className={classes.secondaryText}>
           <b>Ценник за работу: {getPrettyPrice(totalPriceJobs)}</b>
         </Grid>
-        <Grid item xs style={{ opacity: '0.5' }}>
+        <Grid item xs className={classes.secondaryText}>
           <b>Ценник за материалы: {getPrettyPrice(totalMaterials)}</b>
         </Grid>
         <Grid
           item
           xs
           className={clsx({
-            [classes.redText]: totalDifferecne < 0,
-            [classes.greenText]: totalDifferecne >= 0,
+            [classes.dangerText]: totalDifferecne < 0,
+            [classes.successText]: totalDifferecne >= 0,
           })}
         >
           <b>Кредиторская задолженность: {getPrettyPrice(totalDifferecne)}</b>

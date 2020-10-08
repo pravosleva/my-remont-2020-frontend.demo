@@ -1,7 +1,7 @@
 import React, { useMemo, useContext, useState } from 'react'
 import { IJob } from './interfaces'
 import { useStyles } from './styles'
-import { Grid, Typography } from '@material-ui/core'
+import { Grid, Typography, Divider } from '@material-ui/core'
 import Markdown from 'react-markdown'
 import { getPrettyPrice } from '~/utils/getPrettyPrice'
 import clsx from 'clsx'
@@ -24,12 +24,21 @@ export const Job = ({ data }: IProps) => {
       <Grid container direction="column" spacing={2}>
         <Grid item xs>
           {!!data.comment && (
-            <Typography variant="body2" color="textSecondary">
-              {data.comment || 'No comment'}
-            </Typography>
+            <>
+              <h3>Комментарий</h3>
+              <Typography variant="body2" color="textSecondary">
+                {data.comment || 'No comment'}
+              </Typography>
+            </>
           )}
-          {!!data.description && <Markdown source={data.description} />}
+          {!!data.description && (
+            <>
+              <h3>Описание</h3>
+              <Markdown source={data.description} />
+            </>
+          )}
         </Grid>
+        <Divider />
         {!!data.priceJobs && (
           <Grid item>
             <Typography gutterBottom variant="body2" color="textSecondary">
@@ -62,8 +71,8 @@ export const Job = ({ data }: IProps) => {
         <Grid item>
           <b
             className={clsx({
-              [classes.redText]: diff < 0,
-              [classes.greenText]: diff >= 0,
+              [classes.dangerText]: diff < 0,
+              [classes.successText]: diff >= 0,
             })}
           >
             Остаток: {getPrettyPrice(diff)}
