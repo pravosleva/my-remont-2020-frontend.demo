@@ -344,6 +344,20 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
                         }}
                       />
                       <TextField
+                        id={`priceDelivery_${data._id}`}
+                        label="Ценник за доставку"
+                        type="number"
+                        variant="outlined"
+                        value={data.priceDelivery}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                          changeJobField(
+                            data._id,
+                            'priceDelivery',
+                            Number(e.target.value)
+                          )()
+                        }}
+                      />
+                      <TextField
                         id={`payed_${data._id}`}
                         label="Оплачено"
                         type="number"
