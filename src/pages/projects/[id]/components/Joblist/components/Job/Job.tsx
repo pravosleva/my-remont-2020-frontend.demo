@@ -22,44 +22,35 @@ export const Job = ({ data }: IProps) => {
   return (
     <div className={classes.paper}>
       <Grid container direction="column" spacing={2}>
-        <Grid item xs>
-          {!!data.comment && (
-            <>
-              <h3>Комментарий</h3>
+        {!!data.comment && (
+          <Grid item xs={12}>
+            <b>Комментарий</b>
+            <div>
               <Typography variant="body2" color="textSecondary">
                 {data.comment || 'No comment'}
               </Typography>
-            </>
-          )}
-          {!!data.description && (
-            <>
-              <h3>Описание</h3>
-              <Markdown source={data.description} />
-            </>
-          )}
+            </div>
+          </Grid>
+        )}
+        {!!data.description && (
+          <Grid item xs={12}>
+            <b>Описание</b>
+            <br />
+            <Markdown source={data.description} />
+          </Grid>
+        )}
+
+        <Grid item>
+          <Typography gutterBottom variant="body2" color="textSecondary">
+            Цена за работу: {getPrettyPrice(data.priceJobs)}
+          </Typography>
+          <Typography gutterBottom variant="body2" color="textSecondary">
+            Цена за материалы: {getPrettyPrice(data.priceMaterials)}
+          </Typography>
+          <Typography gutterBottom variant="body2" color="textSecondary">
+            Цена за доставку: {getPrettyPrice(data.priceDelivery)}
+          </Typography>
         </Grid>
-        <Divider />
-        {!!data.priceJobs && (
-          <Grid item>
-            <Typography gutterBottom variant="body2" color="textSecondary">
-              Цена за работу: {getPrettyPrice(data.priceJobs)}
-            </Typography>
-          </Grid>
-        )}
-        {!!data.priceMaterials && (
-          <Grid item>
-            <Typography gutterBottom variant="body2" color="textSecondary">
-              Цена за материалы: {getPrettyPrice(data.priceMaterials)}
-            </Typography>
-          </Grid>
-        )}
-        {!!data.priceDelivery && (
-          <Grid item>
-            <Typography gutterBottom variant="body2" color="textSecondary">
-              Цена за доставку: {getPrettyPrice(data.priceDelivery)}
-            </Typography>
-          </Grid>
-        )}
         <Grid item>
           <Typography gutterBottom variant="h5">
             Оплачено: {getPrettyPrice(data.payed)}

@@ -7,7 +7,7 @@ export const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(1),
   },
   paper: {
-    padding: theme.spacing(0, 1, 0, 1),
+    padding: theme.spacing(1),
   },
   dangerText: {
     color: red[500],

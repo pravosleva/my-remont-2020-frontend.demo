@@ -131,8 +131,8 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
             data.joblist.length > 0
           ) {
             updateJoblist(data.joblist)
+            return
           }
-          return
         }
         throw new Error('Fuckup')
       })
@@ -256,13 +256,14 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
                 </Dialog>
                 {/* DIALOG FOR VALUES */}
                 <Dialog
+                  fullWidth
                   open={openedEditorId === data._id}
                   onClose={handleCloseEditor}
                   scroll="paper"
                   aria-labelledby={`scroll-dialog-title_${data._id}`}
                 >
                   <DialogTitle id={`scroll-dialog-title_${data._id}`}>
-                    {data.name}
+                    {data.name || 'Title'}
                   </DialogTitle>
                   <DialogContent dividers={true}>
                     {/*
@@ -286,6 +287,34 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
                         }
                     */}
                     <div className={classes.inputsBox}>
+                      <TextField
+                        id={`name_${data._id}`}
+                        label="Название"
+                        type="text"
+                        variant="outlined"
+                        value={data.name}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                          changeJobField(
+                            data._id,
+                            'name',
+                            e.target.value
+                          )()
+                        }}
+                      />
+                      <TextField
+                        id={`comment_${data._id}`}
+                        label="Комментарий"
+                        type="text"
+                        variant="outlined"
+                        value={data.comment}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                          changeJobField(
+                            data._id,
+                            'comment',
+                            e.target.value
+                          )()
+                        }}
+                      />
                       <TextField
                         id={`priceJobs_${data._id}`}
                         label="Ценник за работу"
