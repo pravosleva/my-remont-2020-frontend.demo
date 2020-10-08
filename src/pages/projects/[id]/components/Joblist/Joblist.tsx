@@ -30,7 +30,7 @@ import { getPrettyPrice } from '~/utils/getPrettyPrice'
 
 const Button = withStyles((theme) => ({
   root: {
-    paddingTop: theme.spacing(1),
+    // paddingTop: theme.spacing(1),
   },
 }))(MuiButton)
 
@@ -271,7 +271,7 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
                           color:
                             data.payed -
                               (data.priceMaterials + data.priceJobs) <
-                            0
+                              0
                               ? 'red'
                               : 'green',
                         }}

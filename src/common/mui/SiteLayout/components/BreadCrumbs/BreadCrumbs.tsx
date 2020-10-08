@@ -1,29 +1,23 @@
-import React, { useCallback, useContext, useMemo } from 'react'
+import React, { useCallback, useContext } from 'react'
 // import { NavLink } from 'react-router-dom'
-import { Link, NavLink, withRouter } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 import { MainContext } from '~/common/context/MainContext'
 // import { useCookies } from 'react-cookie'
-// import { useRouter } from '~/common/hooks/useRouter'
+import { useRouter } from '~/common/hooks/useRouter'
 import { Button } from '@material-ui/core'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 
-export const BreadCrumbs = withRouter(({ location, history }) => {
+export const BreadCrumbs = () => {
   // const { ...rest }: IPageParams = useParams()
   const { projectName, isUserDataLoading, userData, onLogout } = useContext(
     MainContext
   )
-  const { pathname } = location
-  // const router = useRouter()
-  // const handleLogout = useCallback(() => {
-  //   onLogout().then(() => {
-  //     router.push('/auth/login')
-  //   })
-  // }, [onLogout, router])
+  const router = useRouter()
   // const [cookies, setCookie, removeCookie] = useCookies(['jwt'])
-  // const { location: { pathname } } = router
+  const { location: { pathname } } = router
   const handleLogout = useCallback(() => {
     onLogout().then(() => {
-      history.push('/auth/login')
+      router.push('/auth/login')
     })
   }, [onLogout, history])
 
@@ -37,18 +31,18 @@ export const BreadCrumbs = withRouter(({ location, history }) => {
       }}
     >
       {pathname === '/' && (
-        <div style={{ paddingTop: '4px' }}>
+        <div>
           <Link to="/">Главная</Link>
         </div>
       )}
       {(pathname === '/projects' || pathname === '/projects/') && (
-        <div style={{ paddingTop: '4px' }}>
+        <div>
           <Link to="/">Главная</Link> /{' '}
           <span style={{ opacity: '0.5' }}>Проекты</span>
         </div>
       )}
       {pathname.includes('/projects/') && pathname.length > 10 && (
-        <div style={{ paddingTop: '4px' }}>
+        <div>
           <Link to="/">Главная</Link> / <Link to="/projects">Проекты</Link> /{' '}
           <span style={{ opacity: '0.5' }}>
             {projectName || 'Please wait...'}
@@ -56,9 +50,9 @@ export const BreadCrumbs = withRouter(({ location, history }) => {
         </div>
       )}
       {pathname.includes('/auth') && (
-        <div style={{ paddingTop: '4px' }}>
+        <div>
           <Link to="/">Главная</Link> /{' '}
-          <span style={{ opacity: '0.5' }}>Вход</span>
+          <span style={{ opacity: '0.5' }}>Авторизация</span>
         </div>
       )}
       <div style={{ marginLeft: 'auto' }}>
@@ -67,20 +61,20 @@ export const BreadCrumbs = withRouter(({ location, history }) => {
         ) : !userData ? (
           <NavLink to="/auth/login">Вход</NavLink>
         ) : (
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <Button
-              style={{ marginLeft: '10px' }}
-              onClick={handleLogout}
-              size="small"
-              variant="contained"
-              color="primary"
-              endIcon={<ExitToAppIcon />}
-            >
-              <span style={{ paddingTop: '4px' }}>{userData?.username}</span>
-            </Button>
-          </div>
-        )}
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <Button
+                  style={{ marginLeft: '10px' }}
+                  onClick={handleLogout}
+                  size="small"
+                  variant="contained"
+                  color="primary"
+                  endIcon={<ExitToAppIcon />}
+                >
+                  <span>{userData?.username}</span>
+                </Button>
+              </div>
+            )}
       </div>
     </div>
   )
-})
+}
