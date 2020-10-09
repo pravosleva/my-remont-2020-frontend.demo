@@ -77,7 +77,7 @@ export const CreateNewJob = ({
                 fullWidth
                 id="comment_NEW_JOB"
                 label="Коментарий"
-                type="number"
+                type="text"
                 variant="outlined"
                 value={comment}
                 size="small"
