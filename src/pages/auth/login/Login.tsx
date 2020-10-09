@@ -22,7 +22,7 @@ export const Login = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [cookies, setCookie, removeCookie] = useCookies(['jwt'])
-  const { setUserData } = useContext(MainContext)
+  const { setUserData, toast } = useContext(MainContext)
   const handleSubmit = useCallback(() => {
     const normalizedObj = getNormalizedInputs({ email, password })
     // const body = new FormData()
@@ -47,6 +47,7 @@ export const Login = () => {
         if (!!data.jwt && !!data.user) {
           setCookie(data.jwt, 'jwt', { maxAge: 60 * 60 * 24 * 5 })
           setUserData(data.user, data.jwt)
+          toast(`Hello, ${data.user.username}`, { appearance: 'success' })
           return
         }
         throw new Error('Fuckup')
