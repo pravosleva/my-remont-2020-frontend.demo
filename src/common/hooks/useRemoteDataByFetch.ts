@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef, MutableRefObject } from 'react'
-// import { httpErrorHandler } from '~/utils/errors/http/fetch';
+import { httpErrorHandler } from '~/utils/errors/http/fetch'
+import { universalFetchCatch } from '~/utils/errors/http/universalFetchCatch'
+import { TResponse } from '~/utils/errors/api'
 
 interface IUseRemoteDataByFetchProps {
   url: string
@@ -23,7 +25,7 @@ export const useRemoteDataByFetch = ({
   onAbortIfRequestStarted,
   onSuccess,
   onFail,
-  debounce = 0,
+  debounce = 300,
   responseValidator,
   on401,
 }: IUseRemoteDataByFetchProps): TAns => {
@@ -42,7 +44,7 @@ export const useRemoteDataByFetch = ({
       const abortController = new AbortController()
       setIsLoading(false)
 
-      const fetchData = () => {
+      const fetchData = async () => {
         if (!!window) {
           setIsLoading(true)
           setIsLoaded(false)
@@ -59,7 +61,8 @@ export const useRemoteDataByFetch = ({
               Authorization: `Bearer ${accessToken}`,
             }
           }
-          window
+
+          const res: TResponse = await window
             .fetch(url, {
               method,
               headers,
@@ -77,46 +80,46 @@ export const useRemoteDataByFetch = ({
               }
               return res
             })
-            // .then(httpErrorHandler)
             .then((res) => {
-              try {
-                // TODO: Стандартный валидатор ошибок!
-                if (res.status === 200) {
-                  return res.json()
-                } else if (res.status === 401) {
-                  if (!!on401) {
-                    on401(res.statusText)
-                  }
-                }
-              } catch (err) {
-                throw new Error(err.message)
+              if (res.status === 401) {
+                if (!!on401) on401(res.statusText)
               }
+              return res
             })
-            .then((resData: any) => {
-              if (!responseValidator(resData)) {
-                setIsLoaded(false)
-                setIsLoading(false)
-                throw new Error('Data is not correct')
-              }
-              // console.log(resData)
-              setDataFromServer(resData)
-              setIsLoaded(true)
-              setIsLoading(false)
-              if (!!onSuccess) onSuccess(resData)
-              isStartedImperativeRef.current = false
-              abortController.abort()
-            })
-            .catch((error) => {
-              if (!!onFail) onFail(error)
+            .then(httpErrorHandler) // res -> res.json()
+            .then((data: any) => ({
+              isOk: true,
+              response: data,
+            }))
+            .catch(universalFetchCatch)
+
+          if (res.isOk) {
+            // @ts-ignore
+            if (!responseValidator(res.response)) {
               setIsLoaded(false)
               setIsLoading(false)
+              throw new Error('Data is not correct')
+            } else {
+              // @ts-ignore
+              setDataFromServer(res.response)
+              setIsLoaded(true)
+              setIsLoading(false)
+              // @ts-ignore
+              if (!!onSuccess) onSuccess(res.response)
               isStartedImperativeRef.current = false
-            })
+              abortController.abort()
+            }
+          } else {
+            // @ts-ignore
+            if (!!onFail) onFail(res.msg)
+            setIsLoaded(false)
+            setIsLoading(false)
+            isStartedImperativeRef.current = false
+          }
         }
       }
 
       const debouncedHandler = setTimeout(fetchData, debounce)
-      // fetchData()
 
       return function cancel() {
         clearTimeout(debouncedHandler)

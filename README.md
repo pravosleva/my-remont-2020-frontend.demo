@@ -2,20 +2,20 @@
 
 ## Roadmap
 
-- [ ] Standard errors handlers
-  - [ ] network
-  - [ ] http
-  - [ ] api
 - [ ] UX
   - [ ] авториз. пользователь должен видеть только свои ремонты
   - [ ] неавториз. польз. должен видеть только общую информацию о ремонтах
     - [ ] общая аналитика по всем ремонтам на главной
-  - [x] create new job by auth user
-  - [x] logout on 401 (bad jwt)
+  - [ ] socket connection for realtime web app
+  - [x] create/edit job: by auth user
+  - [x] logout on `/users/me` 401 (bad jwt)
 - [ ] UI
   - [ ] стандартные уведомления!
   - [x] markdown editor
-  - [x] done job checkbox
+- [ ] Standard errors handlers
+  - [ ] network
+  - [x] http
+  - [ ] api
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

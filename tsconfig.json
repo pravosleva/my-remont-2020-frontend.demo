@@ -1,7 +1,9 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "noImplicitThis": true,
+    "target": "es2018",
     "lib": [
+      "es6",
       "dom",
       "es2017"
     ],
@@ -9,7 +11,8 @@
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "strict": true,
+    "strict": false,
+    "strictPropertyInitialization": false,
     "forceConsistentCasingInFileNames": true,
     "module": "esnext",
     "moduleResolution": "node",
