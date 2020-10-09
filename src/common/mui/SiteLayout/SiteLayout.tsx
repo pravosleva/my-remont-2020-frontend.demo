@@ -7,6 +7,7 @@ import { getApiUrl } from '~/utils/getApiUrl'
 import { useCookies } from 'react-cookie'
 import { reducer } from './reducer'
 import { useToasts } from 'react-toast-notifications'
+import { useStyles } from './styles'
 
 const apiUrl = getApiUrl()
 const getNormalizedAns = (originalRes: any): IUserData => {
@@ -82,6 +83,7 @@ export const SiteLayout: React.FC = ({ children }) => {
     addToast('Logout', { appearance: 'info' })
     return Promise.resolve(true)
   }, [setUserData, removeCookie])
+  const classes = useStyles()
 
   return (
     <MainContext.Provider
@@ -100,35 +102,37 @@ export const SiteLayout: React.FC = ({ children }) => {
         toast: addToast,
       }}
     >
-      <Grid container spacing={0}>
-        <div
-          style={{
-            width: '100%',
-            maxWidth: '1000px',
-            margin: '0 auto',
-            padding: '0 10px 0 10px',
-            height: '70px',
-            display: 'flex',
-            alignItems: 'center',
-          }}
-        >
-          <BreadCrumbs />
-        </div>
-        <Grid item xs={12}>
+      <div className={classes.bg}>
+        <Grid container spacing={0}>
           <div
             style={{
+              width: '100%',
               maxWidth: '1000px',
               margin: '0 auto',
-              padding: '10px',
-              maxHeight: 'calc(100vh - 70px)',
-              overflowY: 'auto',
-              borderTop: '1px solid lightgray',
+              padding: '0 10px 0 10px',
+              height: '70px',
+              display: 'flex',
+              alignItems: 'center',
             }}
           >
-            {children}
+            <BreadCrumbs />
           </div>
+          <Grid item xs={12}>
+            <div
+              style={{
+                maxWidth: '1000px',
+                margin: '0 auto',
+                padding: '10px',
+                maxHeight: 'calc(100vh - 70px)',
+                overflowY: 'auto',
+                borderTop: '1px solid lightgray',
+              }}
+            >
+              {children}
+            </div>
+          </Grid>
         </Grid>
-      </Grid>
+      </div>
     </MainContext.Provider>
   )
 }

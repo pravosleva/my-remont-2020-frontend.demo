@@ -35,11 +35,9 @@ export const Job = ({ data }: IProps) => {
         {!!data.description && (
           <Grid item xs={12}>
             <b>Описание</b>
-            <br />
             <Markdown source={data.description} />
           </Grid>
         )}
-
         <Grid item>
           <Typography gutterBottom variant="body2" color="textSecondary">
             Цена за работу: {getPrettyPrice(data.priceJobs)}
@@ -56,9 +54,6 @@ export const Job = ({ data }: IProps) => {
             Оплачено: {getPrettyPrice(data.payed)}
           </Typography>
         </Grid>
-        {/*
-          <Grid>{<pre style={{ whiteSpace: 'pre-wrap' }}>{JSON.stringify(data, null, 2)}</pre>}</Grid>
-        */}
         <Grid item>
           <b
             className={clsx({

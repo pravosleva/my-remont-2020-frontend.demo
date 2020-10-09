@@ -18,6 +18,7 @@ import {
   reducer as createNewJobReducer,
 } from './createNewProjectReducer'
 import { CreateNewJob } from './components/CreateNewJob'
+import BuildIcon from '@material-ui/icons/Build';
 
 const apiUrl = getApiUrl()
 
@@ -168,7 +169,7 @@ export const TheProject = () => {
     <>
       <Grid container spacing={2}>
         <Grid item xs={12} md={6}>
-          <Grid container spacing={1}>
+          <Grid container spacing={2}>
             {isLoading && (
               <Grid item xs={12}>
                 {' '}
@@ -189,6 +190,7 @@ export const TheProject = () => {
                     variant="outlined"
                     color="primary"
                     disabled={isLoading}
+                    endIcon={<BuildIcon />}
                   >
                     Создать работу
                   </Button>

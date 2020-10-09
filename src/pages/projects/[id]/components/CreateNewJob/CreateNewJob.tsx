@@ -8,6 +8,7 @@ import {
   DialogContent,
   DialogTitle,
   TextField,
+  Container,
 } from '@material-ui/core'
 import { IState as ICreateJobState } from '~/pages/projects/[id]/createNewProjectReducer'
 import { useStyles } from './styles'
@@ -55,34 +56,38 @@ export const CreateNewJob = ({
         {name || 'Title'}
       </DialogTitle>
       <DialogContent dividers={true} className={classes.dialogContent}>
-        <Grid container spacing={2}>
-          <Grid item xs={12} md={6}>
-            <TextField
-              fullWidth
-              id="name_NEW_JOB"
-              label="Название"
-              type="text"
-              variant="outlined"
-              value={name}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                onChangeField('name', e.target.value)
-              }}
-            />
+        <Container>
+          <Grid container spacing={2}>
+            <Grid item xs={12} md={6}>
+              <TextField
+                fullWidth
+                id="name_NEW_JOB"
+                label="Название"
+                type="text"
+                variant="outlined"
+                value={name}
+                size="small"
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  onChangeField('name', e.target.value)
+                }}
+              />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <TextField
+                fullWidth
+                id="comment_NEW_JOB"
+                label="Коментарий"
+                type="number"
+                variant="outlined"
+                value={comment}
+                size="small"
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  onChangeField('comment', e.target.value)
+                }}
+              />
+            </Grid>
           </Grid>
-          <Grid item xs={12} md={6}>
-            <TextField
-              fullWidth
-              id="comment_NEW_JOB"
-              label="Коментарий"
-              type="number"
-              variant="outlined"
-              value={comment}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                onChangeField('comment', e.target.value)
-              }}
-            />
-          </Grid>
-        </Grid>
+        </Container>
       </DialogContent>
       <DialogActions>
         <Button

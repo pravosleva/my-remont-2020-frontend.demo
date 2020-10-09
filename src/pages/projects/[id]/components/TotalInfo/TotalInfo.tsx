@@ -1,6 +1,6 @@
 import React, { useMemo, useContext } from 'react'
 import { useStyles } from './styles'
-// import { Paper } from '@material-ui/core'
+import { Paper } from '@material-ui/core'
 import { getPrettyPrice } from '~/utils/getPrettyPrice'
 import { Grid, Divider } from '@material-ui/core'
 import {
@@ -27,19 +27,18 @@ export const TotalInfo = () => {
   )
 
   return (
-    <div className={classes.paper}>
+    <Paper className={classes.paper}>
       <Grid container direction="column" spacing={2}>
         <Grid item xs>
-          <h3 className={classes.infoText}>
+          <b className={classes.infoText}>
             Работ принято: {comletedJobsCount} из {joblist.length}
-          </h3>
+          </b>
         </Grid>
         <Divider />
         <Grid
           className={classes.secondaryText}
           item
           xs
-          style={{ marginTop: '20px' }}
         >
           <b>ИТОГО оплачено: {getPrettyPrice(totalPayed)}</b>
         </Grid>
@@ -57,9 +56,9 @@ export const TotalInfo = () => {
             [classes.successText]: totalDifferecne >= 0,
           })}
         >
-          <b>Кредиторская задолженность: {getPrettyPrice(totalDifferecne)}</b>
+          <b>Остаток: {getPrettyPrice(totalDifferecne)}</b>
         </Grid>
       </Grid>
-    </div>
+    </Paper>
   )
 }

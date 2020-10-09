@@ -314,6 +314,7 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
                         type="text"
                         variant="outlined"
                         value={data.name}
+                        size="small"
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                           changeJobField(data._id, 'name', e.target.value)()
                         }}
@@ -324,6 +325,7 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
                         type="text"
                         variant="outlined"
                         value={data.comment}
+                        size="small"
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                           changeJobField(data._id, 'comment', e.target.value)()
                         }}
@@ -334,6 +336,7 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
                         type="number"
                         variant="outlined"
                         value={data.priceJobs}
+                        size="small"
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                           changeJobField(
                             data._id,
@@ -348,6 +351,7 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
                         type="number"
                         variant="outlined"
                         value={data.priceMaterials}
+                        size="small"
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                           changeJobField(
                             data._id,
@@ -362,6 +366,7 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
                         type="number"
                         variant="outlined"
                         value={data.priceDelivery}
+                        size="small"
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                           changeJobField(
                             data._id,
@@ -376,6 +381,7 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
                         type="number"
                         variant="outlined"
                         value={data.payed}
+                        size="small"
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                           changeJobField(
                             data._id,
@@ -392,6 +398,32 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
                           className={classes.formControl}
                         >
                           <FormGroup>
+                            <FormControl
+                              component="fieldset"
+                              className={classes.formControl}
+                            >
+                              <FormGroup>
+                                <FormControlLabel
+                                  control={
+                                    <Checkbox
+                                      color="primary"
+                                      checked={data.isStarted}
+                                      onChange={(
+                                        e: React.ChangeEvent<HTMLInputElement>
+                                      ) => {
+                                        changeJobField(
+                                          data._id,
+                                          'isStarted',
+                                          e.target.checked
+                                        )()
+                                      }}
+                                      name="isStarted"
+                                    />
+                                  }
+                                  label="Работы были начаты"
+                                />
+                              </FormGroup>
+                            </FormControl>
                             <FormControlLabel
                               control={
                                 <Checkbox
@@ -410,32 +442,6 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
                                 />
                               }
                               label="Работы завершены"
-                            />
-                          </FormGroup>
-                        </FormControl>
-                        <FormControl
-                          component="fieldset"
-                          className={classes.formControl}
-                        >
-                          <FormGroup>
-                            <FormControlLabel
-                              control={
-                                <Checkbox
-                                  color="primary"
-                                  checked={data.isStarted}
-                                  onChange={(
-                                    e: React.ChangeEvent<HTMLInputElement>
-                                  ) => {
-                                    changeJobField(
-                                      data._id,
-                                      'isStarted',
-                                      e.target.checked
-                                    )()
-                                  }}
-                                  name="isStarted"
-                                />
-                              }
-                              label="Работы были начаты"
                             />
                           </FormGroup>
                         </FormControl>

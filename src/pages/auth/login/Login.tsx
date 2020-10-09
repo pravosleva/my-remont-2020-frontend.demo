@@ -76,6 +76,7 @@ export const Login = () => {
             type="email"
             variant="outlined"
             value={email}
+            size="small"
             onChange={(e) => {
               setEmail(e.target.value)
             }}
@@ -86,6 +87,7 @@ export const Login = () => {
             type="password"
             variant="outlined"
             value={password}
+            size="small"
             onChange={(e) => {
               setPassword(e.target.value)
             }}
