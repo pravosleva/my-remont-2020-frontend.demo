@@ -50,13 +50,13 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     // Dialog:
     dialogContent: {
-      padding: theme.spacing(2)
+      padding: theme.spacing(2),
     },
     dangerText: {
-      color: red[500]
+      color: red[500],
     },
     successText: {
-      color: green[500]
-    }
+      color: green[500],
+    },
   })
 )

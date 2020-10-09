@@ -81,5 +81,5 @@ export const MainContext = createContext<IMainContext>({
   },
   toast: () => {
     throw new Error('addToast method should be implemented')
-  }
+  },
 })

@@ -1,4 +1,10 @@
-import React, { useCallback, useContext, useEffect, useReducer, useState } from 'react'
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useReducer,
+  useState,
+} from 'react'
 import { useRemoteDataByFetch, TAns } from '~/common/hooks/useRemoteDataByFetch'
 import { getApiUrl } from '~/utils/getApiUrl'
 import { useParams } from 'react-router-dom'
@@ -7,7 +13,10 @@ import { Grid, Button } from '@material-ui/core'
 import { TotalInfo } from './components/TotalInfo'
 import { MainContext } from '~/common/context/MainContext'
 import { useCookies } from 'react-cookie'
-import { initialState as createNewJobInitialState, reducer as createNewJobReducer } from './createNewProjectReducer'
+import {
+  initialState as createNewJobInitialState,
+  reducer as createNewJobReducer,
+} from './createNewProjectReducer'
 import { CreateNewJob } from './components/CreateNewJob'
 
 const apiUrl = getApiUrl()
@@ -31,9 +40,14 @@ interface INewJob {
 
 export const TheProject = () => {
   const { id }: IPageParams = useParams()
-  const { setProjectName, resetProjectName, updateJoblist, userData, joblist, toast } = useContext(
-    MainContext
-  )
+  const {
+    setProjectName,
+    resetProjectName,
+    updateJoblist,
+    userData,
+    joblist,
+    toast,
+  } = useContext(MainContext)
   const [cookies] = useCookies(['jwt'])
   // TODO: Подписаться на сокет, запрашивать обновления при каждом изменении.
   // Либо поместить в контекст
@@ -62,28 +76,37 @@ export const TheProject = () => {
       resetProjectName()
     }
   }, [resetProjectName])
-  const [createJobState, dispatchCreateJob] = useReducer(createNewJobReducer, createNewJobInitialState)
+  const [createJobState, dispatchCreateJob] = useReducer(
+    createNewJobReducer,
+    createNewJobInitialState
+  )
   const handleCreateJob = useCallback(() => {
     dispatchCreateJob({ type: 'OPEN' })
   }, [])
   const handleCloseCreateJobForm = useCallback(() => {
     dispatchCreateJob({ type: 'CLOSE' })
   }, [dispatchCreateJob])
-  const handleChangeField = useCallback((field: string, value: string) => {
-    switch (field) {
-      case 'comment':
-        dispatchCreateJob({ type: 'UPDATE_COMMENT', payload: value })
-        break
-      case 'name':
-        dispatchCreateJob({ type: 'UPDATE_NAME', payload: value })
-        break
-      default: return
-    }
-  }, [dispatchCreateJob])
+  const handleChangeField = useCallback(
+    (field: string, value: string) => {
+      switch (field) {
+        case 'comment':
+          dispatchCreateJob({ type: 'UPDATE_COMMENT', payload: value })
+          break
+        case 'name':
+          dispatchCreateJob({ type: 'UPDATE_NAME', payload: value })
+          break
+        default:
+          return
+      }
+    },
+    [dispatchCreateJob]
+  )
   // ---
   // const handleSubmit = useCallback(() => {
   // }, [remontId, cookies.jwt, joblist, handleCloseEditor, updateJoblist])
-  const [isCreateNewJobLoading, setIsCreateNewJobLoading] = useState<boolean>(false)
+  const [isCreateNewJobLoading, setIsCreateNewJobLoading] = useState<boolean>(
+    false
+  )
   const handleSave = useCallback(() => {
     setIsCreateNewJobLoading(true)
     const newJob: INewJob = {
@@ -100,7 +123,7 @@ export const TheProject = () => {
       isStarted: false,
       payed: 0,
       // description: "",
-      __component: "job.job",
+      __component: 'job.job',
     }
     window
       .fetch(`${apiUrl}/remonts/${id}`, {
@@ -124,7 +147,9 @@ export const TheProject = () => {
             data.joblist.length > 0
           ) {
             updateJoblist(data.joblist)
-            toast(`Updated: ${data.joblist.length} jobs`, { appearance: 'success' })
+            toast(`Updated: ${data.joblist.length} jobs`, {
+              appearance: 'success',
+            })
             return
           }
         }
@@ -144,25 +169,38 @@ export const TheProject = () => {
       <Grid container spacing={2}>
         <Grid item xs={12} md={6}>
           <Grid container spacing={1}>
-            {isLoading && <Grid item xs={12}> <b>Loading...</b></Grid>}
-            {isLoaded && <Grid item xs={12}><TotalInfo /></Grid>}
+            {isLoading && (
+              <Grid item xs={12}>
+                {' '}
+                <b>Loading...</b>
+              </Grid>
+            )}
+            {isLoaded && (
+              <Grid item xs={12}>
+                <TotalInfo />
+              </Grid>
+            )}
             <Grid item xs={12}>
-              {
-                !!userData && (
-                  <>
-                    <Button
-                      onClick={handleCreateJob}
-                      size="small"
-                      variant="outlined"
-                      color="primary"
-                      disabled={isLoading}
-                    >
-                      Создать работу
-                    </Button>
-                    <CreateNewJob isLoading={isLoading || isCreateNewJobLoading} onChangeField={handleChangeField} onClose={handleCloseCreateJobForm} onSave={handleSave} {...createJobState} />
-                  </>
-                )
-              }
+              {!!userData && (
+                <>
+                  <Button
+                    onClick={handleCreateJob}
+                    size="small"
+                    variant="outlined"
+                    color="primary"
+                    disabled={isLoading}
+                  >
+                    Создать работу
+                  </Button>
+                  <CreateNewJob
+                    isLoading={isLoading || isCreateNewJobLoading}
+                    onChangeField={handleChangeField}
+                    onClose={handleCloseCreateJobForm}
+                    onSave={handleSave}
+                    {...createJobState}
+                  />
+                </>
+              )}
             </Grid>
           </Grid>
         </Grid>

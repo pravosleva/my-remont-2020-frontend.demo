@@ -9,7 +9,7 @@ export const universalFetchCatch = (err: any): TResponse => {
   switch (true) {
     case err instanceof NetworkError:
     case err instanceof HttpError:
-    // case err instanceof ApiError:
+      // case err instanceof ApiError:
       return {
         isOk: false,
         msg: err.getErrorMsg(),

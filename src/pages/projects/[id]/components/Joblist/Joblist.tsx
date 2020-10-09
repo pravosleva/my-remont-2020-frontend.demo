@@ -32,8 +32,8 @@ import SaveIcon from '@material-ui/icons/Save'
 // import MDEditor from '@uiw/react-md-editor'
 import MarkdownIt from 'markdown-it'
 import MDEditor from 'react-markdown-editor-lite'
-import 'react-markdown-editor-lite/lib/index.css';
-import Slide from '@material-ui/core/Slide';
+import 'react-markdown-editor-lite/lib/index.css'
+import Slide from '@material-ui/core/Slide'
 
 // Register plugins if required
 // MdEditor.use(YOUR_PLUGINS_HERE);
@@ -44,11 +44,11 @@ import Slide from '@material-ui/core/Slide';
 const mdParser = new MarkdownIt({
   html: false,
   langPrefix: 'language-',
-});
+})
 const TransitionUp = React.forwardRef(function Transition(props, ref) {
   // @ts-ignore
-  return <Slide direction="up" ref={ref} {...props} />;
-});
+  return <Slide direction="up" ref={ref} {...props} />
+})
 // const TransitionRight = React.forwardRef(function Transition(props, ref) {
 //   return <Slide direction="right" ref={ref} {...props} />;
 // });
@@ -76,9 +76,13 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
     setExpanded(isExpanded ? panel : false)
   }
   const classes = useStyles()
-  const { userData, changeJobField, joblist, updateJoblist, toast } = useContext(
-    MainContext
-  )
+  const {
+    userData,
+    changeJobField,
+    joblist,
+    updateJoblist,
+    toast,
+  } = useContext(MainContext)
   const [openedEditorId, setOpenedEditorId] = useState<string | null>(null)
   const handleOpenEditor = useCallback(
     (id: string) => () => {
@@ -160,10 +164,17 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
                   aria-controls={`panel${data._id}bh-content`}
                   id={`panel${data._id}bh-header`}
                 >
-                  <b className={clsx({
-                    [classes.dangerText]: data.payed - (data.priceMaterials + data.priceJobs) < 0,
-                    [classes.successText]: data.payed - (data.priceMaterials + data.priceJobs) >= 0,
-                  })}>{data.name}</b>
+                  <b
+                    className={clsx({
+                      [classes.dangerText]:
+                        data.payed - (data.priceMaterials + data.priceJobs) < 0,
+                      [classes.successText]:
+                        data.payed - (data.priceMaterials + data.priceJobs) >=
+                        0,
+                    })}
+                  >
+                    {data.name}
+                  </b>
                 </AccordionSummary>
                 <Divider />
                 <AccordionDetails className={classes.details}>
@@ -205,10 +216,13 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
                   <DialogTitle id={`scroll-dialog-title_${data._id}`}>
                     {data.name}
                   </DialogTitle>
-                  <DialogContent dividers={true} className={classes.dialogMDContent}>
+                  <DialogContent
+                    dividers={true}
+                    className={classes.dialogMDContent}
+                  >
                     <MDEditor
                       value={data.description}
-                      style={{ minHeight: "300px" }}
+                      style={{ minHeight: '300px' }}
                       renderHTML={(text) => mdParser.render(text)}
                       onChange={({ text }) => {
                         // console.log('handleEditorChange', html, text)
@@ -218,7 +232,13 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
                       }}
                       config={{
                         view: { menu: false, md: true, html: false },
-                        canView: { menu: false, md: true, html: false, fullScreen: true, hideMenu: true }
+                        canView: {
+                          menu: false,
+                          md: true,
+                          html: false,
+                          fullScreen: true,
+                          hideMenu: true,
+                        },
                       }}
                     />
                   </DialogContent>
@@ -247,8 +267,8 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
                             style={{ marginLeft: 'auto' }}
                           />
                         ) : (
-                            <SaveIcon />
-                          )
+                          <SaveIcon />
+                        )
                       }
                     >
                       Сохранить
@@ -295,11 +315,7 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
                         variant="outlined"
                         value={data.name}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                          changeJobField(
-                            data._id,
-                            'name',
-                            e.target.value
-                          )()
+                          changeJobField(data._id, 'name', e.target.value)()
                         }}
                       />
                       <TextField
@@ -309,11 +325,7 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
                         variant="outlined"
                         value={data.comment}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                          changeJobField(
-                            data._id,
-                            'comment',
-                            e.target.value
-                          )()
+                          changeJobField(data._id, 'comment', e.target.value)()
                         }}
                       />
                       <TextField
@@ -429,9 +441,15 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
                         </FormControl>
                       </div>
                       <h3
-                         className={clsx({
-                          [classes.dangerText]: data.payed - (data.priceMaterials + data.priceJobs) < 0,
-                          [classes.successText]: data.payed - (data.priceMaterials + data.priceJobs) >= 0,
+                        className={clsx({
+                          [classes.dangerText]:
+                            data.payed -
+                              (data.priceMaterials + data.priceJobs) <
+                            0,
+                          [classes.successText]:
+                            data.payed -
+                              (data.priceMaterials + data.priceJobs) >=
+                            0,
                         })}
                       >
                         Остаток:{' '}
@@ -466,8 +484,8 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
                             style={{ marginLeft: 'auto' }}
                           />
                         ) : (
-                            <SaveIcon />
-                          )
+                          <SaveIcon />
+                        )
                       }
                     >
                       Сохранить

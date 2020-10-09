@@ -18,9 +18,9 @@ export const useStyles = makeStyles((theme) => ({
     color: green[500],
   },
   infoText: {
-    color: indigo[500]
+    color: indigo[500],
   },
   secondaryText: {
-    color: grey[500]
-  }
+    color: grey[500],
+  },
 }))

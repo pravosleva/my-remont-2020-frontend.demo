@@ -35,7 +35,12 @@ export const TotalInfo = () => {
           </h3>
         </Grid>
         <Divider />
-        <Grid className={classes.secondaryText} item xs style={{ marginTop: '20px' }}>
+        <Grid
+          className={classes.secondaryText}
+          item
+          xs
+          style={{ marginTop: '20px' }}
+        >
           <b>ИТОГО оплачено: {getPrettyPrice(totalPayed)}</b>
         </Grid>
         <Grid item xs className={classes.secondaryText}>
