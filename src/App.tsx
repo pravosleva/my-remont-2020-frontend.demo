@@ -13,7 +13,7 @@ function App() {
     <HashRouter>
       <ToastProvider
         autoDismiss
-        autoDismissTimeout={6000}
+        autoDismissTimeout={10000}
         // components={{ Toast: Snack }}
         placement="bottom-center"
       >

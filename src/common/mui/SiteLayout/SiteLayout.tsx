@@ -79,6 +79,7 @@ export const SiteLayout: React.FC = ({ children }) => {
   const handleLogout = useCallback(() => {
     setUserData(null)
     removeCookie('jwt')
+    addToast('Logout', { appearance: 'info' })
     return Promise.resolve(true)
   }, [setUserData, removeCookie])
 

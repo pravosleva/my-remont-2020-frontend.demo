@@ -1,0 +1,7 @@
+.react-toast-notifications__container {
+  padding: 0;
+}
+.react-toast-notifications__toast {
+  width: 100%;
+  max-width: 300px;
+}
