@@ -31,7 +31,7 @@ interface INewJob {
 
 export const TheProject = () => {
   const { id }: IPageParams = useParams()
-  const { setProjectName, resetProjectName, updateJoblist, userData, joblist } = useContext(
+  const { setProjectName, resetProjectName, updateJoblist, userData, joblist, toast } = useContext(
     MainContext
   )
   const [cookies] = useCookies(['jwt'])
@@ -51,8 +51,9 @@ export const TheProject = () => {
         updateJoblist(data.joblist)
       }
     },
-    onFail: () => {
+    onFail: (msg) => {
       setProjectName(null)
+      // toast(`Не удалось получить список ремонтов: ${msg || 'Что-то пошло не так'}`, { appearance: 'error' })
     },
     responseValidator: (res) => !!res.id,
   })
@@ -84,8 +85,6 @@ export const TheProject = () => {
   // }, [remontId, cookies.jwt, joblist, handleCloseEditor, updateJoblist])
   const [isCreateNewJobLoading, setIsCreateNewJobLoading] = useState<boolean>(false)
   const handleSave = useCallback(() => {
-    console.log('IN PROGRESS')
-    console.log(createJobState)
     setIsCreateNewJobLoading(true)
     const newJob: INewJob = {
       comment: createJobState.comment,
@@ -125,13 +124,15 @@ export const TheProject = () => {
             data.joblist.length > 0
           ) {
             updateJoblist(data.joblist)
+            toast(`Updated: ${data.joblist.length} jobs`, { appearance: 'success' })
             return
           }
         }
         throw new Error('Fuckup')
       })
       .catch((err) => {
-        window.alert(err.message)
+        // window.alert(err.message)
+        toast(err.message, { appearance: 'error' })
         setIsCreateNewJobLoading(false)
         console.log(err.message)
       })

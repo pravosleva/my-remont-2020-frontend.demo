@@ -10,7 +10,7 @@ interface IUseRemoteDataByFetchProps {
   onCall?: () => void
   onAbortIfRequestStarted?: (val: boolean) => void
   onSuccess?: (res: any) => void
-  onFail?: (err: any) => void
+  onFail?: (err: string) => void
   debounce?: number
   responseValidator: (res: any) => boolean
   on401?: (msg: string) => void

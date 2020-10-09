@@ -52,6 +52,7 @@ interface IMainContext {
     value: number | boolean | string
   ) => () => void
   updateJoblist: (joblist: IJob[]) => void
+  toast: (msg: string, opts: { appearance: 'success' | 'error' }) => void
 }
 
 export const MainContext = createContext<IMainContext>({
@@ -75,7 +76,10 @@ export const MainContext = createContext<IMainContext>({
   changeJobField: () => () => {
     throw new Error('changeJobField method should be implemented')
   },
-  updateJoblist: () => () => {
+  updateJoblist: () => {
     throw new Error('updateJoblist method should be implemented')
   },
+  toast: () => {
+    throw new Error('addToast method should be implemented')
+  }
 })

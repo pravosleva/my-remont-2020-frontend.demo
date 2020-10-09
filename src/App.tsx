@@ -5,13 +5,22 @@ import {
 } from 'react-router-dom'
 import { Routes } from '~/routes'
 import { SiteLayout } from '~/common/mui/SiteLayout'
+import { ToastProvider } from 'react-toast-notifications'
+// See also: https://github.com/jossmac/react-toast-notifications
 
 function App() {
   return (
     <HashRouter>
-      <SiteLayout>
-        <Routes />
-      </SiteLayout>
+      <ToastProvider
+        autoDismiss
+        autoDismissTimeout={6000}
+        // components={{ Toast: Snack }}
+        placement="bottom-center"
+      >
+        <SiteLayout>
+          <Routes />
+        </SiteLayout>
+      </ToastProvider>
     </HashRouter>
   )
 }

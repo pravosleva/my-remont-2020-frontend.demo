@@ -76,7 +76,7 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
     setExpanded(isExpanded ? panel : false)
   }
   const classes = useStyles()
-  const { userData, changeJobField, joblist, updateJoblist } = useContext(
+  const { userData, changeJobField, joblist, updateJoblist, toast } = useContext(
     MainContext
   )
   const [openedEditorId, setOpenedEditorId] = useState<string | null>(null)
@@ -131,6 +131,7 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
             data.joblist.length > 0
           ) {
             updateJoblist(data.joblist)
+            toast('Ok', { appearance: 'success' })
             return
           }
         }

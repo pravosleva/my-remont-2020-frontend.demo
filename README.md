@@ -10,7 +10,7 @@
   - [x] create/edit job: by auth user
   - [x] logout on `/users/me` 401 (bad jwt)
 - [ ] UI
-  - [ ] стандартные уведомления!
+  - [x] `react-toast-notifications`
   - [x] markdown editor
 - [ ] Standard errors handlers
   - [ ] network

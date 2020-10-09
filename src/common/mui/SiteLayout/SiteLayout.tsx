@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useReducer, useEffect } from 'react'
+import React, { useState, useCallback, useReducer } from 'react'
 import { Grid } from '@material-ui/core'
 import { BreadCrumbs } from './components/BreadCrumbs'
 import { MainContext, IUserData, IJob } from '~/common/context/MainContext'
@@ -6,6 +6,7 @@ import { useRemoteDataByFetch } from '~/common/hooks/useRemoteDataByFetch'
 import { getApiUrl } from '~/utils/getApiUrl'
 import { useCookies } from 'react-cookie'
 import { reducer } from './reducer'
+import { useToasts } from 'react-toast-notifications'
 
 const apiUrl = getApiUrl()
 const getNormalizedAns = (originalRes: any): IUserData => {
@@ -27,7 +28,7 @@ const getNormalizedAns = (originalRes: any): IUserData => {
   // @ts-ignore
   return result
 }
-let count = 0
+
 export const SiteLayout: React.FC = ({ children }) => {
   // --- JOBLIST STATE:
   const [joblist, dispatch] = useReducer(reducer, [])
@@ -50,9 +51,6 @@ export const SiteLayout: React.FC = ({ children }) => {
   }, [setProjectName])
   const [userData, setUserData] = useState<IUserData | null>(null)
   const [cookies, setCookie, removeCookie] = useCookies(['jwt'])
-  // const cookies = {}
-  // const setCookie = (a: any, b: any, c: any) => { }
-  // const removeCookie = () => { }
   const handleSetUserData = useCallback(
     (originalUserData: any, jwt?: string) => {
       const modifiedUserData = getNormalizedAns(originalUserData)
@@ -64,17 +62,16 @@ export const SiteLayout: React.FC = ({ children }) => {
     },
     [setCookie, setUserData]
   )
+  const { addToast } = useToasts()
   const [, isUserDataLoaded, isUserDataLoading]: any = useRemoteDataByFetch({
     url: `${apiUrl}/users/me`,
     method: 'GET',
     accessToken: cookies.jwt,
     onSuccess: (originalUserData) => {
-      // window.alert(JSON.stringify(originalUserData))
       handleSetUserData(originalUserData)
     },
     on401: (msg: string) => {
-      // TODO: Уведомления!
-      window.alert(msg)
+      addToast(msg || 'Что-то пошло не так', { appearance: 'error' })
       handleLogout()
     },
     responseValidator: (res) => !!res.id,
@@ -84,9 +81,6 @@ export const SiteLayout: React.FC = ({ children }) => {
     removeCookie('jwt')
     return Promise.resolve(true)
   }, [setUserData, removeCookie])
-  // useEffect(() => {
-  //   alert(1)
-  // }, [userData])
 
   return (
     <MainContext.Provider
@@ -94,7 +88,6 @@ export const SiteLayout: React.FC = ({ children }) => {
         projectName,
         setProjectName,
         resetProjectName: handleResetCurrentProject,
-        // USER AUTH DATA:
         userData,
         onLogout: handleLogout,
         isUserDataLoading,
@@ -103,6 +96,7 @@ export const SiteLayout: React.FC = ({ children }) => {
         joblist,
         changeJobField: handleChangeJobField,
         updateJoblist: handleUpdateJoblist,
+        toast: addToast,
       }}
     >
       <Grid container spacing={0}>
