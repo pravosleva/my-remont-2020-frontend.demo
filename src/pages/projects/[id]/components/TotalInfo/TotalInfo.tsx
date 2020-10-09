@@ -35,11 +35,7 @@ export const TotalInfo = () => {
           </b>
         </Grid>
         <Divider />
-        <Grid
-          className={classes.secondaryText}
-          item
-          xs
-        >
+        <Grid className={classes.secondaryText} item xs>
           <b>ИТОГО оплачено: {getPrettyPrice(totalPayed)}</b>
         </Grid>
         <Grid item xs className={classes.secondaryText}>

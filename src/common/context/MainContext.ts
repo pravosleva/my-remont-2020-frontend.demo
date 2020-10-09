@@ -36,10 +36,19 @@ export interface IJob {
   isStarted: boolean
 }
 
+declare var io: {
+  connect(url: string): Socket
+}
+interface Socket {
+  on(event: string, callback: (data: any) => void)
+  emit(event: string, data: any)
+  off(event: string, callback: (data: any) => void)
+}
+
 interface IMainContext {
-  projectName: string | null
-  setProjectName: (name: string | null) => void
-  resetProjectName: () => void
+  projectData: any
+  setProjectData: (remont: any) => void
+  resetProjectData: () => void
   onLogout: () => Promise<boolean>
   userData: IUserData | null
   isUserDataLoading: boolean
@@ -53,15 +62,16 @@ interface IMainContext {
   ) => () => void
   updateJoblist: (joblist: IJob[]) => void
   toast: (msg: string, opts: { appearance: 'success' | 'error' }) => void
+  socket: null | Socket
 }
 
 export const MainContext = createContext<IMainContext>({
-  projectName: null,
-  setProjectName: (_name: string | null) => {
-    throw new Error('setProjectName method should be implemented')
+  projectData: null,
+  setProjectData: () => {
+    throw new Error('setProjectData method should be implemented')
   },
-  resetProjectName: () => {
-    throw new Error('resetProjectName method should be implemented')
+  resetProjectData: () => {
+    throw new Error('resetProjectData method should be implemented')
   },
   userData: null,
   onLogout: () => {
@@ -82,4 +92,5 @@ export const MainContext = createContext<IMainContext>({
   toast: () => {
     throw new Error('addToast method should be implemented')
   },
+  socket: null,
 })

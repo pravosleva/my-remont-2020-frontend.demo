@@ -18,7 +18,8 @@ import {
   reducer as createNewJobReducer,
 } from './createNewProjectReducer'
 import { CreateNewJob } from './components/CreateNewJob'
-import BuildIcon from '@material-ui/icons/Build';
+import BuildIcon from '@material-ui/icons/Build'
+import { isEqual } from 'lodash'
 
 const apiUrl = getApiUrl()
 
@@ -42,41 +43,60 @@ interface INewJob {
 export const TheProject = () => {
   const { id }: IPageParams = useParams()
   const {
-    setProjectName,
-    resetProjectName,
+    resetProjectData,
+    projectData,
+    setProjectData,
     updateJoblist,
     userData,
     joblist,
     toast,
+    socket,
   } = useContext(MainContext)
+  useEffect(() => {
+    // console.log(socket)
+    const onRemontUpdate = ({ result, params, data }) => {
+      // console.log({ result, params, data })
+      if (!!projectData && result.id === projectData.id) {
+        if (!!data.joblist && !isEqual(joblist, data.joblist)) {
+          updateJoblist(data.joblist)
+        }
+      }
+    }
+    if (!!socket) socket.on('REMONT_UPDATED', onRemontUpdate)
+    return () => {
+      if (!!socket) socket.off('REMONT_UPDATED', onRemontUpdate)
+    }
+  }, [socket, projectData, joblist])
   const [cookies] = useCookies(['jwt'])
   // TODO: Подписаться на сокет, запрашивать обновления при каждом изменении.
   // Либо поместить в контекст
+  const handleSuccess = useCallback((data) => {
+    setProjectData(data)
+    if (
+      !!data.joblist &&
+      Array.isArray(data.joblist) &&
+      data.joblist.length > 0
+    ) {
+      updateJoblist(data.joblist)
+    }
+  }, [setProjectData, updateJoblist])
+  const handleFail = useCallback((_mg: string) => {
+    resetProjectData()
+    // toast(`Не удалось получить список ремонтов: ${msg || 'Что-то пошло не так'}`, { appearance: 'error' })
+  }, [resetProjectData])
   const [project, isLoaded, isLoading]: TAns = useRemoteDataByFetch({
     url: `${apiUrl}/remonts/${id}`,
     method: 'GET',
     accessToken: cookies.jwt,
-    onSuccess: (data) => {
-      setProjectName(data.name)
-      if (
-        !!data.joblist &&
-        Array.isArray(data.joblist) &&
-        data.joblist.length > 0
-      ) {
-        updateJoblist(data.joblist)
-      }
-    },
-    onFail: (msg) => {
-      setProjectName(null)
-      // toast(`Не удалось получить список ремонтов: ${msg || 'Что-то пошло не так'}`, { appearance: 'error' })
-    },
+    onSuccess: handleSuccess,
+    onFail: handleFail,
     responseValidator: (res) => !!res.id,
   })
   useEffect(() => {
     return () => {
-      resetProjectName()
+      resetProjectData()
     }
-  }, [resetProjectName])
+  }, [resetProjectData])
   const [createJobState, dispatchCreateJob] = useReducer(
     createNewJobReducer,
     createNewJobInitialState

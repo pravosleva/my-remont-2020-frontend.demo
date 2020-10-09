@@ -9,7 +9,7 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 
 export const BreadCrumbs = () => {
   // const { ...rest }: IPageParams = useParams()
-  const { projectName, isUserDataLoading, userData, onLogout } = useContext(
+  const { projectData, isUserDataLoading, userData, onLogout } = useContext(
     MainContext
   )
   const router = useRouter()
@@ -47,7 +47,7 @@ export const BreadCrumbs = () => {
         <div>
           <Link to="/">Главная</Link> / <Link to="/projects">Проекты</Link> /{' '}
           <span style={{ opacity: '0.5' }}>
-            {projectName || 'Please wait...'}
+            {projectData?.name || 'Please wait...'}
           </span>
         </div>
       )}

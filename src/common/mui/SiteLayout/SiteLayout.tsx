@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useReducer } from 'react'
+import React, { useState, useCallback, useReducer, useEffect } from 'react'
 import { Grid } from '@material-ui/core'
 import { BreadCrumbs } from './components/BreadCrumbs'
 import { MainContext, IUserData, IJob } from '~/common/context/MainContext'
@@ -8,6 +8,8 @@ import { useCookies } from 'react-cookie'
 import { reducer } from './reducer'
 import { useToasts } from 'react-toast-notifications'
 import { useStyles } from './styles'
+import socketIOClient from 'socket.io-client'
+const REACT_APP_SOCKET_ENDPOINT = process.env.REACT_APP_SOCKET_ENDPOINT
 
 const apiUrl = getApiUrl()
 const getNormalizedAns = (originalRes: any): IUserData => {
@@ -46,10 +48,10 @@ export const SiteLayout: React.FC = ({ children }) => {
     [dispatch]
   )
   // ---
-  const [projectName, setProjectName] = useState<string | null>(null)
-  const handleResetCurrentProject = useCallback(() => {
-    setProjectName(null)
-  }, [setProjectName])
+  const [projectData, setProjectData] = useState<any>(null)
+  const handleResetCurrentProjectData = useCallback(() => {
+    setProjectData(null)
+  }, [setProjectData])
   const [userData, setUserData] = useState<IUserData | null>(null)
   const [cookies, setCookie, removeCookie] = useCookies(['jwt'])
   const handleSetUserData = useCallback(
@@ -84,13 +86,26 @@ export const SiteLayout: React.FC = ({ children }) => {
     return Promise.resolve(true)
   }, [setUserData, removeCookie])
   const classes = useStyles()
+  const [socketLink, setSocketLink] = useState(null)
+  useEffect(() => {
+    const socket = socketIOClient(REACT_APP_SOCKET_ENDPOINT)
+
+    socket.on('YOURE_WELCOME', () => {
+      setSocketLink(socket)
+    })
+
+    return () => {
+      socket.disconnect()
+      setSocketLink(null)
+    }
+  }, [])
 
   return (
     <MainContext.Provider
       value={{
-        projectName,
-        setProjectName,
-        resetProjectName: handleResetCurrentProject,
+        projectData,
+        setProjectData,
+        resetProjectData: handleResetCurrentProjectData,
         userData,
         onLogout: handleLogout,
         isUserDataLoading,
@@ -100,6 +115,7 @@ export const SiteLayout: React.FC = ({ children }) => {
         changeJobField: handleChangeJobField,
         updateJoblist: handleUpdateJoblist,
         toast: addToast,
+        socket: socketLink,
       }}
     >
       <div className={classes.bg}>
