@@ -149,7 +149,7 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
             data.joblist.length > 0
           ) {
             updateJoblist(data.joblist)
-            // toast('Ok', { appearance: 'success' })
+            toast('Success', { appearance: 'success' })
             return
           }
         }
