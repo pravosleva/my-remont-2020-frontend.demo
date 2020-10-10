@@ -71,14 +71,12 @@ export const TheProject = () => {
   const handleSocketSubscribe = useCallback(() => {
     if (isDev) toast(`TheProject: handleSocketSubscribe (debounced ${socketSubscriberDebounceInSeconds}s)`, { appearance: 'info' })
     if (!!socket) socket.on(ev.REMONT_UPDATED, onRemontUpdate)
-    if (isDev) toast('Вы подписаны на обновление информации по этому ремонту', { appearance: 'success' })
     return () => {
       if (!!socket) socket.off(ev.REMONT_UPDATED, onRemontUpdate)
     }
   }, [socket])
   const debouncedSocketSubscriber = useDebouncedCallback(handleSocketSubscribe, socketSubscriberDebounceInSeconds * 1000)
   useEffect(() => {
-    if (isDev) toast('TheProject: effect (socket)', { appearance: 'info' })
     debouncedSocketSubscriber()
   }, [socket, onRemontUpdate])
   // ---
@@ -86,8 +84,10 @@ export const TheProject = () => {
   const [cookies] = useCookies(['jwt'])
   const handleSuccess = useCallback((data) => {
     setProjectData(data)
-    if (!!data?.joblist) updateJoblist(data.joblist)
-  }, [setProjectData, updateJoblist])
+    if (!!data.joblist && !isEqual(joblist, data.joblist)) {
+      updateJoblist(data.joblist)
+    }
+  }, [setProjectData, updateJoblist, joblist])
   const handleFail = useCallback((msg: string) => {
     resetProjectData()
     if (isDev) toast(`Не удалось получить список ремонтов: ${msg || 'Что-то пошло не так'}`, { appearance: 'error' })
@@ -208,29 +208,27 @@ export const TheProject = () => {
                 <TotalInfo />
               </Grid>
             )}
-            <Grid item xs={12}>
-              {!!userData && (
-                <>
-                  <Button
-                    onClick={handleCreateJob}
-                    size="small"
-                    variant="outlined"
-                    color="primary"
-                    disabled={isLoading}
-                    endIcon={<BuildIcon />}
-                  >
-                    Создать работу
-                  </Button>
-                  <CreateNewJob
-                    isLoading={isLoading || isCreateNewJobLoading}
-                    onChangeField={handleChangeField}
-                    onClose={handleCloseCreateJobForm}
-                    onSave={handleSave}
-                    {...createJobState}
-                  />
-                </>
-              )}
-            </Grid>
+            {!!userData && (
+              <Grid item xs={12}>
+                <Button
+                  onClick={handleCreateJob}
+                  size="small"
+                  variant="outlined"
+                  color="primary"
+                  disabled={isLoading}
+                  endIcon={<BuildIcon />}
+                >
+                  Создать работу
+                </Button>
+                <CreateNewJob
+                  isLoading={isLoading || isCreateNewJobLoading}
+                  onChangeField={handleChangeField}
+                  onClose={handleCloseCreateJobForm}
+                  onSave={handleSave}
+                  {...createJobState}
+                />
+              </Grid>
+            )}
           </Grid>
         </Grid>
         <Grid item xs={12} md={6}>

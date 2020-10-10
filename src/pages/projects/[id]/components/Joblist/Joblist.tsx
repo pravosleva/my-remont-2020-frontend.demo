@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useState, useRef } from 'react'
+import React, { useCallback, useContext, useState, useRef, useEffect } from 'react'
 import { IJob, Job } from './components/Job'
 import { IProps } from './interfaces'
 import {
@@ -35,8 +35,9 @@ import MarkdownIt from 'markdown-it'
 import MDEditor from 'react-markdown-editor-lite'
 import 'react-markdown-editor-lite/lib/index.css'
 import Slide from '@material-ui/core/Slide'
-import DoneIcon from '@material-ui/icons/Done'
-import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank'
+// import DoneIcon from '@material-ui/icons/Done'
+// import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank'
+import { useDebouncedCallback } from '~/common/hooks'
 
 // Register plugins if required
 // MdEditor.use(YOUR_PLUGINS_HERE);
@@ -113,7 +114,17 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
   // const descriptionElementRef = useRef<HTMLElement>(null)
   const [cookies] = useCookies(['jwt'])
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [localMD, setLocalMD] = useState<string>('')
+  useEffect(() => {
+    const targetJob = joblist.find(({ _id }) => _id === openedMarkdownEditorId)
+    if (!!targetJob) setLocalMD(targetJob.description)
+  }, [openedMarkdownEditorId, joblist])
+  const debouncedUpdateJoblist = useDebouncedCallback((openedMarkdownEditorId, text, changeJobField) => {
+    // localMD -> joblist
+    changeJobField(openedMarkdownEditorId, 'description', text)()
+  }, 500)
   const handleSubmit = useCallback(() => {
+
     setIsLoading(true)
     window
       .fetch(`${apiUrl}/remonts/${remontId}`, {
@@ -138,7 +149,7 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
             data.joblist.length > 0
           ) {
             updateJoblist(data.joblist)
-            toast('Ok', { appearance: 'success' })
+            // toast('Ok', { appearance: 'success' })
             return
           }
         }
@@ -245,14 +256,13 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
                     className={classes.dialogMDContent}
                   >
                     <MDEditor
-                      value={data.description}
+                      value={localMD}
                       style={{ minHeight: '300px' }}
                       renderHTML={(text) => mdParser.render(text)}
                       onChange={({ text }) => {
-                        // console.log('handleEditorChange', html, text)
-                        if (!!text) {
-                          changeJobField(data._id, 'description', text)()
-                        }
+                        // if (!!text) changeJobField(data._id, 'description', text)()
+                        setLocalMD(text)
+                        debouncedUpdateJoblist(data._id, text, changeJobField)
                       }}
                       config={{
                         view: { menu: false, md: true, html: false },
@@ -304,7 +314,7 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
                   fullWidth
                   open={openedEditorId === data._id}
                   onClose={handleCloseEditor}
-                  scroll="paper"
+                  scroll="body"
                   aria-labelledby={`scroll-dialog-title_${data._id}`}
                 >
                   <DialogTitle id={`scroll-dialog-title_${data._id}`}>
