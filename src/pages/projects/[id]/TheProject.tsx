@@ -5,7 +5,7 @@ import React, {
   useReducer,
   useState,
 } from 'react'
-import { useRemoteDataByFetch, TAns } from '~/common/hooks/useRemoteDataByFetch'
+import { useRemoteDataByFetch, TAns, useDebouncedCallback } from '~/common/hooks'
 import { getApiUrl } from '~/utils/getApiUrl'
 import { useParams } from 'react-router-dom'
 import { Joblist } from './components/Joblist'
@@ -20,8 +20,10 @@ import {
 import { CreateNewJob } from './components/CreateNewJob'
 import BuildIcon from '@material-ui/icons/Build'
 import { isEqual } from 'lodash'
+import { eventlist as ev } from '~/common/socket'
 
 const apiUrl = getApiUrl()
+const isDev = process.env.NODE_ENV === 'development'
 
 interface IPageParams {
   id: string
@@ -39,6 +41,7 @@ interface INewJob {
   description?: string
   __component: string
 }
+const socketSubscriberDebounceInSeconds = 3
 
 export const TheProject = () => {
   const { id }: IPageParams = useParams()
@@ -52,37 +55,42 @@ export const TheProject = () => {
     toast,
     socket,
   } = useContext(MainContext)
-  useEffect(() => {
-    // console.log(socket)
-    const onRemontUpdate = ({ result, params, data }) => {
-      // console.log({ result, params, data })
-      if (!!projectData && result.id === projectData.id) {
-        if (!!data.joblist && !isEqual(joblist, data.joblist)) {
-          updateJoblist(data.joblist)
-        }
+  // --- SOCKET SUBSCRIBER:
+  const onRemontUpdate = useCallback(({
+    result,
+    // params,
+    data,
+  }) => {
+    if (!!projectData && result.id === projectData.id) {
+      if (!!data.joblist && !isEqual(joblist, data.joblist)) {
+        updateJoblist(data.joblist)
+        toast('Список работ обновлен', { appearance: 'info' })
       }
     }
-    if (!!socket) socket.on('REMONT_UPDATED', onRemontUpdate)
+  }, [joblist, projectData, updateJoblist])
+  const handleSocketSubscribe = useCallback(() => {
+    if (isDev) toast(`TheProject: handleSocketSubscribe (debounced ${socketSubscriberDebounceInSeconds}s)`, { appearance: 'info' })
+    if (!!socket) socket.on(ev.REMONT_UPDATED, onRemontUpdate)
+    if (isDev) toast('Вы подписаны на обновление информации по этому ремонту', { appearance: 'success' })
     return () => {
-      if (!!socket) socket.off('REMONT_UPDATED', onRemontUpdate)
+      if (!!socket) socket.off(ev.REMONT_UPDATED, onRemontUpdate)
     }
-  }, [socket, projectData, joblist])
+  }, [socket])
+  const debouncedSubscriberSocket = useDebouncedCallback(handleSocketSubscribe, socketSubscriberDebounceInSeconds * 1000)
+  useEffect(() => {
+    if (isDev) toast('TheProject: effect (socket)', { appearance: 'info' })
+    debouncedSubscriberSocket()
+  }, [socket, onRemontUpdate])
+  // ---
+  // --- GET REMONT INFO
   const [cookies] = useCookies(['jwt'])
-  // TODO: Подписаться на сокет, запрашивать обновления при каждом изменении.
-  // Либо поместить в контекст
   const handleSuccess = useCallback((data) => {
     setProjectData(data)
-    if (
-      !!data.joblist &&
-      Array.isArray(data.joblist) &&
-      data.joblist.length > 0
-    ) {
-      updateJoblist(data.joblist)
-    }
+    if (!!data?.joblist) updateJoblist(data.joblist)
   }, [setProjectData, updateJoblist])
-  const handleFail = useCallback((_mg: string) => {
+  const handleFail = useCallback((msg: string) => {
     resetProjectData()
-    // toast(`Не удалось получить список ремонтов: ${msg || 'Что-то пошло не так'}`, { appearance: 'error' })
+    if (isDev) toast(`Не удалось получить список ремонтов: ${msg || 'Что-то пошло не так'}`, { appearance: 'error' })
   }, [resetProjectData])
   const [project, isLoaded, isLoading]: TAns = useRemoteDataByFetch({
     url: `${apiUrl}/remonts/${id}`,
@@ -92,11 +100,12 @@ export const TheProject = () => {
     onFail: handleFail,
     responseValidator: (res) => !!res.id,
   })
-  useEffect(() => {
-    return () => {
-      resetProjectData()
-    }
+  // Reset on unmount:
+  useEffect(() => () => {
+    resetProjectData()
   }, [resetProjectData])
+  // ---
+  // --- CREATE JOB FORM:
   const [createJobState, dispatchCreateJob] = useReducer(
     createNewJobReducer,
     createNewJobInitialState
@@ -123,8 +132,7 @@ export const TheProject = () => {
     [dispatchCreateJob]
   )
   // ---
-  // const handleSubmit = useCallback(() => {
-  // }, [remontId, cookies.jwt, joblist, handleCloseEditor, updateJoblist])
+  // --- SAVE JOB:
   const [isCreateNewJobLoading, setIsCreateNewJobLoading] = useState<boolean>(
     false
   )

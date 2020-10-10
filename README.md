@@ -3,10 +3,19 @@
 ## Roadmap
 
 - [ ] **git hooks**
+
+
+- [ ] allow `findOne` for auth user for his projects
+- [ ] `/projects`
+  - [ ] allow find all projects free
+- [ ] ``
 - [ ] UX
   - [ ] авториз. пользователь должен видеть только свои ремонты
   - [ ] неавториз. польз. должен видеть только общую информацию о ремонтах
     - [ ] общая аналитика по всем ремонтам на главной
+  - [ ] доп. кнопки на странице `/projects/:id`
+    - [ ] "Добавить сумму"
+    - [ ] "Вычесть сумму"
   - [x] socket connection for realtime web app
   - [x] create/edit job: by auth user
   - [x] logout on `/users/me` 401 (bad jwt)

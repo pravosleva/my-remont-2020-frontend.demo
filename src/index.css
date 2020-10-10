@@ -1,6 +1,6 @@
 .react-toast-notifications__container {
   padding: 0;
-  overflow: hidden hidden;
+  overflow-y: hidden !important;
 }
 .react-toast-notifications__toast {
   width: 100%;
