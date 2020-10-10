@@ -14,7 +14,7 @@ interface IProject {
 
 export const Projects = () => {
   const { userData } = useContext(MainContext)
-  const [cookies, setCookie, removeCookie] = useCookies(['jwt'])
+  const [cookies /* , setCookie, removeCookie */] = useCookies(['jwt'])
   const responseValidator = useCallback((res) => Array.isArray(res), [userData])
   const [projects, isLoaded, isLoading]: TAns = useRemoteDataByFetch({
     url: `${apiUrl}/remonts`,

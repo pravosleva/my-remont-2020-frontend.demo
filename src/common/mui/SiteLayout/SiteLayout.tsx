@@ -55,13 +55,10 @@ export const SiteLayout: React.FC = ({ children }) => {
   const [userData, setUserData] = useState<IUserData | null>(null)
   const [cookies, setCookie, removeCookie] = useCookies(['jwt'])
   const handleSetUserData = useCallback(
-    (originalUserData: any, jwt?: string) => {
+    (originalUserData: any) => {
       const modifiedUserData = getNormalizedAns(originalUserData)
 
       setUserData(modifiedUserData)
-      if (!!jwt) {
-        setCookie('jwt', jwt, { maxAge: 60 * 60 * 24 * 5 })
-      }
     },
     [setCookie, setUserData]
   )

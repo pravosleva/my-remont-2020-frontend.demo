@@ -76,10 +76,10 @@ export const TheProject = () => {
       if (!!socket) socket.off(ev.REMONT_UPDATED, onRemontUpdate)
     }
   }, [socket])
-  const debouncedSubscriberSocket = useDebouncedCallback(handleSocketSubscribe, socketSubscriberDebounceInSeconds * 1000)
+  const debouncedSocketSubscriber = useDebouncedCallback(handleSocketSubscribe, socketSubscriberDebounceInSeconds * 1000)
   useEffect(() => {
     if (isDev) toast('TheProject: effect (socket)', { appearance: 'info' })
-    debouncedSubscriberSocket()
+    debouncedSocketSubscriber()
   }, [socket, onRemontUpdate])
   // ---
   // --- GET REMONT INFO
@@ -185,10 +185,8 @@ export const TheProject = () => {
         throw new Error('Fuckup')
       })
       .catch((err) => {
-        // window.alert(err.message)
         toast(err.message, { appearance: 'error' })
         setIsCreateNewJobLoading(false)
-        console.log(err.message)
       })
   }, [createJobState])
   // ---

@@ -33,7 +33,8 @@
 
 ```bash
 REACT_APP_API_ENDPOINT=http://localhost:1337
-REACT_APP_SOCKET_ENDPOINT=http://127.0.0.1:1337
+REACT_APP_SOCKET_ENDPOINT=http://localhost:1337
+REACT_APP_COOKIE_MAXAGE_IN_DAYS=5
 ```
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
