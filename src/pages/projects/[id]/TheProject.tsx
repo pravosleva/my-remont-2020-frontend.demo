@@ -115,6 +115,7 @@ export const TheProject = () => {
   }, [])
   const handleCloseCreateJobForm = useCallback(() => {
     dispatchCreateJob({ type: 'CLOSE' })
+    dispatchCreateJob({ type: 'TOTAL_RESET' })
   }, [dispatchCreateJob])
   const handleChangeField = useCallback(
     (field: string, value: string) => {

@@ -19,6 +19,9 @@ type TAction =
       type: 'UPDATE_NAME'
       payload: string
     }
+  | {
+    type: 'TOTAL_RESET'
+  }
 
 export const initialState = { name: '', comment: '', isOpened: false }
 export function reducer(state: IState, action: TAction): IState {
@@ -31,6 +34,8 @@ export function reducer(state: IState, action: TAction): IState {
       return { ...state, isOpened: true }
     case 'CLOSE':
       return { ...state, isOpened: false }
+    case 'TOTAL_RESET':
+      return initialState
     default:
       return state
   }

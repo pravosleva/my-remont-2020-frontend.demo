@@ -10,6 +10,7 @@ import {
   TextField,
   CircularProgress,
   withStyles,
+  Typography,
 } from '@material-ui/core'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { useStyles } from './styles'
@@ -34,6 +35,8 @@ import MarkdownIt from 'markdown-it'
 import MDEditor from 'react-markdown-editor-lite'
 import 'react-markdown-editor-lite/lib/index.css'
 import Slide from '@material-ui/core/Slide'
+import DoneIcon from '@material-ui/icons/Done'
+import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank'
 
 // Register plugins if required
 // MdEditor.use(YOUR_PLUGINS_HERE);
@@ -146,6 +149,14 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
         console.log(err.message)
       })
   }, [remontId, cookies.jwt, joblist, handleCloseEditor, updateJoblist])
+  const handleDoneJob = useCallback((id, checked) => {
+    changeJobField(
+      id,
+      'isDone',
+      checked,
+    )()
+    handleSubmit()
+  }, [handleSubmit, changeJobField])
 
   return (
     <>
@@ -164,17 +175,30 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
                   aria-controls={`panel${data._id}bh-content`}
                   id={`panel${data._id}bh-header`}
                 >
-                  <b
-                    className={clsx({
-                      [classes.dangerText]:
-                        data.payed - (data.priceMaterials + data.priceJobs) < 0,
-                      [classes.successText]:
-                        data.payed - (data.priceMaterials + data.priceJobs) >=
-                        0,
-                    })}
-                  >
-                    {data.name}
-                  </b>
+                  {
+                    !!userData ? (
+                      <FormControlLabel
+                        aria-label="Acknowledge"
+                        onClick={(e: any) => {
+                          e.stopPropagation()
+                          handleDoneJob(data._id, e.target?.checked)
+                        }}
+                        // onFocus={(event) => { event.stopPropagation() }}
+                        control={<Checkbox checked={data.isDone} color='primary' />}
+                        label={data.name}
+                      />
+                    ) : (
+                      <Typography
+                        className={clsx({
+                          [classes.dangerText]:
+                            data.payed - (data.priceMaterials + data.priceJobs) < 0,
+                          [classes.successText]:
+                            data.payed - (data.priceMaterials + data.priceJobs) >=
+                            0,
+                        })}
+                      >{data.name}</Typography>
+                    )
+                  }
                 </AccordionSummary>
                 <Divider />
                 <AccordionDetails className={classes.details}>
