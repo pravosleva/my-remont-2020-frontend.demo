@@ -196,90 +196,122 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
     switch (filterState.selectedGroup) {
       case 'isDone':
         return joblist.filter(({ isDone, isStarted }) => isStarted && isDone)
-      case 'inProgress': return joblist.filter(({ isDone, isStarted }) => !isDone && isStarted)
+      case 'inProgress':
+        return joblist.filter(({ isDone, isStarted }) => !isDone && isStarted)
       case 'all':
-      default: return joblist
+      default:
+        return joblist
     }
   }, [joblist, filterState])
   const prompt = usePrompt()
   // priceJobs:
-  const handleAddPriceJobs = useCallback((id, initPrice) => () => {
-    prompt({ label: 'Ценник за работу', type: 'number', title: 'Добавить сумму' })
-      .then((value: number) => {
-        changeJobField(
-          id,
-          'priceJobs',
-          initPrice + value
-        )()
+  const handleAddPriceJobs = useCallback(
+    (id, initPrice) => () => {
+      prompt({
+        label: 'Ценник за работу',
+        type: 'number',
+        title: 'Добавить сумму',
       })
-      .then(handleSubmit)
-      .catch((_err) => { toast('Отменено', { appearance: 'error' }) })
-  }, [prompt, changeJobField, toast, handleSubmit])
-  const handleRemovePriceJobs = useCallback((id, initPrice) => () => {
-    prompt({ label: 'Ценник за работу', type: 'number', title: 'Вычесть сумму' })
-      .then((value: number) => {
-        changeJobField(
-          id,
-          'priceJobs',
-          initPrice - value
-        )()
-        handleSubmit()
+        .then((value: number) => {
+          changeJobField(id, 'priceJobs', initPrice + value)()
+        })
+        .then(handleSubmit)
+        .catch((_err) => {
+          toast('Отменено', { appearance: 'error' })
+        })
+    },
+    [prompt, changeJobField, toast, handleSubmit]
+  )
+  const handleRemovePriceJobs = useCallback(
+    (id, initPrice) => () => {
+      prompt({
+        label: 'Ценник за работу',
+        type: 'number',
+        title: 'Вычесть сумму',
       })
-      .then(handleSubmit)
-      .catch((_err) => { toast('Отменено', { appearance: 'error' }) })
-  }, [prompt, changeJobField, toast, handleSubmit])
+        .then((value: number) => {
+          changeJobField(id, 'priceJobs', initPrice - value)()
+          handleSubmit()
+        })
+        .then(handleSubmit)
+        .catch((_err) => {
+          toast('Отменено', { appearance: 'error' })
+        })
+    },
+    [prompt, changeJobField, toast, handleSubmit]
+  )
   // priceMaterials:
-  const handleAddPriceMaterials = useCallback((id, initPrice) => () => {
-    prompt({ label: 'Ценник за материалы', type: 'number', title: 'Добавить сумму' })
-      .then((value: number) => {
-        changeJobField(
-          id,
-          'priceMaterials',
-          initPrice + value
-        )()
+  const handleAddPriceMaterials = useCallback(
+    (id, initPrice) => () => {
+      prompt({
+        label: 'Ценник за материалы',
+        type: 'number',
+        title: 'Добавить сумму',
       })
-      .then(handleSubmit)
-      .catch((_err) => { toast('Отменено', { appearance: 'error' }) })
-  }, [prompt, changeJobField, toast, handleSubmit])
-  const handleRemovePriceMaterials = useCallback((id, initPrice) => () => {
-    prompt({ label: 'Ценник за материалы', type: 'number', title: 'Вычесть сумму' })
-      .then((value: number) => {
-        changeJobField(
-          id,
-          'priceMaterials',
-          initPrice - value
-        )()
-        handleSubmit()
+        .then((value: number) => {
+          changeJobField(id, 'priceMaterials', initPrice + value)()
+        })
+        .then(handleSubmit)
+        .catch((_err) => {
+          toast('Отменено', { appearance: 'error' })
+        })
+    },
+    [prompt, changeJobField, toast, handleSubmit]
+  )
+  const handleRemovePriceMaterials = useCallback(
+    (id, initPrice) => () => {
+      prompt({
+        label: 'Ценник за материалы',
+        type: 'number',
+        title: 'Вычесть сумму',
       })
-      .then(handleSubmit)
-      .catch((_err) => { toast('Отменено', { appearance: 'error' }) })
-  }, [prompt, changeJobField, toast, handleSubmit])
+        .then((value: number) => {
+          changeJobField(id, 'priceMaterials', initPrice - value)()
+          handleSubmit()
+        })
+        .then(handleSubmit)
+        .catch((_err) => {
+          toast('Отменено', { appearance: 'error' })
+        })
+    },
+    [prompt, changeJobField, toast, handleSubmit]
+  )
   // priceDelivery:
-  const handleAddPriceDelivery = useCallback((id, initPrice) => () => {
-    prompt({ label: 'Ценник за доставку', type: 'number', title: 'Добавить сумму' })
-      .then((value: number) => {
-        changeJobField(
-          id,
-          'priceDelivery',
-          initPrice + value
-        )()
+  const handleAddPriceDelivery = useCallback(
+    (id, initPrice) => () => {
+      prompt({
+        label: 'Ценник за доставку',
+        type: 'number',
+        title: 'Добавить сумму',
       })
-      .then(handleSubmit)
-      .catch((_err) => { toast('Отменено', { appearance: 'error' }) })
-  }, [prompt, changeJobField, toast, handleSubmit])
-  const handleRemovePriceDelivery = useCallback((id, initPrice) => () => {
-    prompt({ label: 'Ценник за доставку', type: 'number', title: 'Вычесть сумму' })
-      .then((value: number) => {
-        changeJobField(
-          id,
-          'priceDelivery',
-          initPrice - value
-        )()
-        handleSubmit()
+        .then((value: number) => {
+          changeJobField(id, 'priceDelivery', initPrice + value)()
+        })
+        .then(handleSubmit)
+        .catch((_err) => {
+          toast('Отменено', { appearance: 'error' })
+        })
+    },
+    [prompt, changeJobField, toast, handleSubmit]
+  )
+  const handleRemovePriceDelivery = useCallback(
+    (id, initPrice) => () => {
+      prompt({
+        label: 'Ценник за доставку',
+        type: 'number',
+        title: 'Вычесть сумму',
       })
-      .then(handleSubmit)
-      .catch((_err) => { toast('Отменено', { appearance: 'error' }) })
-  }, [prompt, changeJobField, toast, handleSubmit])
+        .then((value: number) => {
+          changeJobField(id, 'priceDelivery', initPrice - value)()
+          handleSubmit()
+        })
+        .then(handleSubmit)
+        .catch((_err) => {
+          toast('Отменено', { appearance: 'error' })
+        })
+    },
+    [prompt, changeJobField, toast, handleSubmit]
+  )
 
   return (
     <>
@@ -458,7 +490,12 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
                           "id": "5f7901e014e0008700d02545"
                         }
                     */}
-                    <Grid container direction="column" spacing={0} className={classes.inputsBox}>
+                    <Grid
+                      container
+                      direction="column"
+                      spacing={0}
+                      className={classes.inputsBox}
+                    >
                       <Grid item xs={12}>
                         <TextField
                           id={`name_${data._id}`}
@@ -467,7 +504,9 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
                           variant="outlined"
                           value={data.name}
                           size="small"
-                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                          onChange={(
+                            e: React.ChangeEvent<HTMLInputElement>
+                          ) => {
                             changeJobField(data._id, 'name', e.target.value)()
                           }}
                           fullWidth
@@ -481,8 +520,14 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
                           variant="outlined"
                           value={data.comment}
                           size="small"
-                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                            changeJobField(data._id, 'comment', e.target.value)()
+                          onChange={(
+                            e: React.ChangeEvent<HTMLInputElement>
+                          ) => {
+                            changeJobField(
+                              data._id,
+                              'comment',
+                              e.target.value
+                            )()
                           }}
                           fullWidth
                         />
@@ -495,7 +540,9 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
                           // variant="outlined"
                           value={data.priceJobs}
                           size="small"
-                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                          onChange={(
+                            e: React.ChangeEvent<HTMLInputElement>
+                          ) => {
                             changeJobField(
                               data._id,
                               'priceJobs',
@@ -518,7 +565,10 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
                         <Button
                           size="small"
                           variant="outlined"
-                          onClick={handleRemovePriceJobs(data._id, data.priceJobs)}
+                          onClick={handleRemovePriceJobs(
+                            data._id,
+                            data.priceJobs
+                          )}
                           // endIcon={<EditIcon />}
                         >
                           Вычесть сумму
@@ -532,7 +582,9 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
                           // variant="outlined"
                           value={data.priceMaterials}
                           size="small"
-                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                          onChange={(
+                            e: React.ChangeEvent<HTMLInputElement>
+                          ) => {
                             changeJobField(
                               data._id,
                               'priceMaterials',
@@ -546,7 +598,10 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
                         <Button
                           size="small"
                           variant="outlined"
-                          onClick={handleAddPriceMaterials(data._id, data.priceMaterials)}
+                          onClick={handleAddPriceMaterials(
+                            data._id,
+                            data.priceMaterials
+                          )}
                           // endIcon={<EditIcon />}
                         >
                           Добавить сумму
@@ -554,7 +609,10 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
                         <Button
                           size="small"
                           variant="outlined"
-                          onClick={handleRemovePriceMaterials(data._id, data.priceMaterials)}
+                          onClick={handleRemovePriceMaterials(
+                            data._id,
+                            data.priceMaterials
+                          )}
                           // endIcon={<EditIcon />}
                         >
                           Вычесть сумму
@@ -568,7 +626,9 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
                           // variant="outlined"
                           value={data.priceDelivery}
                           size="small"
-                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                          onChange={(
+                            e: React.ChangeEvent<HTMLInputElement>
+                          ) => {
                             changeJobField(
                               data._id,
                               'priceDelivery',
@@ -582,7 +642,10 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
                         <Button
                           size="small"
                           variant="outlined"
-                          onClick={handleAddPriceDelivery(data._id, data.priceDelivery)}
+                          onClick={handleAddPriceDelivery(
+                            data._id,
+                            data.priceDelivery
+                          )}
                           // endIcon={<EditIcon />}
                         >
                           Добавить сумму
@@ -590,7 +653,10 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
                         <Button
                           size="small"
                           variant="outlined"
-                          onClick={handleRemovePriceDelivery(data._id, data.priceDelivery)}
+                          onClick={handleRemovePriceDelivery(
+                            data._id,
+                            data.priceDelivery
+                          )}
                           // endIcon={<EditIcon />}
                         >
                           Вычесть сумму
@@ -604,7 +670,9 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
                           variant="outlined"
                           value={data.payed}
                           size="small"
-                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                          onChange={(
+                            e: React.ChangeEvent<HTMLInputElement>
+                          ) => {
                             changeJobField(
                               data._id,
                               'payed',

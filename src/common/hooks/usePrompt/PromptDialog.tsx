@@ -1,13 +1,19 @@
-import React, { useState, useCallback, useMemo } from 'react';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import TextField from '@material-ui/core/TextField';
+import React, { useState, useCallback, useMemo } from 'react'
+import Button from '@material-ui/core/Button'
+import Dialog from '@material-ui/core/Dialog'
+import DialogActions from '@material-ui/core/DialogActions'
+import DialogContent from '@material-ui/core/DialogContent'
+import DialogContentText from '@material-ui/core/DialogContentText'
+import DialogTitle from '@material-ui/core/DialogTitle'
+import TextField from '@material-ui/core/TextField'
 
-export const PromptDialog = ({ open, options, onCancel, onConfirm, onClose }) => {
+export const PromptDialog = ({
+  open,
+  options,
+  onCancel,
+  onConfirm,
+  onClose,
+}) => {
   const {
     title,
     description,
@@ -20,17 +26,13 @@ export const PromptDialog = ({ open, options, onCancel, onConfirm, onClose }) =>
     onChange,
     value,
     label,
-  } = options;
+  } = options
 
   return (
     <Dialog fullWidth {...dialogProps} open={open} onClose={onClose}>
-      {title && (
-        <DialogTitle>{title}</DialogTitle>
-      )}
+      {title && <DialogTitle>{title}</DialogTitle>}
       <DialogContent>
-        {description && (
-          <DialogContentText>{description}</DialogContentText>
-        )}
+        {description && <DialogContentText>{description}</DialogContentText>}
         <TextField
           value={value}
           id={`standard-basic_${type}`}
@@ -45,10 +47,14 @@ export const PromptDialog = ({ open, options, onCancel, onConfirm, onClose }) =>
         <Button {...cancellationButtonProps} onClick={onCancel}>
           {cancellationText}
         </Button>
-        <Button color="primary" {...confirmationButtonProps} onClick={onConfirm}>
+        <Button
+          color="primary"
+          {...confirmationButtonProps}
+          onClick={onConfirm}
+        >
           {confirmationText}
         </Button>
       </DialogActions>
     </Dialog>
-  );
-};
+  )
+}

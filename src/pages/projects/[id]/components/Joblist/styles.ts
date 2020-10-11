@@ -61,8 +61,8 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     buttonsWrapper: {
       '& > *:not(:last-child)': {
-        marginRight: theme.spacing(1)
-      }
+        marginRight: theme.spacing(1),
+      },
     },
   })
 )

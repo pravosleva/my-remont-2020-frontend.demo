@@ -1,2 +1,2 @@
-export * from './PromptProvider';
-export * from './usePrompt';
+export * from './PromptProvider'
+export * from './usePrompt'

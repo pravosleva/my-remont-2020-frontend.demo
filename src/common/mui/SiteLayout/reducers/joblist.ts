@@ -10,7 +10,10 @@ type TAction =
     }
   | { type: 'UPDATE_JOBLIST'; payload: IJob[] }
 
-export function joblistReducer(state: TJoblistState, action: TAction): TJoblistState {
+export function joblistReducer(
+  state: TJoblistState,
+  action: TAction
+): TJoblistState {
   switch (action.type) {
     case 'UPDATE_JOB_FIELD':
       const targetJobIndex = state.findIndex(({ _id }) => action.id === _id)

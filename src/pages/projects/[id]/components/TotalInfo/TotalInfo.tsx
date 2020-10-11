@@ -37,11 +37,17 @@ export const TotalInfo = () => {
         <Divider />
 
         <Grid className={classes.secondaryText} item>
-          <Typography>Ценник за работу: {getPrettyPrice(totalPriceJobs)}</Typography>
-          <Typography>Ценник за материалы: {getPrettyPrice(totalMaterials)}</Typography>
+          <Typography>
+            Ценник за работу: {getPrettyPrice(totalPriceJobs)}
+          </Typography>
+          <Typography>
+            Ценник за материалы: {getPrettyPrice(totalMaterials)}
+          </Typography>
         </Grid>
         <Grid item>
-          <Typography variant="h5">ИТОГО затраты: {getPrettyPrice(totalPayed)}</Typography>
+          <Typography variant="h5">
+            ИТОГО затраты: {getPrettyPrice(totalPayed)}
+          </Typography>
         </Grid>
         <Divider />
         <Grid

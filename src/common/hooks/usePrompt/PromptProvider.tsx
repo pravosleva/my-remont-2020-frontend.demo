@@ -1,6 +1,12 @@
-import React, { useState, useCallback, Fragment, useMemo, useEffect } from 'react';
-import { PromptContext } from './PromptContext';
-import { PromptDialog } from './PromptDialog';
+import React, {
+  useState,
+  useCallback,
+  Fragment,
+  useMemo,
+  useEffect,
+} from 'react'
+import { PromptContext } from './PromptContext'
+import { PromptDialog } from './PromptDialog'
 
 const DEFAULT_OPTIONS = {
   title: 'Are you sure?',
@@ -11,21 +17,23 @@ const DEFAULT_OPTIONS = {
   dialogProps: {},
   confirmationButtonProps: {},
   cancellationButtonProps: {},
-};
+}
 
 const buildOptions = (defaultOptions, options) => {
   const dialogProps = {
     ...(defaultOptions.dialogProps || DEFAULT_OPTIONS.dialogProps),
     ...(options.dialogProps || {}),
-  };
+  }
   const confirmationButtonProps = {
-    ...(defaultOptions.confirmationButtonProps || DEFAULT_OPTIONS.confirmationButtonProps),
+    ...(defaultOptions.confirmationButtonProps ||
+      DEFAULT_OPTIONS.confirmationButtonProps),
     ...(options.confirmationButtonProps || {}),
-  };
+  }
   const cancellationButtonProps = {
-    ...(defaultOptions.cancellationButtonProps || DEFAULT_OPTIONS.cancellationButtonProps),
+    ...(defaultOptions.cancellationButtonProps ||
+      DEFAULT_OPTIONS.cancellationButtonProps),
     ...(options.cancellationButtonProps || {}),
-  };
+  }
 
   return {
     ...DEFAULT_OPTIONS,
@@ -35,22 +43,37 @@ const buildOptions = (defaultOptions, options) => {
     confirmationButtonProps,
     cancellationButtonProps,
   }
-};
+}
 
 export const PromptProvider = ({ children, defaultOptions = {} }) => {
-  const [options, setOptions] = useState({ ...DEFAULT_OPTIONS, ...defaultOptions });
-  const [resolveReject, setResolveReject] = useState([]);
-  const [resolve, reject] = resolveReject;
+  const [options, setOptions] = useState({
+    ...DEFAULT_OPTIONS,
+    ...defaultOptions,
+  })
+  const [resolveReject, setResolveReject] = useState([])
+  const [resolve, reject] = resolveReject
 
-  const prompt = useCallback((options = {}) => {
-    console.log(options)
-    return new Promise((resolve, reject) => {
-      setOptions(buildOptions(defaultOptions, options));
-      setResolveReject([resolve, reject]);
-    });
-  }, [setResolveReject, resolve, reject, setOptions, buildOptions, defaultOptions]);
+  const prompt = useCallback(
+    (options = {}) => {
+      console.log(options)
+      return new Promise((resolve, reject) => {
+        setOptions(buildOptions(defaultOptions, options))
+        setResolveReject([resolve, reject])
+      })
+    },
+    [
+      setResolveReject,
+      resolve,
+      reject,
+      setOptions,
+      buildOptions,
+      defaultOptions,
+    ]
+  )
 
-  const defaultValue = useMemo(() => options.type === 'number' ? 0 : '', [options.type])
+  const defaultValue = useMemo(() => (options.type === 'number' ? 0 : ''), [
+    options.type,
+  ])
   const [value, setValue] = useState<string | number>(defaultValue)
   // --- Derty hack
   useEffect(() => {
@@ -60,36 +83,37 @@ export const PromptProvider = ({ children, defaultOptions = {} }) => {
   const resetForm = useCallback(() => {
     setValue(defaultValue)
   }, [setValue, defaultValue])
-  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    if (options.type === 'number') {
-      setValue(Number(e.target.value))
-    } else {
-      setValue(e.target.value)
-    }
-  }, [options.type, setValue])
+  const handleChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (options.type === 'number') {
+        setValue(Number(e.target.value))
+      } else {
+        setValue(e.target.value)
+      }
+    },
+    [options.type, setValue]
+  )
 
   const handleClose = useCallback(() => {
-    setResolveReject([]);
+    setResolveReject([])
     resetForm()
-  }, []);
+  }, [])
 
   const handleCancel = useCallback(() => {
-    reject();
-    handleClose();
+    reject()
+    handleClose()
     resetForm()
-  }, [reject, handleClose]);
+  }, [reject, handleClose])
 
   const handleConfirm = useCallback(() => {
-    resolve(value);
-    handleClose();
-    resetForm();
-  }, [value, resolve, handleClose, resetForm]);
+    resolve(value)
+    handleClose()
+    resetForm()
+  }, [value, resolve, handleClose, resetForm])
 
   return (
     <Fragment>
-      <PromptContext.Provider value={prompt}>
-        {children}
-      </PromptContext.Provider>
+      <PromptContext.Provider value={prompt}>{children}</PromptContext.Provider>
       <PromptDialog
         open={resolveReject.length === 2}
         options={{
@@ -108,5 +132,5 @@ export const PromptProvider = ({ children, defaultOptions = {} }) => {
         // value={value}
       />
     </Fragment>
-  );
-};
+  )
+}

@@ -259,7 +259,9 @@ export const TheProject = () => {
                 size="small"
                 variant="outlined"
                 color="primary"
-                disabled={isLoading || filterState.selectedGroup === 'inProgress'}
+                disabled={
+                  isLoading || filterState.selectedGroup === 'inProgress'
+                }
                 // endIcon={<BuildIcon />}
               >
                 В процессе
