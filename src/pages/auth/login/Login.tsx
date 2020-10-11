@@ -50,7 +50,7 @@ export const Login = () => {
       .then(httpErrorHandler) // res -> res.json()
       .then((data) => {
         if (!!data.jwt && !!data.user) {
-          setCookie(data.jwt, 'jwt', {
+          setCookie('jwt', data.jwt, {
             maxAge: REACT_APP_COOKIE_MAXAGE_IN_DAYS * 24 * 60 * 60,
           })
           setUserData(data.user)
