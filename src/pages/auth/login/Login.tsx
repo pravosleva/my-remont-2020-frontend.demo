@@ -13,6 +13,7 @@ import { getApiUrl } from '~/utils/getApiUrl'
 import { useCookies } from 'react-cookie'
 import { MainContext } from '~/common/context/MainContext'
 import { useRouter } from '~/common/hooks/useRouter'
+import { httpErrorHandler } from '~/utils/errors/http/fetch'
 
 const apiUrl = getApiUrl()
 const REACT_APP_COOKIE_MAXAGE_IN_DAYS = process.env
@@ -46,11 +47,11 @@ export const Login = () => {
         },
         body: JSON.stringify(normalizedObj),
       })
-      .then((res) => res.json())
+      .then(httpErrorHandler) // res -> res.json()
       .then((data) => {
         if (!!data.jwt && !!data.user) {
           setCookie(data.jwt, 'jwt', {
-            maxAge: REACT_APP_COOKIE_MAXAGE_IN_DAYS * 24 * 60 * 60 * 1000,
+            maxAge: REACT_APP_COOKIE_MAXAGE_IN_DAYS * 24 * 60 * 60,
           })
           setUserData(data.user)
           toast(`Hello, ${data.user.username}`, { appearance: 'success' })
@@ -62,6 +63,7 @@ export const Login = () => {
         router.history.push('/projects')
       })
       .catch((err) => {
+        toast(err.message || 'Errored', { appearance: 'error' })
         console.log(err.message)
       })
   }, [email, password])
