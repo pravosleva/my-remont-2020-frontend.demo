@@ -1,4 +1,10 @@
-import React, { useCallback, useContext, useState, useRef, useEffect } from 'react'
+import React, {
+  useCallback,
+  useContext,
+  useState,
+  useRef,
+  useEffect,
+} from 'react'
 import { IJob, Job } from './components/Job'
 import { IProps } from './interfaces'
 import {
@@ -120,12 +126,14 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
     const targetJob = joblist.find(({ _id }) => _id === openedMarkdownEditorId)
     if (!!targetJob) setLocalMD(targetJob.description)
   }, [openedMarkdownEditorId, joblist])
-  const debouncedUpdateJoblist = useDebouncedCallback((openedMarkdownEditorId, text, changeJobField) => {
-    // localMD -> joblist
-    changeJobField(openedMarkdownEditorId, 'description', text)()
-  }, 500)
+  const debouncedUpdateJoblist = useDebouncedCallback(
+    (openedMarkdownEditorId, text, changeJobField) => {
+      // localMD -> joblist
+      changeJobField(openedMarkdownEditorId, 'description', text)()
+    },
+    500
+  )
   const handleSubmit = useCallback(() => {
-
     setIsLoading(true)
     window
       .fetch(`${apiUrl}/remonts/${remontId}`, {
@@ -144,10 +152,7 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
           setIsLoading(false)
           handleCloseEditor()
           handleCloseMarkdownEditor()
-          if (
-            !!data?.joblist &&
-            Array.isArray(data.joblist)
-          ) {
+          if (!!data?.joblist && Array.isArray(data.joblist)) {
             updateJoblist(data.joblist)
             toast('Успешно', { appearance: 'success' })
             return
@@ -159,23 +164,30 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
         setIsLoading(false)
         console.log(err.message)
       })
-  }, [setIsLoading, remontId, cookies.jwt, joblist, handleCloseEditor, handleCloseMarkdownEditor, updateJoblist, toast])
+  }, [
+    setIsLoading,
+    remontId,
+    cookies.jwt,
+    joblist,
+    handleCloseEditor,
+    handleCloseMarkdownEditor,
+    updateJoblist,
+    toast,
+  ])
   const confirm = useConfirm()
-  const handleDoneJob = useCallback((id, checked) => {
-    confirm({ title: 'Job status', description: 'Will be updated. Do it?' })
-      .then(() => {
-        changeJobField(
-          id,
-          'isDone',
-          checked,
-        )()
-        handleSubmit()
-      })
-      .catch(() => {
-        // toast('Отменено', { appearance: 'error' })
-      });
-
-  }, [handleSubmit, changeJobField])
+  const handleDoneJob = useCallback(
+    (id, checked) => {
+      confirm({ title: 'Job status', description: 'Will be updated. Do it?' })
+        .then(() => {
+          changeJobField(id, 'isDone', checked)()
+          handleSubmit()
+        })
+        .catch(() => {
+          // toast('Отменено', { appearance: 'error' })
+        })
+    },
+    [handleSubmit, changeJobField]
+  )
   const isItemExpanded = (id: string) => expanded === `panel${id}`
 
   return (
@@ -185,7 +197,9 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
           {joblist.map((data, i) => (
             <React.Fragment key={data._id}>
               <Accordion
-                className={clsx({ [classes.disabled]: data.isDone && !isItemExpanded(data._id)})}
+                className={clsx({
+                  [classes.disabled]: data.isDone && !isItemExpanded(data._id),
+                })}
                 key={data._id}
                 expanded={expanded === `panel${data._id}`}
                 onChange={handleChangeAccoddionItem(`panel${data._id}`)}
@@ -195,30 +209,33 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
                   aria-controls={`panel${data._id}bh-content`}
                   id={`panel${data._id}bh-header`}
                 >
-                  {
-                    !!userData ? (
-                      <FormControlLabel
-                        aria-label="Acknowledge"
-                        onClick={(e: any) => {
-                          e.stopPropagation()
-                          handleDoneJob(data._id, e.target?.checked)
-                        }}
-                        // onFocus={(event) => { event.stopPropagation() }}
-                        control={<Checkbox checked={data.isDone} color='primary' />}
-                        label={data.name}
-                      />
-                    ) : (
-                      <Typography
-                        className={clsx({
-                          [classes.dangerText]:
-                            data.payed - (data.priceMaterials + data.priceJobs) < 0,
-                          [classes.successText]:
-                            data.payed - (data.priceMaterials + data.priceJobs) >=
-                            0,
-                        })}
-                      >{data.name}</Typography>
-                    )
-                  }
+                  {!!userData ? (
+                    <FormControlLabel
+                      aria-label="Acknowledge"
+                      onClick={(e: any) => {
+                        e.stopPropagation()
+                        handleDoneJob(data._id, e.target?.checked)
+                      }}
+                      // onFocus={(event) => { event.stopPropagation() }}
+                      control={
+                        <Checkbox checked={data.isDone} color="primary" />
+                      }
+                      label={data.name}
+                    />
+                  ) : (
+                    <Typography
+                      className={clsx({
+                        [classes.dangerText]:
+                          data.payed - (data.priceMaterials + data.priceJobs) <
+                          0,
+                        [classes.successText]:
+                          data.payed - (data.priceMaterials + data.priceJobs) >=
+                          0,
+                      })}
+                    >
+                      {data.name}
+                    </Typography>
+                  )}
                 </AccordionSummary>
                 <Divider />
                 <AccordionDetails className={classes.details}>

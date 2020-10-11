@@ -20,8 +20,8 @@ type TAction =
       payload: string
     }
   | {
-    type: 'TOTAL_RESET'
-  }
+      type: 'TOTAL_RESET'
+    }
 
 export const initialState = { name: '', comment: '', isOpened: false }
 export function reducer(state: IState, action: TAction): IState {

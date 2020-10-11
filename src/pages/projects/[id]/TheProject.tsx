@@ -5,7 +5,11 @@ import React, {
   useReducer,
   useState,
 } from 'react'
-import { useRemoteDataByFetch, TAns, useDebouncedCallback } from '~/common/hooks'
+import {
+  useRemoteDataByFetch,
+  TAns,
+  useDebouncedCallback,
+} from '~/common/hooks'
 import { getApiUrl } from '~/utils/getApiUrl'
 import { useParams } from 'react-router-dom'
 import { Joblist } from './components/Joblist'
@@ -55,19 +59,31 @@ export const TheProject = () => {
   } = useContext(MainContext)
   // --- GET REMONT INFO
   const [cookies] = useCookies(['jwt'])
-  const handleSuccess = useCallback((data) => {
-    toast('Remont data received', { appearance: 'success' })
-    // console.log(data, !isEqual(joblist, data.joblist))
-    setProjectData(data)
-    updateJoblist(data.joblist)
-    // if (!!data?.joblist && !isEqual(joblist, data.joblist)) {
-    //   updateJoblist(data.joblist)
-    // }
-  }, [setProjectData, updateJoblist, joblist, toast])
-  const handleFail = useCallback((msg: string) => {
-    resetProjectData()
-    if (isDev) toast(`Не удалось получить список ремонтов: ${msg || 'Что-то пошло не так'}`, { appearance: 'error' })
-  }, [resetProjectData])
+  const handleSuccess = useCallback(
+    (data) => {
+      toast('Remont data received', { appearance: 'success' })
+      // console.log(data, !isEqual(joblist, data.joblist))
+      setProjectData(data)
+      updateJoblist(data.joblist)
+      // if (!!data?.joblist && !isEqual(joblist, data.joblist)) {
+      //   updateJoblist(data.joblist)
+      // }
+    },
+    [setProjectData, updateJoblist, joblist, toast]
+  )
+  const handleFail = useCallback(
+    (msg: string) => {
+      resetProjectData()
+      if (isDev)
+        toast(
+          `Не удалось получить список ремонтов: ${
+            msg || 'Что-то пошло не так'
+          }`,
+          { appearance: 'error' }
+        )
+    },
+    [resetProjectData]
+  )
   const [project, isLoaded, isLoading]: TAns = useRemoteDataByFetch({
     url: `${apiUrl}/remonts/${id}`,
     method: 'GET',
@@ -77,9 +93,12 @@ export const TheProject = () => {
     responseValidator: (res) => !!res.id,
   })
   // Reset on unmount:
-  useEffect(() => () => {
-    resetProjectData()
-  }, [resetProjectData])
+  useEffect(
+    () => () => {
+      resetProjectData()
+    },
+    [resetProjectData]
+  )
   // ---
   // --- CREATE JOB FORM:
   const [createJobState, dispatchCreateJob] = useReducer(

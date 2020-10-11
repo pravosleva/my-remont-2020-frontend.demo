@@ -56,10 +56,13 @@ export const SiteLayout: React.FC = ({ children }) => {
   const handleResetCurrentProjectData = useCallback(() => {
     setProjectData(null)
   }, [setProjectData])
-  const handleSetProjectData = useCallback((data) => {
-    // console.log('handleSetProjectData')
-    setProjectData(data)
-  }, [setProjectData])
+  const handleSetProjectData = useCallback(
+    (data) => {
+      // console.log('handleSetProjectData')
+      setProjectData(data)
+    },
+    [setProjectData]
+  )
   const [userData, setUserData] = useState<IUserData | null>(null)
   const [cookies, setCookie, removeCookie] = useCookies(['jwt'])
   const handleSetUserData = useCallback(
@@ -93,18 +96,21 @@ export const SiteLayout: React.FC = ({ children }) => {
   const classes = useStyles()
   const [socketLink, setSocketLink] = useState(null)
 
-  const onRemontUpdate = useCallback(({
-    result,
-    // params,
-    data,
-  }) => {
-    if (!!projectData && result.id === projectData.id) {
-      if (!!data?.joblist && !isEqual(joblist, data.joblist)) {
-        handleUpdateJoblist(data.joblist)
-        addToast('Список работ обновлен', { appearance: 'info' })
+  const onRemontUpdate = useCallback(
+    ({
+      result,
+      // params,
+      data,
+    }) => {
+      if (!!projectData && result.id === projectData.id) {
+        if (!!data?.joblist && !isEqual(joblist, data.joblist)) {
+          handleUpdateJoblist(data.joblist)
+          addToast('Список работ обновлен', { appearance: 'info' })
+        }
       }
-    }
-  }, [joblist, projectData, handleUpdateJoblist])
+    },
+    [joblist, projectData, handleUpdateJoblist]
+  )
   useEffect(() => {
     const socket = socketIOClient(REACT_APP_SOCKET_ENDPOINT)
 

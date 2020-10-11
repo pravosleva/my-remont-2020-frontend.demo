@@ -61,7 +61,10 @@ interface IMainContext {
     value: number | boolean | string
   ) => () => void
   updateJoblist: (joblist: IJob[]) => void
-  toast: (msg: string, opts: { appearance: 'success' | 'error' | 'info' }) => void
+  toast: (
+    msg: string,
+    opts: { appearance: 'success' | 'error' | 'info' }
+  ) => void
   socket: null | Socket
 }
 
