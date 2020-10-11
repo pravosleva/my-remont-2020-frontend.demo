@@ -20,6 +20,12 @@
         - [ ] gql
         - [ ] allow find all projects free (gql)
   - [ ] открытие ссылок `description` в новом окне
+  - [ ] registry service
+    - [ ] `/auth/registry` page
+    - [ ] `/auth/forgot-password` page
+    - [ ] email confirmation
+    - [ ] https
+    - [x] **RESTful api**
   - [x] update job status cofirm dialog by `material-ui-confirm`
   - [x] socket connection for realtime web app
   - [x] create/edit job: by auth user
