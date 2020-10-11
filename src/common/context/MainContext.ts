@@ -100,7 +100,7 @@ export const MainContext = createContext<IMainContext>({
     throw new Error('addToast method should be implemented')
   },
   socket: null,
-  filterState: { selectedGroup: 'all' },
+  filterState: { selectedGroup: 'inProgress' },
   onSelectAll: () => {
     throw new Error('onSelectAll method should be implemented')
   },

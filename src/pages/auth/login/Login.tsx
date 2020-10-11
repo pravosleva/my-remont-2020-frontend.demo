@@ -5,6 +5,7 @@ import {
   Avatar,
   TextField,
   Button,
+  CircularProgress,
 } from '@material-ui/core'
 import { useStyles } from './styles'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
@@ -27,7 +28,8 @@ export const Login = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [cookies, setCookie, removeCookie] = useCookies(['jwt'])
-  const { setUserData, toast } = useContext(MainContext)
+  const { setUserData, toast, isUserDataLoading } = useContext(MainContext)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
   const handleSubmit = useCallback(() => {
     const normalizedObj = getNormalizedInputs({ email, password })
     // const body = new FormData()
@@ -36,6 +38,8 @@ export const Login = () => {
     // body.append('identifier', normalizedObj.identifier)
     // // @ts-ignore
     // body.append('password', normalizedObj.password)
+
+    setIsLoading(true)
 
     window
       .fetch(`${apiUrl}/auth/local`, {
@@ -49,6 +53,7 @@ export const Login = () => {
       })
       .then(httpErrorHandler) // res -> res.json()
       .then((data) => {
+        setIsLoading(false)
         if (!!data.jwt && !!data.user) {
           setCookie('jwt', data.jwt, {
             maxAge: REACT_APP_COOKIE_MAXAGE_IN_DAYS * 24 * 60 * 60,
@@ -63,10 +68,11 @@ export const Login = () => {
         router.history.push('/projects')
       })
       .catch((err) => {
+        setIsLoading(false)
         toast(err.message || 'Errored', { appearance: 'error' })
         console.log(err.message)
       })
-  }, [email, password])
+  }, [email, password, setIsLoading])
 
   return (
     <Container component="main" maxWidth="xs">
@@ -105,6 +111,16 @@ export const Login = () => {
             color="primary"
             fullWidth
             onClick={handleSubmit}
+            disabled={isUserDataLoading}
+            endIcon={
+              isLoading && (
+                <CircularProgress
+                  size={20}
+                  color="primary"
+                  style={{ marginLeft: 'auto' }}
+                />
+              )
+            }
           >
             Войти
           </Button>

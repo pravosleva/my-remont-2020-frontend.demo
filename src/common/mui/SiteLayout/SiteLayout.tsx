@@ -141,7 +141,7 @@ export const SiteLayout: React.FC = ({ children }) => {
   }, [socketLink, onRemontUpdate])
   // --- FILTER STATE:
   const [filterState, dispatchFilter] = useReducer(filterReducer, {
-    selectedGroup: 'all',
+    selectedGroup: 'inProgress',
   })
   const handleSelectAll = useCallback(() => {
     dispatchFilter({ type: 'SELECT_GROUP', payload: 'all' })

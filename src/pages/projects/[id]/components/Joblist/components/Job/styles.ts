@@ -15,4 +15,11 @@ export const useStyles = makeStyles((theme) => ({
   successText: {
     color: green[500],
   },
+  description: {
+    '& blockquote': {
+      // borderLeft: '2px solid lightgray',
+      // paddingLeft: theme.spacing(1),
+      // marginLeft: theme.spacing(1),
+    }
+  }
 }))

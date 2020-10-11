@@ -72,7 +72,8 @@ export const BreadCrumbs = () => {
               color="primary"
               endIcon={<ExitToAppIcon />}
             >
-              <span>{userData?.username}</span>
+              {/* <span>{userData?.username}</span> */}
+              <span>Logout</span>
             </Button>
           </div>
         )}

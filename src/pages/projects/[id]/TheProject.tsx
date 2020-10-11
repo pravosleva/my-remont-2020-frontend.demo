@@ -237,9 +237,9 @@ export const TheProject = () => {
               <Button
                 onClick={onSelectAll}
                 size="small"
-                variant="outlined"
+                variant={filterState.selectedGroup === 'all' ? 'contained' : "outlined"}
                 color="primary"
-                disabled={isLoading || filterState.selectedGroup === 'all'}
+                disabled={isLoading}
                 // endIcon={<BuildIcon />}
               >
                 Все
@@ -247,9 +247,9 @@ export const TheProject = () => {
               <Button
                 onClick={onSelectIsDone}
                 size="small"
-                variant="outlined"
+                variant={filterState.selectedGroup === 'isDone' ? 'contained' : "outlined"}
                 color="primary"
-                disabled={isLoading || filterState.selectedGroup === 'isDone'}
+                disabled={isLoading}
                 // endIcon={<BuildIcon />}
               >
                 Завершенные
@@ -257,11 +257,9 @@ export const TheProject = () => {
               <Button
                 onClick={onSelectInProgress}
                 size="small"
-                variant="outlined"
+                variant={filterState.selectedGroup === 'inProgress' ? 'contained' : "outlined"}
                 color="primary"
-                disabled={
-                  isLoading || filterState.selectedGroup === 'inProgress'
-                }
+                disabled={isLoading}
                 // endIcon={<BuildIcon />}
               >
                 В процессе

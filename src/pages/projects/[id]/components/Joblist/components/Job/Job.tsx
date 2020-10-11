@@ -31,20 +31,16 @@ export const Job = ({ data }: IProps) => {
         {!!data.description && (
           <Grid item xs={12}>
             <b>Описание</b>
-            <Markdown source={data.description} />
+            <Markdown source={data.description} className={classes.description} />
           </Grid>
         )}
         <Grid item>
           <Typography gutterBottom variant="body2" color="textSecondary">
             Цена за работу: {getPrettyPrice(data.priceJobs)}
           </Typography>
-        </Grid>
-        <Grid item>
           <Typography gutterBottom variant="body2" color="textSecondary">
             Цена за материалы: {getPrettyPrice(data.priceMaterials)}
           </Typography>
-        </Grid>
-        <Grid item>
           <Typography gutterBottom variant="body2" color="textSecondary">
             Цена за доставку: {getPrettyPrice(data.priceDelivery)}
           </Typography>

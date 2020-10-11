@@ -60,6 +60,10 @@ export const useStyles = makeStyles((theme: Theme) =>
       color: green[500],
     },
     buttonsWrapper: {
+      marginLeft: 'auto',
+      '& > *': {
+        marginBottom: theme.spacing(1),
+      },
       '& > *:not(:last-child)': {
         marginRight: theme.spacing(1),
       },
