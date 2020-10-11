@@ -2,7 +2,6 @@ import React, {
   useCallback,
   useContext,
   useState,
-  useRef,
   useEffect,
 } from 'react'
 import { IJob, Job } from './components/Job'

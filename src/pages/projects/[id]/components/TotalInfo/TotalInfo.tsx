@@ -1,6 +1,6 @@
 import React, { useMemo, useContext } from 'react'
 import { useStyles } from './styles'
-import { Paper } from '@material-ui/core'
+import { Paper, Typography } from '@material-ui/core'
 import { getPrettyPrice } from '~/utils/getPrettyPrice'
 import { Grid, Divider } from '@material-ui/core'
 import {
@@ -29,30 +29,29 @@ export const TotalInfo = () => {
   return (
     <Paper className={classes.paper}>
       <Grid container direction="column" spacing={2}>
-        <Grid item xs>
+        <Grid item>
           <b className={classes.infoText}>
             Работ принято: {comletedJobsCount} из {joblist.length}
           </b>
         </Grid>
         <Divider />
-        <Grid className={classes.secondaryText} item xs>
-          <b>ИТОГО оплачено: {getPrettyPrice(totalPayed)}</b>
+
+        <Grid className={classes.secondaryText} item>
+          <Typography>Ценник за работу: {getPrettyPrice(totalPriceJobs)}</Typography>
+          <Typography>Ценник за материалы: {getPrettyPrice(totalMaterials)}</Typography>
         </Grid>
-        <Grid item xs className={classes.secondaryText}>
-          <b>Ценник за работу: {getPrettyPrice(totalPriceJobs)}</b>
+        <Grid item>
+          <Typography variant="h5">ИТОГО затраты: {getPrettyPrice(totalPayed)}</Typography>
         </Grid>
-        <Grid item xs className={classes.secondaryText}>
-          <b>Ценник за материалы: {getPrettyPrice(totalMaterials)}</b>
-        </Grid>
+        <Divider />
         <Grid
           item
-          xs
           className={clsx({
             [classes.dangerText]: totalDifferecne < 0,
             [classes.successText]: totalDifferecne >= 0,
           })}
         >
-          <b>Остаток: {getPrettyPrice(totalDifferecne)}</b>
+          <b>Баланс: {getPrettyPrice(totalDifferecne)}</b>
         </Grid>
       </Grid>
     </Paper>

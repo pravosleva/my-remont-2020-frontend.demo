@@ -16,6 +16,7 @@
       - [ ] `/`
         - [ ] gql
         - [ ] allow find all projects free (gql)
+  - [ ] открытие ссылок в новом окне
   - [x] update job status cofirm dialog by `material-ui-confirm`
   - [x] socket connection for realtime web app
   - [x] create/edit job: by auth user
