@@ -17,6 +17,7 @@ import {
   CircularProgress,
   withStyles,
   Typography,
+  Grid,
 } from '@material-ui/core'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { useStyles } from './styles'
@@ -45,6 +46,7 @@ import Slide from '@material-ui/core/Slide'
 // import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank'
 import { useDebouncedCallback } from '~/common/hooks'
 import { useConfirm } from 'material-ui-confirm'
+import { usePrompt } from '~/common/hooks/usePrompt'
 
 // Register plugins if required
 // MdEditor.use(YOUR_PLUGINS_HERE);
@@ -199,6 +201,85 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
       default: return joblist
     }
   }, [joblist, filterState])
+  const prompt = usePrompt()
+  // priceJobs:
+  const handleAddPriceJobs = useCallback((id, initPrice) => () => {
+    prompt({ label: 'Ценник за работу', type: 'number', title: 'Добавить сумму' })
+      .then((value: number) => {
+        changeJobField(
+          id,
+          'priceJobs',
+          initPrice + value
+        )()
+      })
+      .then(handleSubmit)
+      .catch((_err) => { toast('Отменено', { appearance: 'error' }) })
+  }, [prompt, changeJobField, toast, handleSubmit])
+  const handleRemovePriceJobs = useCallback((id, initPrice) => () => {
+    prompt({ label: 'Ценник за работу', type: 'number', title: 'Вычесть сумму' })
+      .then((value: number) => {
+        changeJobField(
+          id,
+          'priceJobs',
+          initPrice - value
+        )()
+        handleSubmit()
+      })
+      .then(handleSubmit)
+      .catch((_err) => { toast('Отменено', { appearance: 'error' }) })
+  }, [prompt, changeJobField, toast, handleSubmit])
+  // priceMaterials:
+  const handleAddPriceMaterials = useCallback((id, initPrice) => () => {
+    prompt({ label: 'Ценник за материалы', type: 'number', title: 'Добавить сумму' })
+      .then((value: number) => {
+        changeJobField(
+          id,
+          'priceMaterials',
+          initPrice + value
+        )()
+      })
+      .then(handleSubmit)
+      .catch((_err) => { toast('Отменено', { appearance: 'error' }) })
+  }, [prompt, changeJobField, toast, handleSubmit])
+  const handleRemovePriceMaterials = useCallback((id, initPrice) => () => {
+    prompt({ label: 'Ценник за материалы', type: 'number', title: 'Вычесть сумму' })
+      .then((value: number) => {
+        changeJobField(
+          id,
+          'priceMaterials',
+          initPrice - value
+        )()
+        handleSubmit()
+      })
+      .then(handleSubmit)
+      .catch((_err) => { toast('Отменено', { appearance: 'error' }) })
+  }, [prompt, changeJobField, toast, handleSubmit])
+  // priceDelivery:
+  const handleAddPriceDelivery = useCallback((id, initPrice) => () => {
+    prompt({ label: 'Ценник за доставку', type: 'number', title: 'Добавить сумму' })
+      .then((value: number) => {
+        changeJobField(
+          id,
+          'priceDelivery',
+          initPrice + value
+        )()
+      })
+      .then(handleSubmit)
+      .catch((_err) => { toast('Отменено', { appearance: 'error' }) })
+  }, [prompt, changeJobField, toast, handleSubmit])
+  const handleRemovePriceDelivery = useCallback((id, initPrice) => () => {
+    prompt({ label: 'Ценник за доставку', type: 'number', title: 'Вычесть сумму' })
+      .then((value: number) => {
+        changeJobField(
+          id,
+          'priceDelivery',
+          initPrice - value
+        )()
+        handleSubmit()
+      })
+      .then(handleSubmit)
+      .catch((_err) => { toast('Отменено', { appearance: 'error' }) })
+  }, [prompt, changeJobField, toast, handleSubmit])
 
   return (
     <>
@@ -377,90 +458,162 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
                           "id": "5f7901e014e0008700d02545"
                         }
                     */}
-                    <div className={classes.inputsBox}>
-                      <TextField
-                        id={`name_${data._id}`}
-                        label="Название"
-                        type="text"
-                        variant="outlined"
-                        value={data.name}
-                        size="small"
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                          changeJobField(data._id, 'name', e.target.value)()
-                        }}
-                      />
-                      <TextField
-                        id={`comment_${data._id}`}
-                        label="Комментарий"
-                        type="text"
-                        variant="outlined"
-                        value={data.comment}
-                        size="small"
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                          changeJobField(data._id, 'comment', e.target.value)()
-                        }}
-                      />
-                      <TextField
-                        id={`priceJobs_${data._id}`}
-                        label="Ценник за работу"
-                        type="number"
-                        variant="outlined"
-                        value={data.priceJobs}
-                        size="small"
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                          changeJobField(
-                            data._id,
-                            'priceJobs',
-                            Number(e.target.value)
-                          )()
-                        }}
-                      />
-                      <TextField
-                        id={`priceMaterials_${data._id}`}
-                        label="Ценник за материалы"
-                        type="number"
-                        variant="outlined"
-                        value={data.priceMaterials}
-                        size="small"
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                          changeJobField(
-                            data._id,
-                            'priceMaterials',
-                            Number(e.target.value)
-                          )()
-                        }}
-                      />
-                      <TextField
-                        id={`priceDelivery_${data._id}`}
-                        label="Ценник за доставку"
-                        type="number"
-                        variant="outlined"
-                        value={data.priceDelivery}
-                        size="small"
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                          changeJobField(
-                            data._id,
-                            'priceDelivery',
-                            Number(e.target.value)
-                          )()
-                        }}
-                      />
-                      <TextField
-                        id={`payed_${data._id}`}
-                        label="Оплачено"
-                        type="number"
-                        variant="outlined"
-                        value={data.payed}
-                        size="small"
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                          changeJobField(
-                            data._id,
-                            'payed',
-                            Number(e.target.value)
-                          )()
-                        }}
-                      />
-
+                    <Grid container direction="column" spacing={0} className={classes.inputsBox}>
+                      <Grid item xs={12}>
+                        <TextField
+                          id={`name_${data._id}`}
+                          label="Название"
+                          type="text"
+                          variant="outlined"
+                          value={data.name}
+                          size="small"
+                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                            changeJobField(data._id, 'name', e.target.value)()
+                          }}
+                          fullWidth
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <TextField
+                          id={`comment_${data._id}`}
+                          label="Комментарий"
+                          type="text"
+                          variant="outlined"
+                          value={data.comment}
+                          size="small"
+                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                            changeJobField(data._id, 'comment', e.target.value)()
+                          }}
+                          fullWidth
+                        />
+                      </Grid>
+                      <Grid item xs={12} style={{ marginBottom: '10px' }}>
+                        <TextField
+                          id={`priceJobs_${data._id}`}
+                          label="Ценник за работу"
+                          type="number"
+                          // variant="outlined"
+                          value={data.priceJobs}
+                          size="small"
+                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                            changeJobField(
+                              data._id,
+                              'priceJobs',
+                              Number(e.target.value)
+                            )()
+                          }}
+                          fullWidth
+                          // disabled={true}
+                        />
+                      </Grid>
+                      <Grid item className={classes.buttonsWrapper}>
+                        <Button
+                          size="small"
+                          variant="outlined"
+                          onClick={handleAddPriceJobs(data._id, data.priceJobs)}
+                          // endIcon={<EditIcon />}
+                        >
+                          Добавить сумму
+                        </Button>
+                        <Button
+                          size="small"
+                          variant="outlined"
+                          onClick={handleRemovePriceJobs(data._id, data.priceJobs)}
+                          // endIcon={<EditIcon />}
+                        >
+                          Вычесть сумму
+                        </Button>
+                      </Grid>
+                      <Grid item xs={12} style={{ marginBottom: '10px' }}>
+                        <TextField
+                          id={`priceMaterials_${data._id}`}
+                          label="Ценник за материалы"
+                          type="number"
+                          // variant="outlined"
+                          value={data.priceMaterials}
+                          size="small"
+                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                            changeJobField(
+                              data._id,
+                              'priceMaterials',
+                              Number(e.target.value)
+                            )()
+                          }}
+                          fullWidth
+                        />
+                      </Grid>
+                      <Grid item className={classes.buttonsWrapper}>
+                        <Button
+                          size="small"
+                          variant="outlined"
+                          onClick={handleAddPriceMaterials(data._id, data.priceMaterials)}
+                          // endIcon={<EditIcon />}
+                        >
+                          Добавить сумму
+                        </Button>
+                        <Button
+                          size="small"
+                          variant="outlined"
+                          onClick={handleRemovePriceMaterials(data._id, data.priceMaterials)}
+                          // endIcon={<EditIcon />}
+                        >
+                          Вычесть сумму
+                        </Button>
+                      </Grid>
+                      <Grid item xs={12} style={{ marginBottom: '10px' }}>
+                        <TextField
+                          id={`priceDelivery_${data._id}`}
+                          label="Ценник за доставку"
+                          type="number"
+                          // variant="outlined"
+                          value={data.priceDelivery}
+                          size="small"
+                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                            changeJobField(
+                              data._id,
+                              'priceDelivery',
+                              Number(e.target.value)
+                            )()
+                          }}
+                          fullWidth
+                        />
+                      </Grid>
+                      <Grid item className={classes.buttonsWrapper}>
+                        <Button
+                          size="small"
+                          variant="outlined"
+                          onClick={handleAddPriceDelivery(data._id, data.priceDelivery)}
+                          // endIcon={<EditIcon />}
+                        >
+                          Добавить сумму
+                        </Button>
+                        <Button
+                          size="small"
+                          variant="outlined"
+                          onClick={handleRemovePriceDelivery(data._id, data.priceDelivery)}
+                          // endIcon={<EditIcon />}
+                        >
+                          Вычесть сумму
+                        </Button>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <TextField
+                          id={`payed_${data._id}`}
+                          label="Оплачено"
+                          type="number"
+                          variant="outlined"
+                          value={data.payed}
+                          size="small"
+                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                            changeJobField(
+                              data._id,
+                              'payed',
+                              Number(e.target.value)
+                            )()
+                          }}
+                          fullWidth
+                        />
+                      </Grid>
                       <Divider />
                       <div className={classes.checkboxWrapper}>
                         <FormControl
@@ -533,7 +686,7 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
                           data.payed - (data.priceMaterials + data.priceJobs)
                         )}
                       </h3>
-                    </div>
+                    </Grid>
                   </DialogContent>
                   <DialogActions>
                     <Button

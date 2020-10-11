@@ -59,5 +59,10 @@ export const useStyles = makeStyles((theme: Theme) =>
     successText: {
       color: green[500],
     },
+    buttonsWrapper: {
+      '& > *:not(:last-child)': {
+        marginRight: theme.spacing(1)
+      }
+    },
   })
 )

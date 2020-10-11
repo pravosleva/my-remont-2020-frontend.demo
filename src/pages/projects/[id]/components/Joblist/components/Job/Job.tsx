@@ -1,13 +1,11 @@
 import React, { useMemo, useContext, useState } from 'react'
 import { IJob } from './interfaces'
 import { useStyles } from './styles'
-import { Grid, Typography, Divider } from '@material-ui/core'
+import { Grid, Typography } from '@material-ui/core'
 import Markdown from 'react-markdown'
 import { getPrettyPrice } from '~/utils/getPrettyPrice'
 import clsx from 'clsx'
 import { getDifference } from '~/utils/getDifference'
-// import { MainContext } from '~/common/context/MainContext'
-// import { Button } from '@material-ui/core'
 
 interface IProps {
   data: IJob
@@ -16,8 +14,6 @@ interface IProps {
 export const Job = ({ data }: IProps) => {
   const classes = useStyles()
   const diff = useMemo(() => getDifference(data), [data])
-  // const { userData } = useContext(MainContext)
-  // const [isEditorOpened, setIsEditorOpened] = useState<boolean>(false)
 
   return (
     <div className={classes.paper}>
@@ -42,9 +38,13 @@ export const Job = ({ data }: IProps) => {
           <Typography gutterBottom variant="body2" color="textSecondary">
             Цена за работу: {getPrettyPrice(data.priceJobs)}
           </Typography>
+        </Grid>
+        <Grid item>
           <Typography gutterBottom variant="body2" color="textSecondary">
             Цена за материалы: {getPrettyPrice(data.priceMaterials)}
           </Typography>
+        </Grid>
+        <Grid item>
           <Typography gutterBottom variant="body2" color="textSecondary">
             Цена за доставку: {getPrettyPrice(data.priceDelivery)}
           </Typography>
