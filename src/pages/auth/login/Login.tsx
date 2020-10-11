@@ -15,7 +15,7 @@ import { MainContext } from '~/common/context/MainContext'
 import { useRouter } from '~/common/hooks/useRouter'
 
 const apiUrl = getApiUrl()
-const REACT_APP_COOKIE_MAXAGE_IN_DAYS = process.env.REACT_APP_COOKIE_MAXAGE_IN_DAYS ? parseInt(process.env.REACT_APP_COOKIE_MAXAGE_IN_DAYS) : 1
+const REACT_APP_COOKIE_EXPIRES_IN_DAYS = process.env.REACT_APP_COOKIE_EXPIRES_IN_DAYS ? parseInt(process.env.REACT_APP_COOKIE_EXPIRES_IN_DAYS) : 1
 
 export const Login = () => {
   const router = useRouter()
@@ -46,7 +46,7 @@ export const Login = () => {
       .then((res) => res.json())
       .then((data) => {
         if (!!data.jwt && !!data.user) {
-          setCookie(data.jwt, 'jwt', { maxAge: 60 * 60 * 24 * REACT_APP_COOKIE_MAXAGE_IN_DAYS })
+          setCookie(data.jwt, 'jwt', { maxAge: REACT_APP_COOKIE_EXPIRES_IN_DAYS * 24 * 60 *60 * 1000 })
           setUserData(data.user)
           toast(`Hello, ${data.user.username}`, { appearance: 'success' })
           return

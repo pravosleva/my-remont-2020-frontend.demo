@@ -3,19 +3,19 @@
 ## Roadmap
 
 - [ ] **git hooks**
-
-
-- [ ] allow `findOne` for auth user for his projects
-- [ ] `/projects`
-  - [ ] allow find all projects free
-- [ ] ``
 - [ ] UX
-  - [ ] авториз. пользователь должен видеть только свои ремонты
-  - [ ] неавториз. польз. должен видеть только общую информацию о ремонтах
-    - [ ] общая аналитика по всем ремонтам на главной
   - [ ] доп. кнопки на странице `/projects/:id`
     - [ ] "Добавить сумму"
     - [ ] "Вычесть сумму"
+  - [ ] авториз. пользователь должен видеть только свои ремонты
+    - [ ] `/projects`
+      - [ ] project should be related to user?
+      - [ ] findOne for the user
+  - [ ] неавториз. польз. должен видеть только общую информацию о ремонтах
+    - [ ] общая аналитика по всем ремонтам на главной
+      - [ ] `/`
+        - [ ] gql
+        - [ ] allow find all projects free (gql)
   - [x] update job status cofirm dialog by `material-ui-confirm`
   - [x] socket connection for realtime web app
   - [x] create/edit job: by auth user
@@ -23,6 +23,9 @@
 - [ ] UI
   - [x] `react-toast-notifications`
   - [x] markdown editor
+- [ ] allow `findOne` for auth user for his projects
+- [ ] socket
+  - [ ] remont room connection?
 - [ ] Standard errors handlers
   - [ ] network
   - [x] http
