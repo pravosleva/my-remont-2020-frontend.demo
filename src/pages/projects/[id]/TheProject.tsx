@@ -25,6 +25,7 @@ import { CreateNewJob } from './components/CreateNewJob'
 import BuildIcon from '@material-ui/icons/Build'
 // import { isEqual } from 'lodash'
 // import { eventlist as ev } from '~/common/socket'
+import { useStyles } from './styles'
 
 const apiUrl = getApiUrl()
 const isDev = process.env.NODE_ENV === 'development'
@@ -50,12 +51,15 @@ export const TheProject = () => {
   const { id }: IPageParams = useParams()
   const {
     resetProjectData,
-    // projectData,
     setProjectData,
     updateJoblist,
     userData,
     joblist,
     toast,
+    filterState,
+    onSelectAll,
+    onSelectIsDone,
+    onSelectInProgress,
   } = useContext(MainContext)
   // --- GET REMONT INFO
   const [cookies] = useCookies(['jwt'])
@@ -186,6 +190,7 @@ export const TheProject = () => {
       })
   }, [createJobState])
   // ---
+  const classes = useStyles()
 
   return (
     <>
@@ -227,9 +232,45 @@ export const TheProject = () => {
           </Grid>
         </Grid>
         <Grid item xs={12} md={6}>
-          {isLoaded && (
-            <Joblist remontId={project.id} joblist={project.joblist} />
-          )}
+          <Grid container spacing={2}>
+            <Grid item xs={12} className={classes.buttonsWrapper}>
+              <Button
+                onClick={onSelectAll}
+                size="small"
+                variant="outlined"
+                color="primary"
+                disabled={isLoading || filterState.selectedGroup === 'all'}
+                // endIcon={<BuildIcon />}
+              >
+                Все
+              </Button>
+              <Button
+                onClick={onSelectIsDone}
+                size="small"
+                variant="outlined"
+                color="primary"
+                disabled={isLoading || filterState.selectedGroup === 'isDone'}
+                // endIcon={<BuildIcon />}
+              >
+                Завершенные
+              </Button>
+              <Button
+                onClick={onSelectInProgress}
+                size="small"
+                variant="outlined"
+                color="primary"
+                disabled={isLoading || filterState.selectedGroup === 'inProgress'}
+                // endIcon={<BuildIcon />}
+              >
+                В процессе
+              </Button>
+            </Grid>
+            <Grid item xs={12}>
+              {isLoaded && (
+                <Joblist remontId={project.id} joblist={project.joblist} />
+              )}
+            </Grid>
+          </Grid>
         </Grid>
       </Grid>
     </>

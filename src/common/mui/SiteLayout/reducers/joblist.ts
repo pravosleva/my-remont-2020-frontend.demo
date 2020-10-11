@@ -1,6 +1,6 @@
 import { IJob } from '~/common/context/MainContext'
 
-export type TState = IJob[]
+export type TJoblistState = IJob[]
 type TAction =
   | {
       type: 'UPDATE_JOB_FIELD'
@@ -10,7 +10,7 @@ type TAction =
     }
   | { type: 'UPDATE_JOBLIST'; payload: IJob[] }
 
-export function reducer(state: TState, action: TAction): TState {
+export function joblistReducer(state: TJoblistState, action: TAction): TJoblistState {
   switch (action.type) {
     case 'UPDATE_JOB_FIELD':
       const targetJobIndex = state.findIndex(({ _id }) => action.id === _id)

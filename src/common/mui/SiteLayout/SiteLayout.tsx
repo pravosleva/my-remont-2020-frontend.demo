@@ -5,7 +5,7 @@ import { MainContext, IUserData, IJob } from '~/common/context/MainContext'
 import { useRemoteDataByFetch } from '~/common/hooks/useRemoteDataByFetch'
 import { getApiUrl } from '~/utils/getApiUrl'
 import { useCookies } from 'react-cookie'
-import { reducer } from './reducer'
+import { joblistReducer, filterReducer } from './reducers'
 import { useToasts } from 'react-toast-notifications'
 import { useStyles } from './styles'
 import socketIOClient from 'socket.io-client'
@@ -38,7 +38,7 @@ const getNormalizedAns = (originalRes: any): IUserData => {
 
 export const SiteLayout: React.FC = ({ children }) => {
   // --- JOBLIST STATE:
-  const [joblist, dispatch] = useReducer(reducer, [])
+  const [joblist, dispatch] = useReducer(joblistReducer, [])
   const handleChangeJobField = useCallback(
     (id, fieldName: string, value: number | boolean | string) => () => {
       dispatch({ type: 'UPDATE_JOB_FIELD', id, fieldName, payload: value })
@@ -138,23 +138,46 @@ export const SiteLayout: React.FC = ({ children }) => {
       if (!!socketLink) socketLink.off(ev.REMONT_UPDATED, onRemontUpdate)
     }
   }, [socketLink, onRemontUpdate])
+  // --- FILTER STATE:
+  const [filterState, dispatchFilter] = useReducer(filterReducer, { selectedGroup: 'all' })
+  const handleSelectAll = useCallback(() => {
+    dispatchFilter({ type: 'SELECT_GROUP', payload: 'all' })
+  }, [dispatchFilter])
+  const handleSelectIsDone = useCallback(() => {
+    dispatchFilter({ type: 'SELECT_GROUP', payload: 'isDone' })
+  }, [dispatchFilter])
+  const handleSelectInProgress = useCallback(() => {
+    dispatchFilter({ type: 'SELECT_GROUP', payload: 'inProgress' })
+  }, [dispatchFilter])
+  // ---
+  // const displayedJoblist
 
   return (
     <MainContext.Provider
       value={{
+        // Project:
         projectData,
         setProjectData: handleSetProjectData,
         resetProjectData: handleResetCurrentProjectData,
+        // User:
         userData,
         onLogout: handleLogout,
         isUserDataLoading,
         isUserDataLoaded,
         setUserData: handleSetUserData,
+        // Joblist:
         joblist,
         changeJobField: handleChangeJobField,
         updateJoblist: handleUpdateJoblist,
+        // Toaster:
         toast: addToast,
+        // Socket:
         socket: socketLink,
+        // Filter:
+        filterState,
+        onSelectAll: handleSelectAll,
+        onSelectIsDone: handleSelectIsDone,
+        onSelectInProgress: handleSelectInProgress,
       }}
     >
       <ConfirmProvider>

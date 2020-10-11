@@ -3,6 +3,7 @@ import React, {
   useContext,
   useState,
   useEffect,
+  useMemo,
 } from 'react'
 import { IJob, Job } from './components/Job'
 import { IProps } from './interfaces'
@@ -92,6 +93,7 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
     joblist,
     updateJoblist,
     toast,
+    filterState,
   } = useContext(MainContext)
   const [openedEditorId, setOpenedEditorId] = useState<string | null>(null)
   const handleOpenEditor = useCallback(
@@ -188,12 +190,21 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
     [handleSubmit, changeJobField]
   )
   const isItemExpanded = (id: string) => expanded === `panel${id}`
+  const displayedJoblist = useMemo(() => {
+    switch (filterState.selectedGroup) {
+      case 'isDone':
+        return joblist.filter(({ isDone, isStarted }) => isStarted && isDone)
+      case 'inProgress': return joblist.filter(({ isDone, isStarted }) => !isDone && isStarted)
+      case 'all':
+      default: return joblist
+    }
+  }, [joblist, filterState])
 
   return (
     <>
-      {joblist.length > 0 && (
+      {displayedJoblist.length > 0 && (
         <>
-          {joblist.map((data, i) => (
+          {displayedJoblist.map((data, i) => (
             <React.Fragment key={data._id}>
               <Accordion
                 className={clsx({

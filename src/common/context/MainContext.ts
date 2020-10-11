@@ -66,6 +66,10 @@ interface IMainContext {
     opts: { appearance: 'success' | 'error' | 'info' }
   ) => void
   socket: null | Socket
+  filterState: { selectedGroup: 'all' | 'isDone' | 'inProgress' }
+  onSelectAll: () => void
+  onSelectIsDone: () => void
+  onSelectInProgress: () => void
 }
 
 export const MainContext = createContext<IMainContext>({
@@ -96,4 +100,14 @@ export const MainContext = createContext<IMainContext>({
     throw new Error('addToast method should be implemented')
   },
   socket: null,
+  filterState: { selectedGroup: 'all' },
+  onSelectAll: () => {
+    throw new Error('onSelectAll method should be implemented')
+  },
+  onSelectIsDone: () => {
+    throw new Error('onSelectIsDone method should be implemented')
+  },
+  onSelectInProgress: () => {
+    throw new Error('onSelectInProgress method should be implemented')
+  },
 })
