@@ -9,6 +9,10 @@ import { reducer } from './reducer'
 import { useToasts } from 'react-toast-notifications'
 import { useStyles } from './styles'
 import socketIOClient from 'socket.io-client'
+import { eventlist as ev } from '~/common/socket'
+import { isEqual } from 'lodash'
+import { ConfirmProvider } from 'material-ui-confirm'
+
 const REACT_APP_SOCKET_ENDPOINT = process.env.REACT_APP_SOCKET_ENDPOINT
 
 const apiUrl = getApiUrl()
@@ -52,6 +56,10 @@ export const SiteLayout: React.FC = ({ children }) => {
   const handleResetCurrentProjectData = useCallback(() => {
     setProjectData(null)
   }, [setProjectData])
+  const handleSetProjectData = useCallback((data) => {
+    // console.log('handleSetProjectData')
+    setProjectData(data)
+  }, [setProjectData])
   const [userData, setUserData] = useState<IUserData | null>(null)
   const [cookies, setCookie, removeCookie] = useCookies(['jwt'])
   const handleSetUserData = useCallback(
@@ -84,24 +92,52 @@ export const SiteLayout: React.FC = ({ children }) => {
   }, [setUserData, removeCookie])
   const classes = useStyles()
   const [socketLink, setSocketLink] = useState(null)
+
+  const onRemontUpdate = useCallback(({
+    result,
+    // params,
+    data,
+  }) => {
+    if (!!projectData && result.id === projectData.id) {
+      if (!!data?.joblist && !isEqual(joblist, data.joblist)) {
+        handleUpdateJoblist(data.joblist)
+        addToast('Список работ обновлен', { appearance: 'info' })
+      }
+    }
+  }, [joblist, projectData, handleUpdateJoblist])
   useEffect(() => {
     const socket = socketIOClient(REACT_APP_SOCKET_ENDPOINT)
 
-    socket.on('YOURE_WELCOME', () => {
-      setSocketLink(socket)
-    })
+    setSocketLink(socket)
 
     return () => {
       socket.disconnect()
       setSocketLink(null)
     }
   }, [])
+  useEffect(() => {
+    const onHello = () => {
+      console.log('yw')
+    }
+    if (!!socketLink) socketLink.on(ev.YOURE_WELCOME, onHello)
+
+    return () => {
+      if (!!socketLink) socketLink.off(ev.YOURE_WELCOME, onHello)
+    }
+  }, [socketLink])
+  useEffect(() => {
+    if (!!socketLink) socketLink.on(ev.REMONT_UPDATED, onRemontUpdate)
+
+    return () => {
+      if (!!socketLink) socketLink.off(ev.REMONT_UPDATED, onRemontUpdate)
+    }
+  }, [socketLink, onRemontUpdate])
 
   return (
     <MainContext.Provider
       value={{
         projectData,
-        setProjectData,
+        setProjectData: handleSetProjectData,
         resetProjectData: handleResetCurrentProjectData,
         userData,
         onLogout: handleLogout,
@@ -115,37 +151,39 @@ export const SiteLayout: React.FC = ({ children }) => {
         socket: socketLink,
       }}
     >
-      <div className={classes.bg}>
-        <Grid container spacing={0}>
-          <div
-            style={{
-              width: '100%',
-              maxWidth: '1000px',
-              margin: '0 auto',
-              padding: '0 10px 0 10px',
-              height: '70px',
-              display: 'flex',
-              alignItems: 'center',
-            }}
-          >
-            <BreadCrumbs />
-          </div>
-          <Grid item xs={12}>
+      <ConfirmProvider>
+        <div className={classes.bg}>
+          <Grid container spacing={0}>
             <div
               style={{
+                width: '100%',
                 maxWidth: '1000px',
                 margin: '0 auto',
-                padding: '10px',
-                maxHeight: 'calc(100vh - 70px)',
-                overflowY: 'auto',
-                borderTop: '1px solid lightgray',
+                padding: '0 10px 0 10px',
+                height: '70px',
+                display: 'flex',
+                alignItems: 'center',
               }}
             >
-              {children}
+              <BreadCrumbs />
             </div>
+            <Grid item xs={12}>
+              <div
+                style={{
+                  maxWidth: '1000px',
+                  margin: '0 auto',
+                  padding: '10px',
+                  maxHeight: 'calc(100vh - 70px)',
+                  overflowY: 'auto',
+                  borderTop: '1px solid lightgray',
+                }}
+              >
+                {children}
+              </div>
+            </Grid>
           </Grid>
-        </Grid>
-      </div>
+        </div>
+      </ConfirmProvider>
     </MainContext.Provider>
   )
 }

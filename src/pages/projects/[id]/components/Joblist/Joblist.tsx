@@ -38,6 +38,7 @@ import Slide from '@material-ui/core/Slide'
 // import DoneIcon from '@material-ui/icons/Done'
 // import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank'
 import { useDebouncedCallback } from '~/common/hooks'
+import { useConfirm } from 'material-ui-confirm'
 
 // Register plugins if required
 // MdEditor.use(YOUR_PLUGINS_HERE);
@@ -144,12 +145,11 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
           handleCloseEditor()
           handleCloseMarkdownEditor()
           if (
-            !!data.joblist &&
-            Array.isArray(data.joblist) &&
-            data.joblist.length > 0
+            !!data?.joblist &&
+            Array.isArray(data.joblist)
           ) {
             updateJoblist(data.joblist)
-            toast('Success', { appearance: 'success' })
+            toast('Успешно', { appearance: 'success' })
             return
           }
         }
@@ -159,15 +159,24 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
         setIsLoading(false)
         console.log(err.message)
       })
-  }, [remontId, cookies.jwt, joblist, handleCloseEditor, updateJoblist])
+  }, [setIsLoading, remontId, cookies.jwt, joblist, handleCloseEditor, handleCloseMarkdownEditor, updateJoblist, toast])
+  const confirm = useConfirm()
   const handleDoneJob = useCallback((id, checked) => {
-    changeJobField(
-      id,
-      'isDone',
-      checked,
-    )()
-    handleSubmit()
+    confirm({ title: 'Job status', description: 'Will be updated. Do it?' })
+      .then(() => {
+        changeJobField(
+          id,
+          'isDone',
+          checked,
+        )()
+        handleSubmit()
+      })
+      .catch(() => {
+        // toast('Отменено', { appearance: 'error' })
+      });
+
   }, [handleSubmit, changeJobField])
+  const isItemExpanded = (id: string) => expanded === `panel${id}`
 
   return (
     <>
@@ -176,7 +185,7 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
           {joblist.map((data, i) => (
             <React.Fragment key={data._id}>
               <Accordion
-                className={clsx({ [classes.disabled]: data.isDone })}
+                className={clsx({ [classes.disabled]: data.isDone && !isItemExpanded(data._id)})}
                 key={data._id}
                 expanded={expanded === `panel${data._id}`}
                 onChange={handleChangeAccoddionItem(`panel${data._id}`)}

@@ -16,6 +16,7 @@
   - [ ] доп. кнопки на странице `/projects/:id`
     - [ ] "Добавить сумму"
     - [ ] "Вычесть сумму"
+  - [x] update job status cofirm dialog by `material-ui-confirm`
   - [x] socket connection for realtime web app
   - [x] create/edit job: by auth user
   - [x] logout on `/users/me` 401 (bad jwt)

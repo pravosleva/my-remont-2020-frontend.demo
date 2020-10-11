@@ -19,8 +19,8 @@ import {
 } from './createNewProjectReducer'
 import { CreateNewJob } from './components/CreateNewJob'
 import BuildIcon from '@material-ui/icons/Build'
-import { isEqual } from 'lodash'
-import { eventlist as ev } from '~/common/socket'
+// import { isEqual } from 'lodash'
+// import { eventlist as ev } from '~/common/socket'
 
 const apiUrl = getApiUrl()
 const isDev = process.env.NODE_ENV === 'development'
@@ -41,53 +41,29 @@ interface INewJob {
   description?: string
   __component: string
 }
-const socketSubscriberDebounceInSeconds = 3
 
 export const TheProject = () => {
   const { id }: IPageParams = useParams()
   const {
     resetProjectData,
-    projectData,
+    // projectData,
     setProjectData,
     updateJoblist,
     userData,
     joblist,
     toast,
-    socket,
   } = useContext(MainContext)
-  // --- SOCKET SUBSCRIBER:
-  const onRemontUpdate = useCallback(({
-    result,
-    // params,
-    data,
-  }) => {
-    if (!!projectData && result.id === projectData.id) {
-      if (!!data.joblist && !isEqual(joblist, data.joblist)) {
-        updateJoblist(data.joblist)
-        toast('Список работ обновлен', { appearance: 'info' })
-      }
-    }
-  }, [joblist, projectData, updateJoblist])
-  const handleSocketSubscribe = useCallback(() => {
-    if (isDev) toast(`TheProject: handleSocketSubscribe (debounced ${socketSubscriberDebounceInSeconds}s)`, { appearance: 'info' })
-    if (!!socket) socket.on(ev.REMONT_UPDATED, onRemontUpdate)
-    return () => {
-      if (!!socket) socket.off(ev.REMONT_UPDATED, onRemontUpdate)
-    }
-  }, [socket])
-  const debouncedSocketSubscriber = useDebouncedCallback(handleSocketSubscribe, socketSubscriberDebounceInSeconds * 1000)
-  useEffect(() => {
-    debouncedSocketSubscriber()
-  }, [socket, onRemontUpdate])
-  // ---
   // --- GET REMONT INFO
   const [cookies] = useCookies(['jwt'])
   const handleSuccess = useCallback((data) => {
+    toast('Remont data received', { appearance: 'success' })
+    // console.log(data, !isEqual(joblist, data.joblist))
     setProjectData(data)
-    if (!!data.joblist && !isEqual(joblist, data.joblist)) {
-      updateJoblist(data.joblist)
-    }
-  }, [setProjectData, updateJoblist, joblist])
+    updateJoblist(data.joblist)
+    // if (!!data?.joblist && !isEqual(joblist, data.joblist)) {
+    //   updateJoblist(data.joblist)
+    // }
+  }, [setProjectData, updateJoblist, joblist, toast])
   const handleFail = useCallback((msg: string) => {
     resetProjectData()
     if (isDev) toast(`Не удалось получить список ремонтов: ${msg || 'Что-то пошло не так'}`, { appearance: 'error' })
