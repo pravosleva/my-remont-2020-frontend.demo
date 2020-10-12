@@ -20,6 +20,6 @@ export const useStyles = makeStyles((theme) => ({
       // borderLeft: '2px solid lightgray',
       // paddingLeft: theme.spacing(1),
       // marginLeft: theme.spacing(1),
-    }
-  }
+    },
+  },
 }))

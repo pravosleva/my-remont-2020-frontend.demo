@@ -65,13 +65,9 @@ export const TheProject = () => {
   const [cookies] = useCookies(['jwt'])
   const handleSuccess = useCallback(
     (data) => {
-      toast('Remont data received', { appearance: 'success' })
-      // console.log(data, !isEqual(joblist, data.joblist))
+      toast('useRemoteData: Received', { appearance: 'success' })
       setProjectData(data)
       updateJoblist(data.joblist)
-      // if (!!data?.joblist && !isEqual(joblist, data.joblist)) {
-      //   updateJoblist(data.joblist)
-      // }
     },
     [setProjectData, updateJoblist, joblist, toast]
   )
@@ -176,9 +172,8 @@ export const TheProject = () => {
             data.joblist.length > 0
           ) {
             updateJoblist(data.joblist)
-            toast(`Updated: ${data.joblist.length} jobs`, {
-              appearance: 'success',
-            })
+            // toast(`Updated: ${data.joblist.length} jobs`, { appearance: 'success' })
+            toast('Ok', { appearance: 'success' })
             return
           }
         }
@@ -188,7 +183,14 @@ export const TheProject = () => {
         toast(err.message, { appearance: 'error' })
         setIsCreateNewJobLoading(false)
       })
-  }, [createJobState])
+  }, [
+    createJobState,
+    id,
+    cookies,
+    joblist,
+    createJobState.comment,
+    createJobState.name,
+  ])
   // ---
   const classes = useStyles()
 
@@ -237,7 +239,9 @@ export const TheProject = () => {
               <Button
                 onClick={onSelectAll}
                 size="small"
-                variant={filterState.selectedGroup === 'all' ? 'contained' : "outlined"}
+                variant={
+                  filterState.selectedGroup === 'all' ? 'contained' : 'outlined'
+                }
                 color="primary"
                 disabled={isLoading}
                 // endIcon={<BuildIcon />}
@@ -247,7 +251,11 @@ export const TheProject = () => {
               <Button
                 onClick={onSelectIsDone}
                 size="small"
-                variant={filterState.selectedGroup === 'isDone' ? 'contained' : "outlined"}
+                variant={
+                  filterState.selectedGroup === 'isDone'
+                    ? 'contained'
+                    : 'outlined'
+                }
                 color="primary"
                 disabled={isLoading}
                 // endIcon={<BuildIcon />}
@@ -257,7 +265,11 @@ export const TheProject = () => {
               <Button
                 onClick={onSelectInProgress}
                 size="small"
-                variant={filterState.selectedGroup === 'inProgress' ? 'contained' : "outlined"}
+                variant={
+                  filterState.selectedGroup === 'inProgress'
+                    ? 'contained'
+                    : 'outlined'
+                }
                 color="primary"
                 disabled={isLoading}
                 // endIcon={<BuildIcon />}

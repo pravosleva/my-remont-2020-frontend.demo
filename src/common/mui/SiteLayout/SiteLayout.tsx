@@ -1,4 +1,10 @@
-import React, { useState, useCallback, useReducer, useEffect } from 'react'
+import React, {
+  useState,
+  useCallback,
+  useReducer,
+  useEffect,
+  useRef,
+} from 'react'
 import { Grid } from '@material-ui/core'
 import { BreadCrumbs } from './components/BreadCrumbs'
 import { MainContext, IUserData, IJob } from '~/common/context/MainContext'
@@ -8,11 +14,13 @@ import { useCookies } from 'react-cookie'
 import { joblistReducer, filterReducer } from './reducers'
 import { useToasts } from 'react-toast-notifications'
 import { useStyles } from './styles'
-import socketIOClient from 'socket.io-client'
+// import io from 'socket.io-client'
 import { eventlist as ev } from '~/common/socket'
 import { isEqual } from 'lodash'
 import { ConfirmProvider } from 'material-ui-confirm'
 import { PromptProvider } from '~/common/hooks/usePrompt'
+import { httpErrorHandler } from '~/utils/errors/http/fetch'
+import useSocket from 'use-socket.io-client'
 
 const REACT_APP_SOCKET_ENDPOINT = process.env.REACT_APP_SOCKET_ENDPOINT
 
@@ -95,8 +103,6 @@ export const SiteLayout: React.FC = ({ children }) => {
     return Promise.resolve(true)
   }, [setUserData, removeCookie])
   const classes = useStyles()
-  const [socketLink, setSocketLink] = useState(null)
-
   const onRemontUpdate = useCallback(
     ({
       result,
@@ -112,33 +118,72 @@ export const SiteLayout: React.FC = ({ children }) => {
     },
     [joblist, projectData, handleUpdateJoblist]
   )
+  // --- SOCKET SUBSCRIBER; GET REMONT IF NECESSARY;
+  const getRemont = useCallback(
+    (id: string, jwt?: string) => {
+      // setIsCreateNewJobLoading(true)
+      let headers = {
+        // 'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json',
+      }
+      if (!!jwt) {
+        headers = {
+          ...headers,
+          // @ts-ignore
+          Authorization: `Bearer ${jwt}`,
+        }
+      }
+      window
+        .fetch(`${apiUrl}/remonts/${id}`, {
+          method: 'GET',
+          mode: 'cors',
+          headers,
+        })
+        .then(httpErrorHandler) // (res) => res.json()
+        .then((data) => {
+          if (!!data.id) {
+            // setIsCreateNewJobLoading(false)
+            setProjectData(data)
+            // toast(`Updated: ${data.joblist.length} jobs`, { appearance: 'success' })
+            addToast('Remont data received', { appearance: 'success' })
+            return
+          }
+          throw new Error('data.id not found')
+        })
+        .catch((err) => {
+          addToast(err.message, { appearance: 'error' })
+          // setIsCreateNewJobLoading(false)
+        })
+    },
+    [setProjectData, addToast]
+  )
+  const [socket] = useSocket(REACT_APP_SOCKET_ENDPOINT, {
+    autoConnect: true,
+    //any other options
+  })
+  const socketRef = useRef(socket)
+  const onSocketTest = useCallback(() => {
+    console.log('onSocketTest: CALLED')
+    if (!!projectData?.id) {
+      getRemont(projectData?.id, cookies?.jwt)
+    }
+  }, [getRemont, projectData])
   useEffect(() => {
-    const socket = socketIOClient(REACT_APP_SOCKET_ENDPOINT)
-
-    setSocketLink(socket)
+    // socket.on(ev.YOURE_WELCOME, onSocketTest)
+    socketRef.current.on(ev.YOURE_WELCOME, onSocketTest)
 
     return () => {
-      socket.disconnect()
-      setSocketLink(null)
+      socketRef.current.off(ev.YOURE_WELCOME, onSocketTest)
     }
-  }, [])
+  }, [onSocketTest])
+  // ---
   useEffect(() => {
-    const onHello = () => {
-      console.log('yw')
-    }
-    if (!!socketLink) socketLink.on(ev.YOURE_WELCOME, onHello)
+    socketRef.current.on(ev.REMONT_UPDATED, onRemontUpdate)
 
     return () => {
-      if (!!socketLink) socketLink.off(ev.YOURE_WELCOME, onHello)
+      socketRef.current.off(ev.REMONT_UPDATED, onRemontUpdate)
     }
-  }, [socketLink])
-  useEffect(() => {
-    if (!!socketLink) socketLink.on(ev.REMONT_UPDATED, onRemontUpdate)
-
-    return () => {
-      if (!!socketLink) socketLink.off(ev.REMONT_UPDATED, onRemontUpdate)
-    }
-  }, [socketLink, onRemontUpdate])
+  }, [onRemontUpdate])
   // --- FILTER STATE:
   const [filterState, dispatchFilter] = useReducer(filterReducer, {
     selectedGroup: 'inProgress',
@@ -175,7 +220,7 @@ export const SiteLayout: React.FC = ({ children }) => {
         // Toaster:
         toast: addToast,
         // Socket:
-        socket: socketLink,
+        socket: socketRef.current,
         // Filter:
         filterState,
         onSelectAll: handleSelectAll,

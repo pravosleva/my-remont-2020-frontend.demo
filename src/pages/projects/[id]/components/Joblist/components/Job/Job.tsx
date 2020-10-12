@@ -31,7 +31,10 @@ export const Job = ({ data }: IProps) => {
         {!!data.description && (
           <Grid item xs={12}>
             <b>Описание</b>
-            <Markdown source={data.description} className={classes.description} />
+            <Markdown
+              source={data.description}
+              className={classes.description}
+            />
           </Grid>
         )}
         <Grid item>
