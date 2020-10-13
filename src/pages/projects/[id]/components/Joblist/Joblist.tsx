@@ -180,7 +180,7 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
   const confirm = useConfirm()
   const handleDoneJob = useCallback(
     (id, checked) => {
-      confirm({ title: 'Job status', description: 'Will be updated. Do it?' })
+      confirm({ title: 'Статус работы', description: `Статус будет измемен на ${checked ? '"Выполнено"' : '"Незавершено"'}. Ok?` })
         .then(() => {
           changeJobField(id, 'isDone', checked)()
           handleSubmit()
@@ -518,6 +518,8 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
                           label="Комментарий"
                           type="text"
                           variant="outlined"
+                          multiline
+                          rows={4}
                           value={data.comment}
                           size="small"
                           onChange={(

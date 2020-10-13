@@ -11,7 +11,8 @@ import { MainContext, IUserData, IJob } from '~/common/context/MainContext'
 import { useRemoteDataByFetch } from '~/common/hooks/useRemoteDataByFetch'
 import { getApiUrl } from '~/utils/getApiUrl'
 import { useCookies } from 'react-cookie'
-import { joblistReducer, filterReducer } from './reducers'
+import { filterReducer } from './reducers/filter'
+import { joblistReducer, TJoblistState, initialState as joblistInitialState } from './reducers/joblist'
 import { useToasts } from 'react-toast-notifications'
 import { useStyles } from './styles'
 // import io from 'socket.io-client'
@@ -47,7 +48,7 @@ const getNormalizedAns = (originalRes: any): IUserData => {
 
 export const SiteLayout: React.FC = ({ children }) => {
   // --- JOBLIST STATE:
-  const [joblist, dispatch] = useReducer(joblistReducer, [])
+  const [joblistState, dispatch] = useReducer(joblistReducer, joblistInitialState)
   const handleChangeJobField = useCallback(
     (id, fieldName: string, value: number | boolean | string) => () => {
       dispatch({ type: 'UPDATE_JOB_FIELD', id, fieldName, payload: value })
@@ -112,13 +113,13 @@ export const SiteLayout: React.FC = ({ children }) => {
       data,
     }) => {
       if (!!projectData && result.id === projectData.id) {
-        if (!!data?.joblist && !isEqual(joblist, data.joblist)) {
+        if (!!data?.joblist && !isEqual(joblistState.items, data.joblist)) {
           handleUpdateJoblist(data.joblist)
           addToast('Список работ обновлен', { appearance: 'info' })
         }
       }
     },
-    [joblist, projectData, handleUpdateJoblist]
+    [joblistState.items, projectData, handleUpdateJoblist]
   )
   // --- SOCKET SUBSCRIBER; GET REMONT IF NECESSARY;
   const getRemont = useCallback(
@@ -211,12 +212,13 @@ export const SiteLayout: React.FC = ({ children }) => {
         resetProjectData: handleResetCurrentProjectData,
         // User:
         userData,
-        onLogout: handleLogout,
+        logout: handleLogout,
         isUserDataLoading,
         isUserDataLoaded,
         setUserData: handleSetUserData,
         // Joblist:
-        joblist,
+        joblist: joblistState.items,
+        jobsLogic: joblistState.logic,
         changeJobField: handleChangeJobField,
         updateJoblist: handleUpdateJoblist,
         // Toaster:

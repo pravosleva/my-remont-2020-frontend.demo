@@ -53,7 +53,7 @@ export const CreateNewJob = ({
       TransitionComponent={TransitionUp}
     >
       <DialogTitle id={`scroll-dialog-title_NEW_JOB`}>
-        {name || 'Title'}
+        {name || 'Новая работа'}
       </DialogTitle>
       <DialogContent dividers={true} className={classes.dialogContent}>
         <Container>
@@ -77,6 +77,8 @@ export const CreateNewJob = ({
                 fullWidth
                 id="comment_NEW_JOB"
                 label="Коментарий"
+                multiline
+                rows={4}
                 type="text"
                 variant="outlined"
                 value={comment}

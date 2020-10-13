@@ -9,7 +9,7 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 
 export const BreadCrumbs = () => {
   // const { ...rest }: IPageParams = useParams()
-  const { projectData, isUserDataLoading, userData, onLogout } = useContext(
+  const { projectData, isUserDataLoading, userData, logout } = useContext(
     MainContext
   )
   const router = useRouter()
@@ -18,10 +18,10 @@ export const BreadCrumbs = () => {
     location: { pathname },
   } = router
   const handleLogout = useCallback(() => {
-    onLogout('Logout').then(() => {
+    logout('Logout').then(() => {
       router.push('/auth/login')
     })
-  }, [onLogout, history])
+  }, [logout, history])
 
   return (
     <div

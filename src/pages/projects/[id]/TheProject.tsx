@@ -4,11 +4,11 @@ import React, {
   useEffect,
   useReducer,
   useState,
+  useMemo,
 } from 'react'
 import {
   useRemoteDataByFetch,
   TAns,
-  useDebouncedCallback,
 } from '~/common/hooks'
 import { getApiUrl } from '~/utils/getApiUrl'
 import { useParams } from 'react-router-dom'
@@ -53,8 +53,10 @@ export const TheProject = () => {
     resetProjectData,
     setProjectData,
     updateJoblist,
+    // updateJoblistLogic,
+    jobsLogic,
     userData,
-    joblist,
+    // joblist,
     toast,
     filterState,
     onSelectAll,
@@ -69,7 +71,7 @@ export const TheProject = () => {
       setProjectData(data)
       updateJoblist(data.joblist)
     },
-    [setProjectData, updateJoblist, joblist, toast]
+    [setProjectData, updateJoblist, toast]
   )
   const handleFail = useCallback(
     (msg: string) => {
@@ -128,6 +130,7 @@ export const TheProject = () => {
     [dispatchCreateJob]
   )
   // ---
+  const joblist = useMemo(() => jobsLogic?.jobs || [], [jobsLogic])
   // --- SAVE JOB:
   const [isCreateNewJobLoading, setIsCreateNewJobLoading] = useState<boolean>(
     false

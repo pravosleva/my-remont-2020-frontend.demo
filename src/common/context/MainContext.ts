@@ -1,5 +1,5 @@
 import { createContext } from 'react'
-
+import { JobsLogic } from '~/utils/logic'
 interface IRole {
   _id: string
   name: String
@@ -49,7 +49,7 @@ interface IMainContext {
   projectData: any
   setProjectData: (remont: any) => void
   resetProjectData: () => void
-  onLogout: (msg: string) => Promise<boolean>
+  logout: (msg: string) => Promise<boolean>
   userData: IUserData | null
   isUserDataLoading: boolean
   isUserDataLoaded: boolean
@@ -61,6 +61,7 @@ interface IMainContext {
     value: number | boolean | string
   ) => () => void
   updateJoblist: (joblist: IJob[]) => void
+  jobsLogic: JobsLogic | null
   toast: (
     msg: string,
     opts: { appearance: 'success' | 'error' | 'info' }
@@ -81,8 +82,8 @@ export const MainContext = createContext<IMainContext>({
     throw new Error('resetProjectData method should be implemented')
   },
   userData: null,
-  onLogout: () => {
-    throw new Error('onLogout method should be implemented')
+  logout: () => {
+    throw new Error('logout method should be implemented')
   },
   isUserDataLoading: false,
   isUserDataLoaded: false,
@@ -96,6 +97,7 @@ export const MainContext = createContext<IMainContext>({
   updateJoblist: () => {
     throw new Error('updateJoblist method should be implemented')
   },
+  jobsLogic: null,
   toast: () => {
     throw new Error('addToast method should be implemented')
   },

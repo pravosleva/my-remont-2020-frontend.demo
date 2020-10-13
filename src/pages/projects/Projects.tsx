@@ -4,6 +4,7 @@ import { getApiUrl } from '~/utils/getApiUrl'
 import { Link } from 'react-router-dom'
 import { useCookies } from 'react-cookie'
 import { MainContext } from '~/common/context/MainContext'
+import { useRouter } from '~/common/hooks/useRouter'
 
 const apiUrl = getApiUrl()
 
@@ -13,9 +14,10 @@ interface IProject {
 }
 
 export const Projects = () => {
-  const { userData, onLogout } = useContext(MainContext)
+  const { userData, logout } = useContext(MainContext)
   const [cookies /* , setCookie, removeCookie */] = useCookies(['jwt'])
   const responseValidator = useCallback((res) => Array.isArray(res), [userData])
+  const router = useRouter()
   const [projects, isLoaded, isLoading]: TAns = useRemoteDataByFetch({
     url: `${apiUrl}/remonts`,
     method: 'GET',
@@ -23,7 +25,9 @@ export const Projects = () => {
     // onSuccess: (data) => {},
     responseValidator,
     on401: (msg: string) => {
-      onLogout(msg)
+      logout(msg).then(() => {
+        router.push('/auth/login')
+      })
     },
   })
 

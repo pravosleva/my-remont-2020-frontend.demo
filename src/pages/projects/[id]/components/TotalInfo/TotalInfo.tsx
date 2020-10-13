@@ -3,27 +3,25 @@ import { useStyles } from './styles'
 import { Paper, Typography } from '@material-ui/core'
 import { getPrettyPrice } from '~/utils/getPrettyPrice'
 import { Grid, Divider } from '@material-ui/core'
-import {
-  getTotalDifference,
-  getTotalPriceMaterials,
-  getTotalPayed,
-  getTotalPriceJobs,
-} from '~/utils/getDifference'
 import clsx from 'clsx'
 import { MainContext } from '~/common/context/MainContext'
 
 export const TotalInfo = () => {
-  const { joblist } = useContext(MainContext)
+  const { jobsLogic } = useContext(MainContext)
   const classes = useStyles()
-  const totalPriceJobs = useMemo(() => getTotalPriceJobs(joblist), [joblist])
-  const totalPayed = useMemo(() => getTotalPayed(joblist), [joblist])
-  const totalMaterials = useMemo(() => getTotalPriceMaterials(joblist), [
-    joblist,
+  const totalPriceJobs = useMemo(() => jobsLogic?.totalPriceJobs || 0, [jobsLogic])
+  const totalPayed = useMemo(() => jobsLogic?.totalPayed || 0, [jobsLogic])
+  const totalMaterials = useMemo(() => jobsLogic?.totalPriceMaterials || 0, [
+    jobsLogic,
   ])
-  const totalDifferecne = useMemo(() => getTotalDifference(joblist), [joblist])
+  const totalDifferecne = useMemo(() => jobsLogic?.totalDifference || 0, [jobsLogic])
   const comletedJobsCount = useMemo(
-    () => joblist.filter(({ isDone }) => isDone).length,
-    [joblist]
+    () => jobsLogic?.comletedJobsCount,
+    [jobsLogic]
+  )
+  const totalJobsCount = useMemo(
+    () => jobsLogic?.totalJobsCount,
+    [jobsLogic]
   )
 
   return (
@@ -31,7 +29,7 @@ export const TotalInfo = () => {
       <Grid container direction="column" spacing={2}>
         <Grid item>
           <b className={classes.infoText}>
-            Работ принято: {comletedJobsCount} из {joblist.length}
+            Работ принято: {comletedJobsCount} из {totalJobsCount}
           </b>
         </Grid>
         <Divider />
