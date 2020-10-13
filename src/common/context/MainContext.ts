@@ -49,7 +49,7 @@ interface IMainContext {
   projectData: any
   setProjectData: (remont: any) => void
   resetProjectData: () => void
-  onLogout: () => Promise<boolean>
+  onLogout: (msg: string) => Promise<boolean>
   userData: IUserData | null
   isUserDataLoading: boolean
   isUserDataLoaded: boolean

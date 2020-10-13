@@ -13,7 +13,7 @@ interface IProject {
 }
 
 export const Projects = () => {
-  const { userData } = useContext(MainContext)
+  const { userData, onLogout } = useContext(MainContext)
   const [cookies /* , setCookie, removeCookie */] = useCookies(['jwt'])
   const responseValidator = useCallback((res) => Array.isArray(res), [userData])
   const [projects, isLoaded, isLoading]: TAns = useRemoteDataByFetch({
@@ -22,6 +22,9 @@ export const Projects = () => {
     accessToken: cookies.jwt,
     // onSuccess: (data) => {},
     responseValidator,
+    on401: (msg: string) => {
+      onLogout(msg || 'Что-то пошло не так')
+    },
   })
 
   return (

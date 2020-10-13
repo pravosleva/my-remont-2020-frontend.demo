@@ -83,6 +83,12 @@ export const SiteLayout: React.FC = ({ children }) => {
     [setCookie, setUserData]
   )
   const { addToast } = useToasts()
+  const handleLogout = useCallback((msg: string) => {
+    setUserData(null)
+    removeCookie('jwt')
+    addToast(`Logout: ${msg}`, { appearance: 'info' })
+    return Promise.resolve(true)
+  }, [setUserData, removeCookie])
   const [, isUserDataLoaded, isUserDataLoading]: any = useRemoteDataByFetch({
     url: `${apiUrl}/users/me`,
     method: 'GET',
@@ -91,17 +97,10 @@ export const SiteLayout: React.FC = ({ children }) => {
       handleSetUserData(originalUserData)
     },
     on401: (msg: string) => {
-      addToast(msg || 'Что-то пошло не так', { appearance: 'error' })
-      handleLogout()
+      handleLogout(msg || 'Что-то пошло не так')
     },
     responseValidator: (res) => !!res.id,
   })
-  const handleLogout = useCallback(() => {
-    setUserData(null)
-    removeCookie('jwt')
-    addToast('Logout', { appearance: 'info' })
-    return Promise.resolve(true)
-  }, [setUserData, removeCookie])
   const classes = useStyles()
   const onRemontUpdate = useCallback(
     ({
