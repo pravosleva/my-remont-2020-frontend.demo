@@ -18,7 +18,7 @@ export const BreadCrumbs = () => {
     location: { pathname },
   } = router
   const handleLogout = useCallback(() => {
-    onLogout().then(() => {
+    onLogout('Logout').then(() => {
       router.push('/auth/login')
     })
   }, [onLogout, history])

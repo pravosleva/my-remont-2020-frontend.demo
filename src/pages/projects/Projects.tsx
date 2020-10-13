@@ -23,7 +23,7 @@ export const Projects = () => {
     // onSuccess: (data) => {},
     responseValidator,
     on401: (msg: string) => {
-      onLogout(msg || 'Что-то пошло не так')
+      onLogout(msg)
     },
   })
 

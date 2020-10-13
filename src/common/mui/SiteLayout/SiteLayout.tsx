@@ -83,12 +83,15 @@ export const SiteLayout: React.FC = ({ children }) => {
     [setCookie, setUserData]
   )
   const { addToast } = useToasts()
-  const handleLogout = useCallback((msg: string) => {
-    setUserData(null)
-    removeCookie('jwt')
-    addToast(`Logout: ${msg}`, { appearance: 'info' })
-    return Promise.resolve(true)
-  }, [setUserData, removeCookie])
+  const handleLogout = useCallback(
+    (msg: string) => {
+      setUserData(null)
+      removeCookie('jwt')
+      addToast(`Logout: ${msg}`, { appearance: 'info' })
+      return Promise.resolve(true)
+    },
+    [setUserData, removeCookie]
+  )
   const [, isUserDataLoaded, isUserDataLoading]: any = useRemoteDataByFetch({
     url: `${apiUrl}/users/me`,
     method: 'GET',
