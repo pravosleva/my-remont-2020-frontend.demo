@@ -55,11 +55,11 @@ interface IMainContext {
   isUserDataLoaded: boolean
   setUserData: (uData: IUserData | null, jwt?: string) => void
   joblist: IJob[]
-  changeJobField: (
+  changeJobFieldPromise: (
     id: string,
     fieldName: string,
     value: number | boolean | string
-  ) => () => void
+  ) => () => Promise<any>
   updateJoblist: (joblist: IJob[]) => void
   jobsLogic: JobsLogic | null
   toast: (
@@ -91,8 +91,8 @@ export const MainContext = createContext<IMainContext>({
     throw new Error('setUserData method should be implemented')
   },
   joblist: [],
-  changeJobField: () => () => {
-    throw new Error('changeJobField method should be implemented')
+  changeJobFieldPromise: () => () => {
+    return Promise.reject('changeJobFieldPromise method should be implemented')
   },
   updateJoblist: () => {
     throw new Error('updateJoblist method should be implemented')

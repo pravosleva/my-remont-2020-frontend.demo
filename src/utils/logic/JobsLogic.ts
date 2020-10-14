@@ -1,7 +1,7 @@
 import { IJob } from '~/common/context/MainContext'
 
 export class JobsLogic extends Object {
-  joblist: any;
+  joblist: any
   constructor(joblist) {
     super()
     this.joblist = joblist

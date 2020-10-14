@@ -24,7 +24,9 @@ export function joblistReducer(
 ): TJoblistState {
   switch (action.type) {
     case 'UPDATE_JOB_FIELD':
-      const targetJobIndex = state.items.findIndex(({ _id }) => action.id === _id)
+      const targetJobIndex = state.items.findIndex(
+        ({ _id }) => action.id === _id
+      )
       const newState = [...state.items]
 
       if (targetJobIndex !== -1) {

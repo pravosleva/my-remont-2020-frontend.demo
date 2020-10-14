@@ -44,7 +44,7 @@ export const PromptDialog = ({
         />
       </DialogContent>
       <DialogActions>
-        <Button {...cancellationButtonProps} onClick={onCancel}>
+        <Button {...cancellationButtonProps} onClick={onCancel} color="secondary">
           {cancellationText}
         </Button>
         <Button

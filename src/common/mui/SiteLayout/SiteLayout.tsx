@@ -12,16 +12,19 @@ import { useRemoteDataByFetch } from '~/common/hooks/useRemoteDataByFetch'
 import { getApiUrl } from '~/utils/getApiUrl'
 import { useCookies } from 'react-cookie'
 import { filterReducer } from './reducers/filter'
-import { joblistReducer, TJoblistState, initialState as joblistInitialState } from './reducers/joblist'
+import {
+  joblistReducer,
+  initialState as joblistInitialState,
+} from './reducers/joblist'
 import { useToasts } from 'react-toast-notifications'
 import { useStyles } from './styles'
-// import io from 'socket.io-client'
 import { eventlist as ev } from '~/common/socket'
 import { isEqual } from 'lodash'
 import { ConfirmProvider } from 'material-ui-confirm'
 import { PromptProvider } from '~/common/hooks/usePrompt'
 import { httpErrorHandler } from '~/utils/errors/http/fetch'
 import useSocket from 'use-socket.io-client'
+// import io from 'socket.io-client'
 
 const REACT_APP_SOCKET_ENDPOINT = process.env.REACT_APP_SOCKET_ENDPOINT
 
@@ -48,10 +51,18 @@ const getNormalizedAns = (originalRes: any): IUserData => {
 
 export const SiteLayout: React.FC = ({ children }) => {
   // --- JOBLIST STATE:
-  const [joblistState, dispatch] = useReducer(joblistReducer, joblistInitialState)
+  const [joblistState, dispatch] = useReducer(
+    joblistReducer,
+    joblistInitialState
+  )
   const handleChangeJobField = useCallback(
     (id, fieldName: string, value: number | boolean | string) => () => {
-      dispatch({ type: 'UPDATE_JOB_FIELD', id, fieldName, payload: value })
+      try {
+        dispatch({ type: 'UPDATE_JOB_FIELD', id, fieldName, payload: value })
+        return Promise.resolve()
+      } catch (err) {
+        return Promise.reject(err?.message || 'handleChangeJobField: Errored')
+      }
     },
     [dispatch]
   )
@@ -219,7 +230,7 @@ export const SiteLayout: React.FC = ({ children }) => {
         // Joblist:
         joblist: joblistState.items,
         jobsLogic: joblistState.logic,
-        changeJobField: handleChangeJobField,
+        changeJobFieldPromise: handleChangeJobField,
         updateJoblist: handleUpdateJoblist,
         // Toaster:
         toast: addToast,

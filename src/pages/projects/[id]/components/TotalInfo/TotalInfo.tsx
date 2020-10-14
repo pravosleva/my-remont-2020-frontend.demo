@@ -9,20 +9,20 @@ import { MainContext } from '~/common/context/MainContext'
 export const TotalInfo = () => {
   const { jobsLogic } = useContext(MainContext)
   const classes = useStyles()
-  const totalPriceJobs = useMemo(() => jobsLogic?.totalPriceJobs || 0, [jobsLogic])
+  const totalPriceJobs = useMemo(() => jobsLogic?.totalPriceJobs || 0, [
+    jobsLogic,
+  ])
   const totalPayed = useMemo(() => jobsLogic?.totalPayed || 0, [jobsLogic])
   const totalMaterials = useMemo(() => jobsLogic?.totalPriceMaterials || 0, [
     jobsLogic,
   ])
-  const totalDifferecne = useMemo(() => jobsLogic?.totalDifference || 0, [jobsLogic])
-  const comletedJobsCount = useMemo(
-    () => jobsLogic?.comletedJobsCount,
-    [jobsLogic]
-  )
-  const totalJobsCount = useMemo(
-    () => jobsLogic?.totalJobsCount,
-    [jobsLogic]
-  )
+  const totalDifferecne = useMemo(() => jobsLogic?.totalDifference || 0, [
+    jobsLogic,
+  ])
+  const comletedJobsCount = useMemo(() => jobsLogic?.comletedJobsCount, [
+    jobsLogic,
+  ])
+  const totalJobsCount = useMemo(() => jobsLogic?.totalJobsCount, [jobsLogic])
 
   return (
     <Paper className={classes.paper}>

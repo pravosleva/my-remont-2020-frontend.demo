@@ -6,10 +6,7 @@ import React, {
   useState,
   useMemo,
 } from 'react'
-import {
-  useRemoteDataByFetch,
-  TAns,
-} from '~/common/hooks'
+import { useRemoteDataByFetch, TAns } from '~/common/hooks'
 import { getApiUrl } from '~/utils/getApiUrl'
 import { useParams } from 'react-router-dom'
 import { Joblist } from './components/Joblist'
@@ -23,8 +20,6 @@ import {
 } from './createNewProjectReducer'
 import { CreateNewJob } from './components/CreateNewJob'
 import BuildIcon from '@material-ui/icons/Build'
-// import { isEqual } from 'lodash'
-// import { eventlist as ev } from '~/common/socket'
 import { useStyles } from './styles'
 
 const apiUrl = getApiUrl()
@@ -204,7 +199,6 @@ export const TheProject = () => {
           <Grid container spacing={2}>
             {isLoading && (
               <Grid item xs={12}>
-                {' '}
                 <b>Loading...</b>
               </Grid>
             )}

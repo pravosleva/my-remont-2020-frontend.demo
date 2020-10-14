@@ -91,7 +91,7 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
   const classes = useStyles()
   const {
     userData,
-    changeJobField,
+    changeJobFieldPromise,
     joblist,
     updateJoblist,
     toast,
@@ -130,9 +130,9 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
     if (!!targetJob) setLocalMD(targetJob.description)
   }, [openedMarkdownEditorId, joblist])
   const debouncedUpdateJoblist = useDebouncedCallback(
-    (openedMarkdownEditorId, text, changeJobField) => {
+    (openedMarkdownEditorId, text, changeJobFieldPromise) => {
       // localMD -> joblist
-      changeJobField(openedMarkdownEditorId, 'description', text)()
+      changeJobFieldPromise(openedMarkdownEditorId, 'description', text)()
     },
     500
   )
@@ -180,16 +180,26 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
   const confirm = useConfirm()
   const handleDoneJob = useCallback(
     (id, checked) => {
-      confirm({ title: 'Статус работы', description: `Статус будет измемен на ${checked ? '"Выполнено"' : '"Незавершено"'}. Ok?` })
+      confirm({
+        title: 'Статус работы',
+        description: `Статус будет изменен на ${
+          checked ? '"Выполнено"' : '"Незавершено"'
+        }. Ok?`,
+      })
         .then(() => {
-          changeJobField(id, 'isDone', checked)()
-          handleSubmit()
+          changeJobFieldPromise(id, 'isDone', checked)()
+            .then(handleSubmit)
+            .catch((msg) => {
+              throw new Error(msg)
+            })
         })
-        .catch(() => {
-          // toast('Отменено', { appearance: 'error' })
+        .catch((err) => {
+          toast(err?.message || 'handleDoneJob: Declined', {
+            appearance: 'error',
+          })
         })
     },
-    [handleSubmit, changeJobField]
+    [handleSubmit, changeJobFieldPromise]
   )
   const isItemExpanded = (id: string) => expanded === `panel${id}`
   const displayedJoblist = useMemo(() => {
@@ -213,14 +223,19 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
         title: 'Добавить сумму',
       })
         .then((value: number) => {
-          changeJobField(id, 'priceJobs', initPrice + value)()
+          changeJobFieldPromise(id, 'priceJobs', initPrice + value)()
+            .then(handleSubmit)
+            .catch((msg) => {
+              throw new Error(msg)
+            })
         })
-        .then(handleSubmit)
-        .catch((_err) => {
-          toast('Отменено', { appearance: 'error' })
+        .catch((err) => {
+          toast(err?.message || 'handleDoneJob: Declined', {
+            appearance: 'error',
+          })
         })
     },
-    [prompt, changeJobField, toast, handleSubmit]
+    [prompt, changeJobFieldPromise, toast, handleSubmit]
   )
   const handleRemovePriceJobs = useCallback(
     (id, initPrice) => () => {
@@ -230,15 +245,19 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
         title: 'Вычесть сумму',
       })
         .then((value: number) => {
-          changeJobField(id, 'priceJobs', initPrice - value)()
-          handleSubmit()
+          changeJobFieldPromise(id, 'priceJobs', initPrice - value)()
+            .then(handleSubmit)
+            .catch((msg) => {
+              throw new Error(msg)
+            })
         })
-        .then(handleSubmit)
-        .catch((_err) => {
-          toast('Отменено', { appearance: 'error' })
+        .catch((err) => {
+          toast(err?.message || 'handleDoneJob: Declined', {
+            appearance: 'error',
+          })
         })
     },
-    [prompt, changeJobField, toast, handleSubmit]
+    [prompt, changeJobFieldPromise, toast, handleSubmit]
   )
   // priceMaterials:
   const handleAddPriceMaterials = useCallback(
@@ -249,14 +268,19 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
         title: 'Добавить сумму',
       })
         .then((value: number) => {
-          changeJobField(id, 'priceMaterials', initPrice + value)()
+          changeJobFieldPromise(id, 'priceMaterials', initPrice + value)()
+            .then(handleSubmit)
+            .catch((msg) => {
+              throw new Error(msg)
+            })
         })
-        .then(handleSubmit)
-        .catch((_err) => {
-          toast('Отменено', { appearance: 'error' })
+        .catch((err) => {
+          toast(err?.message || 'handleDoneJob: Declined', {
+            appearance: 'error',
+          })
         })
     },
-    [prompt, changeJobField, toast, handleSubmit]
+    [prompt, changeJobFieldPromise, toast, handleSubmit]
   )
   const handleRemovePriceMaterials = useCallback(
     (id, initPrice) => () => {
@@ -266,15 +290,19 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
         title: 'Вычесть сумму',
       })
         .then((value: number) => {
-          changeJobField(id, 'priceMaterials', initPrice - value)()
-          handleSubmit()
+          changeJobFieldPromise(id, 'priceMaterials', initPrice - value)()
+            .then(handleSubmit)
+            .catch((msg) => {
+              throw new Error(msg)
+            })
         })
-        .then(handleSubmit)
-        .catch((_err) => {
-          toast('Отменено', { appearance: 'error' })
+        .catch((err) => {
+          toast(err?.message || 'handleDoneJob: Declined', {
+            appearance: 'error',
+          })
         })
     },
-    [prompt, changeJobField, toast, handleSubmit]
+    [prompt, changeJobFieldPromise, toast, handleSubmit]
   )
   // priceDelivery:
   const handleAddPriceDelivery = useCallback(
@@ -285,14 +313,17 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
         title: 'Добавить сумму',
       })
         .then((value: number) => {
-          changeJobField(id, 'priceDelivery', initPrice + value)()
+          changeJobFieldPromise(id, 'priceDelivery', initPrice + value)()
+            .then(handleSubmit)
+            .catch((msg) => {
+              throw new Error(msg)
+            })
         })
-        .then(handleSubmit)
         .catch((_err) => {
           toast('Отменено', { appearance: 'error' })
         })
     },
-    [prompt, changeJobField, toast, handleSubmit]
+    [prompt, changeJobFieldPromise, toast, handleSubmit]
   )
   const handleRemovePriceDelivery = useCallback(
     (id, initPrice) => () => {
@@ -302,15 +333,17 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
         title: 'Вычесть сумму',
       })
         .then((value: number) => {
-          changeJobField(id, 'priceDelivery', initPrice - value)()
-          handleSubmit()
+          changeJobFieldPromise(id, 'priceDelivery', initPrice - value)()
+            .then(handleSubmit)
+            .catch((msg) => {
+              throw new Error(msg)
+            })
         })
-        .then(handleSubmit)
         .catch((_err) => {
           toast('Отменено', { appearance: 'error' })
         })
     },
-    [prompt, changeJobField, toast, handleSubmit]
+    [prompt, changeJobFieldPromise, toast, handleSubmit]
   )
 
   return (
@@ -409,9 +442,13 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
                       style={{ minHeight: '300px' }}
                       renderHTML={(text) => mdParser.render(text)}
                       onChange={({ text }) => {
-                        // if (!!text) changeJobField(data._id, 'description', text)()
+                        // if (!!text) changeJobFieldPromise(data._id, 'description', text)()
                         setLocalMD(text)
-                        debouncedUpdateJoblist(data._id, text, changeJobField)
+                        debouncedUpdateJoblist(
+                          data._id,
+                          text,
+                          changeJobFieldPromise
+                        )
                       }}
                       config={{
                         view: { menu: false, md: true, html: false },
@@ -507,7 +544,11 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
                           onChange={(
                             e: React.ChangeEvent<HTMLInputElement>
                           ) => {
-                            changeJobField(data._id, 'name', e.target.value)()
+                            changeJobFieldPromise(
+                              data._id,
+                              'name',
+                              e.target.value
+                            )()
                           }}
                           fullWidth
                         />
@@ -525,7 +566,7 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
                           onChange={(
                             e: React.ChangeEvent<HTMLInputElement>
                           ) => {
-                            changeJobField(
+                            changeJobFieldPromise(
                               data._id,
                               'comment',
                               e.target.value
@@ -545,7 +586,7 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
                           onChange={(
                             e: React.ChangeEvent<HTMLInputElement>
                           ) => {
-                            changeJobField(
+                            changeJobFieldPromise(
                               data._id,
                               'priceJobs',
                               Number(e.target.value)
@@ -587,7 +628,7 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
                           onChange={(
                             e: React.ChangeEvent<HTMLInputElement>
                           ) => {
-                            changeJobField(
+                            changeJobFieldPromise(
                               data._id,
                               'priceMaterials',
                               Number(e.target.value)
@@ -631,7 +672,7 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
                           onChange={(
                             e: React.ChangeEvent<HTMLInputElement>
                           ) => {
-                            changeJobField(
+                            changeJobFieldPromise(
                               data._id,
                               'priceDelivery',
                               Number(e.target.value)
@@ -675,7 +716,7 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
                           onChange={(
                             e: React.ChangeEvent<HTMLInputElement>
                           ) => {
-                            changeJobField(
+                            changeJobFieldPromise(
                               data._id,
                               'payed',
                               Number(e.target.value)
@@ -684,7 +725,6 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
                           fullWidth
                         />
                       </Grid>
-                      <Divider />
                       <div className={classes.checkboxWrapper}>
                         <FormControl
                           component="fieldset"
@@ -704,7 +744,7 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
                                       onChange={(
                                         e: React.ChangeEvent<HTMLInputElement>
                                       ) => {
-                                        changeJobField(
+                                        changeJobFieldPromise(
                                           data._id,
                                           'isStarted',
                                           e.target.checked
@@ -725,7 +765,7 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
                                   onChange={(
                                     e: React.ChangeEvent<HTMLInputElement>
                                   ) => {
-                                    changeJobField(
+                                    changeJobFieldPromise(
                                       data._id,
                                       'isDone',
                                       e.target.checked

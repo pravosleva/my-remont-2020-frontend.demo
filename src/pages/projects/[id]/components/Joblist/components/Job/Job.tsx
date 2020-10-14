@@ -22,7 +22,11 @@ export const Job = ({ data }: IProps) => {
           <Grid item xs={12}>
             <b>Комментарий</b>
             <div>
-              <Typography variant="body2" color="textSecondary" style={{ whiteSpace: 'pre-wrap' }}>
+              <Typography
+                variant="body2"
+                color="textSecondary"
+                style={{ whiteSpace: 'pre-wrap' }}
+              >
                 {data.comment || 'No comment'}
               </Typography>
             </div>

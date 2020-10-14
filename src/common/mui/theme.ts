@@ -13,10 +13,17 @@ import {
 export const defaultTheme = {
   palette: {
     primary: {
+      light: '#757ce8',
+      // main: '#3f50b5', // Official
       main: '#556cd6',
+      dark: '#002884',
+      contrastText: '#fff',
     },
     secondary: {
-      main: '#19857b',
+      light: '#ff7961',
+      main: '#f44336',
+      dark: '#ba000d',
+      contrastText: '#000',
     },
     error: {
       main: red.A400,
