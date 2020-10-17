@@ -122,7 +122,7 @@ export const SiteLayout = ({ socket, children }: any) => {
       ) {
         if (!!data?.joblist && !isEqual(remontState.jobs, data.joblist)) {
           handleUpdateJoblist(data.joblist)
-          handleSetProjectData(data)
+          handleSetProjectData(result)
           addToast('Список работ обновлен', { appearance: 'info' })
         }
       }
