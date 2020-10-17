@@ -196,9 +196,11 @@ export const TheProject = () => {
     remontLogic,
     userData,
   ])
+  const projectName: boolean = useMemo(() => remontLogic?.name, [remontLogic])
 
   return (
     <>
+      <h1>{projectName}</h1>
       <Grid container spacing={2}>
         <Grid item xs={12} md={6}>
           <Grid container spacing={2}>

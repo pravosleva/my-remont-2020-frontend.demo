@@ -27,5 +27,10 @@ export const useStyles = makeStyles((theme: Theme) =>
         },
       },
     },
+    rightSpace: {
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'flex-end',
+    }
   })
 )

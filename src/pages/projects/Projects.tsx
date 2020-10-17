@@ -420,8 +420,8 @@ export const Projects = () => {
   )
 
   return (
-    <div>
-      <h1>Проекы</h1>
+    <>
+      <h1>Проекты</h1>
       <Grid container spacing={2}>
         <Grid item xs={12} md={6}>
           {isLoading && <b>Loading...</b>}
@@ -433,17 +433,20 @@ export const Projects = () => {
         </Grid>
         {!!userData?.id && (
           <Grid item xs={12} md={6}>
-            <Button
-              size="small"
-              variant="outlined"
-              onClick={handleCreateJob}
-              startIcon={<AddIcon />}
-            >
-              Создать проект
-            </Button>
+            <div className={classes.rightSpace}>
+              <Button
+                size="small"
+                variant="outlined"
+                onClick={handleCreateJob}
+                startIcon={<AddIcon />}
+                disabled={isLoading || !isLoaded}
+              >
+                Создать проект
+              </Button>
+            </div>
           </Grid>
         )}
       </Grid>
-    </div>
+    </>
   )
 }
