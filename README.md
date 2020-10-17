@@ -4,25 +4,25 @@
 
 - [ ] **git hooks**
 - [ ] UX
-  - [ ] личный кабинет
+  - [ ] личный кабинет (?)
     - [x] доп. кнопки на странице `/projects/:id` "Добавить сумму"/"Вычесть сумму"
-    - [ ] авториз. пользователь должен видеть только свои ремонты
-      - [ ] `/projects`
-        - [ ] project should be related to user?
+    - [ ] авториз. пользователь должен видеть только свои ремонты (?)
+      - [x] `/projects`
+        - [x] project should be related to user?
+          - [x] user could be owner
+          - [ ] user could be executor
         - [ ] findOne for the user
-  - [ ] неавториз. польз. должен видеть только общую информацию о ремонтах
+  - [ ] неавториз. польз. должен видеть только общую информацию о ремонтах (?)
     - [ ] общая аналитика по всем ремонтам на главной
       - [ ] `/`
-        - [ ] allow find all projects free (gql)
+        - [x] allow find all projects free (gql)
   - [ ] открытие ссылок `description` в новом окне
   - [ ] registry service
-    - [ ] `/auth/sign-up`
-      - [x] page
-      - [ ] API
+    - [x] `/auth/sign-up`
     - [ ] `/auth/forgot-password`
       - [ ] page
       - [ ] API
-    - [ ] email confirmation
+    - [x] email confirmation mechanism
       - [ ] https for MVP?
     - [x] **RESTful api**
   - [ ] 2 balances
