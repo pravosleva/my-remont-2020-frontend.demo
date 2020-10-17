@@ -5,7 +5,7 @@ import {
   CircularProgress,
   Container,
   Grid,
-  LinearProgress,
+  // LinearProgress,
   Typography,
 } from '@material-ui/core'
 import { Formik, Form, Field } from 'formik';
@@ -149,12 +149,12 @@ export const Login = () => {
                     variant="outlined"
                     style={{ marginBottom: '10px' }}
                   />
-                  {isSubmitting && (
+                  {/* isSubmitting && (
                     <LinearProgress style={{ marginBottom: '20px' }} />
-                  )}
+                  ) */}
                   <div>
                     <Button
-                      disabled={!isValid || isSubmitting || Object.keys(touched).length === 0 || isUserDataLoading || isUserDataLoaded}
+                      disabled={!isValid || isSubmitting || Object.keys(touched).length === 0 || isUserDataLoading}
                       variant="contained"
                       color="primary"
                       onClick={submitForm}

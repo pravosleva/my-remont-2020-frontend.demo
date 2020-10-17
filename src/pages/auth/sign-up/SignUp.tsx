@@ -7,7 +7,7 @@ import {
   CircularProgress,
   Container,
   Grid,
-  LinearProgress,
+  // LinearProgress,
   Typography,
 } from '@material-ui/core';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
@@ -140,9 +140,9 @@ export const SignUp = () => {
                     variant="outlined"
                     style={{ marginBottom: '10px' }}
                   />
-                  {isSubmitting && (
+                  {/* isSubmitting && (
                     <LinearProgress style={{ marginBottom: '20px' }} />
-                  )}
+                  ) */}
                   <div>
                     <Button
                       disabled={!isValid || isSubmitting || Object.keys(touched).length === 0 || isUserDataLoading || isUserDataLoaded}

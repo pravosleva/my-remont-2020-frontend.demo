@@ -1,5 +1,6 @@
 import { createContext } from 'react'
 import { JobsLogic } from '~/utils/logic'
+import { RemontLogic } from '~/utils/logic'
 interface IRole {
   _id: string
   name: String
@@ -34,6 +35,9 @@ export interface IJob {
   priceDelivery: number
   isDone: boolean
   isStarted: boolean
+  // TODO:
+  owners: any[]
+  executors: any[]
 }
 
 declare var io: {
@@ -62,6 +66,8 @@ interface IMainContext {
   ) => () => Promise<any>
   updateJoblist: (joblist: IJob[]) => void
   jobsLogic: JobsLogic | null
+  remontLogic: RemontLogic | null
+  updateRemont: (remont: any) => void
   toast: (
     msg: string,
     opts: { appearance: 'success' | 'error' | 'info' | 'warning' }
@@ -98,7 +104,11 @@ export const MainContext = createContext<IMainContext>({
     throw new Error('updateJoblist method should be implemented')
   },
   jobsLogic: null,
+  remontLogic: null,
   toast: () => {
+    throw new Error('addToast method should be implemented')
+  },
+  updateRemont: () => {
     throw new Error('addToast method should be implemented')
   },
   socket: null,

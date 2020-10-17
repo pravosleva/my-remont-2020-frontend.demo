@@ -13,9 +13,9 @@ import { getApiUrl } from '~/utils/getApiUrl'
 import { useCookies } from 'react-cookie'
 import { filterReducer } from './reducers/filter'
 import {
-  joblistReducer,
-  initialState as joblistInitialState,
-} from './reducers/joblist'
+  remontReducer,
+  initialState as remontInitialState,
+} from './reducers/remont'
 import { useToasts } from 'react-toast-notifications'
 import { useStyles } from './styles'
 import { eventlist as ev } from '~/common/socket'
@@ -46,10 +46,10 @@ const getNormalizedAns = (originalRes: any): IUserData => {
 }
 
 export const SiteLayout = ({ socket, children }: any) => {
-  // --- JOBLIST STATE:
-  const [joblistState, dispatch] = useReducer(
-    joblistReducer,
-    joblistInitialState
+  // --- REMONT STATE:
+  const [remontState, dispatch] = useReducer(
+    remontReducer,
+    remontInitialState
   )
   const handleChangeJobField = useCallback(
     (id, fieldName: string, value: number | boolean | string) => () => {
@@ -120,13 +120,13 @@ export const SiteLayout = ({ socket, children }: any) => {
       data,
     }) => {
       if (!!projectData && result.id === projectData.id) {
-        if (!!data?.joblist && !isEqual(joblistState.items, data.joblist)) {
+        if (!!data?.joblist && !isEqual(remontState.jobs, data.joblist)) {
           handleUpdateJoblist(data.joblist)
           addToast('Список работ обновлен', { appearance: 'info' })
         }
       }
     },
-    [joblistState.items, projectData, handleUpdateJoblist]
+    [remontState.jobs, projectData, handleUpdateJoblist]
   )
   // --- SOCKET SUBSCRIBER; GET REMONT IF NECESSARY;
   const getRemont = useCallback(
@@ -204,7 +204,9 @@ export const SiteLayout = ({ socket, children }: any) => {
     dispatchFilter({ type: 'SELECT_GROUP', payload: 'inProgress' })
   }, [dispatchFilter])
   // ---
-  // const displayedJoblist
+  const handleUpdateRemont = useCallback((remont: any) => {
+    dispatch({ type: 'UPDATE_REMONT', payload: remont })
+  }, [dispatchFilter])
 
   return (
     <MainContext.Provider
@@ -220,10 +222,12 @@ export const SiteLayout = ({ socket, children }: any) => {
         isUserDataLoaded,
         setUserData: handleSetUserData,
         // Joblist:
-        // joblist: joblistState.items,
-        jobsLogic: joblistState.logic,
+        // joblist: remontState.jobs,
+        jobsLogic: remontState.jobsLogic,
         changeJobFieldPromise: handleChangeJobField,
         updateJoblist: handleUpdateJoblist,
+        remontLogic: remontState.remontLogic,
+        updateRemont: handleUpdateRemont,
         // Toaster:
         toast: addToast,
         // Socket:

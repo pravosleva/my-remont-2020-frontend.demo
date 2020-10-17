@@ -57,6 +57,7 @@ export const TheProject = () => {
     onSelectAll,
     onSelectIsDone,
     onSelectInProgress,
+    updateRemont,
   } = useContext(MainContext)
   // --- GET REMONT INFO
   const [cookies] = useCookies(['jwt'])
@@ -64,6 +65,7 @@ export const TheProject = () => {
     (data) => {
       toast('useRemoteData: Received', { appearance: 'success' })
       setProjectData(data)
+      updateRemont(data)
       updateJoblist(data.joblist)
     },
     [setProjectData, updateJoblist, toast]

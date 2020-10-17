@@ -94,10 +94,12 @@ export const Joblist = ({ remontId }: IProps) => {
     changeJobFieldPromise,
     // joblist,
     jobsLogic,
+    remontLogic,
     updateJoblist,
     toast,
     filterState,
   } = useContext(MainContext)
+  const isOwner: boolean = useMemo(() => remontLogic?.isOwner(userData?.id), [remontLogic, userData])
   const joblist = useMemo(() => jobsLogic?.jobs || [], [jobsLogic])
   const [openedEditorId, setOpenedEditorId] = useState<string | null>(null)
   const handleOpenEditor = useCallback(
@@ -367,7 +369,7 @@ export const Joblist = ({ remontId }: IProps) => {
                   aria-controls={`panel${data._id}bh-content`}
                   id={`panel${data._id}bh-header`}
                 >
-                  {!!userData ? (
+                  {isOwner ? (
                     <FormControlLabel
                       aria-label="Acknowledge"
                       onClick={(e: any) => {
@@ -399,7 +401,7 @@ export const Joblist = ({ remontId }: IProps) => {
                 <AccordionDetails className={classes.details}>
                   <Job data={data} key={getUniqueKey(data)} />
                 </AccordionDetails>
-                {!!userData && (
+                {isOwner && (
                   <>
                     <Divider />
                     <AccordionActions>
