@@ -15,4 +15,7 @@ export const useStyles = makeStyles((theme) => ({
   leftSide: {
     marginLeft: 'auto',
   },
+  muted: {
+    opacity: '0.5',
+  }
 }))

@@ -7,6 +7,7 @@ import { TheProject } from '~/pages/projects/[id]'
 import { Login } from '~/pages/auth/login'
 import { SignUp } from '~/pages/auth/sign-up'
 import { NotFound } from '~/pages/not-found'
+import { Profile } from '~/pages/profile'
 
 const routes: IRoute[] = [
   { path: '/', exact: true, component: HomePage },
@@ -14,6 +15,7 @@ const routes: IRoute[] = [
   { path: '/projects/:id', exact: true, component: TheProject },
   { path: '/auth/login', exact: true, component: Login },
   { path: '/auth/sign-up', exact: true, component: SignUp },
+  { path: '/profile', exact: true, component: Profile },
 ]
 
 export const Routes = () => {
@@ -22,7 +24,7 @@ export const Routes = () => {
       {[...routes].map(({ path, exact, component }) => (
         <Route key={path} path={path} exact={exact} component={component} />
       ))}
-      {/* <Route exact path="/*" component={NotFound} /> */}
+      <Route exact path="*" component={NotFound} />
     </Switch>
   )
 }

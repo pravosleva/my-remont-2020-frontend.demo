@@ -37,27 +37,32 @@ export const BreadCrumbs = () => {
       {(pathname === '/projects' || pathname === '/projects/') && (
         <div className={classes.rightSide}>
           <Link to="/">Главная</Link> /{' '}
-          <span style={{ opacity: '0.5' }}>Проекты</span>
+          <span className={classes.muted}>Проекты</span>
         </div>
       )}
       {pathname.includes('/projects/') && pathname.length > 10 && (
         <div className={classes.rightSide}>
           <Link to="/">Главная</Link> / <Link to="/projects">Проекты</Link> /{' '}
-          <span style={{ opacity: '0.5' }}>
-            {remontLogic ? remontLogic.name : 'Please wait...'}
-          </span>
+          {!remontLogic && <span className={classes.muted}>Please wait...</span>}
+          {!!remontLogic && <span style={{ whiteSpace: 'nowrap' }} className={classes.muted}>{remontLogic.name}</span>}
         </div>
       )}
       {pathname === '/auth/login' && (
         <div className={classes.rightSide}>
           <Link to="/">Главная</Link> /{' '}
-          <span style={{ opacity: '0.5' }}>Авторизация</span>
+          <span className={classes.muted}>Авторизация</span>
         </div>
       )}
       {pathname === '/auth/sign-up' && (
         <div className={classes.rightSide}>
           <Link to="/">Главная</Link> /{' '}
-          <span style={{ opacity: '0.5' }}>Регистрация</span>
+          <span className={classes.muted}>Регистрация</span>
+        </div>
+      )}
+      {pathname === '/profile' && (
+        <div className={classes.rightSide}>
+          <Link to="/">Главная</Link> /{' '}
+          <span className={classes.muted}>Профиль</span>
         </div>
       )}
 
@@ -70,6 +75,7 @@ export const BreadCrumbs = () => {
           <NavLink to="/auth/login">Вход</NavLink>
         ) : (
           <div style={{ display: 'flex', alignItems: 'center' }}>
+            <NavLink to="/profile" style={{ marginLeft: '10px' }}>Профиль</NavLink>
             <Button
               style={{ marginLeft: '10px' }}
               onClick={handleLogout}

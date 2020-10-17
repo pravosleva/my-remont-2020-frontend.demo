@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import { Link } from 'react-router-dom'
+// import { Link } from 'react-router-dom'
 import { Grid, List, ListItem, ListItemText } from '@material-ui/core'
 import { useStyles } from './styles'
 import { useRouter } from '~/common/hooks/useRouter'
@@ -24,10 +24,7 @@ export const HomePage = () => {
               className={classes.listItem}
               onClick={goToPage('/projects')}
             >
-              <ListItemText
-                primary="Проекты"
-                // secondary='Some text'
-              />
+              <ListItemText primary="Проекты" secondary="Ремонты квартир" />
             </ListItem>
           </List>
         </Grid>

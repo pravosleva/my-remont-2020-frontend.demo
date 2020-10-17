@@ -55,7 +55,7 @@ export const PromptProvider = ({ children, defaultOptions = {} }) => {
 
   const prompt = useCallback(
     (options = {}) => {
-      console.log(options)
+      // console.log(options)
       return new Promise((resolve, reject) => {
         setOptions(buildOptions(defaultOptions, options))
         setResolveReject([resolve, reject])

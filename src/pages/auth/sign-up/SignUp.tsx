@@ -14,11 +14,12 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import { validShape } from './yup'
 import { validateEmail, isCiryllic } from '~/utils/validators'
 import { useStyles } from './styles'
-import { Link } from 'react-router-dom'
+import { Link, Router } from 'react-router-dom'
 import { MainContext } from '~/common/context/MainContext'
 import axios from 'axios'
 import { getApiUrl } from '~/utils/getApiUrl'
 import { useCookies } from 'react-cookie'
+import { useRouter } from '~/common/hooks/useRouter'
 
 const apiUrl = getApiUrl()
 const REACT_APP_COOKIE_MAXAGE_IN_DAYS = process.env
@@ -62,27 +63,29 @@ export const SignUp = () => {
         })
         .then((res) => res.data)
         .then((data) => {
-          console.log(data) // { jwt, user }
-          if (data.jwt && data.user) return { jwt: data.jwt, user: data.user }
+          if (!!data.user) return { user: data.user }
 
           throw data
         })
-        .then(({ jwt, user }) => {
-          console.log(user)
-          setCookie('jwt', jwt, {
-            maxAge: REACT_APP_COOKIE_MAXAGE_IN_DAYS * 24 * 60 * 60,
-          })
-          return 'Проверьте почту'
+        // .then(({ jwt, user }) => {
+        //   setCookie('jwt', jwt, {
+        //     maxAge: REACT_APP_COOKIE_MAXAGE_IN_DAYS * 24 * 60 * 60,
+        //   })
+        //   return 'Проверьте почту'
+        // })
+        .then(({ user }) => {
+          return `Ok, ${user.username}, проверьте почту`
         })
         .catch((err) => {
           console.log(err)
-          return typeof err === 'string' ? err : 'Errored'
+          return typeof err === 'string' ? err : JSON.stringify(err)
         })
 
       return res
     },
     [toast]
   )
+  const router = useRouter()
 
   return (
     <Container component="main" maxWidth="xs">
@@ -129,6 +132,7 @@ export const SignUp = () => {
               handleSubmit(values)
                 .then((msg) => {
                   toast(msg, { appearance: 'success' })
+                  router.history.push('/auth/login')
                 })
                 .catch((msg) => {
                   toast(msg, { appearance: 'warning' })

@@ -20,7 +20,7 @@ export const Job = ({ data }: IProps) => {
       <Grid container direction="column" spacing={2}>
         {!!data.comment && (
           <Grid item xs={12}>
-            <b>Комментарий</b>
+            <div style={{ marginBottom: '15px' }}><b>Комментарий</b></div>
             <div>
               <Typography
                 variant="body2"
@@ -34,7 +34,7 @@ export const Job = ({ data }: IProps) => {
         )}
         {!!data.description && (
           <Grid item xs={12}>
-            <b>Описание</b>
+            <div><b>Описание</b></div>
             <Markdown
               source={data.description}
               className={classes.description}
@@ -42,6 +42,7 @@ export const Job = ({ data }: IProps) => {
           </Grid>
         )}
         <Grid item>
+          <div style={{ marginBottom: '15px' }}><b>Итог</b></div>
           <Typography gutterBottom variant="body2" color="textSecondary">
             Цена за работу: {getPrettyPrice(data.priceJobs)}
           </Typography>

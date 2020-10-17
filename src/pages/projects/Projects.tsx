@@ -355,11 +355,14 @@ export const Projects = () => {
     }
 
     prompt({
-      label: 'Новый проект',
+      label: 'Введите название',
       type: 'text',
-      title: 'Введите название',
+      title: 'Новый проект',
     })
       .then((value: string) => {
+        if (!value) {
+          throw new Error('Соррян, бро. Название проекта не может быть пустым')
+        }
         createRemontPromise2({ name: value })
           // TODO: Вместо этого ждем ремонт по сокету:
           // .then((remont: any) => {
