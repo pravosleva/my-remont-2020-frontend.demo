@@ -11,7 +11,7 @@ import { useStyles } from './styles'
 export const BreadCrumbs = () => {
   const classes = useStyles()
   // const { ...rest }: IPageParams = useParams()
-  const { projectData, isUserDataLoading, userData, logout } = useContext(
+  const { remontLogic, isUserDataLoading, userData, logout } = useContext(
     MainContext
   )
   const router = useRouter()
@@ -27,7 +27,6 @@ export const BreadCrumbs = () => {
 
   return (
     <div className={classes.wrapper}>
-
       {/* ROGHT SIDE */}
 
       {pathname === '/' && (
@@ -45,7 +44,7 @@ export const BreadCrumbs = () => {
         <div className={classes.rightSide}>
           <Link to="/">Главная</Link> / <Link to="/projects">Проекты</Link> /{' '}
           <span style={{ opacity: '0.5' }}>
-            {projectData?.name || 'Please wait...'}
+            {remontLogic ? remontLogic.name : 'Please wait...'}
           </span>
         </div>
       )}
@@ -64,7 +63,7 @@ export const BreadCrumbs = () => {
 
       {/* LEFT SIDE */}
 
-      <div  className={classes.leftSide}>
+      <div className={classes.leftSide}>
         {isUserDataLoading ? (
           <span>Loading...</span>
         ) : !userData ? (

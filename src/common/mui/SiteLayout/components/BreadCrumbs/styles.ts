@@ -11,9 +11,7 @@ export const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     width: '100%',
   },
-  rightSide: {
-
-  },
+  rightSide: {},
   leftSide: {
     marginLeft: 'auto',
   },

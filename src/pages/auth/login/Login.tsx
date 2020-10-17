@@ -8,10 +8,10 @@ import {
   // LinearProgress,
   Typography,
 } from '@material-ui/core'
-import { Formik, Form, Field } from 'formik';
-import { TextField } from 'formik-material-ui';
+import { Formik, Form, Field } from 'formik'
+import { TextField } from 'formik-material-ui'
 import { useStyles } from './styles'
-import LockOpenIcon from '@material-ui/icons/LockOpen';
+import LockOpenIcon from '@material-ui/icons/LockOpen'
 import { getNormalizedInputs } from '~/utils/strapi/getNormalizedInputs'
 import { getApiUrl } from '~/utils/getApiUrl'
 import { useCookies } from 'react-cookie'
@@ -37,7 +37,12 @@ export const Login = () => {
   const router = useRouter()
   const classes = useStyles()
   const [, setCookie] = useCookies(['jwt'])
-  const { setUserData, toast, isUserDataLoading, isUserDataLoaded } = useContext(MainContext)
+  const {
+    setUserData,
+    toast,
+    isUserDataLoading,
+    isUserDataLoaded,
+  } = useContext(MainContext)
   const handleSubmit = useCallback(({ email, password }: IValues) => {
     const normalizedObj = getNormalizedInputs({ email, password })
     // const body = new FormData()
@@ -91,11 +96,7 @@ export const Login = () => {
             password: '',
           }}
           validationSchema={validShape}
-          onSubmit={( values, { setSubmitting }) => {
-            // setTimeout(() => {
-            //   setSubmitting(false)
-            //   alert(JSON.stringify(values, null, 2))
-            // }, 500)
+          onSubmit={(values, { setSubmitting }) => {
             handleSubmit(values)
               .then((msg: string) => {
                 setSubmitting(false)
@@ -119,7 +120,7 @@ export const Login = () => {
             // isValidating,
             // submitCount,
             isValid,
-            touched
+            touched,
           }) => (
             <Grid container spacing={0}>
               <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
@@ -154,7 +155,12 @@ export const Login = () => {
                   ) */}
                   <div>
                     <Button
-                      disabled={!isValid || isSubmitting || Object.keys(touched).length === 0 || isUserDataLoading}
+                      disabled={
+                        !isValid ||
+                        isSubmitting ||
+                        Object.keys(touched).length === 0 ||
+                        isUserDataLoading
+                      }
                       variant="contained"
                       color="primary"
                       onClick={submitForm}
@@ -177,9 +183,7 @@ export const Login = () => {
             </Grid>
           )}
         </Formik>
-        <Link to="/auth/sign-up">
-          Регистрация
-        </Link>
+        <Link to="/auth/sign-up">Регистрация</Link>
       </div>
     </Container>
   )

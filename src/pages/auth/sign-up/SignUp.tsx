@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
-import { Formik, Form, Field } from 'formik';
-import { TextField } from 'formik-material-ui';
+import { Formik, Form, Field } from 'formik'
+import { TextField } from 'formik-material-ui'
 import {
   Avatar,
   Button,
@@ -9,7 +9,7 @@ import {
   Grid,
   // LinearProgress,
   Typography,
-} from '@material-ui/core';
+} from '@material-ui/core'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import { validShape } from './yup'
 import { validateEmail, isCiryllic } from '~/utils/validators'
@@ -18,10 +18,10 @@ import { Link } from 'react-router-dom'
 import { MainContext } from '~/common/context/MainContext'
 
 interface IValues {
-  username: string;
-  email: string;
-  password: string;
-  password2: string;
+  username: string
+  email: string
+  password: string
+  password2: string
 }
 
 export const SignUp = () => {
@@ -45,7 +45,7 @@ export const SignUp = () => {
             password2: '',
           }}
           validate={(values: IValues) => {
-            const errors: Partial<IValues> = {};
+            const errors: Partial<IValues> = {}
 
             if (!values.username) {
               errors.username = 'Введите имя пользователя'
@@ -64,7 +64,7 @@ export const SignUp = () => {
               errors.password2 = 'Присутствует кириллица'
             }
 
-            return errors;
+            return errors
           }}
           validationSchema={validShape}
           onSubmit={(values, { setSubmitting }) => {
@@ -86,7 +86,7 @@ export const SignUp = () => {
             // isValidating,
             // submitCount,
             isValid,
-            touched
+            touched,
           }) => (
             <Grid container spacing={0}>
               <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
@@ -145,7 +145,13 @@ export const SignUp = () => {
                   ) */}
                   <div>
                     <Button
-                      disabled={!isValid || isSubmitting || Object.keys(touched).length === 0 || isUserDataLoading || isUserDataLoaded}
+                      disabled={
+                        !isValid ||
+                        isSubmitting ||
+                        Object.keys(touched).length === 0 ||
+                        isUserDataLoading ||
+                        isUserDataLoaded
+                      }
                       variant="contained"
                       color="primary"
                       onClick={submitForm}
@@ -168,11 +174,8 @@ export const SignUp = () => {
             </Grid>
           )}
         </Formik>
-        <Link to="/auth/login">
-          Авторизация
-        </Link>
+        <Link to="/auth/login">Авторизация</Link>
       </div>
-
     </Container>
-  );
-};
+  )
+}

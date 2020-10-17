@@ -12,7 +12,16 @@ import {
   AccordionSummary,
   AccordionDetails,
   AccordionActions,
+  Button as MuiButton,
+  Checkbox,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   Divider,
+  FormControl,
+  FormControlLabel,
+  FormGroup,
   TextField,
   CircularProgress,
   withStyles,
@@ -23,27 +32,15 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { useStyles } from './styles'
 import clsx from 'clsx'
 import { MainContext } from '~/common/context/MainContext'
-import { Button as MuiButton } from '@material-ui/core'
-import Dialog from '@material-ui/core/Dialog'
-import DialogActions from '@material-ui/core/DialogActions'
-import DialogContent from '@material-ui/core/DialogContent'
-import DialogTitle from '@material-ui/core/DialogTitle'
 import { useCookies } from 'react-cookie'
 import { getApiUrl } from '~/utils/getApiUrl'
-import FormControl from '@material-ui/core/FormControl'
-import FormGroup from '@material-ui/core/FormGroup'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
-import Checkbox from '@material-ui/core/Checkbox'
 import { getPrettyPrice } from '~/utils/getPrettyPrice'
 import EditIcon from '@material-ui/icons/Edit'
 import SaveIcon from '@material-ui/icons/Save'
-// import MDEditor from '@uiw/react-md-editor'
 import MarkdownIt from 'markdown-it'
 import MDEditor from 'react-markdown-editor-lite'
 import 'react-markdown-editor-lite/lib/index.css'
 import Slide from '@material-ui/core/Slide'
-// import DoneIcon from '@material-ui/icons/Done'
-// import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank'
 import { useDebouncedCallback } from '~/common/hooks'
 import { useConfirm } from 'material-ui-confirm'
 import { usePrompt } from '~/common/hooks/usePrompt'
@@ -99,7 +96,10 @@ export const Joblist = ({ remontId }: IProps) => {
     toast,
     filterState,
   } = useContext(MainContext)
-  const isOwner: boolean = useMemo(() => remontLogic?.isOwner(userData?.id), [remontLogic, userData])
+  const isOwner: boolean = useMemo(() => remontLogic?.isOwner(userData?.id), [
+    remontLogic,
+    userData,
+  ])
   const joblist = useMemo(() => jobsLogic?.jobs || [], [jobsLogic])
   const [openedEditorId, setOpenedEditorId] = useState<string | null>(null)
   const handleOpenEditor = useCallback(

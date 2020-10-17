@@ -4,6 +4,7 @@ import React, {
   useReducer,
   useEffect,
   useRef,
+  useMemo,
 } from 'react'
 import { Grid } from '@material-ui/core'
 import { BreadCrumbs } from './components/BreadCrumbs'
@@ -23,6 +24,7 @@ import { isEqual } from 'lodash'
 import { ConfirmProvider } from 'material-ui-confirm'
 import { PromptProvider } from '~/common/hooks/usePrompt'
 import { httpErrorHandler } from '~/utils/errors/http/fetch'
+import axios from 'axios'
 
 const apiUrl = getApiUrl()
 const getNormalizedAns = (originalRes: any): IUserData => {
@@ -47,10 +49,7 @@ const getNormalizedAns = (originalRes: any): IUserData => {
 
 export const SiteLayout = ({ socket, children }: any) => {
   // --- REMONT STATE:
-  const [remontState, dispatch] = useReducer(
-    remontReducer,
-    remontInitialState
-  )
+  const [remontState, dispatch] = useReducer(remontReducer, remontInitialState)
   const handleChangeJobField = useCallback(
     (id, fieldName: string, value: number | boolean | string) => () => {
       try {
@@ -69,16 +68,14 @@ export const SiteLayout = ({ socket, children }: any) => {
     [dispatch]
   )
   // ---
-  const [projectData, setProjectData] = useState<any>(null)
-  const handleResetCurrentProjectData = useCallback(() => {
-    setProjectData(null)
-  }, [setProjectData])
+  const handleResetProjectData = useCallback(() => {
+    dispatch({ type: 'UPDATE_REMONT', payload: null })
+  }, [dispatch])
   const handleSetProjectData = useCallback(
-    (data) => {
-      // console.log('handleSetProjectData')
-      setProjectData(data)
+    (data: any | null) => {
+      dispatch({ type: 'UPDATE_REMONT', payload: data })
     },
-    [setProjectData]
+    [dispatch]
   )
   const [userData, setUserData] = useState<IUserData | null>(null)
   const [cookies, setCookie, removeCookie] = useCookies(['jwt'])
@@ -119,19 +116,22 @@ export const SiteLayout = ({ socket, children }: any) => {
       // params,
       data,
     }) => {
-      if (!!projectData && result.id === projectData.id) {
+      if (
+        !!remontState.remontLogic?.id &&
+        result.id === remontState.remontLogic.id
+      ) {
         if (!!data?.joblist && !isEqual(remontState.jobs, data.joblist)) {
           handleUpdateJoblist(data.joblist)
+          handleSetProjectData(data)
           addToast('Список работ обновлен', { appearance: 'info' })
         }
       }
     },
-    [remontState.jobs, projectData, handleUpdateJoblist]
+    [remontState.jobs, remontState.remontLogic, handleUpdateJoblist]
   )
   // --- SOCKET SUBSCRIBER; GET REMONT IF NECESSARY;
   const getRemont = useCallback(
     (id: string, jwt?: string) => {
-      // setIsCreateNewJobLoading(true)
       let headers = {
         // 'Access-Control-Allow-Origin': '*',
         'Content-Type': 'application/json',
@@ -151,10 +151,8 @@ export const SiteLayout = ({ socket, children }: any) => {
         })
         .then(httpErrorHandler) // (res) => res.json()
         .then((data) => {
-          if (!!data.id) {
-            // setIsCreateNewJobLoading(false)
-            setProjectData(data)
-            // toast(`Updated: ${data.joblist.length} jobs`, { appearance: 'success' })
+          if (!!data?.id) {
+            handleSetProjectData(data)
             addToast('Remont data received', { appearance: 'success' })
             return
           }
@@ -162,18 +160,17 @@ export const SiteLayout = ({ socket, children }: any) => {
         })
         .catch((err) => {
           addToast(err.message, { appearance: 'error' })
-          // setIsCreateNewJobLoading(false)
         })
     },
-    [setProjectData, addToast]
+    [remontState.remontLogic, addToast]
   )
   const socketRef = useRef(socket)
   const onSocketTest = useCallback(() => {
     console.log('onSocketTest: CALLED')
-    if (!!projectData?.id) {
-      getRemont(projectData?.id, cookies?.jwt)
+    if (!!remontState.remontLogic?.id) {
+      getRemont(remontState.remontLogic?.id, cookies?.jwt)
     }
-  }, [getRemont, projectData])
+  }, [getRemont, remontState.remontLogic])
   useEffect(() => {
     // socket.on(ev.YOURE_WELCOME, onSocketTest)
     socketRef.current.on(ev.YOURE_WELCOME, onSocketTest)
@@ -204,30 +201,38 @@ export const SiteLayout = ({ socket, children }: any) => {
     dispatchFilter({ type: 'SELECT_GROUP', payload: 'inProgress' })
   }, [dispatchFilter])
   // ---
-  const handleUpdateRemont = useCallback((remont: any) => {
-    dispatch({ type: 'UPDATE_REMONT', payload: remont })
-  }, [dispatchFilter])
+
+  // --- AXIOS
+  const memoizedAxiosOpts = useMemo(() => {
+    const axiosOpts = {
+      baseURL: `${apiUrl}/graphql`,
+    }
+    if (!!cookies?.jwt) {
+      axiosOpts['Authorization'] = `Bearer ${cookies.jwt}`
+    }
+
+    return axiosOpts
+  }, [cookies.jwt, apiUrl])
+  // ---
 
   return (
     <MainContext.Provider
       value={{
         // Project:
-        projectData,
         setProjectData: handleSetProjectData,
-        resetProjectData: handleResetCurrentProjectData,
+        resetProjectData: handleResetProjectData,
         // User:
         userData,
         logout: handleLogout,
         isUserDataLoading,
         isUserDataLoaded,
         setUserData: handleSetUserData,
-        // Joblist:
-        // joblist: remontState.jobs,
+        // Joblist logic && Remont logic:
         jobsLogic: remontState.jobsLogic,
         changeJobFieldPromise: handleChangeJobField,
         updateJoblist: handleUpdateJoblist,
         remontLogic: remontState.remontLogic,
-        updateRemont: handleUpdateRemont,
+        updateRemont: handleSetProjectData,
         // Toaster:
         toast: addToast,
         // Socket:
@@ -237,6 +242,8 @@ export const SiteLayout = ({ socket, children }: any) => {
         onSelectAll: handleSelectAll,
         onSelectIsDone: handleSelectIsDone,
         onSelectInProgress: handleSelectInProgress,
+        // Axios:
+        axiosRemoteGraphQL: axios.create(memoizedAxiosOpts),
       }}
     >
       <PromptProvider>

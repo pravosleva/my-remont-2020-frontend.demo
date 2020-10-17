@@ -1,4 +1,4 @@
-import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
+import { createStyles, Theme, makeStyles } from '@material-ui/core/styles'
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -8,7 +8,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       backgroundColor: theme.palette.background.paper,
       position: 'relative',
       overflow: 'auto',
-      maxHeight: 300,
+      // maxHeight: 300,
 
       borderRadius: '4px',
       padding: '0px',
@@ -27,5 +27,5 @@ export const useStyles = makeStyles((theme: Theme) =>
         },
       },
     },
-  }),
-);
+  })
+)

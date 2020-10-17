@@ -36,25 +36,32 @@ export const SignUp = () => {
       email: null,
       password: null,
       password2: null,
-    };
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
+    }
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i
     if (!values.email) {
-      errors.email = "Cannot be blank";
+      errors.email = 'Cannot be blank'
     } else if (!regex.test(values.email)) {
-      errors.email = "Invalid email format";
+      errors.email = 'Invalid email format'
     }
     if (!values.password) {
-      errors.password = "Cannot be blank";
+      errors.password = 'Cannot be blank'
     } else if (values.password.length < 4) {
-      errors.password = "Password must be more than 4 characters";
+      errors.password = 'Password must be more than 4 characters'
     }
     if (values.password2 !== values.password) {
-      errors.password2 = "Should be equal to Password";
+      errors.password2 = 'Should be equal to Password'
     }
-    return errors;
-  };
-  const errors = useMemo(() => validate({ email, password, password2 }), [email, password, password2])
-  const isCorrect = useMemo(() => !errors.email && !errors.password && !errors.password2, [errors])
+    return errors
+  }
+  const errors = useMemo(() => validate({ email, password, password2 }), [
+    email,
+    password,
+    password2,
+  ])
+  const isCorrect = useMemo(
+    () => !errors.email && !errors.password && !errors.password2,
+    [errors]
+  )
   const handleSubmit = useCallback(() => {
     const normalizedObj = getNormalizedInputs({ email, password })
     // const body = new FormData()
@@ -231,7 +238,9 @@ export const SignUp = () => {
             }}
             error={!!errors.password2}
             helperText={errors.password2 || undefined}
-            disabled={!email || !password || !!errors.email || !!errors.password}
+            disabled={
+              !email || !password || !!errors.email || !!errors.password
+            }
           />
           <Button
             variant="contained"

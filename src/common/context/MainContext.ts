@@ -1,6 +1,7 @@
 import { createContext } from 'react'
 import { JobsLogic } from '~/utils/logic'
 import { RemontLogic } from '~/utils/logic'
+
 interface IRole {
   _id: string
   name: String
@@ -50,7 +51,6 @@ interface Socket {
 }
 
 interface IMainContext {
-  projectData: any
   setProjectData: (remont: any) => void
   resetProjectData: () => void
   logout: (msg: string) => Promise<boolean>
@@ -77,10 +77,10 @@ interface IMainContext {
   onSelectAll: () => void
   onSelectIsDone: () => void
   onSelectInProgress: () => void
+  axiosRemoteGraphQL: any | null
 }
 
 export const MainContext = createContext<IMainContext>({
-  projectData: null,
   setProjectData: () => {
     throw new Error('setProjectData method should be implemented')
   },
@@ -122,4 +122,5 @@ export const MainContext = createContext<IMainContext>({
   onSelectInProgress: () => {
     throw new Error('onSelectInProgress method should be implemented')
   },
+  axiosRemoteGraphQL: null,
 })

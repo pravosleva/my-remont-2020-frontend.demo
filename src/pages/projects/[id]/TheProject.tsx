@@ -48,10 +48,9 @@ export const TheProject = () => {
     resetProjectData,
     setProjectData,
     updateJoblist,
-    // updateJoblistLogic,
     jobsLogic,
     userData,
-    // joblist,
+    remontLogic,
     toast,
     filterState,
     onSelectAll,
@@ -193,6 +192,10 @@ export const TheProject = () => {
   ])
   // ---
   const classes = useStyles()
+  const isOwner: boolean = useMemo(() => remontLogic?.isOwner(userData?.id), [
+    remontLogic,
+    userData,
+  ])
 
   return (
     <>
@@ -209,7 +212,7 @@ export const TheProject = () => {
                 <TotalInfo />
               </Grid>
             )}
-            {!!userData && (
+            {!!isOwner && (
               <Grid item xs={12}>
                 <Button
                   onClick={handleCreateJob}
@@ -277,9 +280,7 @@ export const TheProject = () => {
               </Button>
             </Grid>
             <Grid item xs={12}>
-              {isLoaded && (
-                <Joblist remontId={project.id} />
-              )}
+              {isLoaded && <Joblist remontId={project.id} />}
             </Grid>
           </Grid>
         </Grid>
