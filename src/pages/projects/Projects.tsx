@@ -364,15 +364,13 @@ export const Projects = () => {
           throw new Error('Соррян, бро. Название проекта не может быть пустым')
         }
         createRemontPromise2({ name: value })
-          // TODO: Вместо этого ждем ремонт по сокету:
-          // .then((remont: any) => {
-          //   addProject(remont)
-          // })
+          // NOTE: Могли бы сразу же занести в стейт, но вместо этого ждем ремонт по сокету:
+          // .then((remont: any) => { addProject(remont) })
           .catch((err) => {
             toast(
               typeof err === 'string'
                 ? err
-                : err?.message || 'createRemontPromise: Errored',
+                : err?.message || 'createRemontPromise2: Errored',
               {
                 appearance: 'error',
               }
@@ -380,7 +378,7 @@ export const Projects = () => {
           })
       })
       .catch((err: any) => {
-        toast(err?.message || 'handleDoneJob: Declined', {
+        toast(err?.message || 'handleCreateJob: Declined', {
           appearance: 'error',
         })
       })
