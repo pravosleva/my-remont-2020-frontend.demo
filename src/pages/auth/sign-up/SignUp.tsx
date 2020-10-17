@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useCallback } from 'react'
 import { Formik, Form, Field } from 'formik'
 import { TextField } from 'formik-material-ui'
 import {
@@ -16,6 +16,15 @@ import { validateEmail, isCiryllic } from '~/utils/validators'
 import { useStyles } from './styles'
 import { Link } from 'react-router-dom'
 import { MainContext } from '~/common/context/MainContext'
+import axios from 'axios'
+import { getApiUrl } from '~/utils/getApiUrl'
+import { useCookies } from 'react-cookie'
+
+const apiUrl = getApiUrl()
+const REACT_APP_COOKIE_MAXAGE_IN_DAYS = process.env
+  .REACT_APP_COOKIE_MAXAGE_IN_DAYS
+  ? parseInt(process.env.REACT_APP_COOKIE_MAXAGE_IN_DAYS)
+  : 1
 
 interface IValues {
   username: string
@@ -26,7 +35,54 @@ interface IValues {
 
 export const SignUp = () => {
   const classes = useStyles()
-  const { toast, isUserDataLoading, isUserDataLoaded } = useContext(MainContext)
+  const {
+    toast,
+    isUserDataLoading,
+    isUserDataLoaded,
+    setUserData,
+  } = useContext(MainContext)
+  const [, setCookie] = useCookies(['jwt'])
+  const handleSubmit = useCallback(
+    async (values: IValues): Promise<string | undefined> => {
+      const res = await axios({
+        url: `${apiUrl}/auth/local/register`,
+        method: 'POST',
+        data: {
+          username: values.username,
+          email: values.email,
+          password: values.password,
+        },
+        validateStatus: (status) => status >= 200 && status < 500,
+      })
+        .then((res) => {
+          console.log(res)
+
+          if (res.status === 200) return res
+          throw new Error(res.statusText)
+        })
+        .then((res) => res.data)
+        .then((data) => {
+          console.log(data) // { jwt, user }
+          if (data.jwt && data.user) return { jwt: data.jwt, user: data.user }
+
+          throw data
+        })
+        .then(({ jwt, user }) => {
+          console.log(user)
+          setCookie('jwt', jwt, {
+            maxAge: REACT_APP_COOKIE_MAXAGE_IN_DAYS * 24 * 60 * 60,
+          })
+          return 'Проверьте почту'
+        })
+        .catch((err) => {
+          console.log(err)
+          return typeof err === 'string' ? err : 'Errored'
+        })
+
+      return res
+    },
+    [toast]
+  )
 
   return (
     <Container component="main" maxWidth="xs">
@@ -70,7 +126,13 @@ export const SignUp = () => {
           onSubmit={(values, { setSubmitting }) => {
             setTimeout(() => {
               setSubmitting(false)
-              toast('Функционал в разработке', { appearance: 'warning' })
+              handleSubmit(values)
+                .then((msg) => {
+                  toast(msg, { appearance: 'success' })
+                })
+                .catch((msg) => {
+                  toast(msg, { appearance: 'warning' })
+                })
             }, 500)
           }}
           validateOnChange

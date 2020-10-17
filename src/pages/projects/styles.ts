@@ -31,6 +31,6 @@ export const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       flexDirection: 'row',
       justifyContent: 'flex-end',
-    }
+    },
   })
 )
