@@ -6,8 +6,10 @@ import { MainContext } from '~/common/context/MainContext'
 import { useRouter } from '~/common/hooks/useRouter'
 import { Button } from '@material-ui/core'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'
+import { useStyles } from './styles'
 
 export const BreadCrumbs = () => {
+  const classes = useStyles()
   // const { ...rest }: IPageParams = useParams()
   const { projectData, isUserDataLoading, userData, logout } = useContext(
     MainContext
@@ -24,40 +26,45 @@ export const BreadCrumbs = () => {
   }, [logout, history])
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        width: '100%',
-      }}
-    >
+    <div className={classes.wrapper}>
+
+      {/* ROGHT SIDE */}
+
       {pathname === '/' && (
-        <div>
+        <div className={classes.rightSide}>
           <Link to="/">Главная</Link>
         </div>
       )}
       {(pathname === '/projects' || pathname === '/projects/') && (
-        <div>
+        <div className={classes.rightSide}>
           <Link to="/">Главная</Link> /{' '}
           <span style={{ opacity: '0.5' }}>Проекты</span>
         </div>
       )}
       {pathname.includes('/projects/') && pathname.length > 10 && (
-        <div>
+        <div className={classes.rightSide}>
           <Link to="/">Главная</Link> / <Link to="/projects">Проекты</Link> /{' '}
           <span style={{ opacity: '0.5' }}>
             {projectData?.name || 'Please wait...'}
           </span>
         </div>
       )}
-      {pathname.includes('/auth') && (
-        <div>
+      {pathname === '/auth/login' && (
+        <div className={classes.rightSide}>
           <Link to="/">Главная</Link> /{' '}
           <span style={{ opacity: '0.5' }}>Авторизация</span>
         </div>
       )}
-      <div style={{ marginLeft: 'auto' }}>
+      {pathname === '/auth/sign-up' && (
+        <div className={classes.rightSide}>
+          <Link to="/">Главная</Link> /{' '}
+          <span style={{ opacity: '0.5' }}>Регистрация</span>
+        </div>
+      )}
+
+      {/* LEFT SIDE */}
+
+      <div  className={classes.leftSide}>
         {isUserDataLoading ? (
           <span>Loading...</span>
         ) : !userData ? (

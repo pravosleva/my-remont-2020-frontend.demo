@@ -23,10 +23,6 @@ import { isEqual } from 'lodash'
 import { ConfirmProvider } from 'material-ui-confirm'
 import { PromptProvider } from '~/common/hooks/usePrompt'
 import { httpErrorHandler } from '~/utils/errors/http/fetch'
-import useSocket from 'use-socket.io-client'
-// import io from 'socket.io-client'
-
-const REACT_APP_SOCKET_ENDPOINT = process.env.REACT_APP_SOCKET_ENDPOINT
 
 const apiUrl = getApiUrl()
 const getNormalizedAns = (originalRes: any): IUserData => {
@@ -49,7 +45,7 @@ const getNormalizedAns = (originalRes: any): IUserData => {
   return result
 }
 
-export const SiteLayout: React.FC = ({ children }) => {
+export const SiteLayout = ({ socket, children }: any) => {
   // --- JOBLIST STATE:
   const [joblistState, dispatch] = useReducer(
     joblistReducer,
@@ -171,10 +167,6 @@ export const SiteLayout: React.FC = ({ children }) => {
     },
     [setProjectData, addToast]
   )
-  const [socket] = useSocket(REACT_APP_SOCKET_ENDPOINT, {
-    autoConnect: true,
-    //any other options
-  })
   const socketRef = useRef(socket)
   const onSocketTest = useCallback(() => {
     console.log('onSocketTest: CALLED')
@@ -228,7 +220,7 @@ export const SiteLayout: React.FC = ({ children }) => {
         isUserDataLoaded,
         setUserData: handleSetUserData,
         // Joblist:
-        joblist: joblistState.items,
+        // joblist: joblistState.items,
         jobsLogic: joblistState.logic,
         changeJobFieldPromise: handleChangeJobField,
         updateJoblist: handleUpdateJoblist,

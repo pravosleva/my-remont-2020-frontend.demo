@@ -276,7 +276,7 @@ export const TheProject = () => {
             </Grid>
             <Grid item xs={12}>
               {isLoaded && (
-                <Joblist remontId={project.id} joblist={project.joblist} />
+                <Joblist remontId={project.id} />
               )}
             </Grid>
           </Grid>

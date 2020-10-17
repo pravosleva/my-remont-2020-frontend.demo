@@ -54,7 +54,7 @@ interface IMainContext {
   isUserDataLoading: boolean
   isUserDataLoaded: boolean
   setUserData: (uData: IUserData | null, jwt?: string) => void
-  joblist: IJob[]
+  // joblist: IJob[]
   changeJobFieldPromise: (
     id: string,
     fieldName: string,
@@ -64,7 +64,7 @@ interface IMainContext {
   jobsLogic: JobsLogic | null
   toast: (
     msg: string,
-    opts: { appearance: 'success' | 'error' | 'info' }
+    opts: { appearance: 'success' | 'error' | 'info' | 'warning' }
   ) => void
   socket: null | Socket
   filterState: { selectedGroup: 'all' | 'isDone' | 'inProgress' }
@@ -90,7 +90,7 @@ export const MainContext = createContext<IMainContext>({
   setUserData: () => {
     throw new Error('setUserData method should be implemented')
   },
-  joblist: [],
+  // joblist: [],
   changeJobFieldPromise: () => () => {
     return Promise.reject('changeJobFieldPromise method should be implemented')
   },

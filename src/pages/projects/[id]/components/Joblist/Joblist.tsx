@@ -80,7 +80,7 @@ const getUniqueKey = (data: IJob): string => {
   return `${data._id}_${data.payed}_${data.priceDelivery}_${data.priceJobs}_${data.priceMaterials}`
 }
 
-export const Joblist = ({ remontId, joblist: j }: IProps) => {
+export const Joblist = ({ remontId }: IProps) => {
   const [expanded, setExpanded] = React.useState<string | false>(false)
   const handleChangeAccoddionItem = (panel: string) => (
     _event: React.ChangeEvent<{}>,
@@ -92,11 +92,13 @@ export const Joblist = ({ remontId, joblist: j }: IProps) => {
   const {
     userData,
     changeJobFieldPromise,
-    joblist,
+    // joblist,
+    jobsLogic,
     updateJoblist,
     toast,
     filterState,
   } = useContext(MainContext)
+  const joblist = useMemo(() => jobsLogic?.jobs || [], [jobsLogic])
   const [openedEditorId, setOpenedEditorId] = useState<string | null>(null)
   const handleOpenEditor = useCallback(
     (id: string) => () => {
