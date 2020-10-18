@@ -349,6 +349,47 @@ export const Joblist = ({ remontId }: IProps) => {
     },
     [prompt, changeJobFieldPromise, toast, handleSubmit]
   )
+  // payed:
+  const handleAddPayed = useCallback(
+    (id, initPrice) => () => {
+      prompt({
+        label: 'Оплачено',
+        type: 'number',
+        title: 'Добавить сумму',
+      })
+        .then((value: number) => {
+          changeJobFieldPromise(id, 'payed', initPrice + value)()
+            .then(handleSubmit)
+            .catch((msg) => {
+              throw new Error(msg)
+            })
+        })
+        .catch((_err) => {
+          toast('Отменено', { appearance: 'error' })
+        })
+    },
+    [prompt, changeJobFieldPromise, toast, handleSubmit]
+  )
+  const handleRemovePayed = useCallback(
+    (id, initPrice) => () => {
+      prompt({
+        label: 'Оплачено',
+        type: 'number',
+        title: 'Вычесть сумму',
+      })
+        .then((value: number) => {
+          changeJobFieldPromise(id, 'payed', initPrice - value)()
+            .then(handleSubmit)
+            .catch((msg) => {
+              throw new Error(msg)
+            })
+        })
+        .catch((_err) => {
+          toast('Отменено', { appearance: 'error' })
+        })
+    },
+    [prompt, changeJobFieldPromise, toast, handleSubmit]
+  )
 
   return (
     <>
@@ -501,7 +542,8 @@ export const Joblist = ({ remontId }: IProps) => {
                 </Dialog>
                 {/* DIALOG FOR VALUES */}
                 <Dialog
-                  fullWidth
+                  // fullWidth
+                  fullScreen
                   open={openedEditorId === data._id}
                   onClose={handleCloseEditor}
                   scroll="body"
@@ -709,7 +751,7 @@ export const Joblist = ({ remontId }: IProps) => {
                           Вычесть сумму
                         </Button>
                       </Grid>
-                      <Grid item xs={12}>
+                      <Grid item xs={12} style={{ marginBottom: '10px' }}>
                         <TextField
                           id={`payed_${data._id}`}
                           label="Оплачено"
@@ -728,6 +770,30 @@ export const Joblist = ({ remontId }: IProps) => {
                           }}
                           fullWidth
                         />
+                      </Grid>
+                      <Grid item className={classes.buttonsWrapper}>
+                        <Button
+                          size="small"
+                          variant="outlined"
+                          onClick={handleAddPayed(
+                            data._id,
+                            data.payed
+                          )}
+                          // endIcon={<EditIcon />}
+                        >
+                          Добавить сумму
+                        </Button>
+                        <Button
+                          size="small"
+                          variant="outlined"
+                          onClick={handleRemovePayed(
+                            data._id,
+                            data.payed
+                          )}
+                          // endIcon={<EditIcon />}
+                        >
+                          Вычесть сумму
+                        </Button>
                       </Grid>
                       <div className={classes.checkboxWrapper}>
                         <FormControl
