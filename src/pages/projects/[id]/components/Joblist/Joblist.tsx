@@ -44,6 +44,7 @@ import Slide from '@material-ui/core/Slide'
 import { useDebouncedCallback } from '~/common/hooks'
 import { useConfirm } from 'material-ui-confirm'
 import { usePrompt } from '~/common/hooks/usePrompt'
+import { useWindowSize } from 'react-use';
 
 // Register plugins if required
 // MdEditor.use(YOUR_PLUGINS_HERE);
@@ -390,6 +391,7 @@ export const Joblist = ({ remontId }: IProps) => {
     },
     [prompt, changeJobFieldPromise, toast, handleSubmit]
   )
+  const { width } = useWindowSize();
 
   return (
     <>
@@ -543,7 +545,7 @@ export const Joblist = ({ remontId }: IProps) => {
                 {/* DIALOG FOR VALUES */}
                 <Dialog
                   // fullWidth
-                  fullScreen
+                  fullScreen={width <= 767}
                   open={openedEditorId === data._id}
                   onClose={handleCloseEditor}
                   scroll="body"
