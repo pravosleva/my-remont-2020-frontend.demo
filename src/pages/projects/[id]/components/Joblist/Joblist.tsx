@@ -544,7 +544,7 @@ export const Joblist = ({ remontId }: IProps) => {
                 </Dialog>
                 {/* DIALOG FOR VALUES */}
                 <Dialog
-                  // fullWidth
+                  fullWidth={width > 767}
                   fullScreen={width <= 767}
                   open={openedEditorId === data._id}
                   onClose={handleCloseEditor}
