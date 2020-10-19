@@ -13,4 +13,7 @@ export class HttpError extends UniversalError {
 
     return `${normalizedName} ${this.status}: ${this.message}`
   }
+  get resStatus() {
+    return this.status
+  }
 }

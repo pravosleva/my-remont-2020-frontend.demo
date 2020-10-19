@@ -43,8 +43,14 @@ export const BreadCrumbs = () => {
       {pathname.includes('/projects/') && pathname.length > 10 && (
         <div className={classes.rightSide}>
           <Link to="/">Главная</Link> / <Link to="/projects">Проекты</Link> /{' '}
-          {!remontLogic && <span className={classes.muted}>Please wait...</span>}
-          {!!remontLogic && <span style={{ whiteSpace: 'nowrap' }} className={classes.muted}>{remontLogic.name}</span>}
+          {!remontLogic && (
+            <span className={classes.muted}>Please wait...</span>
+          )}
+          {!!remontLogic && (
+            <span style={{ whiteSpace: 'nowrap' }} className={classes.muted}>
+              {remontLogic.name}
+            </span>
+          )}
         </div>
       )}
       {pathname === '/auth/login' && (
@@ -75,7 +81,9 @@ export const BreadCrumbs = () => {
           <NavLink to="/auth/login">Вход</NavLink>
         ) : (
           <div style={{ display: 'flex', alignItems: 'center' }}>
-            <NavLink to="/profile" style={{ marginLeft: '10px' }}>Профиль</NavLink>
+            <NavLink to="/profile" style={{ marginLeft: '10px' }}>
+              Профиль
+            </NavLink>
             <Button
               style={{ marginLeft: '10px' }}
               onClick={handleLogout}

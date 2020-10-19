@@ -44,7 +44,11 @@ import Slide from '@material-ui/core/Slide'
 import { useDebouncedCallback } from '~/common/hooks'
 import { useConfirm } from 'material-ui-confirm'
 import { usePrompt } from '~/common/hooks/usePrompt'
-import { useWindowSize } from 'react-use';
+import { useWindowSize } from 'react-use'
+import { HttpError } from '~/utils/errors/http'
+import { useRouter } from '~/common/hooks/useRouter'
+import buildUrl from 'build-url'
+import { httpErrorHandler } from '~/utils/errors/http/fetch'
 
 // Register plugins if required
 // MdEditor.use(YOUR_PLUGINS_HERE);
@@ -128,6 +132,7 @@ export const Joblist = ({ remontId }: IProps) => {
   }, [setOpenedMarkdownEditorId])
   // const descriptionElementRef = useRef<HTMLElement>(null)
   const [cookies] = useCookies(['jwt'])
+  const accessToken = useMemo(() => cookies.jwt, [cookies.jwt])
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [localMD, setLocalMD] = useState<string>('')
   useEffect(() => {
@@ -141,6 +146,7 @@ export const Joblist = ({ remontId }: IProps) => {
     },
     500
   )
+  const router = useRouter()
   const handleSubmit = useCallback(() => {
     setIsLoading(true)
     window
@@ -150,11 +156,12 @@ export const Joblist = ({ remontId }: IProps) => {
         headers: {
           // 'Access-Control-Allow-Origin': '*',
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${cookies.jwt}`,
+          Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify({ joblist }),
       })
-      .then((res) => res.json())
+      .then(httpErrorHandler)
+      // .then((res) => res.json())
       .then((data) => {
         if (!!data.id) {
           setIsLoading(false)
@@ -171,11 +178,22 @@ export const Joblist = ({ remontId }: IProps) => {
       .catch((err) => {
         setIsLoading(false)
         console.log(err.message)
+        if (err instanceof HttpError && err.resStatus === 401) {
+          const url = buildUrl('/', {
+            path: 'auth/login',
+            // hash: 'contact',
+            queryParams: {
+              from: `/projects/${remontId}`,
+            },
+          })
+          router.history.push(url)
+        }
       })
   }, [
+    router,
     setIsLoading,
     remontId,
-    cookies.jwt,
+    accessToken,
     joblist,
     handleCloseEditor,
     handleCloseMarkdownEditor,
@@ -183,6 +201,7 @@ export const Joblist = ({ remontId }: IProps) => {
     toast,
   ])
   const confirm = useConfirm()
+
   const handleDoneJob = useCallback(
     (id, checked) => {
       confirm({
@@ -235,7 +254,7 @@ export const Joblist = ({ remontId }: IProps) => {
             })
         })
         .catch((err) => {
-          toast(err?.message || 'handleDoneJob: Declined', {
+          toast(err?.message || 'handleAddPriceJobs: Declined', {
             appearance: 'error',
           })
         })
@@ -257,7 +276,7 @@ export const Joblist = ({ remontId }: IProps) => {
             })
         })
         .catch((err) => {
-          toast(err?.message || 'handleDoneJob: Declined', {
+          toast(err?.message || 'handleRemovePriceJobs: Declined', {
             appearance: 'error',
           })
         })
@@ -280,7 +299,7 @@ export const Joblist = ({ remontId }: IProps) => {
             })
         })
         .catch((err) => {
-          toast(err?.message || 'handleDoneJob: Declined', {
+          toast(err?.message || 'handleAddPriceMaterials: Declined', {
             appearance: 'error',
           })
         })
@@ -302,7 +321,7 @@ export const Joblist = ({ remontId }: IProps) => {
             })
         })
         .catch((err) => {
-          toast(err?.message || 'handleDoneJob: Declined', {
+          toast(err?.message || 'handleRemovePriceMaterials: Declined', {
             appearance: 'error',
           })
         })
@@ -324,8 +343,10 @@ export const Joblist = ({ remontId }: IProps) => {
               throw new Error(msg)
             })
         })
-        .catch((_err) => {
-          toast('Отменено', { appearance: 'error' })
+        .catch((err) => {
+          toast(err?.message || 'handleAddPriceDelivery: Declined', {
+            appearance: 'error',
+          })
         })
     },
     [prompt, changeJobFieldPromise, toast, handleSubmit]
@@ -344,8 +365,10 @@ export const Joblist = ({ remontId }: IProps) => {
               throw new Error(msg)
             })
         })
-        .catch((_err) => {
-          toast('Отменено', { appearance: 'error' })
+        .catch((err) => {
+          toast(err?.message || 'handleRemovePriceDelivery: Declined', {
+            appearance: 'error',
+          })
         })
     },
     [prompt, changeJobFieldPromise, toast, handleSubmit]
@@ -365,8 +388,10 @@ export const Joblist = ({ remontId }: IProps) => {
               throw new Error(msg)
             })
         })
-        .catch((_err) => {
-          toast('Отменено', { appearance: 'error' })
+        .catch((err) => {
+          toast(err?.message || 'handleAddPayed: Declined', {
+            appearance: 'error',
+          })
         })
     },
     [prompt, changeJobFieldPromise, toast, handleSubmit]
@@ -385,13 +410,15 @@ export const Joblist = ({ remontId }: IProps) => {
               throw new Error(msg)
             })
         })
-        .catch((_err) => {
-          toast('Отменено', { appearance: 'error' })
+        .catch((err) => {
+          toast(err?.message || 'handleRemovePayed: Declined', {
+            appearance: 'error',
+          })
         })
     },
     [prompt, changeJobFieldPromise, toast, handleSubmit]
   )
-  const { width } = useWindowSize();
+  const { width } = useWindowSize()
 
   return (
     <>
@@ -777,10 +804,7 @@ export const Joblist = ({ remontId }: IProps) => {
                         <Button
                           size="small"
                           variant="outlined"
-                          onClick={handleAddPayed(
-                            data._id,
-                            data.payed
-                          )}
+                          onClick={handleAddPayed(data._id, data.payed)}
                           // endIcon={<EditIcon />}
                         >
                           Добавить сумму
@@ -788,10 +812,7 @@ export const Joblist = ({ remontId }: IProps) => {
                         <Button
                           size="small"
                           variant="outlined"
-                          onClick={handleRemovePayed(
-                            data._id,
-                            data.payed
-                          )}
+                          onClick={handleRemovePayed(data._id, data.payed)}
                           // endIcon={<EditIcon />}
                         >
                           Вычесть сумму

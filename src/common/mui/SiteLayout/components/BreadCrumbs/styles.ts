@@ -17,5 +17,5 @@ export const useStyles = makeStyles((theme) => ({
   },
   muted: {
     opacity: '0.5',
-  }
+  },
 }))

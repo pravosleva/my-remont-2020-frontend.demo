@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useContext } from 'react'
+import React, { useCallback, useContext } from 'react'
 import {
   Avatar,
   Button,
@@ -41,7 +41,7 @@ export const Login = () => {
     setUserData,
     toast,
     isUserDataLoading,
-    isUserDataLoaded,
+    // isUserDataLoaded,
   } = useContext(MainContext)
   const handleSubmit = useCallback(({ email, password }: IValues) => {
     const normalizedObj = getNormalizedInputs({ email, password })
@@ -101,7 +101,13 @@ export const Login = () => {
               .then((msg: string) => {
                 setSubmitting(false)
                 toast(`Hello, ${msg}`, { appearance: 'success' })
-                router.history.push('/projects')
+                // @ts-ignore
+                if (!!router.query?.from) {
+                  // @ts-ignore
+                  router.history.push(decodeURIComponent(router.query?.from))
+                } else {
+                  router.history.push('/projects')
+                }
               })
               .catch((msg: string) => {
                 setSubmitting(false)

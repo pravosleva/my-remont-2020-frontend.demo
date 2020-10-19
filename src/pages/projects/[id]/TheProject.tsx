@@ -21,6 +21,10 @@ import {
 import { CreateNewJob } from './components/CreateNewJob'
 import BuildIcon from '@material-ui/icons/Build'
 import { useStyles } from './styles'
+import { useRouter } from '~/common/hooks/useRouter'
+import buildUrl from 'build-url'
+import { HttpError } from '~/utils/errors/http/HttpError'
+import { httpErrorHandler } from '~/utils/errors/http/fetch'
 
 const apiUrl = getApiUrl()
 const isDev = process.env.NODE_ENV === 'development'
@@ -82,12 +86,24 @@ export const TheProject = () => {
     },
     [resetProjectData]
   )
+  const router = useRouter()
+  const accessToken = useMemo(() => cookies.jwt, [cookies.jwt])
   const [project, isLoaded, isLoading]: TAns = useRemoteDataByFetch({
     url: `${apiUrl}/remonts/${id}`,
     method: 'GET',
-    accessToken: cookies.jwt,
+    accessToken,
     onSuccess: handleSuccess,
     onFail: handleFail,
+    on401: () => {
+      const url = buildUrl('/', {
+        path: 'auth/login',
+        // hash: 'contact',
+        queryParams: {
+          from: `/projects/${id}`,
+        },
+      })
+      router.history.push(url)
+    },
     responseValidator: (res) => !!res.id,
   })
   // Reset on unmount:
@@ -156,11 +172,11 @@ export const TheProject = () => {
         headers: {
           // 'Access-Control-Allow-Origin': '*',
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${cookies.jwt}`,
+          Authorization: `Bearer ${accessToken}`,
         },
         body: JSON.stringify({ joblist: [newJob, ...joblist] }),
       })
-      .then((res) => res.json())
+      .then(httpErrorHandler)
       .then((data) => {
         if (!!data.id) {
           setIsCreateNewJobLoading(false)
@@ -171,7 +187,6 @@ export const TheProject = () => {
             data.joblist.length > 0
           ) {
             updateJoblist(data.joblist)
-            // toast(`Updated: ${data.joblist.length} jobs`, { appearance: 'success' })
             toast('Ok', { appearance: 'success' })
             return
           }
@@ -180,6 +195,16 @@ export const TheProject = () => {
       })
       .catch((err) => {
         toast(err.message, { appearance: 'error' })
+        if (err instanceof HttpError && err.resStatus === 401) {
+          const url = buildUrl('/', {
+            path: 'auth/login',
+            // hash: 'contact',
+            queryParams: {
+              from: `/projects/${id}`,
+            },
+          })
+          router.history.push(url)
+        }
         setIsCreateNewJobLoading(false)
       })
   }, [

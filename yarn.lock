@@ -1809,10 +1809,10 @@
   resolved "https://registry.yarnpkg.com/@types/linkify-it/-/linkify-it-2.1.0.tgz#ea3dd64c4805597311790b61e872cbd1ed2cd806"
   integrity sha512-Q7DYAOi9O/+cLLhdaSvKdaumWyHbm7HAk/bFwwyTuU0arR5yyCeW5GOoqt4tJTpDRxhpx9Q8kQL6vMpuw9hDSw==
 
-"@types/lodash@^4.14.161":
-  version "4.14.161"
-  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.161.tgz#a21ca0777dabc6e4f44f3d07f37b765f54188b18"
-  integrity sha512-EP6O3Jkr7bXvZZSZYlsgt5DIjiGr0dXP1/jVEwVLTFgg0d+3lWVQkRavYVQszV7dYUwvg0B8R0MBDpcmXg7XIA==
+"@types/lodash@^4.14.162":
+  version "4.14.162"
+  resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.162.tgz#65d78c397e0d883f44afbf1f7ba9867022411470"
+  integrity sha512-alvcho1kRUnnD1Gcl4J+hK0eencvzq9rmzvFPRmP5rPHx9VVsJj6bKLTATPVf9ktgv4ujzh7T+XWKp+jhuODig==
 
 "@types/markdown-it@^10.0.2":
   version "10.0.2"
@@ -3092,6 +3092,11 @@ buffer@^4.3.0:
     base64-js "^1.0.2"
     ieee754 "^1.1.4"
     isarray "^1.0.0"
+
+build-url@^6.0.1:
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/build-url/-/build-url-6.0.1.tgz#b16505136248e24b1b6d7ccab99c7ee73cd962a7"
+  integrity sha512-FEmyP+3hCVoBBxGZEfC8WCTvqASZb+QOvTznddKCBgdxZFqTww1+7vtZP0TUIL0/8sup0m0QpKaOaj/V4Mol0w==
 
 builtin-status-codes@^3.0.0:
   version "3.0.0"
