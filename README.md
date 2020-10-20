@@ -1,7 +1,11 @@
-# my-remont-2020 frontend.demo (CRA based)
+# my-remont-2020/frontend.demo (MVP CRA based)
+
+Fullstack приложение для мониторинга затрат на процесс ремонта квартиры **(реализация MVP)**
 
 ## Roadmap
 
+- [x] [envs](#envs)
+- [x] [quick deploy](#deploy-app)
 - [ ] **git hooks**
 - [ ] UX
   - [ ] личный кабинет (?)
@@ -14,17 +18,15 @@
         - [ ] findOne for the user
   - [ ] неавториз. польз. должен видеть только общую информацию о ремонтах (?)
     - [ ] общая аналитика по всем ремонтам на главной
-      - [ ] `/`
+      - [ ] _HomePage_
         - [x] allow find all projects free (gql)
   - [ ] открытие ссылок `description` в новом окне
-  - [ ] registry service
+  - [ ] _Auth pages: registry service_
     - [x] `/auth/sign-up`
     - [ ] `/auth/forgot-password`
-      - [ ] page
-      - [ ] API
     - [x] email confirmation mechanism
       - [ ] https for MVP?
-    - [x] **RESTful api**
+    - [x] login/logout mechanism
   - [ ] 2 balances
     > (Баланс в бухгалтерии считается только как разница между сделанными и оплаченными работами) Один на фактическую дату (где будет только факт работ и оплат). Другой - на плановую дату (где будет факт+план). Думать про 2 баланса должна система и разработчик. А не конечный пользователь. А у конечного пользователя может возникнуть ситуация, когда неожиданно решено будет закрытыть/приостановить проект. В этом случае нужно будет закрыть расчёты по состоянию на эту дату. И без аналитики реально закрытые работы на дату - этого не сделать (только плановые работы будут в системе)
   - [x] DB for dev mode
@@ -54,6 +56,24 @@
 REACT_APP_API_ENDPOINT=http://localhost:1337
 REACT_APP_SOCKET_ENDPOINT=http://localhost:1337
 REACT_APP_COOKIE_MAXAGE_IN_DAYS=5
+```
+
+## deploy-app
+
+### `deploy-app init`
+```json
+{
+  "prod:demo": {
+    "user": "deploy",
+    "host": "selection4test.ru",
+    "port": "22",
+    "files": "./build/*",
+    "path": "/home/my-remont-2020/backend/public/demo",
+    "pre-deploy-local": "yarn build"
+  },
+  "dev": {},
+  "staging": {}
+}
 ```
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
