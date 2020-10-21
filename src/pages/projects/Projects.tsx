@@ -348,7 +348,7 @@ export const Projects = () => {
   // const confirm = useConfirm()
   const prompt = usePrompt()
 
-  const handleCreateJob = useCallback(() => {
+  const handleCreateProject = useCallback(() => {
     if (!userData?.id) {
       toast('Необходима авторизация', { appearance: 'error' })
       return
@@ -378,7 +378,7 @@ export const Projects = () => {
           })
       })
       .catch((err: any) => {
-        toast(err?.message || 'handleCreateJob: Declined', {
+        toast(err?.message || 'handleCreateProject: Declined', {
           appearance: 'error',
         })
       })
@@ -438,7 +438,7 @@ export const Projects = () => {
               <Button
                 size="small"
                 variant="outlined"
-                onClick={handleCreateJob}
+                onClick={handleCreateProject}
                 startIcon={<AddIcon />}
                 disabled={isLoading || !isLoaded}
               >

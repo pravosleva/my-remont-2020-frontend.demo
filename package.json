@@ -92,7 +92,8 @@
     "start": "node scripts/start.js",
     "prebuild": "yarn format && prettier --write .",
     "build": "node scripts/build.js",
-    "postbuild": "bash ./postbuild.sh",
+    "build:local-prod": "yarn build && bash ./postbuild.sh",
+    "build:remote-prod": "yarn deploy-app -d prod:demo",
     "test": "node scripts/test.js",
     "format": "prettier --write \"**/*.{js,ts,tsx}\""
   },
