@@ -1,4 +1,6 @@
-# my-remont-2020/frontend.demo (MVP CRA based)
+# my-remont-2020/frontend.demo
+
+**MVP CRA based**
 
 Fullstack приложение для мониторинга затрат на процесс ремонта квартиры **(реализация MVP)**
 
