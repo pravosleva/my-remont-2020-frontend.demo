@@ -51,7 +51,6 @@ Fullstack приложение для мониторинга затрат на �
     - [ ] общая аналитика по всем ремонтам на главной
       - [ ] _HomePage_
         - [x] allow find all projects free (gql)
-  - [ ] открытие ссылок `description` в новом окне
   - [ ] _Auth pages: registry service_
     - [ ] `/auth/forgot-password`
       - [ ] frontend
