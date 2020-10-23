@@ -2,6 +2,16 @@
   "name": "my-remont-2020_frontend.demo",
   "version": "0.1.0",
   "private": true,
+  "scripts": {
+    "analyze": "node scripts/analyze.js",
+    "start": "node scripts/start.js",
+    "prebuild": "yarn format && prettier --write .",
+    "build": "node scripts/build.js",
+    "build:local-prod": "yarn build && bash ./postbuild.sh",
+    "build:remote-prod": "yarn deploy-app -d prod:demo",
+    "test": "node scripts/test.js",
+    "format": "prettier --write \"**/*.{js,ts,tsx}\""
+  },
   "dependencies": {
     "@babel/core": "7.9.0",
     "@material-ui/core": "^5.0.0-alpha.10",
@@ -88,15 +98,6 @@
     "workbox-webpack-plugin": "4.3.1",
     "yup": "^0.29.3"
   },
-  "scripts": {
-    "start": "node scripts/start.js",
-    "prebuild": "yarn format && prettier --write .",
-    "build": "node scripts/build.js",
-    "build:local-prod": "yarn build && bash ./postbuild.sh",
-    "build:remote-prod": "yarn deploy-app -d prod:demo",
-    "test": "node scripts/test.js",
-    "format": "prettier --write \"**/*.{js,ts,tsx}\""
-  },
   "homepage": "/demo/",
   "eslintConfig": {
     "extends": "react-app"
@@ -125,7 +126,9 @@
     "eslint-config-prettier": "^6.12.0",
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-standard": "^4.0.1",
-    "prettier": "^2.1.2"
+    "prettier": "^2.1.2",
+    "progress-bar-webpack-plugin": "^2.1.0",
+    "webpack-bundle-analyzer": "^3.9.0"
   },
   "jest": {
     "roots": [
