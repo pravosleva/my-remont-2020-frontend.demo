@@ -1,4 +1,4 @@
-import React, { useMemo, useContext, useState } from 'react'
+import React, { useMemo, useEffect } from 'react'
 import { IJob } from './interfaces'
 import { useStyles } from './styles'
 import { Grid, Typography } from '@material-ui/core'
@@ -11,9 +11,42 @@ interface IProps {
   data: IJob
 }
 
+function linkInNewTab(e: any) {
+  try {
+    const { tagName } = e?.originalTarget
+
+    if (!tagName) return
+
+    if (tagName === 'A') {
+      e.preventDefault()
+      const newLink = window.document.createElement('a')
+
+      newLink.setAttribute('href', e.originalTarget.href)
+      newLink.setAttribute('target', '_blank')
+      newLink.click()
+    }
+  } catch (err) {
+    return
+  }
+}
+
 export const Job = ({ data }: IProps) => {
   const classes = useStyles()
   const diff = useMemo(() => getDifference(data), [data])
+
+  // Links should be opened in new tab:
+  useEffect(() => {
+    const jobDescriptionMarkdown = document.querySelector('.job-description-markdown')
+
+    if (typeof window !== 'undefined') {
+      if (!!jobDescriptionMarkdown) jobDescriptionMarkdown?.addEventListener('click', linkInNewTab)
+    }
+    return () => {
+      if (typeof window !== 'undefined') {
+        if (!!jobDescriptionMarkdown) jobDescriptionMarkdown?.removeEventListener('click', linkInNewTab)
+      }
+    }
+  }, [])
 
   return (
     <div className={classes.paper}>
@@ -35,7 +68,7 @@ export const Job = ({ data }: IProps) => {
           </Grid>
         )}
         {!!data.description && (
-          <Grid item xs={12}>
+          <Grid item xs={12} className='job-description-markdown'>
             <div>
               <b>Описание</b>
             </div>
