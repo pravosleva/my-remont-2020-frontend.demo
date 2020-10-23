@@ -36,14 +36,18 @@ export const Job = ({ data }: IProps) => {
 
   // Links should be opened in new tab:
   useEffect(() => {
-    const jobDescriptionMarkdown = document.querySelector('.job-description-markdown')
+    const jobDescriptionMarkdown = document.querySelector(
+      '.job-description-markdown'
+    )
 
     if (typeof window !== 'undefined') {
-      if (!!jobDescriptionMarkdown) jobDescriptionMarkdown?.addEventListener('click', linkInNewTab)
+      if (!!jobDescriptionMarkdown)
+        jobDescriptionMarkdown?.addEventListener('click', linkInNewTab)
     }
     return () => {
       if (typeof window !== 'undefined') {
-        if (!!jobDescriptionMarkdown) jobDescriptionMarkdown?.removeEventListener('click', linkInNewTab)
+        if (!!jobDescriptionMarkdown)
+          jobDescriptionMarkdown?.removeEventListener('click', linkInNewTab)
       }
     }
   }, [])
@@ -68,7 +72,7 @@ export const Job = ({ data }: IProps) => {
           </Grid>
         )}
         {!!data.description && (
-          <Grid item xs={12} className='job-description-markdown'>
+          <Grid item xs={12} className="job-description-markdown">
             <div>
               <b>Описание</b>
             </div>

@@ -103,12 +103,14 @@ REACT_APP_COOKIE_MAXAGE_IN_DAYS=5
     "port": "22",
     "files": "./build/*",
     "path": "/home/my-remont-2020/backend/public/demo",
-    "pre-deploy-local": "yarn build"
+    "pre-deploy-local": "yarn build && yarn analyze"
   },
   "dev": {},
   "staging": {}
 }
 ```
+
+> Bundlez size analysis will be moved to `./build/analyze/*` dir.
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
