@@ -19,7 +19,6 @@ import DateFnsAdapter from '@material-ui/pickers/adapter/date-fns'
 import ruLocale from 'date-fns/locale/ru'
 import SaveIcon from '@material-ui/icons/Save'
 import { MainContext } from '~/common/context/MainContext'
-import ArrowForwardIcon from '@material-ui/icons/ArrowForward'
 
 interface IProps {
   data: IJob
@@ -67,8 +66,6 @@ export const Job = ({ data, onSetDates, isLoading }: IProps) => {
     data.realFinishDate ? new Date(data.realFinishDate) : null
   )
   const handleSunmit = () => {
-    // console.log(String(dates[0]), String(dates[1]))
-    // console.log('realFinishDate', realFinishDate)
     onSetDates(
       data._id,
       dates[0].toISOString(),
@@ -78,12 +75,12 @@ export const Job = ({ data, onSetDates, isLoading }: IProps) => {
   }
   const isSubmitDisabled = useMemo(
     () =>
-      new Date(data.plannedStartDate).getTime() ===
+      (!dates[0]) || (new Date(data.plannedStartDate).getTime() ===
         new Date(dates[0]).getTime() &&
       new Date(data.plannedFinishDate).getTime() ===
         new Date(dates[1]).getTime() &&
       new Date(data.realFinishDate).getTime() ===
-        new Date(realFinishDate).getTime(),
+        new Date(realFinishDate).getTime()),
     [
       dates,
       data.plannedStartDate,
@@ -167,7 +164,14 @@ export const Job = ({ data, onSetDates, isLoading }: IProps) => {
                 toolbarPlaceholder="Финиш"
                 value={realFinishDate}
                 onChange={(newValue) => setRealFinishDate(newValue)}
-                renderInput={(props) => <TextField size="small" {...props} variant="outlined" fullWidth />}
+                renderInput={(props) => (
+                  <TextField
+                    size="small"
+                    {...props}
+                    variant="outlined"
+                    fullWidth
+                  />
+                )}
                 disabled={!isOwner}
               />
             </div>
