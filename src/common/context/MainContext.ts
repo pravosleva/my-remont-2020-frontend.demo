@@ -39,6 +39,9 @@ export interface IJob {
   // TODO:
   owners: any[]
   executors: any[]
+  plannedStartDate?: string
+  plannedFinishDate?: string
+  realFinishDate?: string
 }
 
 declare var io: {

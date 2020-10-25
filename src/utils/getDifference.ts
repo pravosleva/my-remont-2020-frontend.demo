@@ -1,4 +1,5 @@
-import { IJob } from '~/pages/projects/[id]/components/Joblist/components/Job/interfaces'
+// import { IJob } from '~/pages/projects/[id]/components/Joblist/components/Job/interfaces'
+import { IJob } from '~/common/context/MainContext'
 
 export const getDifference = (data: IJob) => {
   return (

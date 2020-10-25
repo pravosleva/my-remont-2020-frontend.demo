@@ -5,7 +5,8 @@ import React, {
   useEffect,
   useMemo,
 } from 'react'
-import { IJob, Job } from './components/Job'
+import { Job } from './components/Job'
+import { IJob } from '~/common/context/MainContext'
 import { IProps } from './interfaces'
 import {
   Accordion,
@@ -14,6 +15,7 @@ import {
   AccordionActions,
   Button as MuiButton,
   Checkbox,
+  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
@@ -23,7 +25,6 @@ import {
   FormControlLabel,
   FormGroup,
   TextField,
-  CircularProgress,
   withStyles,
   Typography,
   Grid,
@@ -419,6 +420,28 @@ export const Joblist = ({ remontId }: IProps) => {
     [prompt, changeJobFieldPromise, toast, handleSubmit]
   )
   const { width } = useWindowSize()
+  const handleSetDates = useCallback(
+    (id, plannedStartDate, plannedFinishDate) => () => {
+      changeJobFieldPromise(id, 'plannedStartDate', plannedStartDate)()
+        .then(() => {
+          changeJobFieldPromise(id, 'plannedFinishDate', plannedFinishDate)()
+            .then(handleSubmit)
+            .catch((msg) => {
+              console.log(msg)
+              toast(msg || 'plannedFinishDate: Declined', {
+                appearance: 'error',
+              })
+            })
+        })
+        .catch((msg) => {
+          console.log(msg)
+          toast(msg || 'plannedStartDate: Declined', {
+            appearance: 'error',
+          })
+        })
+    },
+    [prompt, changeJobFieldPromise, toast, handleSubmit]
+  )
 
   return (
     <>
@@ -469,7 +492,12 @@ export const Joblist = ({ remontId }: IProps) => {
                 </AccordionSummary>
                 <Divider />
                 <AccordionDetails className={classes.details}>
-                  <Job data={data} key={getUniqueKey(data)} />
+                  <Job
+                    data={data}
+                    key={getUniqueKey(data)}
+                    onSetDates={handleSetDates}
+                    isLoading={isLoading}
+                  />
                 </AccordionDetails>
                 {isOwner && (
                   <>
