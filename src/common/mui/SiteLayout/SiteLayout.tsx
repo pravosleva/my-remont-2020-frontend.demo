@@ -53,6 +53,14 @@ export const SiteLayout = ({ socket, children }: any) => {
   const handleChangeJobField = useCallback(
     (id, fieldName: string, value: number | boolean | string) => () => {
       try {
+        if (
+          (fieldName === 'realFinishDate' ||
+            fieldName === 'plannedStartDate' ||
+            fieldName === 'plannedFinishDate') &&
+          !value
+        ) {
+          return Promise.resolve()
+        }
         dispatch({ type: 'UPDATE_JOB_FIELD', id, fieldName, payload: value })
         return Promise.resolve()
       } catch (err) {

@@ -13,6 +13,7 @@ import {
   DateRangeDelimiter,
   DateRange as TDateRange,
   LocalizationProvider,
+  MobileDatePicker,
 } from '@material-ui/pickers'
 import DateFnsAdapter from '@material-ui/pickers/adapter/date-fns'
 import ruLocale from 'date-fns/locale/ru'
@@ -22,12 +23,21 @@ import ArrowForwardIcon from '@material-ui/icons/ArrowForward'
 
 interface IProps {
   data: IJob
-  onSetDates: (id: string, psd: string, pfd: string) => () => void
+  onSetDates: (
+    id: string,
+    psd: string,
+    pfd: string,
+    realFinishDate: string
+  ) => () => void
   isLoading: boolean
 }
 
 export const Job = ({ data, onSetDates, isLoading }: IProps) => {
-  const { userData } = useContext(MainContext)
+  const { userData, remontLogic } = useContext(MainContext)
+  const isOwner: boolean = useMemo(() => remontLogic?.isOwner(userData?.id), [
+    remontLogic,
+    userData,
+  ])
   const classes = useStyles()
   const diff = useMemo(() => getDifference(data), [data])
 
@@ -53,17 +63,34 @@ export const Job = ({ data, onSetDates, isLoading }: IProps) => {
     data.plannedStartDate ? new Date(data.plannedStartDate) : null,
     data.plannedFinishDate ? new Date(data.plannedFinishDate) : null,
   ])
+  const [realFinishDate, setRealFinishDate] = useState<Date>(
+    data.realFinishDate ? new Date(data.realFinishDate) : null
+  )
   const handleSunmit = () => {
     // console.log(String(dates[0]), String(dates[1]))
-    onSetDates(data._id, dates[0].toISOString(), dates[1].toISOString())()
+    // console.log('realFinishDate', realFinishDate)
+    onSetDates(
+      data._id,
+      dates[0].toISOString(),
+      dates[1].toISOString(),
+      realFinishDate.toISOString()
+    )()
   }
   const isSubmitDisabled = useMemo(
     () =>
       new Date(data.plannedStartDate).getTime() ===
         new Date(dates[0]).getTime() &&
       new Date(data.plannedFinishDate).getTime() ===
-        new Date(dates[1]).getTime(),
-    [dates, data.plannedStartDate, data.plannedFinishDate]
+        new Date(dates[1]).getTime() &&
+      new Date(data.realFinishDate).getTime() ===
+        new Date(realFinishDate).getTime(),
+    [
+      dates,
+      data.plannedStartDate,
+      data.plannedFinishDate,
+      data.realFinishDate,
+      realFinishDate,
+    ]
   )
 
   return (
@@ -74,32 +101,48 @@ export const Job = ({ data, onSetDates, isLoading }: IProps) => {
             <div className={classes.title}>
               <b>План</b>
             </div>
-            <DateRangePicker
-              calendars={1}
-              value={dates}
-              onChange={(newValue) => {
-                setStartDate(newValue)
-              }}
-              disabled={!userData}
-              renderInput={(startProps, endProps) => (
-                <>
-                  <TextField
-                    size="small"
-                    {...startProps}
-                    label="Начало работ"
-                    helperText="Фактическая дата"
-                  />
-                  <DateRangeDelimiter>to</DateRangeDelimiter>
-                  <TextField
-                    size="small"
-                    {...endProps}
-                    label="Конец работ"
-                    helperText="Планируемая дата"
-                  />
-                </>
-              )}
-            />
-            {!!userData && (
+            <div style={{ marginBottom: '15px' }}>
+              <DateRangePicker
+                calendars={1}
+                value={dates}
+                onChange={(newValue) => {
+                  setStartDate(newValue)
+                }}
+                disabled={!isOwner}
+                renderInput={(startProps, endProps) => (
+                  <>
+                    <TextField
+                      size="small"
+                      {...startProps}
+                      label="Начало работ"
+                      helperText="Фактическая дата"
+                      fullWidth
+                    />
+                    <DateRangeDelimiter>to</DateRangeDelimiter>
+                    <TextField
+                      size="small"
+                      {...endProps}
+                      label="Конец работ"
+                      helperText="Планируемая дата"
+                      fullWidth
+                    />
+                  </>
+                )}
+              />
+            </div>
+            <div style={{ marginBottom: '15px' }}>
+              <MobileDatePicker
+                // clearable
+                label="Дата завершения"
+                inputFormat="MM/dd/yyyy"
+                toolbarPlaceholder="Финиш"
+                value={realFinishDate}
+                onChange={(newValue) => setRealFinishDate(newValue)}
+                renderInput={(props) => <TextField size="small" {...props} />}
+                disabled={!isOwner}
+              />
+            </div>
+            {isOwner && (
               <Button
                 fullWidth
                 variant="outlined"

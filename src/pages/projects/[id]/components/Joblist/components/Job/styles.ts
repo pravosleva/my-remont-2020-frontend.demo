@@ -10,6 +10,7 @@ export const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(1),
   },
   paper: {
+    width: '100%',
     padding: theme.spacing(1),
   },
   dangerText: {

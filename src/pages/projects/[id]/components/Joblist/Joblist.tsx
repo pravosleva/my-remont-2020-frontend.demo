@@ -421,20 +421,29 @@ export const Joblist = ({ remontId }: IProps) => {
   )
   const { width } = useWindowSize()
   const handleSetDates = useCallback(
-    (id, plannedStartDate, plannedFinishDate) => () => {
+    (id, plannedStartDate, plannedFinishDate, realFinishDate) => () => {
       changeJobFieldPromise(id, 'plannedStartDate', plannedStartDate)()
         .then(() => {
           changeJobFieldPromise(id, 'plannedFinishDate', plannedFinishDate)()
-            .then(handleSubmit)
+            .then(() => {
+              changeJobFieldPromise(id, 'realFinishDate', realFinishDate)()
+                .then(handleSubmit)
+                .catch((msg) => {
+                  // console.log(msg)
+                  toast(msg || 'realFinishDate: Declined', {
+                    appearance: 'error',
+                  })
+                })
+            })
             .catch((msg) => {
-              console.log(msg)
+              // console.log(msg)
               toast(msg || 'plannedFinishDate: Declined', {
                 appearance: 'error',
               })
             })
         })
         .catch((msg) => {
-          console.log(msg)
+          // console.log(msg)
           toast(msg || 'plannedStartDate: Declined', {
             appearance: 'error',
           })
