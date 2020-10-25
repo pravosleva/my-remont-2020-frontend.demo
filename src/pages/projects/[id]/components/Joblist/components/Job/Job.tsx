@@ -99,6 +99,35 @@ export const Job = ({ data, onSetDates, isLoading }: IProps) => {
         <Grid container direction="column" spacing={2}>
           <Grid item>
             <div className={classes.title}>
+              <b>Итог</b>
+            </div>
+            <Typography gutterBottom variant="body2" color="textSecondary">
+              Цена за работу: {getPrettyPrice(data.priceJobs)}
+            </Typography>
+            <Typography gutterBottom variant="body2" color="textSecondary">
+              Цена за материалы: {getPrettyPrice(data.priceMaterials)}
+            </Typography>
+            <Typography gutterBottom variant="body2" color="textSecondary">
+              Цена за доставку: {getPrettyPrice(data.priceDelivery)}
+            </Typography>
+          </Grid>
+          <Grid item>
+            <Typography gutterBottom variant="h5">
+              Оплачено: {getPrettyPrice(data.payed)}
+            </Typography>
+          </Grid>
+          <Grid item>
+            <b
+              className={clsx({
+                [classes.dangerText]: diff < 0,
+                [classes.successText]: diff >= 0,
+              })}
+            >
+              Остаток: {getPrettyPrice(diff)}
+            </b>
+          </Grid>
+          <Grid item>
+            <div className={classes.title}>
               <b>План</b>
             </div>
             <div style={{ marginBottom: '15px' }}>
@@ -138,7 +167,7 @@ export const Job = ({ data, onSetDates, isLoading }: IProps) => {
                 toolbarPlaceholder="Финиш"
                 value={realFinishDate}
                 onChange={(newValue) => setRealFinishDate(newValue)}
-                renderInput={(props) => <TextField size="small" {...props} />}
+                renderInput={(props) => <TextField size="small" {...props} variant="outlined" fullWidth />}
                 disabled={!isOwner}
               />
             </div>
@@ -164,35 +193,6 @@ export const Job = ({ data, onSetDates, isLoading }: IProps) => {
                 Save
               </Button>
             )}
-          </Grid>
-          <Grid item>
-            <div className={classes.title}>
-              <b>Итог</b>
-            </div>
-            <Typography gutterBottom variant="body2" color="textSecondary">
-              Цена за работу: {getPrettyPrice(data.priceJobs)}
-            </Typography>
-            <Typography gutterBottom variant="body2" color="textSecondary">
-              Цена за материалы: {getPrettyPrice(data.priceMaterials)}
-            </Typography>
-            <Typography gutterBottom variant="body2" color="textSecondary">
-              Цена за доставку: {getPrettyPrice(data.priceDelivery)}
-            </Typography>
-          </Grid>
-          <Grid item>
-            <Typography gutterBottom variant="h5">
-              Оплачено: {getPrettyPrice(data.payed)}
-            </Typography>
-          </Grid>
-          <Grid item>
-            <b
-              className={clsx({
-                [classes.dangerText]: diff < 0,
-                [classes.successText]: diff >= 0,
-              })}
-            >
-              Остаток: {getPrettyPrice(diff)}
-            </b>
           </Grid>
           {!!data.comment && (
             <Grid item xs={12}>
