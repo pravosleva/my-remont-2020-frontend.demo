@@ -75,12 +75,13 @@ export const Job = ({ data, onSetDates, isLoading }: IProps) => {
   }
   const isSubmitDisabled = useMemo(
     () =>
-      (!dates[0]) || (new Date(data.plannedStartDate).getTime() ===
+      !dates[0] ||
+      (new Date(data.plannedStartDate).getTime() ===
         new Date(dates[0]).getTime() &&
-      new Date(data.plannedFinishDate).getTime() ===
-        new Date(dates[1]).getTime() &&
-      new Date(data.realFinishDate).getTime() ===
-        new Date(realFinishDate).getTime()),
+        new Date(data.plannedFinishDate).getTime() ===
+          new Date(dates[1]).getTime() &&
+        new Date(data.realFinishDate).getTime() ===
+          new Date(realFinishDate).getTime()),
     [
       dates,
       data.plannedStartDate,
