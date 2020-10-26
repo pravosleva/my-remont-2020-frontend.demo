@@ -405,6 +405,9 @@ export const Projects = () => {
                 />
                 {isOwner && (
                   <Chip
+                    className={classes.chip}
+                    variant="outlined"
+                    // size="small"
                     avatar={
                       <Avatar>{myUserName.slice(0, 1).toUpperCase()}</Avatar>
                     }

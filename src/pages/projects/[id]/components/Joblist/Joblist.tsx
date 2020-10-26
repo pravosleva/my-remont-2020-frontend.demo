@@ -537,7 +537,9 @@ export const Joblist = ({ remontId }: IProps) => {
                   onClose={handleCloseEditor}
                   scroll="paper"
                   aria-labelledby={`scroll-dialog-title_${data._id}`}
-                  fullScreen
+                  fullWidth={width > 767}
+                  fullScreen={width <= 767}
+                  maxWidth="lg"
                   // @ts-ignore
                   TransitionComponent={TransitionUp}
                 >
@@ -550,7 +552,7 @@ export const Joblist = ({ remontId }: IProps) => {
                   >
                     <MDEditor
                       value={localMD}
-                      style={{ minHeight: '300px' }}
+                      style={{ minHeight: width > 767 ? '450px' : '300px' }}
                       renderHTML={(text) => mdParser.render(text)}
                       onChange={({ text }) => {
                         // if (!!text) changeJobFieldPromise(data._id, 'description', text)()
@@ -562,11 +564,11 @@ export const Joblist = ({ remontId }: IProps) => {
                         )
                       }}
                       config={{
-                        view: { menu: false, md: true, html: false },
+                        view: { menu: false, md: true, html: width > 767 },
                         canView: {
                           menu: false,
                           md: true,
-                          html: false,
+                          html: width > 767,
                           fullScreen: true,
                           hideMenu: true,
                         },

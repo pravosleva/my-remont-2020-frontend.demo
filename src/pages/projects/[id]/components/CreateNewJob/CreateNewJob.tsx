@@ -14,6 +14,7 @@ import { IState as ICreateJobState } from '~/pages/projects/[id]/createNewProjec
 import { useStyles } from './styles'
 import SaveIcon from '@material-ui/icons/Save'
 import Slide from '@material-ui/core/Slide'
+import { useWindowSize } from 'react-use'
 
 const TransitionUp = React.forwardRef(function Transition(props, ref) {
   // @ts-ignore
@@ -41,6 +42,7 @@ export const CreateNewJob = ({
   onSave: () => void
 }) => {
   const classes = useStyles()
+  const { width } = useWindowSize()
 
   return (
     <Dialog
@@ -48,7 +50,9 @@ export const CreateNewJob = ({
       // onClose={() => {}}
       scroll="paper"
       aria-labelledby={`scroll-dialog-title_NEW_JOB`}
-      fullScreen
+      fullWidth={width > 767}
+      fullScreen={width <= 767}
+      maxWidth="md"
       // @ts-ignore
       TransitionComponent={TransitionUp}
     >
@@ -70,6 +74,9 @@ export const CreateNewJob = ({
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   onChangeField('name', e.target.value)
                 }}
+                // TODO: Use Formik
+                // error={!name}
+                helperText={!name ? 'Поле не может быть пустым' : undefined}
               />
             </Grid>
             <Grid item xs={12} md={6}>
@@ -107,7 +114,7 @@ export const CreateNewJob = ({
           variant="outlined"
           color="primary"
           size="small"
-          disabled={isLoading}
+          disabled={isLoading || !name}
           endIcon={
             isLoading ? (
               <CircularProgress

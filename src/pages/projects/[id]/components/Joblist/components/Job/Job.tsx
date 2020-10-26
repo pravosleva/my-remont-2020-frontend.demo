@@ -128,7 +128,7 @@ export const Job = ({ data, onSetDates, isLoading }: IProps) => {
             <div className={classes.title}>
               <b>План</b>
             </div>
-            <div style={{ marginBottom: '15px' }}>
+            <div style={{ marginBottom: '20px' }}>
               <DateRangePicker
                 calendars={1}
                 value={dates}
@@ -141,23 +141,25 @@ export const Job = ({ data, onSetDates, isLoading }: IProps) => {
                     <TextField
                       size="small"
                       {...startProps}
-                      label="Начало работ"
-                      helperText="Фактическая дата"
+                      label="Начало работ (факт)"
+                      // helperText="Фактическая дата"
+                      helperText={undefined}
                       fullWidth
                     />
                     <DateRangeDelimiter>to</DateRangeDelimiter>
                     <TextField
                       size="small"
                       {...endProps}
-                      label="Конец работ"
-                      helperText="Планируемая дата"
+                      label="Конец работ (план)"
+                      // helperText="Планируемая дата"
+                      helperText={undefined}
                       fullWidth
                     />
                   </>
                 )}
               />
             </div>
-            <div style={{ marginBottom: '15px' }}>
+            <div>
               <MobileDatePicker
                 // clearable
                 label="Дата завершения"
@@ -176,27 +178,29 @@ export const Job = ({ data, onSetDates, isLoading }: IProps) => {
                 disabled={!isOwner}
               />
             </div>
-            {isOwner && (
-              <Button
-                fullWidth
-                variant="outlined"
-                color="primary"
-                onClick={handleSunmit}
-                disabled={isSubmitDisabled}
-                endIcon={
-                  isLoading ? (
-                    <CircularProgress
-                      size={20}
-                      color="primary"
-                      style={{ marginLeft: 'auto' }}
-                    />
-                  ) : (
-                    <SaveIcon />
-                  )
-                }
-              >
-                Save
-              </Button>
+            {isOwner && !isSubmitDisabled && (
+              <div style={{ marginTop: '20px' }}>
+                <Button
+                  fullWidth
+                  variant="outlined"
+                  color="primary"
+                  onClick={handleSunmit}
+                  disabled={isSubmitDisabled}
+                  endIcon={
+                    isLoading ? (
+                      <CircularProgress
+                        size={20}
+                        color="primary"
+                        style={{ marginLeft: 'auto' }}
+                      />
+                    ) : (
+                      <SaveIcon />
+                    )
+                  }
+                >
+                  Save
+                </Button>
+              </div>
             )}
           </Grid>
           {!!data.comment && (

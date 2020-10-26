@@ -32,5 +32,8 @@ export const useStyles = makeStyles((theme: Theme) =>
       flexDirection: 'row',
       justifyContent: 'flex-end',
     },
+    chip: {
+      backgroundColor: '#FFF',
+    },
   })
 )

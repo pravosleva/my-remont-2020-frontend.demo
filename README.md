@@ -78,6 +78,12 @@ Fullstack приложение для мониторинга затрат на �
   - [x] http
   - [ ] api
 - [x] GraphQL
+- [x] `package.json` for example:
+```json
+"script": {
+  "prebuild": "yarn format && prettier --write ."
+}
+```
 
 ## envs
 
