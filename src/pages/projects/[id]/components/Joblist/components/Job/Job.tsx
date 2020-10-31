@@ -66,11 +66,14 @@ export const Job = ({ data, onSetDates, isLoading }: IProps) => {
     data.realFinishDate ? new Date(data.realFinishDate) : null
   )
   const handleSunmit = () => {
+    console.log(dates)
+    console.log(dates[0].toISOString())
+    console.log(dates[1].toISOString())
     onSetDates(
       data._id,
-      dates[0].toISOString(),
-      dates[1].toISOString(),
-      realFinishDate.toISOString()
+      !!dates[0] ? dates[0].toISOString() : null,
+      !!dates[1] ? dates[1].toISOString() : null,
+      !!realFinishDate ? realFinishDate.toISOString() : null
     )()
   }
   const isSubmitDisabled = useMemo(
