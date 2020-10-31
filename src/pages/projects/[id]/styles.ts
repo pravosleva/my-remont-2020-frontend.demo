@@ -10,5 +10,15 @@ export const useStyles = makeStyles((theme: Theme) =>
         marginRight: theme.spacing(1),
       },
     },
+    circularProgressCentered: {
+      display: 'flex',
+      justifyContent: 'center',
+    },
+    desktopStickyInfoBox: {
+      [theme.breakpoints.up('md')]: {
+        position: 'sticky',
+        top: '0px',
+      },
+    },
   })
 )

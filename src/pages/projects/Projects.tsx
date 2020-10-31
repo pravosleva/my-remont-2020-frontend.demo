@@ -14,6 +14,7 @@ import { HttpError } from '~/utils/errors/http'
 import {
   Avatar,
   Button,
+  CircularProgress,
   Chip,
   Grid,
   List,
@@ -222,6 +223,9 @@ export const Projects = () => {
           count.current += 1
           setProjects(ps)
         },
+        onFail: (msg: string) => {
+          toast(msg, { appearance: 'error' })
+        }
       })
     }
   }, [userData, setProjects])
@@ -427,14 +431,18 @@ export const Projects = () => {
     <>
       <h1>Проекты</h1>
       <Grid container spacing={2}>
-        <Grid item xs={12} md={6}>
-          {isLoading && <b>Loading...</b>}
-          {isLoaded && projects.length > 0 && (
+        {isLoading && (
+          <Grid item xs={12} md={6}>
+            <CircularProgress />
+          </Grid>
+        )}
+        {isLoaded && projects.length > 0 && (
+          <Grid item xs={12} md={6}>
             <List className={classes.root} subheader={<li />}>
               {MemoizedListing}
             </List>
-          )}
-        </Grid>
+          </Grid>
+        )}
         {!!userData?.id && (
           <Grid item xs={12} md={6}>
             <div className={classes.rightSpace}>

@@ -165,8 +165,9 @@ export const Job = ({ data, onSetDates, isLoading }: IProps) => {
             <div>
               <MobileDatePicker
                 // clearable
+                // mask='__.__.____'
                 label="Дата завершения"
-                inputFormat="MM/dd/yyyy"
+                inputFormat="dd.MM.yyyy"
                 toolbarPlaceholder="Финиш"
                 value={realFinishDate}
                 onChange={(newValue) => setRealFinishDate(newValue)}

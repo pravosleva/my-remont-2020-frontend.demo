@@ -10,7 +10,7 @@ import { useRemoteDataByFetch, TAns } from '~/common/hooks'
 import { getApiUrl } from '~/utils/getApiUrl'
 import { useParams } from 'react-router-dom'
 import { Joblist } from './components/Joblist'
-import { Grid, Button } from '@material-ui/core'
+import { Grid, Button, CircularProgress } from '@material-ui/core'
 import { TotalInfo } from './components/TotalInfo'
 import { MainContext } from '~/common/context/MainContext'
 import { useCookies } from 'react-cookie'
@@ -228,10 +228,10 @@ export const TheProject = () => {
       <h1>{projectName}</h1>
       <Grid container spacing={2}>
         <Grid item xs={12} md={6}>
-          <Grid container spacing={2}>
+          <Grid container spacing={2} className={classes.desktopStickyInfoBox}>
             {isLoading && (
-              <Grid item xs={12}>
-                <b>Loading...</b>
+              <Grid item xs={12} className={classes.circularProgressCentered}>
+                <CircularProgress />
               </Grid>
             )}
             {isLoaded && (

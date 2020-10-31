@@ -35,5 +35,9 @@ export const useStyles = makeStyles((theme: Theme) =>
     chip: {
       backgroundColor: '#FFF',
     },
+    circularProgressCentered: {
+      display: 'flex',
+      justifyContent: 'center',
+    }
   })
 )
