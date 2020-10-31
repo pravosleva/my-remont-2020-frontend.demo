@@ -274,6 +274,7 @@ export const TheProject = () => {
                 color="primary"
                 disabled={isLoading}
                 // endIcon={<BuildIcon />}
+                className={filterState.selectedGroup !== 'all' ? 'inactive' : ''}
               >
                 Все
               </Button>
@@ -288,6 +289,7 @@ export const TheProject = () => {
                 color="primary"
                 disabled={isLoading}
                 // endIcon={<BuildIcon />}
+                className={filterState.selectedGroup !== 'isDone' ? 'inactive' : ''}
               >
                 Завершенные
               </Button>
@@ -302,6 +304,7 @@ export const TheProject = () => {
                 color="primary"
                 disabled={isLoading}
                 // endIcon={<BuildIcon />}
+                className={filterState.selectedGroup !== 'inProgress' ? 'inactive' : ''}
               >
                 В процессе
               </Button>
