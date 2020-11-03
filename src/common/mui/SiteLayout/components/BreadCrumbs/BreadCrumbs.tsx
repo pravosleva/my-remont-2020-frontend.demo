@@ -78,7 +78,7 @@ export const BreadCrumbs = () => {
         {isUserDataLoading ? (
           <span>Loading...</span>
         ) : !userData ? (
-          <NavLink to="/auth/login">Вход</NavLink>
+          <NavLink to={!!remontLogic?.id ? `/auth/login?from=${encodeURIComponent(`/projects/${remontLogic?.id}`)}` : "/auth/login"}>Вход</NavLink>
         ) : (
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <NavLink to="/profile" style={{ marginLeft: '10px' }}>
