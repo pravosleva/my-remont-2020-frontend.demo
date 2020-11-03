@@ -10,7 +10,7 @@ import { useRemoteDataByFetch, TAns } from '~/common/hooks'
 import { getApiUrl } from '~/utils/getApiUrl'
 import { useParams } from 'react-router-dom'
 import { Joblist } from './components/Joblist'
-import { Grid, Button, CircularProgress } from '@material-ui/core'
+import { Grid, Button, CircularProgress, Paper } from '@material-ui/core'
 import { TotalInfo } from './components/TotalInfo'
 import { MainContext } from '~/common/context/MainContext'
 import { useCookies } from 'react-cookie'
@@ -25,6 +25,7 @@ import { useRouter } from '~/common/hooks/useRouter'
 import buildUrl from 'build-url'
 import { HttpError } from '~/utils/errors/http/HttpError'
 import { httpErrorHandler } from '~/utils/errors/http/fetch'
+import clsx from 'clsx'
 
 const apiUrl = getApiUrl()
 const isDev = process.env.NODE_ENV === 'development'
@@ -264,50 +265,52 @@ export const TheProject = () => {
         </Grid>
         <Grid item xs={12} md={6}>
           <Grid container spacing={2}>
-            <Grid item xs={12} className={classes.buttonsWrapper}>
-              <Button
-                onClick={onSelectAll}
-                size="small"
-                variant={
-                  filterState.selectedGroup === 'all' ? 'contained' : 'outlined'
-                }
-                color="primary"
-                disabled={isLoading}
-                // endIcon={<BuildIcon />}
-                className={filterState.selectedGroup !== 'all' ? 'inactive' : ''}
-              >
-                Все
-              </Button>
-              <Button
-                onClick={onSelectIsDone}
-                size="small"
-                variant={
-                  filterState.selectedGroup === 'isDone'
-                    ? 'contained'
-                    : 'outlined'
-                }
-                color="primary"
-                disabled={isLoading}
-                // endIcon={<BuildIcon />}
-                className={filterState.selectedGroup !== 'isDone' ? 'inactive' : ''}
-              >
-                Завершенные
-              </Button>
-              <Button
-                onClick={onSelectInProgress}
-                size="small"
-                variant={
-                  filterState.selectedGroup === 'inProgress'
-                    ? 'contained'
-                    : 'outlined'
-                }
-                color="primary"
-                disabled={isLoading}
-                // endIcon={<BuildIcon />}
-                className={filterState.selectedGroup !== 'inProgress' ? 'inactive' : ''}
-              >
-                В процессе
-              </Button>
+            <Grid item xs={12} className={classes.stickyBox}>
+              <Paper className={clsx(classes.paper, classes.buttonsWrapper)}>
+                <Button
+                  onClick={onSelectAll}
+                  size="small"
+                  variant={
+                    filterState.selectedGroup === 'all' ? 'contained' : 'outlined'
+                  }
+                  color="primary"
+                  disabled={isLoading}
+                  // endIcon={<BuildIcon />}
+                  className={filterState.selectedGroup !== 'all' ? 'inactive' : ''}
+                >
+                  Все
+                </Button>
+                <Button
+                  onClick={onSelectIsDone}
+                  size="small"
+                  variant={
+                    filterState.selectedGroup === 'isDone'
+                      ? 'contained'
+                      : 'outlined'
+                  }
+                  color="primary"
+                  disabled={isLoading}
+                  // endIcon={<BuildIcon />}
+                  className={filterState.selectedGroup !== 'isDone' ? 'inactive' : ''}
+                >
+                  Завершенные
+                </Button>
+                <Button
+                  onClick={onSelectInProgress}
+                  size="small"
+                  variant={
+                    filterState.selectedGroup === 'inProgress'
+                      ? 'contained'
+                      : 'outlined'
+                  }
+                  color="primary"
+                  disabled={isLoading}
+                  // endIcon={<BuildIcon />}
+                  className={filterState.selectedGroup !== 'inProgress' ? 'inactive' : ''}
+                >
+                  В процессе
+                </Button>
+              </Paper>
             </Grid>
             <Grid item xs={12}>
               {isLoaded && <Joblist remontId={project.id} />}
