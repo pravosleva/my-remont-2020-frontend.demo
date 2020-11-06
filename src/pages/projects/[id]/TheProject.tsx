@@ -231,61 +231,65 @@ export const TheProject = () => {
   return (
     <>
       <h1>{projectName}</h1>
-      <div className={clsx(classes.fixedDesktopWidget, { [classes.openedWidget]: isWidgetOpened })}>
+      <div
+        className={clsx(classes.fixedDesktopWidget, {
+          [classes.openedWidget]: isWidgetOpened,
+        })}
+      >
         <Button
           onClick={handleToggleWidget}
           size="small"
-          variant='contained'
+          variant="contained"
           color="primary"
           className={classes.widgetTogglerBtn}
         >
           {isWidgetOpened ? 'Close' : 'Open'}
         </Button>
-            <Paper className={clsx(classes.widgetPaper, classes.buttonsWrapper)}>
-              <Button
-                onClick={onSelectAll}
-                size="small"
-                variant={
-                  filterState.selectedGroup === 'all' ? 'contained' : 'outlined'
-                }
-                color="primary"
-                disabled={isLoading}
-                // endIcon={<BuildIcon />}
-                className={filterState.selectedGroup !== 'all' ? 'inactive' : ''}
-              >
-                Все
-              </Button>
-              <Button
-                onClick={onSelectIsDone}
-                size="small"
-                variant={
-                  filterState.selectedGroup === 'isDone'
-                    ? 'contained'
-                    : 'outlined'
-                }
-                color="primary"
-                disabled={isLoading}
-                // endIcon={<BuildIcon />}
-                className={filterState.selectedGroup !== 'isDone' ? 'inactive' : ''}
-              >
-                Завершенные
-              </Button>
-              <Button
-                onClick={onSelectInProgress}
-                size="small"
-                variant={
-                  filterState.selectedGroup === 'inProgress'
-                    ? 'contained'
-                    : 'outlined'
-                }
-                color="primary"
-                disabled={isLoading}
-                // endIcon={<BuildIcon />}
-                className={filterState.selectedGroup !== 'inProgress' ? 'inactive' : ''}
-              >
-                В процессе
-              </Button>
-            </Paper>
+        <Paper className={clsx(classes.widgetPaper, classes.buttonsWrapper)}>
+          <Button
+            onClick={onSelectAll}
+            size="small"
+            variant={
+              filterState.selectedGroup === 'all' ? 'contained' : 'outlined'
+            }
+            color="primary"
+            disabled={isLoading}
+            // endIcon={<BuildIcon />}
+            className={filterState.selectedGroup !== 'all' ? 'inactive' : ''}
+          >
+            Все
+          </Button>
+          <Button
+            onClick={onSelectIsDone}
+            size="small"
+            variant={
+              filterState.selectedGroup === 'isDone' ? 'contained' : 'outlined'
+            }
+            color="primary"
+            disabled={isLoading}
+            // endIcon={<BuildIcon />}
+            className={filterState.selectedGroup !== 'isDone' ? 'inactive' : ''}
+          >
+            Завершенные
+          </Button>
+          <Button
+            onClick={onSelectInProgress}
+            size="small"
+            variant={
+              filterState.selectedGroup === 'inProgress'
+                ? 'contained'
+                : 'outlined'
+            }
+            color="primary"
+            disabled={isLoading}
+            // endIcon={<BuildIcon />}
+            className={
+              filterState.selectedGroup !== 'inProgress' ? 'inactive' : ''
+            }
+          >
+            В процессе
+          </Button>
+        </Paper>
       </div>
       <Grid container spacing={2}>
         <Grid item xs={12} md={6}>

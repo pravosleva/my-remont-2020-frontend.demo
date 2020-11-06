@@ -12,7 +12,7 @@ export const useStyles = makeStyles((theme) => ({
     width: '100%',
     maxWidth: '1000px',
     margin: '0 auto',
-    padding: theme.spacing(0, 1, 0, 1)
+    padding: theme.spacing(0, 1, 0, 1),
   },
   rightSide: {},
   leftSide: {

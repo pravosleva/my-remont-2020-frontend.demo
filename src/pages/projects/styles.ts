@@ -38,6 +38,6 @@ export const useStyles = makeStyles((theme: Theme) =>
     circularProgressCentered: {
       display: 'flex',
       justifyContent: 'center',
-    }
+    },
   })
 )

@@ -225,7 +225,7 @@ export const Projects = () => {
         },
         onFail: (msg: string) => {
           toast(msg, { appearance: 'error' })
-        }
+        },
       })
     }
   }, [userData, setProjects])
