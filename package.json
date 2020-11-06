@@ -75,6 +75,7 @@
     "react-cookie": "^4.0.3",
     "react-dev-utils": "^10.2.1",
     "react-dom": "^16.13.1",
+    "react-headroom": "^3.0.0",
     "react-json-view": "^1.19.1",
     "react-markdown": "^4.3.1",
     "react-markdown-editor-lite": "^1.2.2",
@@ -117,6 +118,7 @@
   "devDependencies": {
     "@types/lodash": "^4.14.162",
     "@types/markdown-it": "^10.0.2",
+    "@types/react-headroom": "^2.2.1",
     "@types/react-router-dom": "^5.1.5",
     "@types/react-toast-notifications": "^2.4.0",
     "@types/socket.io": "^2.1.11",

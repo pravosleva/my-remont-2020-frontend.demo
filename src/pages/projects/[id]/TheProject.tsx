@@ -223,13 +223,73 @@ export const TheProject = () => {
     userData,
   ])
   const projectName: boolean = useMemo(() => remontLogic?.name, [remontLogic])
+  const [isWidgetOpened, setWidgetOpened] = useState<boolean>(false)
+  const handleToggleWidget = () => {
+    setWidgetOpened((s) => !s)
+  }
 
   return (
     <>
       <h1>{projectName}</h1>
+      <div className={clsx(classes.fixedDesktopWidget, { [classes.openedWidget]: isWidgetOpened })}>
+        <Button
+          onClick={handleToggleWidget}
+          size="small"
+          variant='contained'
+          color="primary"
+          className={classes.widgetTogglerBtn}
+        >
+          {isWidgetOpened ? 'Close' : 'Open'}
+        </Button>
+            <Paper className={clsx(classes.widgetPaper, classes.buttonsWrapper)}>
+              <Button
+                onClick={onSelectAll}
+                size="small"
+                variant={
+                  filterState.selectedGroup === 'all' ? 'contained' : 'outlined'
+                }
+                color="primary"
+                disabled={isLoading}
+                // endIcon={<BuildIcon />}
+                className={filterState.selectedGroup !== 'all' ? 'inactive' : ''}
+              >
+                Все
+              </Button>
+              <Button
+                onClick={onSelectIsDone}
+                size="small"
+                variant={
+                  filterState.selectedGroup === 'isDone'
+                    ? 'contained'
+                    : 'outlined'
+                }
+                color="primary"
+                disabled={isLoading}
+                // endIcon={<BuildIcon />}
+                className={filterState.selectedGroup !== 'isDone' ? 'inactive' : ''}
+              >
+                Завершенные
+              </Button>
+              <Button
+                onClick={onSelectInProgress}
+                size="small"
+                variant={
+                  filterState.selectedGroup === 'inProgress'
+                    ? 'contained'
+                    : 'outlined'
+                }
+                color="primary"
+                disabled={isLoading}
+                // endIcon={<BuildIcon />}
+                className={filterState.selectedGroup !== 'inProgress' ? 'inactive' : ''}
+              >
+                В процессе
+              </Button>
+            </Paper>
+      </div>
       <Grid container spacing={2}>
         <Grid item xs={12} md={6}>
-          <Grid container spacing={2} className={classes.desktopStickyInfoBox}>
+          <Grid container spacing={2}>
             {isLoading && (
               <Grid item xs={12} className={classes.circularProgressCentered}>
                 <CircularProgress />
@@ -265,53 +325,6 @@ export const TheProject = () => {
         </Grid>
         <Grid item xs={12} md={6}>
           <Grid container spacing={2}>
-            <Grid item xs={12} className={classes.stickyBox}>
-              <Paper className={clsx(classes.paper, classes.buttonsWrapper)}>
-                <Button
-                  onClick={onSelectAll}
-                  size="small"
-                  variant={
-                    filterState.selectedGroup === 'all' ? 'contained' : 'outlined'
-                  }
-                  color="primary"
-                  disabled={isLoading}
-                  // endIcon={<BuildIcon />}
-                  className={filterState.selectedGroup !== 'all' ? 'inactive' : ''}
-                >
-                  Все
-                </Button>
-                <Button
-                  onClick={onSelectIsDone}
-                  size="small"
-                  variant={
-                    filterState.selectedGroup === 'isDone'
-                      ? 'contained'
-                      : 'outlined'
-                  }
-                  color="primary"
-                  disabled={isLoading}
-                  // endIcon={<BuildIcon />}
-                  className={filterState.selectedGroup !== 'isDone' ? 'inactive' : ''}
-                >
-                  Завершенные
-                </Button>
-                <Button
-                  onClick={onSelectInProgress}
-                  size="small"
-                  variant={
-                    filterState.selectedGroup === 'inProgress'
-                      ? 'contained'
-                      : 'outlined'
-                  }
-                  color="primary"
-                  disabled={isLoading}
-                  // endIcon={<BuildIcon />}
-                  className={filterState.selectedGroup !== 'inProgress' ? 'inactive' : ''}
-                >
-                  В процессе
-                </Button>
-              </Paper>
-            </Grid>
             <Grid item xs={12}>
               {isLoaded && <Joblist remontId={project.id} />}
             </Grid>

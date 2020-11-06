@@ -25,6 +25,7 @@ import { ConfirmProvider } from 'material-ui-confirm'
 import { PromptProvider } from '~/common/hooks/usePrompt'
 import { httpErrorHandler } from '~/utils/errors/http/fetch'
 import axios from 'axios'
+import Headroom from 'react-headroom'
 
 const apiUrl = getApiUrl()
 const getNormalizedAns = (originalRes: any): IUserData => {
@@ -257,29 +258,30 @@ export const SiteLayout = ({ socket, children }: any) => {
       <PromptProvider>
         <ConfirmProvider>
           <div className={classes.bg}>
+            <Headroom
+              style={{
+                width: '100%',
+                zIndex: 6,
+                margin: '0 auto',
+                padding: '0 10px 0 10px',
+                height: '70px',
+                display: 'flex',
+                alignItems: 'center',
+                borderBottom: '1px solid lightgray',
+                backgroundColor: '#FFF',
+              }}
+            >
+              <BreadCrumbs />
+            </Headroom>
             <Grid container spacing={0}>
-              <div
-                style={{
-                  width: '100%',
-                  maxWidth: '1000px',
-                  margin: '0 auto',
-                  padding: '0 10px 0 10px',
-                  height: '70px',
-                  display: 'flex',
-                  alignItems: 'center',
-                }}
-              >
-                <BreadCrumbs />
-              </div>
               <Grid item xs={12}>
                 <div
                   style={{
                     maxWidth: '1000px',
                     margin: '0 auto',
                     padding: '10px',
-                    maxHeight: 'calc(100vh - 70px)',
+                    // maxHeight: 'calc(100vh - 70px)',
                     overflowY: 'auto',
-                    borderTop: '1px solid lightgray',
                   }}
                 >
                   {children}
