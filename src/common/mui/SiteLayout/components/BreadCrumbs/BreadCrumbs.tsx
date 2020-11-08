@@ -1,29 +1,21 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useContext } from 'react'
 // import { NavLink } from 'react-router-dom'
-import { Link, NavLink } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { MainContext } from '~/common/context/MainContext'
 // import { useCookies } from 'react-cookie'
 import { useRouter } from '~/common/hooks/useRouter'
-import { Button } from '@material-ui/core'
-import ExitToAppIcon from '@material-ui/icons/ExitToApp'
+
 import { useStyles } from './styles'
 
 export const BreadCrumbs = () => {
   const classes = useStyles()
   // const { ...rest }: IPageParams = useParams()
-  const { remontLogic, isUserDataLoading, userData, logout } = useContext(
-    MainContext
-  )
+  const { remontLogic } = useContext(MainContext)
   const router = useRouter()
   // const [cookies, setCookie, removeCookie] = useCookies(['jwt'])
   const {
     location: { pathname },
   } = router
-  const handleLogout = useCallback(() => {
-    logout('Logout').then(() => {
-      router.push('/auth/login')
-    })
-  }, [logout, history])
 
   return (
     <div className={classes.wrapper}>
@@ -71,43 +63,6 @@ export const BreadCrumbs = () => {
           <span className={classes.muted}>Профиль</span>
         </div>
       )}
-
-      {/* LEFT SIDE */}
-
-      <div className={classes.leftSide}>
-        {isUserDataLoading ? (
-          <span>Loading...</span>
-        ) : !userData ? (
-          <NavLink
-            to={
-              !!remontLogic?.id
-                ? `/auth/login?from=${encodeURIComponent(
-                    `/projects/${remontLogic?.id}`
-                  )}`
-                : '/auth/login'
-            }
-          >
-            Вход
-          </NavLink>
-        ) : (
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <NavLink to="/profile" style={{ marginLeft: '10px' }}>
-              Профиль
-            </NavLink>
-            <Button
-              style={{ marginLeft: '10px' }}
-              onClick={handleLogout}
-              size="small"
-              variant="contained"
-              color="primary"
-              endIcon={<ExitToAppIcon />}
-            >
-              {/* <span>{userData?.username}</span> */}
-              <span>Logout</span>
-            </Button>
-          </div>
-        )}
-      </div>
     </div>
   )
 }

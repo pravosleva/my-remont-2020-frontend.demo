@@ -7,6 +7,7 @@ import React, {
   useMemo,
 } from 'react'
 import { Grid } from '@material-ui/core'
+import { SiteHeader } from './components/SiteHeader'
 import { BreadCrumbs } from './components/BreadCrumbs'
 import { MainContext, IUserData, IJob } from '~/common/context/MainContext'
 import { useRemoteDataByFetch } from '~/common/hooks/useRemoteDataByFetch'
@@ -26,6 +27,7 @@ import { PromptProvider } from '~/common/hooks/usePrompt'
 import { httpErrorHandler } from '~/utils/errors/http/fetch'
 import axios from 'axios'
 import Headroom from 'react-headroom'
+import { Footer } from './components/Footer'
 
 const apiUrl = getApiUrl()
 const getNormalizedAns = (originalRes: any): IUserData => {
@@ -271,23 +273,17 @@ export const SiteLayout = ({ socket, children }: any) => {
                 backgroundColor: '#FFF',
               }}
             >
-              <BreadCrumbs />
+              <SiteHeader />
             </Headroom>
+            <div className={classes.breadcrumbs}>
+              <BreadCrumbs />
+            </div>
             <Grid container spacing={0}>
               <Grid item xs={12}>
-                <div
-                  style={{
-                    maxWidth: '1000px',
-                    margin: '0 auto',
-                    padding: '10px',
-                    // maxHeight: 'calc(100vh - 70px)',
-                    overflowY: 'auto',
-                  }}
-                >
-                  {children}
-                </div>
+                <div className={classes.content}>{children}</div>
               </Grid>
             </Grid>
+            <Footer />
           </div>
         </ConfirmProvider>
       </PromptProvider>

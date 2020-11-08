@@ -1,6 +1,6 @@
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 
-const widgetWidthDesktop = 450
+const widgetWidthDesktop = 336
 const widgetWidthMobile = 200
 const widgetTogglerWidthDesktop = 100
 const widgetTogglerWidthMobile = 70
@@ -16,14 +16,11 @@ export const useStyles = makeStyles((theme: Theme) =>
       [theme.breakpoints.down('sm')]: {
         width: `${widgetWidthMobile}px`,
       },
-      borderTopLeftRadius: '0px',
-      borderTopRightRadius: '0px',
-      borderBottomRightRadius: '0px',
+      borderRadius: '0 0 0 4px',
 
       position: 'relative',
     },
     buttonsWrapper: {
-      // zIndex: 1,
       display: 'flex',
       [theme.breakpoints.up('md')]: {
         justifyContent: 'center',

@@ -10,7 +10,7 @@ import { useRemoteDataByFetch, TAns } from '~/common/hooks'
 import { getApiUrl } from '~/utils/getApiUrl'
 import { useParams } from 'react-router-dom'
 import { Joblist } from './components/Joblist'
-import { Grid, Button, CircularProgress, Paper } from '@material-ui/core'
+import { Box, Button, CircularProgress, Grid, Paper } from '@material-ui/core'
 import { TotalInfo } from './components/TotalInfo'
 import { MainContext } from '~/common/context/MainContext'
 import { useCookies } from 'react-cookie'
@@ -238,7 +238,10 @@ export const TheProject = () => {
           [classes.openedWidget]: isWidgetOpened,
         })}
       >
-        <Paper className={clsx(classes.widgetPaper, classes.buttonsWrapper)}>
+        <Box
+          boxShadow={2}
+          className={clsx(classes.widgetPaper, classes.buttonsWrapper)}
+        >
           <Button
             onClick={handleToggleWidget}
             size="small"
@@ -246,7 +249,7 @@ export const TheProject = () => {
             color="primary"
             className={classes.widgetTogglerBtn}
           >
-            {isWidgetOpened ? 'close' : 'open'}
+            {isWidgetOpened ? 'Закрыть' : 'Фильтр'}
           </Button>
           <Button
             onClick={() => {
@@ -300,7 +303,7 @@ export const TheProject = () => {
           >
             В процессе
           </Button>
-        </Paper>
+        </Box>
       </div>
       <Grid container spacing={2}>
         <Grid item xs={12} md={6}>

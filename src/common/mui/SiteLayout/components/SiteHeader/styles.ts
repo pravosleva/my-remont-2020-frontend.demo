@@ -11,11 +11,10 @@ export const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     width: '100%',
     maxWidth: '1000px',
-    padding: theme.spacing(1),
     margin: '0 auto',
+    padding: theme.spacing(0, 1, 0, 1),
   },
-  rightSide: {},
-  leftSide: {
+  rightSide: {
     marginLeft: 'auto',
   },
   muted: {
