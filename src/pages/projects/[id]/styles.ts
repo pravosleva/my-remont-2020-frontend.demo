@@ -17,7 +17,8 @@ export const useStyles = makeStyles((theme: Theme) =>
         width: `${widgetWidthMobile}px`,
       },
       borderTopLeftRadius: '0px',
-      borderBottomLeftRadius: '0px',
+      borderTopRightRadius: '0px',
+      borderBottomRightRadius: '0px',
 
       position: 'relative',
     },
@@ -80,6 +81,13 @@ export const useStyles = makeStyles((theme: Theme) =>
         width: `${widgetTogglerWidthMobile}px !important`,
         minWidth: `${widgetTogglerWidthMobile}px`,
         left: `-${widgetTogglerWidthMobile}px`,
+      },
+
+      '&:hover': {
+        boxShadow: 'none',
+      },
+      '&:focus': {
+        boxShadow: 'none',
       },
     },
   })
