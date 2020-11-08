@@ -49,6 +49,12 @@ interface INewJob {
 
 export const TheProject = () => {
   const { id }: IPageParams = useParams()
+  // --- WIDGET
+  const [isWidgetOpened, setWidgetOpened] = useState<boolean>(false)
+  const handleToggleWidget = () => {
+    setWidgetOpened((s) => !s)
+  }
+  // ---
   const {
     resetProjectData,
     setProjectData,
@@ -223,10 +229,6 @@ export const TheProject = () => {
     userData,
   ])
   const projectName: boolean = useMemo(() => remontLogic?.name, [remontLogic])
-  const [isWidgetOpened, setWidgetOpened] = useState<boolean>(false)
-  const handleToggleWidget = () => {
-    setWidgetOpened((s) => !s)
-  }
 
   return (
     <>
@@ -236,18 +238,21 @@ export const TheProject = () => {
           [classes.openedWidget]: isWidgetOpened,
         })}
       >
-        <Button
-          onClick={handleToggleWidget}
-          size="small"
-          variant="contained"
-          color="primary"
-          className={classes.widgetTogglerBtn}
-        >
-          {isWidgetOpened ? 'Close' : 'Open'}
-        </Button>
         <Paper className={clsx(classes.widgetPaper, classes.buttonsWrapper)}>
           <Button
-            onClick={onSelectAll}
+            onClick={handleToggleWidget}
+            size="small"
+            variant="contained"
+            color="primary"
+            className={classes.widgetTogglerBtn}
+          >
+            {isWidgetOpened ? 'close' : 'open'}
+          </Button>
+          <Button
+            onClick={() => {
+              onSelectAll()
+              handleToggleWidget()
+            }}
             size="small"
             variant={
               filterState.selectedGroup === 'all' ? 'contained' : 'outlined'
@@ -260,7 +265,10 @@ export const TheProject = () => {
             Все
           </Button>
           <Button
-            onClick={onSelectIsDone}
+            onClick={() => {
+              onSelectIsDone()
+              handleToggleWidget()
+            }}
             size="small"
             variant={
               filterState.selectedGroup === 'isDone' ? 'contained' : 'outlined'
@@ -273,7 +281,10 @@ export const TheProject = () => {
             Завершенные
           </Button>
           <Button
-            onClick={onSelectInProgress}
+            onClick={() => {
+              onSelectInProgress()
+              handleToggleWidget()
+            }}
             size="small"
             variant={
               filterState.selectedGroup === 'inProgress'
