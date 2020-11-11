@@ -28,6 +28,7 @@ import { httpErrorHandler } from '~/utils/errors/http/fetch'
 import axios from 'axios'
 import Headroom from 'react-headroom'
 import { Footer } from './components/Footer'
+import { FixedScrollTopButton } from './components/FixedScrollTopButton'
 
 const apiUrl = getApiUrl()
 const getNormalizedAns = (originalRes: any): IUserData => {
@@ -285,6 +286,7 @@ export const SiteLayout = ({ socket, children }: any) => {
             </Grid>
             <Footer />
           </div>
+          <FixedScrollTopButton />
         </ConfirmProvider>
       </PromptProvider>
     </MainContext.Provider>

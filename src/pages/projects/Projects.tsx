@@ -432,7 +432,7 @@ export const Projects = () => {
       <h1>Проекты</h1>
       <Grid container spacing={2}>
         {isLoading && (
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} className={classes.circularProgressCentered}>
             <CircularProgress />
           </Grid>
         )}

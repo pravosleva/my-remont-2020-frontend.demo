@@ -25,6 +25,7 @@ export function remontReducer(
   state: TRemontState,
   action: TRemontAction
 ): TRemontState {
+  // console.log(action)
   switch (action.type) {
     case 'UPDATE_JOB_FIELD':
       const targetJobIndex = state.jobs.findIndex(

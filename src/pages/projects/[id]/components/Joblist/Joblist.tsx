@@ -50,6 +50,9 @@ import { HttpError } from '~/utils/errors/http'
 import { useRouter } from '~/common/hooks/useRouter'
 import buildUrl from 'build-url'
 import { httpErrorHandler } from '~/utils/errors/http/fetch'
+import useDynamicRefs from 'use-dynamic-refs'
+import { scrollTo } from '~/utils/scrollTo'
+import { getDifference } from '~/utils/getDifference'
 
 // Register plugins if required
 // MdEditor.use(YOUR_PLUGINS_HERE);
@@ -85,11 +88,15 @@ const getUniqueKey = (data: IJob): string => {
 
 export const Joblist = ({ remontId }: IProps) => {
   const [expanded, setExpanded] = React.useState<string | false>(false)
-  const handleChangeAccoddionItem = (panel: string) => (
+  const [getRef, setRef] =  useDynamicRefs();
+  const handleChangeAccoddionItem = (panel: string, id: string) => (
     _event: React.ChangeEvent<{}>,
     isExpanded: boolean
   ) => {
     setExpanded(isExpanded ? panel : false)
+    if (!!id) {
+      setTimeout(() => scrollTo(getRef(id)), 500)
+    }
   }
   const classes = useStyles()
   const {
@@ -464,7 +471,9 @@ export const Joblist = ({ remontId }: IProps) => {
                 })}
                 key={data._id}
                 expanded={expanded === `panel${data._id}`}
-                onChange={handleChangeAccoddionItem(`panel${data._id}`)}
+                onChange={handleChangeAccoddionItem(`panel${data._id}`, data._id)}
+                // @ts-ignore
+                ref={setRef(data._id)}
               >
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon />}
@@ -476,13 +485,26 @@ export const Joblist = ({ remontId }: IProps) => {
                       aria-label="Acknowledge"
                       onClick={(e: any) => {
                         e.stopPropagation()
-                        handleDoneJob(data._id, e.target?.checked)
+                        if (!data.isStarted) {
+                          return
+                        } else {
+                          handleDoneJob(data._id, e.target?.checked)
+                        }
                       }}
+                      disabled={!data.isStarted}
                       // onFocus={(event) => { event.stopPropagation() }}
                       control={
                         <Checkbox checked={data.isDone} color="primary" />
                       }
-                      label={data.name}
+                      label={(data.isStarted && !data.isDone) ? <span>{data.name} <span className='price'>({getPrettyPrice(getDifference(data))})</span></span> : data.name}
+                      className={clsx(classes.checkbox, {
+                        [classes.dangerText]:
+                          data.payed - (data.priceMaterials + data.priceJobs) <
+                          0,
+                        [classes.successText]:
+                          data.payed - (data.priceMaterials + data.priceJobs) >=
+                          0,
+                      })}
                     />
                   ) : (
                     <Typography
@@ -623,23 +645,23 @@ export const Joblist = ({ remontId }: IProps) => {
                   <DialogContent dividers={true}>
                     {/*
                       {
-                          "__component": "job.job",
-                          "isDone": false,
-                          "isStarted": false,
-                          "payed": 25000,
-                          "priceJobs": 10000,
-                          "priceMaterials": 12332,
-                          "priceDelivery": 0,
-                          "_id": "5f7901e014e0008700d02545",
-                          "price": 0,
-                          "name": "Замена батарей",
-                          "createdAt": "2020-10-03T22:57:36.559Z",
-                          "updatedAt": "2020-10-05T21:53:21.693Z",
-                          "__v": 0,
-                          "comment": "Пока ждем информацию по ценам от ЖЭК",
-                          "description": "- 5.10 - Озвучена цена за работу: 5000 за одну батарею (**=10 000 Р** за две)\n- 5.10 - Съездили в магазин с Кудратом, ценник за материалы: **=12 332 Р** за батареи с комплектацией (8 секц. + 4 секц.)",
-                          "id": "5f7901e014e0008700d02545"
-                        }
+                        "__component": "job.job",
+                        "isDone": false,
+                        "isStarted": false,
+                        "payed": 25000,
+                        "priceJobs": 10000,
+                        "priceMaterials": 12332,
+                        "priceDelivery": 0,
+                        "_id": "5f7901e014e0008700d02545",
+                        "price": 0,
+                        "name": "Замена батарей",
+                        "createdAt": "2020-10-03T22:57:36.559Z",
+                        "updatedAt": "2020-10-05T21:53:21.693Z",
+                        "__v": 0,
+                        "comment": "Пока ждем информацию по ценам от ЖЭК",
+                        "description": "- 5.10 - Озвучена цена за работу: 5000 за одну батарею (**=10 000 Р** за две)\n- 5.10 - Съездили в магазин с Кудратом, ценник за материалы: **=12 332 Р** за батареи с комплектацией (8 секц. + 4 секц.)",
+                        "id": "5f7901e014e0008700d02545"
+                      }
                     */}
                     <Grid
                       container

@@ -14,6 +14,11 @@ export const useStyles = makeStyles((theme: Theme) =>
         color: 'red',
       },
     },
+    checkbox: {
+      '& .price': {
+        whiteSpace: 'nowrap',
+      },
+    },
     // jobTitle: { margin: theme.spacing(0) },
     heading: {
       // fontSize: theme.typography.pxToRem(15),

@@ -26,6 +26,7 @@ import buildUrl from 'build-url'
 import { HttpError } from '~/utils/errors/http/HttpError'
 import { httpErrorHandler } from '~/utils/errors/http/fetch'
 import clsx from 'clsx'
+import CloseIcon from '@material-ui/icons/Close'
 
 const apiUrl = getApiUrl()
 const isDev = process.env.NODE_ENV === 'development'
@@ -229,6 +230,35 @@ export const TheProject = () => {
     userData,
   ])
   const projectName: boolean = useMemo(() => remontLogic?.name, [remontLogic])
+  const getFilterStateSelectedGroupInRussian = (value: string) => {
+    switch (value) {
+      case 'all': return 'Все'
+      case 'inProgress': return 'В процессе'
+      case 'isDone': return 'Завершенные'
+      default: return 'FILTER'
+    }
+  }
+  const filterTogglerLabel = useMemo(() => {
+    if (!remontLogic) return 'Filter'
+    switch (filterState.selectedGroup) {
+      case 'isDone': return `${getFilterStateSelectedGroupInRussian(filterState.selectedGroup)} (${remontLogic.isDoneCounter})`
+      case 'inProgress': return `${getFilterStateSelectedGroupInRussian(filterState.selectedGroup)} (${remontLogic.inProgressCounter})`
+      case 'all': return `${getFilterStateSelectedGroupInRussian(filterState.selectedGroup)} (${remontLogic.allCounter})`
+      default: return 0;
+    }
+  }, [filterState.selectedGroup, remontLogic])
+  const handleSelectAll = useCallback(() => {
+    onSelectAll()
+    handleToggleWidget()
+  }, [onSelectAll, handleToggleWidget])
+  const handleSelectIsDone = useCallback(() => {
+    onSelectIsDone()
+    handleToggleWidget()
+  }, [onSelectIsDone, handleToggleWidget])
+  const handleSelectInProgress = useCallback(() => {
+    onSelectInProgress()
+    handleToggleWidget()
+  }, [onSelectInProgress, handleToggleWidget])
 
   return (
     <>
@@ -239,23 +269,21 @@ export const TheProject = () => {
         })}
       >
         <Box
-          boxShadow={2}
+          boxShadow={3}
           className={clsx(classes.widgetPaper, classes.buttonsWrapper)}
         >
           <Button
             onClick={handleToggleWidget}
             size="small"
             variant="contained"
-            color="primary"
+            color="inherit"
             className={classes.widgetTogglerBtn}
+            disabled={isLoading}
           >
-            {isWidgetOpened ? 'Закрыть' : 'Фильтр'}
+            {isWidgetOpened ? <CloseIcon /> : filterTogglerLabel}
           </Button>
           <Button
-            onClick={() => {
-              onSelectAll()
-              handleToggleWidget()
-            }}
+            onClick={handleSelectAll}
             size="small"
             variant={
               filterState.selectedGroup === 'all' ? 'contained' : 'outlined'
@@ -265,13 +293,10 @@ export const TheProject = () => {
             // endIcon={<BuildIcon />}
             className={filterState.selectedGroup !== 'all' ? 'inactive' : ''}
           >
-            Все
+            Все{!!remontLogic ? ` (${remontLogic.allCounter})` : ''}
           </Button>
           <Button
-            onClick={() => {
-              onSelectIsDone()
-              handleToggleWidget()
-            }}
+            onClick={handleSelectIsDone}
             size="small"
             variant={
               filterState.selectedGroup === 'isDone' ? 'contained' : 'outlined'
@@ -281,13 +306,10 @@ export const TheProject = () => {
             // endIcon={<BuildIcon />}
             className={filterState.selectedGroup !== 'isDone' ? 'inactive' : ''}
           >
-            Завершенные
+            Завершенные{!!remontLogic ? ` (${remontLogic.isDoneCounter})` : ''}
           </Button>
           <Button
-            onClick={() => {
-              onSelectInProgress()
-              handleToggleWidget()
-            }}
+            onClick={handleSelectInProgress}
             size="small"
             variant={
               filterState.selectedGroup === 'inProgress'
@@ -301,18 +323,18 @@ export const TheProject = () => {
               filterState.selectedGroup !== 'inProgress' ? 'inactive' : ''
             }
           >
-            В процессе
+            В процессе{!!remontLogic ? ` (${remontLogic.inProgressCounter})` : ''}
           </Button>
         </Box>
       </div>
       <Grid container spacing={2}>
+        {isLoading && (
+          <Grid item xs={12} className={classes.circularProgressCentered}>
+            <CircularProgress />
+          </Grid>
+        )}
         <Grid item xs={12} md={6}>
           <Grid container spacing={2}>
-            {isLoading && (
-              <Grid item xs={12} className={classes.circularProgressCentered}>
-                <CircularProgress />
-              </Grid>
-            )}
             {isLoaded && (
               <Grid item xs={12}>
                 <TotalInfo />
