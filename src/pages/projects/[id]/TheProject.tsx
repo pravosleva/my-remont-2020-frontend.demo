@@ -27,6 +27,8 @@ import { HttpError } from '~/utils/errors/http/HttpError'
 import { httpErrorHandler } from '~/utils/errors/http/fetch'
 import clsx from 'clsx'
 import CloseIcon from '@material-ui/icons/Close'
+// TODO:
+// import { httpClient } from '~/utils/httpClient'
 
 const apiUrl = getApiUrl()
 const isDev = process.env.NODE_ENV === 'development'

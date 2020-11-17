@@ -429,7 +429,22 @@ export const Projects = () => {
 
   return (
     <>
-      <h1>Проекты</h1>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems:'center' }}>
+        <h1 style={{ display: 'inline' }}>Проекты</h1>
+        {!!userData?.id && (
+          <div>
+            <Button
+              size="small"
+              variant="outlined"
+              onClick={handleCreateProject}
+              startIcon={<AddIcon />}
+              disabled={isLoading || !isLoaded}
+            >
+              Создать
+            </Button>
+          </div>
+        )}
+      </div>
       <Grid container spacing={2}>
         {isLoading && (
           <Grid item xs={12} className={classes.circularProgressCentered}>
@@ -443,21 +458,13 @@ export const Projects = () => {
             </List>
           </Grid>
         )}
-        {!!userData?.id && (
+        {/* {!!userData?.id && (
           <Grid item xs={12} md={6}>
             <div className={classes.rightSpace}>
-              <Button
-                size="small"
-                variant="outlined"
-                onClick={handleCreateProject}
-                startIcon={<AddIcon />}
-                disabled={isLoading || !isLoaded}
-              >
-                Создать проект
-              </Button>
+
             </div>
           </Grid>
-        )}
+        )} */}
       </Grid>
     </>
   )

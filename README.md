@@ -34,6 +34,7 @@ Fullstack приложение для мониторинга затрат на �
 
 ## Roadmap
 
+- [ ] use `httpClient`
 - [x] `webpack-bundle-analyzer` by `$ yarn analyze`
 - [x] [envs](#envs)
 - [x] [quick deploy](#deploy-app)

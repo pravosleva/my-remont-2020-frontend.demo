@@ -10,7 +10,7 @@ import { Grid } from '@material-ui/core'
 import { SiteHeader } from './components/SiteHeader'
 import { BreadCrumbs } from './components/BreadCrumbs'
 import { MainContext, IUserData, IJob } from '~/common/context/MainContext'
-import { useRemoteDataByFetch } from '~/common/hooks/useRemoteDataByFetch'
+// import { useRemoteDataByFetch } from '~/common/hooks/useRemoteDataByFetch'
 import { getApiUrl } from '~/utils/getApiUrl'
 import { useCookies } from 'react-cookie'
 import { filterReducer } from './reducers/filter'
@@ -29,6 +29,7 @@ import axios from 'axios'
 import Headroom from 'react-headroom'
 import { Footer } from './components/Footer'
 import { FixedScrollTopButton } from './components/FixedScrollTopButton'
+import { httpClient } from '~/utils/httpClient'
 
 const apiUrl = getApiUrl()
 const getNormalizedAns = (originalRes: any): IUserData => {
@@ -109,18 +110,36 @@ export const SiteLayout = ({ socket, children }: any) => {
     },
     [setUserData, removeCookie]
   )
-  const [, isUserDataLoaded, isUserDataLoading]: any = useRemoteDataByFetch({
-    url: `${apiUrl}/users/me`,
-    method: 'GET',
-    accessToken: cookies.jwt,
-    onSuccess: (originalUserData) => {
-      handleSetUserData(originalUserData)
-    },
-    on401: (msg: string) => {
-      handleLogout(msg || 'Что-то пошло не так')
-    },
-    responseValidator: (res) => !!res.id,
-  })
+  // const [, isUserDataLoaded, isUserDataLoading]: any = useRemoteDataByFetch({
+  //   url: `${apiUrl}/users/me`,
+  //   method: 'GET',
+  //   accessToken: cookies.jwt,
+  //   onSuccess: (originalUserData) => {
+  //     handleSetUserData(originalUserData)
+  //   },
+  //   on401: (msg: string) => {
+  //     handleLogout(msg || 'Что-то пошло не так')
+  //   },
+  //   responseValidator: (res) => !!res.id,
+  // })
+  const [isUserDataLoading, setIsUserDataLoading] = useState<boolean>(false)
+  const [isUserDataLoaded, setIsUserDataLoaded] = useState<boolean>(false)
+  useEffect(() => {
+    setIsUserDataLoading(true)
+    setIsUserDataLoaded(false)
+    httpClient.getMe(cookies.jwt)
+      .then((originalUserData: any) => {
+        setIsUserDataLoading(false)
+        setIsUserDataLoaded(true)
+        handleSetUserData(originalUserData)
+      })
+      .catch((err) => {
+        setIsUserDataLoading(false)
+        console.log(err)
+        addToast(err?.message || 'Авторизация не удалась.', { appearance: 'error' })
+        // handleLogout(err?.message || 'Авторизация не удалась')
+      })
+  }, [cookies.jwt])
   const classes = useStyles()
   const onRemontUpdate = useCallback(
     ({

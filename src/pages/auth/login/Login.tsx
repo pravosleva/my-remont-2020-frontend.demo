@@ -122,7 +122,7 @@ export const Login = () => {
             isSubmitting,
             errors,
             // setFieldValue,
-            // values,
+            values,
             // isValidating,
             // submitCount,
             isValid,
@@ -155,6 +155,18 @@ export const Login = () => {
                     size="small"
                     variant="outlined"
                     style={{ marginBottom: '10px' }}
+                    onKeyDown={(e: any) => {
+                      if (e.keyCode === 13) {
+                        // Enter pressed!
+                        e.preventDefault();
+                        if (!(!isValid ||
+                          isSubmitting ||
+                          Object.keys(touched).length === 0 ||
+                          isUserDataLoading)) {
+                            handleSubmit(values);
+                          }
+                      }
+                    }}
                   />
                   {/* isSubmitting && (
                     <LinearProgress style={{ marginBottom: '20px' }} />
