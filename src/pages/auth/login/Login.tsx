@@ -127,6 +127,7 @@ export const Login = () => {
             // submitCount,
             isValid,
             touched,
+            setSubmitting,
           }) => (
             <Grid container spacing={0}>
               <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
@@ -163,7 +164,22 @@ export const Login = () => {
                           isSubmitting ||
                           Object.keys(touched).length === 0 ||
                           isUserDataLoading)) {
-                            handleSubmit(values);
+                            handleSubmit(values)
+                              .then((msg: string) => {
+                                setSubmitting(false)
+                                toast(`Hello, ${msg}`, { appearance: 'success' })
+                                // @ts-ignore
+                                if (!!router.query?.from) {
+                                  // @ts-ignore
+                                  router.history.push(decodeURIComponent(router.query?.from))
+                                } else {
+                                  router.history.push('/projects')
+                                }
+                              })
+                              .catch((msg: string) => {
+                                setSubmitting(false)
+                                toast(msg || 'Errored', { appearance: 'error' })
+                              })
                           }
                       }
                     }}

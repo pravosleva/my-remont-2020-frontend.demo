@@ -30,6 +30,10 @@ import Headroom from 'react-headroom'
 import { Footer } from './components/Footer'
 import { FixedScrollTopButton } from './components/FixedScrollTopButton'
 import { httpClient } from '~/utils/httpClient'
+import axiosRetry from 'axios-retry';
+import { useRouter } from '~/common/hooks/useRouter'
+
+axiosRetry(axios, { retries: 5 });
 
 const apiUrl = getApiUrl()
 const getNormalizedAns = (originalRes: any): IUserData => {
@@ -102,10 +106,12 @@ export const SiteLayout = ({ socket, children }: any) => {
   )
   const { addToast } = useToasts()
   const handleLogout = useCallback(
-    (msg: string) => {
+    (msg?: string) => {
       setUserData(null)
       removeCookie('jwt')
-      addToast(`Logout: ${msg}`, { appearance: 'info' })
+      if (!!msg) {
+        addToast(`Logout: ${msg}`, { appearance: 'info' })
+      }
       return Promise.resolve(true)
     },
     [setUserData, removeCookie]
@@ -124,6 +130,7 @@ export const SiteLayout = ({ socket, children }: any) => {
   // })
   const [isUserDataLoading, setIsUserDataLoading] = useState<boolean>(false)
   const [isUserDataLoaded, setIsUserDataLoaded] = useState<boolean>(false)
+  // const router = useRouter()
   useEffect(() => {
     setIsUserDataLoading(true)
     setIsUserDataLoaded(false)
@@ -137,8 +144,12 @@ export const SiteLayout = ({ socket, children }: any) => {
         setIsUserDataLoading(false)
         console.log(err)
         addToast(err?.message || 'Авторизация не удалась.', { appearance: 'error' })
-        // handleLogout(err?.message || 'Авторизация не удалась')
       })
+  }, [])
+  useEffect(() => {
+    if (!cookies?.jwt) {
+      handleLogout('by cookies?.jwt')
+    }
   }, [cookies.jwt])
   const classes = useStyles()
   const onRemontUpdate = useCallback(

@@ -1,23 +1,23 @@
 import { Wget as fetch, FetcherController } from '~/utils/fetcher';
 import { getApiUrl } from '~/utils/getApiUrl'
 
-const apiUrl = getApiUrl()
-
-class CartClientSingletone {
-  static _instance = new CartClientSingletone();
+class HttpClientSingletone {
+  static _instance = new HttpClientSingletone();
+  apiUrl: string;
   getMeController: any;
 
   constructor() {
-    if (CartClientSingletone._instance) {
+    if (HttpClientSingletone._instance) {
       throw new Error(
-        'Instantiation failed: use CartClientSingletone.getInstance() instead of new.'
+        'Instantiation failed: use HttpClientSingletone.getInstance() instead of new.'
       );
     }
+    this.apiUrl = getApiUrl()
     this.getMeController = null;
   }
 
   static getInstance() {
-    return CartClientSingletone._instance;
+    return HttpClientSingletone._instance;
   }
   universalResponseHandler(validator) {
     return (axiosRes) => {
@@ -52,7 +52,7 @@ class CartClientSingletone {
 
     const response = await fetch({
       method: 'GET',
-      url: `${apiUrl}/users/me`,
+      url: `${this.apiUrl}/users/me`,
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${jwt}`,
@@ -72,4 +72,4 @@ class CartClientSingletone {
   }
 }
 
-export const httpClient = CartClientSingletone.getInstance();
+export const httpClient = HttpClientSingletone.getInstance();

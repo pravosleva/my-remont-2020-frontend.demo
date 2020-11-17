@@ -1,7 +1,7 @@
 import React, { useCallback, useContext } from 'react'
 import { Button } from '@material-ui/core'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'
-import { NavLink } from 'react-router-dom'
+// import { NavLink } from 'react-router-dom'
 import { useRouter } from '~/common/hooks/useRouter'
 import { MainContext } from '~/common/context/MainContext'
 import { useStyles } from './styles'
@@ -14,11 +14,11 @@ export const SiteHeader = () => {
   )
   const router = useRouter()
   // const [cookies, setCookie, removeCookie] = useCookies(['jwt'])
-  const {
-    location: { pathname },
-  } = router
+  // const {
+  //   location: { pathname },
+  // } = router
   const handleLogout = useCallback(() => {
-    logout('Logout').then(() => {
+    logout().then(() => {
       router.push('/auth/login')
     })
   }, [logout, history])

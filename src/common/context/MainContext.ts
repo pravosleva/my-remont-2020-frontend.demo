@@ -56,7 +56,7 @@ interface Socket {
 interface IMainContext {
   setProjectData: (remont: any) => void
   resetProjectData: () => void
-  logout: (msg: string) => Promise<boolean>
+  logout: (msg?: string) => Promise<boolean>
   userData: IUserData | null
   isUserDataLoading: boolean
   isUserDataLoaded: boolean
