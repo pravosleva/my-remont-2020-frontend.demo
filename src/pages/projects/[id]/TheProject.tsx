@@ -6,8 +6,8 @@ import React, {
   useState,
   useMemo,
 } from 'react'
-import { useRemoteDataByFetch, TAns } from '~/common/hooks'
-import { getApiUrl } from '~/utils/getApiUrl'
+// import { useRemoteDataByFetch, TAns } from '~/common/hooks'
+// import { getApiUrl } from '~/utils/getApiUrl'
 import { useParams } from 'react-router-dom'
 import { Joblist } from './components/Joblist'
 import { Box, Button, CircularProgress, Grid, Paper } from '@material-ui/core'
@@ -23,15 +23,12 @@ import BuildIcon from '@material-ui/icons/Build'
 import { useStyles } from './styles'
 import { useRouter } from '~/common/hooks/useRouter'
 import buildUrl from 'build-url'
-import { HttpError } from '~/utils/errors/http/HttpError'
-import { httpErrorHandler } from '~/utils/errors/http/fetch'
 import clsx from 'clsx'
 import CloseIcon from '@material-ui/icons/Close'
-// TODO:
-// import { httpClient } from '~/utils/httpClient'
+import { httpClient } from '~/utils/httpClient'
 
-const apiUrl = getApiUrl()
-const isDev = process.env.NODE_ENV === 'development'
+// const apiUrl = getApiUrl()
+// const isDev = process.env.NODE_ENV === 'development'
 
 interface IPageParams {
   id: string
@@ -74,6 +71,9 @@ export const TheProject = () => {
   } = useContext(MainContext)
   // --- GET REMONT INFO
   const [cookies] = useCookies(['jwt'])
+  const router: any = useRouter()
+  const accessToken = useMemo(() => cookies.jwt, [cookies.jwt])
+  /* V1:
   const handleSuccess = useCallback(
     (data) => {
       toast('useRemoteData: Received', { appearance: 'success' })
@@ -88,7 +88,7 @@ export const TheProject = () => {
       resetProjectData()
       if (isDev)
         toast(
-          `Не удалось получить список ремонтов: ${
+          `Не удалось получить данные по ремонту: ${
             msg || 'Что-то пошло не так'
           }`,
           { appearance: 'error' }
@@ -96,8 +96,6 @@ export const TheProject = () => {
     },
     [resetProjectData]
   )
-  const router = useRouter()
-  const accessToken = useMemo(() => cookies.jwt, [cookies.jwt])
   const [project, isLoaded, isLoading]: TAns = useRemoteDataByFetch({
     url: `${apiUrl}/remonts/${id}`,
     method: 'GET',
@@ -116,6 +114,29 @@ export const TheProject = () => {
     },
     responseValidator: (res) => !!res.id,
   })
+  */
+
+  /* V2: */
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isLoaded, setIsLoaded] = useState<boolean>(false)
+  useEffect(() => {
+    setIsLoading(true)
+    httpClient.getRemont(router.query?.id, cookies?.jwt)
+      .then((data) => {
+        setIsLoading(false)
+        setIsLoaded(true)
+        setProjectData(data)
+        updateRemont(data)
+        updateJoblist(data.joblist)
+        toast('Remont data received', { appearance: 'success' })
+      })
+      .catch((err) => {
+        setIsLoading(false)
+        setIsLoaded(false)
+        toast(err.message, { appearance: 'error' })
+      })
+  }, [router.query?.id]) // remontLogic?.id, cookies?.jwt, setIsLoading
+
   // Reset on unmount:
   useEffect(
     () => () => {
@@ -175,27 +196,13 @@ export const TheProject = () => {
       // description: "",
       __component: 'job.job',
     }
-    window
-      .fetch(`${apiUrl}/remonts/${id}`, {
-        method: 'PUT',
-        mode: 'cors',
-        headers: {
-          // 'Access-Control-Allow-Origin': '*',
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify({ joblist: [newJob, ...joblist] }),
-      })
-      .then(httpErrorHandler)
+
+    httpClient.updateRemontJoblist(id, [newJob, ...joblist], accessToken)
       .then((data) => {
-        if (!!data.id) {
+        if (!!data?.id) {
           setIsCreateNewJobLoading(false)
           handleCloseCreateJobForm()
-          if (
-            !!data.joblist &&
-            Array.isArray(data.joblist) &&
-            data.joblist.length > 0
-          ) {
+          if (Array.isArray(data.joblist)) {
             updateJoblist(data.joblist)
             toast('Ok', { appearance: 'success' })
             return
@@ -204,8 +211,9 @@ export const TheProject = () => {
         throw new Error('Fuckup')
       })
       .catch((err) => {
-        toast(err.message, { appearance: 'error' })
-        if (err instanceof HttpError && err.resStatus === 401) {
+        console.log(err)
+        setIsCreateNewJobLoading(false)
+        if (err === 401) {
           const url = buildUrl('/', {
             path: 'auth/login',
             // hash: 'contact',
@@ -214,11 +222,11 @@ export const TheProject = () => {
             },
           })
           router.history.push(url)
+        } else {
+          toast(err.message, { appearance: 'error' })
         }
-        setIsCreateNewJobLoading(false)
       })
   }, [
-    createJobState,
     id,
     cookies,
     joblist,
@@ -368,7 +376,8 @@ export const TheProject = () => {
         <Grid item xs={12} md={6}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              {isLoaded && <Joblist remontId={project.id} />}
+              {isLoaded && <Joblist remontId={remontLogic?.id} />}
+              {/* remont.id */}
             </Grid>
           </Grid>
         </Grid>

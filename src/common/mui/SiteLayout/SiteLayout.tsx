@@ -24,14 +24,14 @@ import { eventlist as ev } from '~/common/socket'
 import { isEqual } from 'lodash'
 import { ConfirmProvider } from 'material-ui-confirm'
 import { PromptProvider } from '~/common/hooks/usePrompt'
-import { httpErrorHandler } from '~/utils/errors/http/fetch'
+// import { httpErrorHandler } from '~/utils/errors/http/fetch'
 import axios from 'axios'
 import Headroom from 'react-headroom'
 import { Footer } from './components/Footer'
 import { FixedScrollTopButton } from './components/FixedScrollTopButton'
 import { httpClient } from '~/utils/httpClient'
 import axiosRetry from 'axios-retry';
-import { useRouter } from '~/common/hooks/useRouter'
+// import { useRouter } from '~/common/hooks/useRouter'
 
 axiosRetry(axios, { retries: 5 });
 
@@ -142,15 +142,11 @@ export const SiteLayout = ({ socket, children }: any) => {
       })
       .catch((err) => {
         setIsUserDataLoading(false)
-        console.log(err)
-        addToast(err?.message || 'Авторизация не удалась.', { appearance: 'error' })
+        const msg = err?.message || 'Auth error'
+        // addToast(msg, { appearance: 'error' })
+        handleLogout(msg)
       })
   }, [])
-  useEffect(() => {
-    if (!cookies?.jwt) {
-      handleLogout('by cookies?.jwt')
-    }
-  }, [cookies.jwt])
   const classes = useStyles()
   const onRemontUpdate = useCallback(
     ({
@@ -172,6 +168,7 @@ export const SiteLayout = ({ socket, children }: any) => {
     [remontState.jobs, remontState.remontLogic, handleUpdateJoblist]
   )
   // --- SOCKET SUBSCRIBER; GET REMONT IF NECESSARY;
+  /*
   const getRemont = useCallback(
     (id: string, jwt?: string) => {
       let headers = {
@@ -206,13 +203,21 @@ export const SiteLayout = ({ socket, children }: any) => {
     },
     [remontState.remontLogic, addToast]
   )
+  */
+
   const socketRef = useRef(socket)
   const onSocketTest = useCallback(() => {
-    console.log('onSocketTest: CALLED')
     if (!!remontState.remontLogic?.id) {
-      getRemont(remontState.remontLogic?.id, cookies?.jwt)
+      httpClient.getRemont(remontState.remontLogic.id, cookies?.jwt)
+        .then((data) => {
+          handleSetProjectData(data)
+          addToast('Remont data received', { appearance: 'success' })
+        })
+        .catch((err) => {
+          addToast(err.message, { appearance: 'error' })
+        })
     }
-  }, [getRemont, remontState.remontLogic])
+  }, [remontState.remontLogic, cookies?.jwt])
   useEffect(() => {
     // socket.on(ev.YOURE_WELCOME, onSocketTest)
     socketRef.current.on(ev.YOURE_WELCOME, onSocketTest)

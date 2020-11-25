@@ -1,6 +1,6 @@
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles'
 
-const widgetWidthDesktop = 390
+const widgetWidthDesktop = 400
 const widgetWidthMobile = 200
 // const widgetTogglerWidthDesktop = 160
 // const widgetTogglerWidthMobile = 160
@@ -64,6 +64,25 @@ export const useStyles = makeStyles((theme: Theme) =>
       transform: 'translateX(0px)',
     },
     widgetTogglerBtn: {
+      // --- Like smartprice
+      cursor: 'pointer',
+      color: '#202020',
+      backgroundColor: '#FCBF2C',
+      border: '1px solid #FCBF2C',
+      '&:hover': {
+        backgroundColor: '#FCBF2C',
+        color: '#202020',
+        border: '1px solid #FCBF2C',
+        // boxShadow: '0px 14px 30px -8px rgba(198, 143, 15, 0.6)',
+        boxShadow: 'none',
+      },
+      '&:disabled': {
+        cursor: 'not-allowed',
+        backgroundColor: '#E6EAF0',
+        color: '#B8BDCE',
+      },
+      // ---
+
       marginRight: '0px !important',
       position: 'absolute',
       top: '0px',
@@ -84,9 +103,7 @@ export const useStyles = makeStyles((theme: Theme) =>
         transform: `translateX(-${widgetWidthMobile}px)`,
       },
 
-      '&:hover': {
-        boxShadow: 'none',
-      },
+      // '&:hover': {},
       '&:focus': {
         boxShadow: 'none',
       },

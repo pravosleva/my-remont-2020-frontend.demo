@@ -473,7 +473,7 @@ export const Joblist = ({ remontId }: IProps) => {
                 expanded={expanded === `panel${data._id}`}
                 onChange={handleChangeAccoddionItem(`panel${data._id}`, data._id)}
                 // @ts-ignore
-                ref={setRef(data._id)}
+                ref={setRef(data.id)}
               >
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon />}

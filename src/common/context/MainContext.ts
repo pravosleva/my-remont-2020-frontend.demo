@@ -48,9 +48,9 @@ declare var io: {
   connect(url: string): Socket
 }
 interface Socket {
-  on(event: string, callback: (data: any) => void)
-  emit(event: string, data: any)
-  off(event: string, callback: (data: any) => void)
+  on(event: string, callback: (data: any) => void): any
+  emit(event: string, data: any): any
+  off(event: string, callback: (data: any) => void): any
 }
 
 interface IMainContext {

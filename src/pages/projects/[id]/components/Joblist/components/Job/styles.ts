@@ -21,9 +21,16 @@ export const useStyles = makeStyles((theme) => ({
   },
   description: {
     '& blockquote': {
-      // borderLeft: '2px solid lightgray',
-      // paddingLeft: theme.spacing(1),
-      // marginLeft: theme.spacing(1),
+      position: 'relative',
+      margin: '16px 0',
+      padding: '5px 8px 5px 30px',
+      background: 'none repeat scroll 0 0 rgba(102,128,153,.05)',
+      border: 'none',
+      borderLeftColor: 'currentcolor',
+      borderLeftStyle: 'none',
+      borderLeftWidth: 'medium',
+      color: '#333',
+      borderLeft: '10px solid #d6dbdf !important',
     },
   },
 }))

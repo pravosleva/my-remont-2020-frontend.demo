@@ -19,6 +19,7 @@ import DateFnsAdapter from '@material-ui/pickers/adapter/date-fns'
 import ruLocale from 'date-fns/locale/ru'
 import SaveIcon from '@material-ui/icons/Save'
 import { MainContext } from '~/common/context/MainContext'
+import { Plan } from './components/Plan'
 
 interface IProps {
   data: IJob
@@ -98,6 +99,90 @@ export const Job = ({ data, onSetDates, isLoading }: IProps) => {
     <LocalizationProvider dateAdapter={DateFnsAdapter} locale={ruLocale}>
       <div className={classes.paper}>
         <Grid container direction="column" spacing={2}>
+        <Grid item>
+            <Plan
+              title='План'
+              contentRenderer={() => (
+                <>
+                  <div style={{ marginBottom: '20px' }}>
+                    <DateRangePicker
+                      calendars={1}
+                      value={dates}
+                      onChange={(newValue) => {
+                        setStartDate(newValue)
+                      }}
+                      disabled={!isOwner}
+                      renderInput={(startProps, endProps) => (
+                        <>
+                          <TextField
+                            size="small"
+                            {...startProps}
+                            label="Начало работ (факт)"
+                            // helperText="Фактическая дата"
+                            helperText={undefined}
+                            fullWidth
+                          />
+                          <DateRangeDelimiter>to</DateRangeDelimiter>
+                          <TextField
+                            size="small"
+                            {...endProps}
+                            label="Конец работ (план)"
+                            // helperText="Планируемая дата"
+                            helperText={undefined}
+                            fullWidth
+                          />
+                        </>
+                      )}
+                    />
+                  </div>
+                  <div>
+                    <MobileDatePicker
+                      // clearable
+                      // mask='__.__.____'
+                      label="Дата завершения"
+                      inputFormat="dd.MM.yyyy"
+                      toolbarPlaceholder="Финиш"
+                      value={realFinishDate}
+                      onChange={(newValue) => setRealFinishDate(newValue)}
+                      renderInput={(props) => (
+                        <TextField
+                          size="small"
+                          {...props}
+                          variant="outlined"
+                          fullWidth
+                        />
+                      )}
+                      disabled={!isOwner}
+                    />
+                  </div>
+                  {isOwner && !isSubmitDisabled && (
+                    <div style={{ marginTop: '20px' }}>
+                      <Button
+                        fullWidth
+                        variant="outlined"
+                        color="primary"
+                        onClick={handleSunmit}
+                        disabled={isSubmitDisabled}
+                        endIcon={
+                          isLoading ? (
+                            <CircularProgress
+                              size={20}
+                              color="primary"
+                              style={{ marginLeft: 'auto' }}
+                            />
+                          ) : (
+                            <SaveIcon />
+                          )
+                        }
+                      >
+                        Save
+                      </Button>
+                    </div>
+                  )}
+                </>
+              )}
+            />
+          </Grid>
           <Grid item>
             <div className={classes.title}>
               <b>Итог</b>
@@ -126,86 +211,6 @@ export const Job = ({ data, onSetDates, isLoading }: IProps) => {
             >
               Остаток: {getPrettyPrice(diff)}
             </b>
-          </Grid>
-          <Grid item>
-            <div className={classes.title}>
-              <b>План</b>
-            </div>
-            <div style={{ marginBottom: '20px' }}>
-              <DateRangePicker
-                calendars={1}
-                value={dates}
-                onChange={(newValue) => {
-                  setStartDate(newValue)
-                }}
-                disabled={!isOwner}
-                renderInput={(startProps, endProps) => (
-                  <>
-                    <TextField
-                      size="small"
-                      {...startProps}
-                      label="Начало работ (факт)"
-                      // helperText="Фактическая дата"
-                      helperText={undefined}
-                      fullWidth
-                    />
-                    <DateRangeDelimiter>to</DateRangeDelimiter>
-                    <TextField
-                      size="small"
-                      {...endProps}
-                      label="Конец работ (план)"
-                      // helperText="Планируемая дата"
-                      helperText={undefined}
-                      fullWidth
-                    />
-                  </>
-                )}
-              />
-            </div>
-            <div>
-              <MobileDatePicker
-                // clearable
-                // mask='__.__.____'
-                label="Дата завершения"
-                inputFormat="dd.MM.yyyy"
-                toolbarPlaceholder="Финиш"
-                value={realFinishDate}
-                onChange={(newValue) => setRealFinishDate(newValue)}
-                renderInput={(props) => (
-                  <TextField
-                    size="small"
-                    {...props}
-                    variant="outlined"
-                    fullWidth
-                  />
-                )}
-                disabled={!isOwner}
-              />
-            </div>
-            {isOwner && !isSubmitDisabled && (
-              <div style={{ marginTop: '20px' }}>
-                <Button
-                  fullWidth
-                  variant="outlined"
-                  color="primary"
-                  onClick={handleSunmit}
-                  disabled={isSubmitDisabled}
-                  endIcon={
-                    isLoading ? (
-                      <CircularProgress
-                        size={20}
-                        color="primary"
-                        style={{ marginLeft: 'auto' }}
-                      />
-                    ) : (
-                      <SaveIcon />
-                    )
-                  }
-                >
-                  Save
-                </Button>
-              </div>
-            )}
           </Grid>
           {!!data.comment && (
             <Grid item xs={12}>
