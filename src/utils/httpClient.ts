@@ -10,6 +10,7 @@ class HttpClientSingletone {
   getMeController: any;
   getRemontController: any;
   putRemontController: any;
+  uploadFileController: any;
 
   constructor() {
     if (HttpClientSingletone._instance) {
@@ -21,6 +22,7 @@ class HttpClientSingletone {
     this.getMeController = null;
     this.getRemontController = null;
     this.putRemontController = null;
+    this.uploadFileController = null;
   }
 
   static getInstance(): HttpClientSingletone {
@@ -54,6 +56,7 @@ class HttpClientSingletone {
   }
   getErrorMsg(data: any): string {
     // console.log(data) // { isAborted: false }
+    if (typeof data === 'string') return data
     return !!data?.message
       ? data?.message
       : data?.isAborted
@@ -168,6 +171,110 @@ class HttpClientSingletone {
       .then(httpErrorHandler)
       .then(
         this.responseDataHandlerAfterHttpErrorHandler((data: any) => !!data?.id)
+      )
+      .catch((err) => ({ isOk: false, data: err }));
+
+    if (response.isOk) {
+      return Promise.resolve(response.data);
+    }
+    if (response.data instanceof HttpError) {
+      return Promise.reject(response.data.resStatus);
+    }
+    return Promise.reject(this.getErrorMsg(response.data));
+  }
+
+  async updateMedia(remontId: string, joblist: any, jwt?: string): Promise<any> {
+    if (!remontId || !joblist) throw new Error('ERR: !remontId || !joblist');
+    if (!!this.putRemontController) {
+      this.putRemontController.abort();
+    }
+    this.putRemontController = new FetcherController();
+
+    let headers: any = {
+      // 'Access-Control-Allow-Origin': '*',
+      'Content-Type': 'application/json',
+    }
+    if (!!jwt) {
+      headers = {
+        ...headers,
+        Authorization: `Bearer ${jwt}`,
+      }
+    }
+
+    const response = await fetch({
+      method: 'PUT',
+      url: `${this.apiUrl}/remonts/${remontId}`,
+      data: { joblist },
+      mode: 'cors',
+      headers,
+      controller: this.putRemontController,
+      // NOTE: From docs
+      // `validateStatus` defines whether to resolve or reject the promise for a given
+      // HTTP response status code. If `validateStatus` returns `true` (or is set to `null`
+      // or `undefined`), the promise will be resolved; otherwise, the promise will be
+      // rejected.
+      validateStatus: function (status: number) {
+        // return status >= 200 && status < 300; // default
+        return status >= 200 && status < 500; // default
+      },
+    })
+      .then(httpErrorHandler)
+      .then(
+        this.responseDataHandlerAfterHttpErrorHandler((data: any) => !!data?.id)
+      )
+      .catch((err) => ({ isOk: false, data: err }));
+
+    if (response.isOk) {
+      return Promise.resolve(response.data);
+    }
+    if (response.data instanceof HttpError) {
+      return Promise.reject(response.data.resStatus);
+    }
+    return Promise.reject(this.getErrorMsg(response.data));
+  }
+
+  async uploadFiles(files: any, jwt?: string): Promise<any> {
+    if (files.length === 0) throw new Error('ERR: !files.length');
+    if (!!this.uploadFileController) {
+      this.uploadFileController.abort();
+    }
+    this.uploadFileController = new FetcherController();
+
+    let headers: any = {
+      // 'Access-Control-Allow-Origin': '*',
+      'Content-Type': 'application/json',
+    }
+    if (!!jwt) {
+      headers = {
+        ...headers,
+        Authorization: `Bearer ${jwt}`,
+      }
+    }
+
+    const body = new FormData();
+
+    files.forEach(file => body.append('files', file.file));
+
+    const response = await fetch({
+      method: 'POST',
+      url: `${this.apiUrl}/upload/`,
+      data: body,
+      mode: 'cors',
+      headers,
+      controller: this.uploadFileController,
+      // NOTE: From docs
+      // `validateStatus` defines whether to resolve or reject the promise for a given
+      // HTTP response status code. If `validateStatus` returns `true` (or is set to `null`
+      // or `undefined`), the promise will be resolved; otherwise, the promise will be
+      // rejected.
+      // validateStatus: function (status: number) {
+      //   // return status >= 200 && status < 300; // default
+      //   return status >= 200 && status < 500; // default
+      // },
+    })
+      .then(httpErrorHandler)
+      .then(
+        this.responseDataHandlerAfterHttpErrorHandler((data: any) => !!data)
       )
       .catch((err) => ({ isOk: false, data: err }));
 

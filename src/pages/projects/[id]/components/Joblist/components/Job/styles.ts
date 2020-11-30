@@ -33,4 +33,18 @@ export const useStyles = makeStyles((theme) => ({
       borderLeft: '10px solid #d6dbdf !important',
     },
   },
+  dropZoneWrapper: {
+    '& .MuiDropzoneArea-root.smartprice-dropzone': {
+      minHeight: 'unset',
+    },
+    '& .smartprice-dropzone > .MuiDropzoneArea-textContainer': {
+      padding: '5px',
+    },
+    '& .MuiTypography-root MuiTypography-h5 MuiDropzoneArea-text': {
+      fontSize: '15px',
+    },
+  },
+  galleryWrapper: {
+    maxWidth: '100%',
+  },
 }))

@@ -9,6 +9,7 @@ import { ToastProvider } from 'react-toast-notifications'
 // See also: https://github.com/jossmac/react-toast-notifications
 import useSocket from 'use-socket.io-client'
 // import io from 'socket.io-client'
+import 'react-image-gallery/styles/css/image-gallery.css'
 
 const REACT_APP_SOCKET_ENDPOINT = process.env.REACT_APP_SOCKET_ENDPOINT
 

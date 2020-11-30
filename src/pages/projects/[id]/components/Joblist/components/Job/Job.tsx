@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect, useState, useContext } from 'react'
+import React, { useMemo, useEffect, useState, useContext, useCallback } from 'react'
 import { IJob } from '~/common/context/MainContext'
 import { useStyles } from './styles'
 import { Button, CircularProgress, Grid, Typography } from '@material-ui/core'
@@ -20,6 +20,13 @@ import ruLocale from 'date-fns/locale/ru'
 import SaveIcon from '@material-ui/icons/Save'
 import { MainContext } from '~/common/context/MainContext'
 import { Plan } from './components/Plan'
+import { httpClient } from '~/utils/httpClient'
+import { DropzoneAreaBase } from 'material-ui-dropzone';
+import { useCookies } from 'react-cookie'
+import ImageGallery from 'react-image-gallery';
+import { getApiUrl } from '~/utils/getApiUrl'
+
+const apiUrl = getApiUrl()
 
 interface IProps {
   data: IJob
@@ -30,10 +37,11 @@ interface IProps {
     realFinishDate: string
   ) => () => void
   isLoading: boolean
+  remontId: string
 }
 
-export const Job = ({ data, onSetDates, isLoading }: IProps) => {
-  const { userData, remontLogic } = useContext(MainContext)
+export const Job = ({ remontId, data, onSetDates, isLoading }: IProps) => {
+  const { userData, remontLogic, toast, changeJobFieldPromise, jobsLogic } = useContext(MainContext)
   const isOwner: boolean = useMemo(() => remontLogic?.isOwner(userData?.id), [
     remontLogic,
     userData,
@@ -66,10 +74,10 @@ export const Job = ({ data, onSetDates, isLoading }: IProps) => {
   const [realFinishDate, setRealFinishDate] = useState<Date>(
     data.realFinishDate ? new Date(data.realFinishDate) : null
   )
-  const handleSunmit = () => {
-    console.log(dates)
-    console.log(dates[0].toISOString())
-    console.log(dates[1].toISOString())
+  const handleSubmit = () => {
+    // console.log(dates)
+    // console.log(dates[0].toISOString())
+    // console.log(dates[1].toISOString())
     onSetDates(
       data._id,
       !!dates[0] ? dates[0].toISOString() : null,
@@ -94,6 +102,96 @@ export const Job = ({ data, onSetDates, isLoading }: IProps) => {
       realFinishDate,
     ]
   )
+
+  const [files, setFiles] = useState<any[]>([])
+  const [fileUrls, setFileUrls] = useState<any>(null)
+
+  const addFile = (fs: any) => {
+    setFiles((s) => [...s, ...fs]);
+  };
+  const handleAddFile = (arr: any[]) => {
+    addFile(arr)
+  }
+  const removeFile = (testedPath: string) => {
+    // console.log(testedPath)
+    setFiles((fs) => fs.filter(({ file }) => file.path !== testedPath));
+  };
+  const handleDeleteFile = (arg: any) => {
+    const {
+      file: { path },
+    } = arg;
+    removeFile(path);
+  }
+  // useEffect(() => {
+  //   console.log(files)
+  // }, [JSON.stringify(files)])
+  const handleUploadFiles = useCallback(async () => {
+    // if (files.length === 0) {
+    //   console.log('No files')
+    //   return;
+    // }
+
+    const res = await httpClient.uploadFiles(files)
+      .then((d) => {
+        toast('Ok', { appearance: 'success' })
+        return d;
+      })
+      .catch((err) => {
+        toast(typeof err === 'string' ? err : err?.message || 'Sorry', { appearance: 'error' })
+        return err
+      })
+
+    // console.log(res)
+    /* ARRAY like this:
+    [{
+      __v: 0
+      _id: "5fc273520b3cf8c9f2c4c069"
+      createdAt: "2020-11-28T15:57:06.787Z"
+      ext: ".png"
+      formats: Object { thumbnail: {…}, large: {…}, medium: {…}, … }
+      hash: "Snimok_ekrana_ot_2020_10_20_18_46_46_ee2ded8957"
+      height: 472
+      id: "5fc273520b3cf8c9f2c4c069"
+      mime: "image/png"
+      name: "Снимок экрана от 2020-10-20 18-46-46.png"
+      provider: "local"
+      related: Array []
+      size: 700.51
+      updatedAt: "2020-11-28T15:57:06.787Z"
+      url: "/uploads/Snimok_ekrana_ot_2020_10_20_18_46_46_ee2ded8957.png"
+      width: 1042
+    }]
+    */
+
+    if (Array.isArray(res)) {
+      setFiles([])
+      console.log(res)
+      try {
+        const formats = res.map(({ formats }) => formats)
+        setFileUrls(formats)
+      } catch (err) {
+        console.log(err)
+      }
+    }
+  }, [JSON.stringify(files), setFiles, setFileUrls])
+  const [cookies] = useCookies(['jwt'])
+  const joblist = useMemo(() => jobsLogic?.jobs || [], [jobsLogic])
+  const handleAssignFiles = useCallback(() => {
+    // console.log('TODO: assign ids')
+    // console.log(fileUrls)
+
+    changeJobFieldPromise(data._id, 'add@imagesUrls', fileUrls)()
+      .then(() => {
+        // console.log(data)
+        if (!!data.imagesUrls) {
+          // const targetJoblist =
+          httpClient.updateMedia(remontId, joblist, cookies?.jwt)
+            .then(() => {
+              setFileUrls(null)
+            })
+        }
+      })
+  }, [fileUrls, setFileUrls, JSON.stringify(data), JSON.stringify(joblist)])
 
   return (
     <LocalizationProvider dateAdapter={DateFnsAdapter} locale={ruLocale}>
@@ -161,7 +259,7 @@ export const Job = ({ data, onSetDates, isLoading }: IProps) => {
                         fullWidth
                         variant="outlined"
                         color="primary"
-                        onClick={handleSunmit}
+                        onClick={handleSubmit}
                         disabled={isSubmitDisabled}
                         endIcon={
                           isLoading ? (
@@ -245,6 +343,97 @@ export const Job = ({ data, onSetDates, isLoading }: IProps) => {
             <pre>{JSON.stringify(data.dateStart)}</pre>
           </Grid>
           */}
+          {
+            isOwner && (
+              <>
+                <Grid item xs={12} className={classes.dropZoneWrapper}>
+                  <DropzoneAreaBase
+                    // Icon={BackupIcon}
+                    filesLimit={5}
+                    maxFileSize={50 * 1024 * 1024}
+                    onAdd={handleAddFile}
+                    // onDrop={handleAdd}
+                    onDelete={handleDeleteFile}
+                    showPreviewsInDropzone={true}
+                    showAlerts={false}
+                    // onAlert={this.onDropzoneAlert}
+                    fileObjects={files}
+                    dropzoneText="Загрузите или перетащите файл в выделенную область в формате .jpg или .png"
+                    dropzoneClass="smartprice-dropzone"
+                    acceptedFiles={[
+                      // 'application/msword',
+                      'image/jpeg',
+                      'image/png',
+                      // 'image/bmp',
+                    ]}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  {
+                    files.length > 0 && (
+                      <Button
+                        fullWidth
+                        variant="outlined"
+                        color="primary"
+                        onClick={handleUploadFiles}
+                        // disabled={isSubmitDisabled}
+                        endIcon={
+                          isLoading ? (
+                            <CircularProgress
+                              size={20}
+                              color="primary"
+                              style={{ marginLeft: 'auto' }}
+                            />
+                          ) : (
+                            <SaveIcon />
+                          )
+                        }
+                      >
+                        Upload files
+                      </Button>
+                    )
+                  }
+                  {
+                    !!fileUrls && fileUrls.length > 0 && (
+                      <Button
+                        fullWidth
+                        variant="outlined"
+                        color="primary"
+                        onClick={handleAssignFiles}
+                        // disabled={isSubmitDisabled}
+                        endIcon={
+                          isLoading ? (
+                            <CircularProgress
+                              size={20}
+                              color="primary"
+                              style={{ marginLeft: 'auto' }}
+                            />
+                          ) : (
+                            <SaveIcon />
+                          )
+                        }
+                      >
+                        Assign files
+                      </Button>
+                    )
+                  }
+                </Grid>
+              </>
+            )
+          }
+          {
+            !!data.imagesUrls && data.imagesUrls.length > 0 && (
+              <Grid item className={classes.galleryWrapper}>
+                <div className={classes.title}>
+                  <b>Фото ({data.imagesUrls.length})</b>
+                </div>
+                <ImageGallery items={data.imagesUrls.map(({ large, medium, thumbnail, small }: any) => ({
+                  original: !!large ? `${apiUrl}${large.url}` : medium ? `${apiUrl}${medium.url}` : `${apiUrl}${small.url}`,
+                  thumbnail: `${apiUrl}${thumbnail.url}`
+                }))} />
+              </Grid>
+            )
+          }
         </Grid>
       </div>
     </LocalizationProvider>

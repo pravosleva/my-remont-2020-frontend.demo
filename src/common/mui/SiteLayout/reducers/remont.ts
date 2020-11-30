@@ -11,6 +11,9 @@ export type TRemontState = {
   jobsLogic: JobsLogic | null
   remontLogic: RemontLogic | null
 }
+type TFileId = {
+  id: string
+}
 type TRemontAction =
   | {
       type: 'UPDATE_JOB_FIELD'
@@ -20,18 +23,26 @@ type TRemontAction =
     }
   | { type: 'UPDATE_JOBLIST'; payload: IJob[] }
   | { type: 'UPDATE_REMONT'; payload: any }
+  | {
+    type: 'UPDATE_JOB_FIELD@ADD_IMAGES_URLS',
+    id: string
+    payload: TFileId[]
+  }
 
 export function remontReducer(
   state: TRemontState,
   action: TRemontAction
 ): TRemontState {
   // console.log(action)
+  let targetJobIndex = -1;
+  let newState
+
   switch (action.type) {
     case 'UPDATE_JOB_FIELD':
-      const targetJobIndex = state.jobs.findIndex(
+      targetJobIndex = state.jobs.findIndex(
         ({ _id }) => action.id === _id
       )
-      const newState = [...state.jobs]
+      newState = [...state.jobs]
 
       if (targetJobIndex !== -1) {
         // @ts-ignore
@@ -39,6 +50,25 @@ export function remontReducer(
       }
 
       return { ...state, jobs: [...newState] }
+    case 'UPDATE_JOB_FIELD@ADD_IMAGES_URLS':
+      newState = [...state.jobs]
+
+      targetJobIndex = state.jobs.findIndex(
+        ({ _id }) => action.id === _id
+      )
+      if (targetJobIndex !== -1) {
+        // @ts-ignore
+        if (!!newState[targetJobIndex]?.imagesUrls) {
+          // @ts-ignore
+          newState[targetJobIndex].imagesUrls = [...newState[targetJobIndex].imagesUrls, ...action.payload]
+        } else {
+          // @ts-ignore
+          newState[targetJobIndex].imagesUrls = [...action.payload]
+        }
+      }
+
+      return { ...state, jobs: [...newState] }
+      // return { ...state, jobs: action.payload, jobsLogic }
     case 'UPDATE_JOBLIST':
       const jobsLogic = new JobsLogic(action.payload)
       // @ts-ignore

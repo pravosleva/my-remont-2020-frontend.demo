@@ -60,7 +60,7 @@ export const SiteLayout = ({ socket, children }: any) => {
   // --- REMONT STATE:
   const [remontState, dispatch] = useReducer(remontReducer, remontInitialState)
   const handleChangeJobField = useCallback(
-    (id, fieldName: string, value: number | boolean | string) => () => {
+    (id, fieldName: string, value: number | boolean | string | any) => () => {
       try {
         if (
           (fieldName === 'realFinishDate' ||
@@ -68,6 +68,10 @@ export const SiteLayout = ({ socket, children }: any) => {
             fieldName === 'plannedFinishDate') &&
           !value
         ) {
+          return Promise.resolve()
+        }
+        if (fieldName === 'add@imagesUrls') {
+          dispatch({ type: 'UPDATE_JOB_FIELD@ADD_IMAGES_URLS', id, payload: value })
           return Promise.resolve()
         }
         dispatch({ type: 'UPDATE_JOB_FIELD', id, fieldName, payload: value })

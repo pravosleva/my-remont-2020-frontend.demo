@@ -42,6 +42,7 @@ export interface IJob {
   plannedStartDate?: string
   plannedFinishDate?: string
   realFinishDate?: string
+  imagesUrls: string[]
 }
 
 declare var io: {
@@ -65,7 +66,7 @@ interface IMainContext {
   changeJobFieldPromise: (
     id: string,
     fieldName: string,
-    value: number | boolean | string
+    value: number | boolean | string | any[]
   ) => () => Promise<any>
   updateJoblist: (joblist: IJob[]) => void
   jobsLogic: JobsLogic | null

@@ -528,6 +528,7 @@ export const Joblist = ({ remontId }: IProps) => {
                     key={getUniqueKey(data)}
                     onSetDates={handleSetDates}
                     isLoading={isLoading}
+                    remontId={remontId}
                   />
                 </AccordionDetails>
                 {isOwner && (
