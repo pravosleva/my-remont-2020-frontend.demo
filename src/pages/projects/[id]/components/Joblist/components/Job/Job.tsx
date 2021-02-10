@@ -104,7 +104,7 @@ export const Job = ({ remontId, data, onSetDates, isLoading }: IProps) => {
   )
 
   const [files, setFiles] = useState<any[]>([])
-  const [fileUrls, setFileUrls] = useState<any>(null)
+  // const [fileUrls, setFileUrls] = useState<any>(null)
 
   const addFile = (fs: any) => {
     setFiles((s) => [...s, ...fs]);
@@ -122,14 +122,30 @@ export const Job = ({ remontId, data, onSetDates, isLoading }: IProps) => {
     } = arg;
     removeFile(path);
   }
-  // useEffect(() => {
-  //   console.log(files)
-  // }, [JSON.stringify(files)])
+  // --- ASSING FILES
+  const [cookies] = useCookies(['jwt'])
+  const joblist = useMemo(() => jobsLogic?.jobs || [], [jobsLogic])
+  const handleAssignFiles = useCallback((formats) => {
+    // console.log('TODO: assign ids')
+    // console.log(fileUrls)
+
+    changeJobFieldPromise(data._id, 'add@imagesUrls', formats)()
+      .then(() => {
+        // console.log(data)
+        if (!!data.imagesUrls) {
+          // const targetJoblist =
+          httpClient.updateMedia(remontId, joblist, cookies?.jwt)
+          // .then(() => { setFileUrls(null); })
+        }
+      })
+  }, [
+    // fileUrls, setFileUrls,
+    JSON.stringify(data),
+    JSON.stringify(joblist),
+  ])
+  // ---
   const handleUploadFiles = useCallback(async () => {
-    // if (files.length === 0) {
-    //   console.log('No files')
-    //   return;
-    // }
+    // if (files.length === 0) { console.log('No files'); return; }
 
     const res = await httpClient.uploadFiles(files)
       .then((d) => {
@@ -168,30 +184,18 @@ export const Job = ({ remontId, data, onSetDates, isLoading }: IProps) => {
       console.log(res)
       try {
         const formats = res.map(({ formats }) => formats)
-        setFileUrls(formats)
+        // setFileUrls(formats)
+        handleAssignFiles(formats)
       } catch (err) {
         console.log(err)
       }
     }
-  }, [JSON.stringify(files), setFiles, setFileUrls])
-  const [cookies] = useCookies(['jwt'])
-  const joblist = useMemo(() => jobsLogic?.jobs || [], [jobsLogic])
-  const handleAssignFiles = useCallback(() => {
-    // console.log('TODO: assign ids')
-    // console.log(fileUrls)
-
-    changeJobFieldPromise(data._id, 'add@imagesUrls', fileUrls)()
-      .then(() => {
-        // console.log(data)
-        if (!!data.imagesUrls) {
-          // const targetJoblist =
-          httpClient.updateMedia(remontId, joblist, cookies?.jwt)
-            .then(() => {
-              setFileUrls(null)
-            })
-        }
-      })
-  }, [fileUrls, setFileUrls, JSON.stringify(data), JSON.stringify(joblist)])
+  }, [
+    JSON.stringify(files),
+    setFiles,
+    // setFileUrls,
+    handleAssignFiles
+  ])
 
   return (
     <LocalizationProvider dateAdapter={DateFnsAdapter} locale={ruLocale}>
@@ -393,7 +397,7 @@ export const Job = ({ remontId, data, onSetDates, isLoading }: IProps) => {
                       </Button>
                     )
                   }
-                  {
+                  {/*
                     !!fileUrls && fileUrls.length > 0 && (
                       <Button
                         fullWidth
@@ -416,7 +420,7 @@ export const Job = ({ remontId, data, onSetDates, isLoading }: IProps) => {
                         Assign files
                       </Button>
                     )
-                  }
+                  */}
                 </Grid>
               </>
             )

@@ -38,10 +38,14 @@ export const useStyles = makeStyles((theme) => ({
       minHeight: 'unset',
     },
     '& .smartprice-dropzone > .MuiDropzoneArea-textContainer': {
-      padding: '5px',
+      padding: '10px',
     },
-    '& .MuiTypography-root MuiTypography-h5 MuiDropzoneArea-text': {
+    '& .MuiTypography-root.MuiTypography-h5.MuiDropzoneArea-text': {
       fontSize: '15px',
+    },
+    '& .MuiDropzoneArea-icon': {
+      width: '35px',
+      height: '35px',
     },
   },
   galleryWrapper: {
