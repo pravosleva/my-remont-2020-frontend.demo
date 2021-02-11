@@ -22,8 +22,10 @@ export const useStyles = makeStyles((theme) => ({
   description: {
     '& blockquote': {
       position: 'relative',
-      margin: '16px 0',
-      padding: '5px 8px 5px 30px',
+      margin: '10px 0',
+      padding: '5px 8px 5px 40px',
+      // paddingTop: '5px',
+      // paddingBottom: '5px',
       background: 'none repeat scroll 0 0 rgba(102,128,153,.05)',
       border: 'none',
       borderLeftColor: 'currentcolor',
@@ -31,6 +33,23 @@ export const useStyles = makeStyles((theme) => ({
       borderLeftWidth: 'medium',
       color: '#333',
       borderLeft: '10px solid #d6dbdf !important',
+      borderRadius: '4px',
+    },
+    '& blockquote::before': {
+      fontFamily: 'Arial',
+      content: 'open-quote',
+      fontSize: '4em',
+      fontStyle: 'italic',
+      position: 'absolute',
+      left: '8px',
+      top: '-10px',
+      color: '#d6dbdf',
+    },
+    '& blockquote span': {
+      display: 'block',
+      fontStyle: 'normal',
+      fontWeight: 'bold',
+      marginTop: '1em',
     },
   },
   dropZoneWrapper: {
