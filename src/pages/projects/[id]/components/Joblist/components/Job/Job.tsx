@@ -37,10 +37,11 @@ interface IProps {
     realFinishDate: string
   ) => () => void
   isLoading: boolean
+  setIsLoading: (val: boolean) => void
   remontId: string
 }
 
-export const Job = ({ remontId, data, onSetDates, isLoading }: IProps) => {
+export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IProps) => {
   const { userData, remontLogic, toast, changeJobFieldPromise, jobsLogic } = useContext(MainContext)
   const isOwner: boolean = useMemo(() => remontLogic?.isOwner(userData?.id), [
     remontLogic,
@@ -133,8 +134,11 @@ export const Job = ({ remontId, data, onSetDates, isLoading }: IProps) => {
       .then(() => {
         // console.log(data)
         if (!!data.imagesUrls) {
-          // const targetJoblist =
+          setIsLoading(true)
           httpClient.updateMedia(remontId, joblist, cookies?.jwt)
+            .finally(() => {
+              setIsLoading(false)
+            })
           // .then(() => { setFileUrls(null); })
         }
       })
@@ -142,10 +146,12 @@ export const Job = ({ remontId, data, onSetDates, isLoading }: IProps) => {
     // fileUrls, setFileUrls,
     JSON.stringify(data),
     JSON.stringify(joblist),
+    setIsLoading,
   ])
   // ---
   const handleUploadFiles = useCallback(async () => {
     // if (files.length === 0) { console.log('No files'); return; }
+    setIsLoading(true)
 
     const res = await httpClient.uploadFiles(files)
       .then((d) => {
@@ -156,6 +162,8 @@ export const Job = ({ remontId, data, onSetDates, isLoading }: IProps) => {
         toast(typeof err === 'string' ? err : err?.message || 'Sorry', { appearance: 'error' })
         return err
       })
+
+    setIsLoading(false)
 
     // console.log(res)
     /* ARRAY like this:
@@ -194,7 +202,8 @@ export const Job = ({ remontId, data, onSetDates, isLoading }: IProps) => {
     JSON.stringify(files),
     setFiles,
     // setFileUrls,
-    handleAssignFiles
+    handleAssignFiles,
+    setIsLoading,
   ])
 
   return (

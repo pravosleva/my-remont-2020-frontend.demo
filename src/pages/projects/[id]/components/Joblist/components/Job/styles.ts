@@ -43,6 +43,9 @@ export const useStyles = makeStyles((theme) => ({
     '& .MuiTypography-root.MuiTypography-h5.MuiDropzoneArea-text': {
       fontSize: '15px',
     },
+    '& .MuiDropzonePreviewList-image': {
+      objectFit: 'cover',
+    },
     '& .MuiDropzoneArea-icon': {
       width: '35px',
       height: '35px',
