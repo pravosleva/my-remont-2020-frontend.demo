@@ -169,7 +169,7 @@ export const SiteLayout = ({ socket, children }: any) => {
         }
       }
     },
-    [remontState.jobs, remontState.remontLogic, handleUpdateJoblist]
+    [remontState.jobs, remontState.remontLogic, handleUpdateJoblist, handleSetProjectData, addToast]
   )
   // --- SOCKET SUBSCRIBER; GET REMONT IF NECESSARY;
   /*

@@ -33,9 +33,9 @@ export function remontReducer(
   state: TRemontState,
   action: TRemontAction
 ): TRemontState {
-  // console.log(action)
   let targetJobIndex = -1;
   let newState
+  const { payload } = action
 
   switch (action.type) {
     case 'UPDATE_JOB_FIELD':
@@ -60,23 +60,21 @@ export function remontReducer(
         // @ts-ignore
         if (!!newState[targetJobIndex]?.imagesUrls) {
           // @ts-ignore
-          newState[targetJobIndex].imagesUrls = [...newState[targetJobIndex].imagesUrls, ...action.payload]
+          newState[targetJobIndex].imagesUrls = [...newState[targetJobIndex].imagesUrls, ...payload]
         } else {
           // @ts-ignore
-          newState[targetJobIndex].imagesUrls = [...action.payload]
+          newState[targetJobIndex].imagesUrls = [...payload]
         }
       }
 
       return { ...state, jobs: [...newState] }
-      // return { ...state, jobs: action.payload, jobsLogic }
+      // return { ...state, jobs: payload, jobsLogic }
     case 'UPDATE_JOBLIST':
-      const jobsLogic = new JobsLogic(action.payload)
       // @ts-ignore
-      return { ...state, jobs: action.payload, jobsLogic }
+      return { ...state, jobs: payload, jobsLogic: new JobsLogic(payload) }
     case 'UPDATE_REMONT':
-      const remontLogic = new RemontLogic(action.payload)
       // @ts-ignore
-      return { ...state, remontLogic }
+      return { ...state, remontLogic: new RemontLogic(payload) }
     default:
       return state
   }

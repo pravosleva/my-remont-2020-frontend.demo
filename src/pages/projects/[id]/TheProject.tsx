@@ -232,6 +232,9 @@ export const TheProject = () => {
     joblist,
     createJobState.comment,
     createJobState.name,
+    setIsCreateNewJobLoading,
+    updateJoblist,
+    toast,
   ])
   // ---
   const classes = useStyles()
