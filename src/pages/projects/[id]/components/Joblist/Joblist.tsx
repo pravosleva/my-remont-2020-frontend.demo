@@ -560,14 +560,14 @@ export const Joblist = ({ remontId }: IProps) => {
                   open={openedMarkdownEditorId === data._id}
                   onClose={handleCloseEditor}
                   scroll="paper"
-                  aria-labelledby={`scroll-dialog-title_${data._id}`}
+                  aria-labelledby={`scroll-dialog-md-title_${data._id}`}
                   fullWidth={width > 767}
                   fullScreen={width <= 767}
                   maxWidth="lg"
                   // @ts-ignore
                   TransitionComponent={TransitionUp}
                 >
-                  <DialogTitle id={`scroll-dialog-title_${data._id}`}>
+                  <DialogTitle id={`scroll-dialog-md-title_${data._id}`}>
                     {data.name}
                   </DialogTitle>
                   <DialogContent
@@ -639,9 +639,9 @@ export const Joblist = ({ remontId }: IProps) => {
                   open={openedEditorId === data._id}
                   onClose={handleCloseEditor}
                   scroll="body"
-                  aria-labelledby={`scroll-dialog-title_${data._id}`}
+                  aria-labelledby={`scroll-dialog-values-title_${data._id}`}
                 >
-                  <DialogTitle id={`scroll-dialog-title_${data._id}`}>
+                  <DialogTitle id={`scroll-dialog-values-title_${data._id}`}>
                     {data.name || 'Title'}
                   </DialogTitle>
                   <DialogContent dividers={true}>
