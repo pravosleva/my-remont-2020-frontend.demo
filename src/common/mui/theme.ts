@@ -51,6 +51,10 @@ export const GlobalCss = withStyles({
       outline: 'none !important',
       userSelect: 'none !important',
     },
+    '.Mui-focusVisible': {
+      border: '1px solid red',
+      opacity: '0.5',
+    },
     // See also: https://material-ui.com/ru/customization/components/
     code: {
       background: 'rgba(250, 239, 240, 0.78)',
