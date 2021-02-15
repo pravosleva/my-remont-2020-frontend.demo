@@ -47,7 +47,10 @@ export const GlobalCss = withStyles({
   // @global is handled by jss-plugin-global.
   '@global': {
     // You should target [class*="MuiButton-root"] instead if you nest themes.
-    // '.MuiButton-root': {}
+    '.MuiButton-root': {
+      outline: 'none !important',
+      userSelect: 'none !important',
+    },
     // See also: https://material-ui.com/ru/customization/components/
     code: {
       background: 'rgba(250, 239, 240, 0.78)',
@@ -64,7 +67,7 @@ export const GlobalCss = withStyles({
       overflowX: 'hidden',
     },
     a: {
-      color: 'black',
+      color: '#3882C4',
     },
   },
 })(() => null)
