@@ -28,6 +28,7 @@ export interface IUserData {
 export interface IJob {
   name: string
   _id: string
+  id?: string
   comment?: string
   description?: string
   payed: number

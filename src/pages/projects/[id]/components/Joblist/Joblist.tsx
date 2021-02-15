@@ -87,17 +87,6 @@ const getUniqueKey = (data: IJob): string => {
 }
 
 export const Joblist = ({ remontId }: IProps) => {
-  const [expanded, setExpanded] = React.useState<string | false>(false)
-  const [getRef, setRef] =  useDynamicRefs();
-  const handleChangeAccoddionItem = (panel: string, id: string) => (
-    _event: React.ChangeEvent<{}>,
-    isExpanded: boolean
-  ) => {
-    setExpanded(isExpanded ? panel : false)
-    if (!!id) {
-      setTimeout(() => scrollTo(getRef(id)), 500)
-    }
-  }
   const classes = useStyles()
   const {
     userData,
@@ -109,6 +98,20 @@ export const Joblist = ({ remontId }: IProps) => {
     toast,
     filterState,
   } = useContext(MainContext)
+  // --
+  const [expanded, setExpanded] = React.useState<string | false>(false)
+  const [getRef, setRef] =  useDynamicRefs();
+  const handleChangeAccoddionItem = (panelName: string, id: string) => (
+    _event: React.ChangeEvent<{}>,
+    isExpanded: boolean
+  ) => {
+    setExpanded(isExpanded ? panelName : false)
+    // console.log(panelName, id)
+    if (!!id) {
+      setTimeout(() => scrollTo(getRef(id)), 500)
+    }
+  }
+  // --
   const isOwner: boolean = useMemo(() => remontLogic?.isOwner(userData?.id), [
     remontLogic,
     userData,
@@ -244,7 +247,7 @@ export const Joblist = ({ remontId }: IProps) => {
       default:
         return joblist
     }
-  }, [joblist, filterState])
+  }, [joblist, filterState.selectedGroup])
   const prompt = usePrompt()
   // priceJobs:
   const handleAddPriceJobs = useCallback(
@@ -473,7 +476,7 @@ export const Joblist = ({ remontId }: IProps) => {
                 expanded={expanded === `panel${data._id}`}
                 onChange={handleChangeAccoddionItem(`panel${data._id}`, data._id)}
                 // @ts-ignore
-                ref={setRef(data.id)}
+                ref={setRef(data._id)}
               >
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon />}

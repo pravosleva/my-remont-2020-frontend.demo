@@ -200,10 +200,10 @@ export const TheProject = () => {
     httpClient.updateRemontJoblist(id, [newJob, ...joblist], accessToken)
       .then((data) => {
         if (!!data?.id) {
-          setIsCreateNewJobLoading(false)
           handleCloseCreateJobForm()
           if (Array.isArray(data.joblist)) {
-            updateJoblist(data.joblist)
+            // NOTE: Necessary, because already updated by socket
+            // updateJoblist(data.joblist)
             toast('Ok', { appearance: 'success' })
             return
           }
@@ -212,7 +212,6 @@ export const TheProject = () => {
       })
       .catch((err) => {
         console.log(err)
-        setIsCreateNewJobLoading(false)
         if (err === 401) {
           const url = buildUrl('/', {
             path: 'auth/login',
@@ -226,6 +225,7 @@ export const TheProject = () => {
           toast(err.message, { appearance: 'error' })
         }
       })
+      setIsCreateNewJobLoading(false)
   }, [
     id,
     cookies,
@@ -233,9 +233,11 @@ export const TheProject = () => {
     createJobState.comment,
     createJobState.name,
     setIsCreateNewJobLoading,
+    handleCloseCreateJobForm,
     updateJoblist,
     toast,
   ])
+  // useEffect(() => {}, [])
   // ---
   const classes = useStyles()
   const isOwner: boolean = useMemo(() => remontLogic?.isOwner(userData?.id), [

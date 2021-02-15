@@ -162,10 +162,15 @@ export const SiteLayout = ({ socket, children }: any) => {
         !!remontState.remontLogic?.id &&
         result.id === remontState.remontLogic.id
       ) {
-        if (!!data?.joblist && !isEqual(remontState.jobs, data.joblist)) {
-          handleUpdateJoblist(data.joblist)
+        console.log('--- SOCKET: ev.result ---')
+        console.log(result)
+        console.log('--- SOCKET: ev.data ---')
+        console.log(data)
+        if (!!data?.joblist && !isEqual(remontState.jobs, result.joblist)) {
+          // NOTE: data.joblist по сокету приходит без ids (Dont use data.joblist for update state)
+          handleUpdateJoblist(result.joblist)
           handleSetProjectData(result)
-          addToast('Список работ обновлен', { appearance: 'info' })
+          addToast(`joblist (${result.joblist.length}) updated`, { appearance: 'info' })
         }
       }
     },
