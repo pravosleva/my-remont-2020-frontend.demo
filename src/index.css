@@ -1,3 +1,15 @@
+*,
+*:focus,
+*:hover {
+  outline: none !important;
+}
+.not-allowed {
+  cursor: not-allowed !important;
+}
+body {
+  -webkit-tap-highlight-color: transparent; /* for removing the highlight */
+}
+
 .react-toast-notifications__container {
   padding: 0;
   overflow-y: hidden !important;
