@@ -4,6 +4,15 @@ import green from '@material-ui/core/colors/green'
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
+    truncate: {
+      '& > h2': {
+        whiteSpace: 'nowrap',
+        width: '100%', // IE6 needs any width
+        overflow: 'hidden', // "overflow" value must be different from  visible"
+        // -o-text-overflow: 'ellipsis // Opera < 11
+        textOverflow: 'ellipsis !important', // IE, Safari (WebKit), Opera >= 11, FF > 6
+      },
+    },
     root: {
       width: '100%',
       [theme.breakpoints.up('md')]: {

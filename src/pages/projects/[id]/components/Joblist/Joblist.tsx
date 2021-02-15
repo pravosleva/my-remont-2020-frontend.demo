@@ -641,10 +641,10 @@ export const Joblist = ({ remontId }: IProps) => {
                   fullScreen={width <= 767}
                   open={openedEditorId === data._id}
                   onClose={handleCloseEditor}
-                  scroll="body"
+                  scroll="paper"
                   aria-labelledby={`scroll-dialog-values-title_${data._id}`}
                 >
-                  <DialogTitle id={`scroll-dialog-values-title_${data._id}`}>
+                  <DialogTitle id={`scroll-dialog-values-title_${data._id}`} className={classes.truncate}>
                     {data.name || 'Title'}
                   </DialogTitle>
                   <DialogContent dividers={true}>
