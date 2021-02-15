@@ -219,7 +219,7 @@ export const SignUp = () => {
                         isUserDataLoading ||
                         isUserDataLoaded
                       }
-                      variant="contained"
+                      variant={isSubmitting || isUserDataLoading ? "outlined" : "contained"}
                       color="primary"
                       onClick={submitForm}
                       fullWidth

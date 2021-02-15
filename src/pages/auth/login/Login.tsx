@@ -196,7 +196,7 @@ export const Login = () => {
                         Object.keys(touched).length === 0 ||
                         isUserDataLoading
                       }
-                      variant="contained"
+                      variant={isSubmitting || isUserDataLoading ? "outlined" : "contained"}
                       color="primary"
                       onClick={submitForm}
                       fullWidth

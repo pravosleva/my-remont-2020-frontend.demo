@@ -14,9 +14,9 @@ export const SiteHeader = () => {
   )
   const router = useRouter()
   // const [cookies, setCookie, removeCookie] = useCookies(['jwt'])
-  // const {
-  //   location: { pathname },
-  // } = router
+  const {
+    location: { pathname },
+  } = router
   const handleLogout = useCallback(() => {
     logout().then(() => {
       router.push('/auth/login')
@@ -41,10 +41,10 @@ export const SiteHeader = () => {
               )
             }}
             size="small"
-            variant="contained"
+            variant={pathname === '/auth/login' || isUserDataLoading ? "outlined" : "contained"}
             color="primary"
             endIcon={<AccountCircleIcon />}
-            disabled={router.pathname === '/auth/login'}
+            disabled={pathname === '/auth/login'}
           >
             <span>Вход</span>
           </Button>
@@ -57,7 +57,7 @@ export const SiteHeader = () => {
                 router.push('/profile')
               }}
               size="small"
-              variant="contained"
+              variant="outlined"
               color="primary"
               endIcon={<AccountCircleIcon />}
               disabled={router.pathname === '/profile'}
