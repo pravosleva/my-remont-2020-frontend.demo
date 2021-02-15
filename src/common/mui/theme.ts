@@ -67,7 +67,7 @@ export const GlobalCss = withStyles({
       overflowX: 'hidden',
     },
     a: {
-      color: '#3882C4',
+      color: '#556cd6',
     },
   },
 })(() => null)

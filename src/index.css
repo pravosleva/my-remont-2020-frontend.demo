@@ -1,3 +1,30 @@
+html {
+  --blue: #147ec1;
+  --lgt-blue: #3db5eb;
+  --lgtr-blue: #a6f7ff;
+  --drk-blue: #1663a0;
+  --black: #32383c;
+}
+
+a,
+button {
+  transition: all 0.3s ease;
+}
+button:hover {
+  /* color: var(--lgt-blue); */
+  border-color: var(--lgt-blue);
+}
+
+button:active {
+  /* color: var(--drk-blue); */
+  border-color: var(--drk-blue);
+}
+
+button:focus {
+  outline: none;
+  background-color: var(--lgtr-blue);
+}
+
 *,
 *:focus,
 *:hover {
