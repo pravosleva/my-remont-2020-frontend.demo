@@ -35,12 +35,12 @@ export const BreadCrumbs = () => {
       {pathname.includes('/projects/') && pathname.length > 10 && (
         <div className={classes.rightSide}>
           <Link to="/">Главная</Link> / <Link to="/projects">Проекты</Link> /{' '}
-          {!remontLogic && (
+          {!remontLogic?.name && (
             <span className={classes.muted}>Please wait...</span>
           )}
-          {!!remontLogic && (
+          {!!remontLogic?.name && (
             <span style={{ whiteSpace: 'nowrap' }} className={classes.muted}>
-              {remontLogic.name}
+              {remontLogic.name.length <= 35 ? remontLogic.name : `${remontLogic.name.slice(0, 34)}...`}
             </span>
           )}
         </div>

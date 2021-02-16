@@ -44,7 +44,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     fixedDesktopWidget: {
       position: 'fixed',
-      top: '90px',
+      top: '80px',
       right: '0px',
       transition: 'transform 0.2s linear',
       zIndex: 6,
