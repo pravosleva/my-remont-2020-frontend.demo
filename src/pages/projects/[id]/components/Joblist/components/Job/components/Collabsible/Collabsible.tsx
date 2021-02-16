@@ -7,11 +7,12 @@ import { mdiChevronDown, mdiChevronUp } from '@mdi/js'
 interface IProps {
   contentRenderer: React.FC<any>
   title: string
+  isOpenedByDefault?: boolean
 }
 
-export const Collabsible = ({ title, contentRenderer }: IProps): any => {
+export const Collabsible = ({ title, contentRenderer, isOpenedByDefault }: IProps): any => {
   const classes = useStyles()
-  const [isOpened, setIsOpened] = useState<boolean>(false)
+  const [isOpened, setIsOpened] = useState<boolean>(isOpenedByDefault || false)
   const handleToggle = () => {
     setIsOpened((s: boolean) => !s)
   }
@@ -19,8 +20,8 @@ export const Collabsible = ({ title, contentRenderer }: IProps): any => {
   return (
     <div className={classes.wrapper}>
       <div className={clsx(classes.titleBox, { [classes.marginBottomIfOpened]: isOpened })} onClick={handleToggle}>
+      <div>{isOpened ? <Icon path={mdiChevronUp} size={0.7} /> : <Icon path={mdiChevronDown} size={0.7} /> }</div>
         <div><b>{title}</b></div>
-        <div>{isOpened ? <Icon path={mdiChevronUp} size={0.7} /> : <Icon path={mdiChevronDown} size={0.7} /> }</div>
       </div>
       {
         isOpened && contentRenderer({})

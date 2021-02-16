@@ -210,7 +210,40 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
     <LocalizationProvider dateAdapter={DateFnsAdapter} locale={ruLocale}>
       <div className={classes.paper}>
         <Grid container direction="column" spacing={2}>
-        <Grid item>
+          <Grid item>
+            <Collabsible
+              title='Итог'
+              contentRenderer={() => (
+                <>
+                  <Typography gutterBottom variant="body2" color="textSecondary">
+                    Цена за работу: {getPrettyPrice(data.priceJobs)}
+                  </Typography>
+                  <Typography gutterBottom variant="body2" color="textSecondary">
+                    Цена за материалы: {getPrettyPrice(data.priceMaterials)}
+                  </Typography>
+                  <Typography gutterBottom variant="body2" color="textSecondary">
+                    Цена за доставку: {getPrettyPrice(data.priceDelivery)}
+                  </Typography>
+                </>
+              )}
+            />
+          </Grid>
+          <Grid item>
+            <Typography gutterBottom variant="h5">
+              Оплачено: {getPrettyPrice(data.payed)}
+            </Typography>
+          </Grid>
+          <Grid item>
+            <b
+              className={clsx({
+                [classes.dangerText]: diff < 0,
+                [classes.successText]: diff >= 0,
+              })}
+            >
+              Остаток: {getPrettyPrice(diff)}
+            </b>
+          </Grid>
+          <Grid item>
             <Collabsible
               title='План'
               contentRenderer={() => (
@@ -294,59 +327,35 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
               )}
             />
           </Grid>
-          <Grid item>
-            <div className={classes.title}>
-              <b>Итог</b>
-            </div>
-            <Typography gutterBottom variant="body2" color="textSecondary">
-              Цена за работу: {getPrettyPrice(data.priceJobs)}
-            </Typography>
-            <Typography gutterBottom variant="body2" color="textSecondary">
-              Цена за материалы: {getPrettyPrice(data.priceMaterials)}
-            </Typography>
-            <Typography gutterBottom variant="body2" color="textSecondary">
-              Цена за доставку: {getPrettyPrice(data.priceDelivery)}
-            </Typography>
-          </Grid>
-          <Grid item>
-            <Typography gutterBottom variant="h5">
-              Оплачено: {getPrettyPrice(data.payed)}
-            </Typography>
-          </Grid>
-          <Grid item>
-            <b
-              className={clsx({
-                [classes.dangerText]: diff < 0,
-                [classes.successText]: diff >= 0,
-              })}
-            >
-              Остаток: {getPrettyPrice(diff)}
-            </b>
-          </Grid>
           {!!data.comment && (
             <Grid item xs={12}>
-              <div className={classes.title}>
-                <b>Комментарий</b>
-              </div>
-              <div>
-                <Typography
-                  variant="body2"
-                  color="textSecondary"
-                  style={{ whiteSpace: 'pre-wrap' }}
-                >
-                  {data.comment || 'No comment'}
-                </Typography>
-              </div>
+              <Collabsible
+                title='Комментарий'
+                isOpenedByDefault
+                contentRenderer={() => (
+                  <div>
+                    <Typography
+                      variant="body2"
+                      color="textSecondary"
+                      style={{ whiteSpace: 'pre-wrap' }}
+                    >
+                      {data.comment || 'No comment'}
+                    </Typography>
+                  </div>
+                )}
+              />
             </Grid>
           )}
           {!!data.description && (
             <Grid item xs={12} className="job-description-markdown">
-              <div>
-                <b>Описание</b>
-              </div>
-              <Markdown
-                source={data.description}
-                className={classes.description}
+              <Collabsible
+                title='Описание'
+                contentRenderer={() => (
+                  <Markdown
+                    source={data.description}
+                    className={classes.description}
+                  />
+                )}
               />
             </Grid>
           )}
