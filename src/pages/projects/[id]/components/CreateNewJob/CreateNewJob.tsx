@@ -49,14 +49,14 @@ export const CreateNewJob = ({
       open={isOpened}
       // onClose={() => {}}
       scroll="paper"
-      aria-labelledby={`scroll-dialog-title_NEW_JOB`}
+      aria-labelledby='scroll-dialog-title_NEW_JOB'
       fullWidth={width > 767}
       fullScreen={width <= 767}
       maxWidth="md"
       // @ts-ignore
       TransitionComponent={TransitionUp}
     >
-      <DialogTitle id={`scroll-dialog-title_NEW_JOB`}>
+      <DialogTitle id='scroll-dialog-title_NEW_JOB'>
         {name || 'Новая работа'}
       </DialogTitle>
       <DialogContent dividers={true} className={classes.dialogContent}>

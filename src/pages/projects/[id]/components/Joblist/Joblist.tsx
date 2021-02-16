@@ -53,6 +53,8 @@ import { httpErrorHandler } from '~/utils/errors/http/fetch'
 import useDynamicRefs from 'use-dynamic-refs'
 import { scrollTo } from '~/utils/scrollTo'
 import { getDifference } from '~/utils/getDifference'
+import Icon from '@mdi/react'
+import { mdiDelete } from '@mdi/js'
 
 // Register plugins if required
 // MdEditor.use(YOUR_PLUGINS_HERE);
@@ -86,7 +88,7 @@ const getUniqueKey = (data: IJob): string => {
   return `${data._id}_${data.payed}_${data.priceDelivery}_${data.priceJobs}_${data.priceMaterials}`
 }
 
-export const Joblist = ({ remontId }: IProps) => {
+export const Joblist = ({ remontId, removeJob }: IProps) => {
   const classes = useStyles()
   const {
     userData,
@@ -465,21 +467,11 @@ export const Joblist = ({ remontId }: IProps) => {
   const handleDeleteJob = useCallback(
     (data: IJob) => {
       confirm({
-        title: 'Удаление работы: Вы уверены?',
+        title: <span style={{ color: 'red' }}>Работа будет удалена. Ok?</span>,
         description: data.name,
       })
         .then(() => {
-          toast('In progress...', { appearance: 'error' })
-
-          // removeJobPromise(data.id)
-          //   .then(async () => {
-          //     console.log(joblist)
-          //     await (() => new Promise((res, rej) => setTimeout(res, 1000)))()
-          //   })
-          //   .then(handleSubmit)
-          //   .catch((msg) => {
-          //     throw new Error(msg)
-          //   })
+          removeJob(data._id)
         })
         .catch((err) => {
           toast(err?.message || 'handleDeleteJob: Declined', {
@@ -573,8 +565,10 @@ export const Joblist = ({ remontId }: IProps) => {
                         variant="outlined"
                         color="secondary"
                         disabled={isLoading}
+                        endIcon={<Icon path={mdiDelete} size={0.8} />}
+                        style={{ marginRight: 'auto' }}
                       >
-                        Удалить
+                        DEL
                       </Button>
                       <Button
                         size="small"

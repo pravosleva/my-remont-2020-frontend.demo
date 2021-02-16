@@ -178,7 +178,7 @@ export const TheProject = () => {
   const [isCreateNewJobLoading, setIsCreateNewJobLoading] = useState<boolean>(
     false
   )
-  const handleSave = useCallback(() => {
+  const handleSaveNewJobs = useCallback(() => {
     setIsCreateNewJobLoading(true)
     const newJob: INewJob = {
       comment: createJobState.comment,
@@ -236,8 +236,49 @@ export const TheProject = () => {
     handleCloseCreateJobForm,
     updateJoblist,
     toast,
+    accessToken,
   ])
-  // useEffect(() => {}, [])
+  // ---
+  // --- REMOVE JOB:
+  const handleRemoveJob = useCallback((jobId: string) => {
+    setIsCreateNewJobLoading(true)
+    const newJobList = joblist.filter(({ _id }) => _id !== jobId)
+
+    httpClient.updateRemontJoblist(id, newJobList, accessToken)
+      .then((data) => {
+        if (!!data?.id) {
+          handleCloseCreateJobForm()
+          if (Array.isArray(data.joblist)) {
+            // NOTE: Necessary, because already updated by socket
+            // updateJoblist(data.joblist)
+            toast('Ok', { appearance: 'success' })
+            return
+          }
+        }
+        throw new Error('Fuckup')
+      })
+      .catch((err) => {
+        console.log(err)
+        if (err === 401) {
+          const url = buildUrl('/', {
+            path: 'auth/login',
+            // hash: 'contact',
+            queryParams: {
+              from: `/projects/${id}`,
+            },
+          })
+          router.history.push(url)
+        } else {
+          toast(err.message, { appearance: 'error' })
+        }
+      })
+      setIsCreateNewJobLoading(false)
+  }, [
+    id,
+    accessToken,
+    setIsCreateNewJobLoading,
+    joblist,
+  ])
   // ---
   const classes = useStyles()
   const isOwner: boolean = useMemo(() => remontLogic?.isOwner(userData?.id), [
@@ -371,7 +412,7 @@ export const TheProject = () => {
                   isLoading={isLoading || isCreateNewJobLoading}
                   onChangeField={handleChangeField}
                   onClose={handleCloseCreateJobForm}
-                  onSave={handleSave}
+                  onSave={handleSaveNewJobs}
                   {...createJobState}
                 />
               </Grid>
@@ -381,7 +422,7 @@ export const TheProject = () => {
         <Grid item xs={12} md={6}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              {isLoaded && <Joblist remontId={remontLogic?.id} />}
+              {isLoaded && <Joblist remontId={remontLogic?.id} removeJob={handleRemoveJob} />}
               {/* remont.id */}
             </Grid>
           </Grid>
