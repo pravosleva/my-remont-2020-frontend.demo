@@ -210,6 +210,121 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
     <LocalizationProvider dateAdapter={DateFnsAdapter} locale={ruLocale}>
       <div className={classes.paper}>
         <Grid container direction="column" spacing={2}>
+          {
+            !!data.imagesUrls && data.imagesUrls.length > 0 && (
+              <Grid item className={classes.galleryWrapper}>
+                {/* <div className={classes.title}><b>Фото ({data.imagesUrls.length})</b></div> */}
+                <ImageGallery items={data.imagesUrls.map(({ large, medium, thumbnail, small }: any) => ({
+                  original: !!large ? `${apiUrl}${large.url}` : medium ? `${apiUrl}${medium.url}` : `${apiUrl}${small.url}`,
+                  thumbnail: `${apiUrl}${thumbnail.url}`
+                }))} />
+              </Grid>
+            )
+          }
+          {
+            isOwner && (
+              <>
+                <Grid item xs={12} className={classes.dropZoneWrapper}>
+                  <DropzoneAreaBase
+                    // Icon={BackupIcon}
+                    filesLimit={5}
+                    maxFileSize={50 * 1024 * 1024}
+                    onAdd={handleAddFile}
+                    // onDrop={handleAdd}
+                    onDelete={handleDeleteFile}
+                    showPreviewsInDropzone={true}
+                    showAlerts={false}
+                    // onAlert={this.onDropzoneAlert}
+                    fileObjects={files}
+                    dropzoneText="Загрузите или перетащите файл в выделенную область в формате .jpg или .png"
+                    dropzoneClass="smartprice-dropzone"
+                    acceptedFiles={[
+                      // 'application/msword',
+                      'image/jpeg',
+                      'image/png',
+                      // 'image/bmp',
+                    ]}
+                  />
+                </Grid>
+                {
+                  files.length > 0 && (
+                    <Grid item xs={12}>
+                      <Button
+                        fullWidth
+                        variant="outlined"
+                        color="primary"
+                        onClick={handleUploadFiles}
+                        // disabled={isSubmitDisabled}
+                        endIcon={
+                          isLoading ? (
+                            <CircularProgress
+                              size={20}
+                              color="primary"
+                              style={{ marginLeft: 'auto' }}
+                            />
+                          ) : (
+                            <SaveIcon />
+                          )
+                        }
+                      >
+                        Upload files
+                      </Button>
+                      {/*
+                        !!fileUrls && fileUrls.length > 0 && (
+                          <Button
+                            fullWidth
+                            variant="outlined"
+                            color="primary"
+                            onClick={handleAssignFiles}
+                            // disabled={isSubmitDisabled}
+                            endIcon={
+                              isLoading ? (
+                                <CircularProgress
+                                  size={20}
+                                  color="primary"
+                                  style={{ marginLeft: 'auto' }}
+                                />
+                              ) : (
+                                <SaveIcon />
+                              )
+                            }
+                          >
+                            Assign files
+                          </Button>
+                        )
+                      */}
+                    </Grid>
+                  )
+                }
+              </>
+            )
+          }
+          {!!data.comment && (
+            <Grid item xs={12}>
+              {/* <Collabsible
+                title='Комментарий'
+                isOpenedByDefault
+                contentRenderer={() => (
+                  <div>
+                    <Typography
+                      variant="body2"
+                      color="textSecondary"
+                      style={{ whiteSpace: 'pre-wrap' }}
+                    >
+                      {data.comment}
+                    </Typography>
+                  </div>
+                )}
+              /> */}
+              <Typography
+                variant="body2"
+                color="textSecondary"
+                style={{ whiteSpace: 'pre-wrap' }}
+              >
+                {data.comment}
+              </Typography>
+            </Grid>
+          )}
           <Grid item>
             <Collabsible
               title='Итог'
@@ -327,25 +442,6 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
               )}
             />
           </Grid>
-          {!!data.comment && (
-            <Grid item xs={12}>
-              <Collabsible
-                title='Комментарий'
-                isOpenedByDefault
-                contentRenderer={() => (
-                  <div>
-                    <Typography
-                      variant="body2"
-                      color="textSecondary"
-                      style={{ whiteSpace: 'pre-wrap' }}
-                    >
-                      {data.comment || 'No comment'}
-                    </Typography>
-                  </div>
-                )}
-              />
-            </Grid>
-          )}
           {!!data.description && (
             <Grid item xs={12} className="job-description-markdown">
               <Collabsible
@@ -365,97 +461,6 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
             <pre>{JSON.stringify(data.dateStart)}</pre>
           </Grid>
           */}
-          {
-            isOwner && (
-              <>
-                <Grid item xs={12} className={classes.dropZoneWrapper}>
-                  <DropzoneAreaBase
-                    // Icon={BackupIcon}
-                    filesLimit={5}
-                    maxFileSize={50 * 1024 * 1024}
-                    onAdd={handleAddFile}
-                    // onDrop={handleAdd}
-                    onDelete={handleDeleteFile}
-                    showPreviewsInDropzone={true}
-                    showAlerts={false}
-                    // onAlert={this.onDropzoneAlert}
-                    fileObjects={files}
-                    dropzoneText="Загрузите или перетащите файл в выделенную область в формате .jpg или .png"
-                    dropzoneClass="smartprice-dropzone"
-                    acceptedFiles={[
-                      // 'application/msword',
-                      'image/jpeg',
-                      'image/png',
-                      // 'image/bmp',
-                    ]}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  {
-                    files.length > 0 && (
-                      <Button
-                        fullWidth
-                        variant="outlined"
-                        color="primary"
-                        onClick={handleUploadFiles}
-                        // disabled={isSubmitDisabled}
-                        endIcon={
-                          isLoading ? (
-                            <CircularProgress
-                              size={20}
-                              color="primary"
-                              style={{ marginLeft: 'auto' }}
-                            />
-                          ) : (
-                            <SaveIcon />
-                          )
-                        }
-                      >
-                        Upload files
-                      </Button>
-                    )
-                  }
-                  {/*
-                    !!fileUrls && fileUrls.length > 0 && (
-                      <Button
-                        fullWidth
-                        variant="outlined"
-                        color="primary"
-                        onClick={handleAssignFiles}
-                        // disabled={isSubmitDisabled}
-                        endIcon={
-                          isLoading ? (
-                            <CircularProgress
-                              size={20}
-                              color="primary"
-                              style={{ marginLeft: 'auto' }}
-                            />
-                          ) : (
-                            <SaveIcon />
-                          )
-                        }
-                      >
-                        Assign files
-                      </Button>
-                    )
-                  */}
-                </Grid>
-              </>
-            )
-          }
-          {
-            !!data.imagesUrls && data.imagesUrls.length > 0 && (
-              <Grid item className={classes.galleryWrapper}>
-                <div className={classes.title}>
-                  <b>Фото ({data.imagesUrls.length})</b>
-                </div>
-                <ImageGallery items={data.imagesUrls.map(({ large, medium, thumbnail, small }: any) => ({
-                  original: !!large ? `${apiUrl}${large.url}` : medium ? `${apiUrl}${medium.url}` : `${apiUrl}${small.url}`,
-                  thumbnail: `${apiUrl}${thumbnail.url}`
-                }))} />
-              </Grid>
-            )
-          }
         </Grid>
       </div>
     </LocalizationProvider>
