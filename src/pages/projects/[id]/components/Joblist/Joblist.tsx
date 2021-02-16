@@ -97,6 +97,7 @@ export const Joblist = ({ remontId }: IProps) => {
     updateJoblist,
     toast,
     filterState,
+    removeJobPromise,
   } = useContext(MainContext)
   // --
   const [expanded, setExpanded] = React.useState<string | false>(false)
@@ -461,6 +462,33 @@ export const Joblist = ({ remontId }: IProps) => {
     },
     [prompt, changeJobFieldPromise, toast, handleSubmit]
   )
+  const handleDeleteJob = useCallback(
+    (data: IJob) => {
+      confirm({
+        title: 'Удаление работы: Вы уверены?',
+        description: data.name,
+      })
+        .then(() => {
+          toast('In progress...', { appearance: 'error' })
+
+          // removeJobPromise(data.id)
+          //   .then(async () => {
+          //     console.log(joblist)
+          //     await (() => new Promise((res, rej) => setTimeout(res, 1000)))()
+          //   })
+          //   .then(handleSubmit)
+          //   .catch((msg) => {
+          //     throw new Error(msg)
+          //   })
+        })
+        .catch((err) => {
+          toast(err?.message || 'handleDeleteJob: Declined', {
+            appearance: 'error',
+          })
+        })
+    },
+    [handleSubmit, removeJobPromise, joblist]
+  )
 
   return (
     <>
@@ -539,6 +567,15 @@ export const Joblist = ({ remontId }: IProps) => {
                   <>
                     <Divider />
                     <AccordionActions>
+                      <Button
+                        onClick={() => handleDeleteJob(data)}
+                        size="small"
+                        variant="outlined"
+                        color="secondary"
+                        disabled={isLoading}
+                      >
+                        Удалить
+                      </Button>
                       <Button
                         size="small"
                         variant="outlined"

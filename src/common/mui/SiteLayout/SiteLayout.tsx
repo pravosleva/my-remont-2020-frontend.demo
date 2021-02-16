@@ -60,7 +60,7 @@ export const SiteLayout = ({ socket, children }: any) => {
   // --- REMONT STATE:
   const [remontState, dispatch] = useReducer(remontReducer, remontInitialState)
   const handleChangeJobField = useCallback(
-    (id, fieldName: string, value: number | boolean | string | any) => () => {
+    (id: string, fieldName: string, value: number | boolean | string | any) => () => {
       try {
         if (
           (fieldName === 'realFinishDate' ||
@@ -78,6 +78,17 @@ export const SiteLayout = ({ socket, children }: any) => {
         return Promise.resolve()
       } catch (err) {
         return Promise.reject(err?.message || 'handleChangeJobField: Errored')
+      }
+    },
+    [dispatch]
+  )
+  const handleDeleteJob = useCallback(
+    (id: string) => {
+      try {
+        dispatch({ type: 'DELETE_JOB', payload: id })
+        return Promise.resolve()
+      } catch (err) {
+        return Promise.reject(err?.message || 'handleDeleteJob: Errored')
       }
     },
     [dispatch]
@@ -113,9 +124,7 @@ export const SiteLayout = ({ socket, children }: any) => {
     (msg?: string) => {
       setUserData(null)
       removeCookie('jwt')
-      if (!!msg) {
-        addToast(`Logout: ${msg}`, { appearance: 'info' })
-      }
+      // if (!!msg) addToast(`Logout: ${msg}`, { appearance: 'info' })
       return Promise.resolve(true)
     },
     [setUserData, removeCookie]
@@ -289,6 +298,7 @@ export const SiteLayout = ({ socket, children }: any) => {
         updateJoblist: handleUpdateJoblist,
         remontLogic: remontState.remontLogic,
         updateRemont: handleSetProjectData,
+        removeJobPromise: handleDeleteJob,
         // Toaster:
         toast: addToast,
         // Socket:

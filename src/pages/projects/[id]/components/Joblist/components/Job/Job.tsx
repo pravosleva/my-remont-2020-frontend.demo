@@ -19,7 +19,7 @@ import DateFnsAdapter from '@material-ui/pickers/adapter/date-fns'
 import ruLocale from 'date-fns/locale/ru'
 import SaveIcon from '@material-ui/icons/Save'
 import { MainContext } from '~/common/context/MainContext'
-import { Plan } from './components/Plan'
+import { Collabsible } from './components/Collabsible'
 import { httpClient } from '~/utils/httpClient'
 import { DropzoneAreaBase } from 'material-ui-dropzone';
 import { useCookies } from 'react-cookie'
@@ -211,7 +211,7 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
       <div className={classes.paper}>
         <Grid container direction="column" spacing={2}>
         <Grid item>
-            <Plan
+            <Collabsible
               title='План'
               contentRenderer={() => (
                 <>

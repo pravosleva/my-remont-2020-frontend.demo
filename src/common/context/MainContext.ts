@@ -83,6 +83,7 @@ interface IMainContext {
   onSelectIsDone: () => void
   onSelectInProgress: () => void
   axiosRemoteGraphQL: any | null
+  removeJobPromise: (id: string) => Promise<any>
 }
 
 export const MainContext = createContext<IMainContext>({
@@ -128,4 +129,7 @@ export const MainContext = createContext<IMainContext>({
     throw new Error('onSelectInProgress method should be implemented')
   },
   axiosRemoteGraphQL: null,
+  removeJobPromise: (id: string) => {
+    throw new Error('removeJobPromise method should be implemented')
+  },
 })

@@ -28,6 +28,10 @@ type TRemontAction =
     id: string
     payload: TFileId[]
   }
+  | {
+    type: 'DELETE_JOB',
+    payload: string
+  }
 
 export function remontReducer(
   state: TRemontState,
@@ -75,6 +79,11 @@ export function remontReducer(
     case 'UPDATE_REMONT':
       // @ts-ignore
       return { ...state, remontLogic: new RemontLogic(payload) }
+    case 'DELETE_JOB':
+      newState = [...state.jobs].filter(({ _id }) => _id !== payload)
+      // console.log(newState)
+      // @ts-ignore
+      return { ...state, jobs: newState, jobsLogic: new JobsLogic(newState) }
     default:
       return state
   }
