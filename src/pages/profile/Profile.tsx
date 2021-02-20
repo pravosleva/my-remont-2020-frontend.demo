@@ -2,12 +2,13 @@ import React from 'react'
 import { Grid } from '@material-ui/core'
 import ReactJson from 'react-json-view'
 import { useUserAuthContext } from '~/common/hooks'
+import { ResponsiveBlock } from '~/common/mui/ResponsiveBlock'
 
 export const Profile = () => {
   const { userData } = useUserAuthContext()
 
   return (
-    <div>
+    <ResponsiveBlock isLimited>
       <h1>Профиль</h1>
       <Grid container spacing={2}>
         <Grid item xs={12} md={6}>
@@ -15,6 +16,6 @@ export const Profile = () => {
           {!!userData && <ReactJson src={userData} />}
         </Grid>
       </Grid>
-    </div>
+    </ResponsiveBlock>
   )
 }

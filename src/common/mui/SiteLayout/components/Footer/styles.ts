@@ -10,8 +10,8 @@ export const useStyles = makeStyles((theme) => ({
     color: '#FFF',
   },
   content: {
-    maxWidth: '1000px',
+    // maxWidth: '1000px',
     margin: '0 auto',
-    padding: theme.spacing(1),
+    padding: theme.spacing(1, 0, 1, 0),
   },
 }))

@@ -21,6 +21,7 @@ import { httpErrorHandler } from '~/utils/errors/http/fetch'
 import { Link } from 'react-router-dom'
 import { validateEmail } from '~/utils/validators'
 import { validShape } from './yup'
+import { ResponsiveBlock } from '~/common/mui/ResponsiveBlock'
 
 const apiUrl = getApiUrl()
 const REACT_APP_COOKIE_MAXAGE_IN_DAYS = process.env
@@ -79,7 +80,7 @@ export const Login = () => {
   }, [setUserData])
 
   return (
-    <Container component="main" maxWidth="xs">
+    <ResponsiveBlock isLimited>
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
           <LockOpenIcon />
@@ -217,6 +218,6 @@ export const Login = () => {
         </Formik>
         <Link to="/auth/sign-up">Регистрация</Link>
       </div>
-    </Container>
+    </ResponsiveBlock>
   )
 }

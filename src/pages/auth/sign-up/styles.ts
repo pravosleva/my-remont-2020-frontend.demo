@@ -2,7 +2,9 @@ import { makeStyles } from '@material-ui/core/styles'
 
 export const useStyles = makeStyles((theme) => ({
   paper: {
+    maxWidth: theme.breakpoints.values.xs,
     marginTop: theme.spacing(8),
+    margin: '0 auto',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',

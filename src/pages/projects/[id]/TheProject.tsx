@@ -25,6 +25,7 @@ import buildUrl from 'build-url'
 import clsx from 'clsx'
 import CloseIcon from '@material-ui/icons/Close'
 import { httpClient } from '~/utils/httpClient'
+import { ResponsiveBlock } from '~/common/mui/ResponsiveBlock'
 
 // const apiUrl = getApiUrl()
 // const isDev = process.env.NODE_ENV === 'development'
@@ -316,7 +317,7 @@ export const TheProject = () => {
   }, [onSelectInProgress, handleToggleWidget])
 
   return (
-    <>
+    <ResponsiveBlock isLimited>
       <h1>{projectName}</h1>
       <div
         className={clsx(classes.fixedDesktopWidget, {
@@ -427,6 +428,6 @@ export const TheProject = () => {
           </Grid>
         </Grid>
       </Grid>
-    </>
+    </ResponsiveBlock>
   )
 }

@@ -7,7 +7,7 @@ import React, {
   useRef,
   useMemo,
 } from 'react'
-import { Grid } from '@material-ui/core'
+// import { Container } from '@material-ui/core'
 import { SiteHeader } from './components/SiteHeader'
 import { BreadCrumbs } from './components/BreadCrumbs'
 import { MainContext, IJob } from '~/common/context/MainContext'
@@ -37,10 +37,16 @@ import axiosRetry from 'axios-retry';
 // import { useRouter } from '~/common/hooks'
 // import { getNormalizedUserDataResponse } from '~/utils/strapi/getNormalizedUserDataResponse'
 import { UserAuthContextProvider } from '~/common/context/UserAuthContext'
+import {
+  siteHeaderHeight,
+  // useBaseStyles,
+} from '~/common/mui/baseStyles'
+import clsx from 'clsx'
 
 axiosRetry(axios, { retries: 5 });
 
 const apiUrl = getApiUrl()
+// const isDev = process.env.NODE_ENV === 'development'
 
 export const SiteLayout = ({ socket, children }: any) => {
   // --- REMONT STATE:
@@ -265,6 +271,7 @@ export const SiteLayout = ({ socket, children }: any) => {
     return axiosOpts
   }, [cookies.jwt, apiUrl])
   // ---
+  // const baseClasses = useBaseStyles()
 
   return (
     <UserAuthContextProvider>
@@ -306,7 +313,7 @@ export const SiteLayout = ({ socket, children }: any) => {
                   zIndex: 6,
                   margin: '0 auto',
                   padding: '0px',
-                  height: '60px',
+                  height: `${siteHeaderHeight.desktop}px`,
                   display: 'flex',
                   alignItems: 'center',
                   borderBottom: '1px solid lightgray',
@@ -318,11 +325,7 @@ export const SiteLayout = ({ socket, children }: any) => {
               <div className={classes.breadcrumbs}>
                 <BreadCrumbs />
               </div>
-              <Grid container spacing={0}>
-                <Grid item xs={12}>
-                  <div className={classes.content}>{children}</div>
-                </Grid>
-              </Grid>
+              <div className={clsx(classes.content)}>{children}</div>
               <Footer />
             </div>
             <FixedScrollTopButton />

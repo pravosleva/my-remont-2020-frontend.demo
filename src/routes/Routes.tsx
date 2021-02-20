@@ -8,6 +8,7 @@ import { Login } from '~/pages/auth/login'
 import { SignUp } from '~/pages/auth/sign-up'
 import { NotFound } from '~/pages/not-found'
 import { Profile } from '~/pages/profile'
+import { TryUi } from '~/pages/try-ui'
 
 const routes: IRoute[] = [
   { path: '/', exact: true, component: HomePage },
@@ -16,6 +17,7 @@ const routes: IRoute[] = [
   { path: '/auth/login', exact: true, component: Login },
   { path: '/auth/sign-up', exact: true, component: SignUp },
   { path: '/profile', exact: true, component: Profile },
+  { path: '/try-ui', exact: true, component: TryUi },
 ]
 
 export const Routes = () => {

@@ -20,6 +20,7 @@ import { useCustomToastContext, useUserAuthContext } from '~/common/hooks'
 import axios from 'axios'
 import { getApiUrl } from '~/utils/getApiUrl'
 import { useRouter } from '~/common/hooks/useRouter'
+import { ResponsiveBlock } from '~/common/mui/ResponsiveBlock'
 
 const apiUrl = getApiUrl()
 // const REACT_APP_COOKIE_MAXAGE_IN_DAYS = process.env
@@ -88,7 +89,7 @@ export const SignUp = () => {
   const router = useRouter()
 
   return (
-    <Container component="main" maxWidth="xs">
+    <ResponsiveBlock isLimited>
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
@@ -243,6 +244,6 @@ export const SignUp = () => {
         </Formik>
         <Link to="/auth/login">Авторизация</Link>
       </div>
-    </Container>
+    </ResponsiveBlock>
   )
 }

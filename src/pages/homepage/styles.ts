@@ -27,5 +27,9 @@ export const useStyles = makeStyles((theme: Theme) =>
         },
       },
     },
+
+    redBox: {
+      border: '1px solid red',
+    },
   })
 )

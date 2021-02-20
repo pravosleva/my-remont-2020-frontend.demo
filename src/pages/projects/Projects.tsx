@@ -26,6 +26,7 @@ import { useStyles } from './styles'
 import { useCookies } from 'react-cookie'
 import { eventlist as ev } from '~/common/socket'
 import { formatDateBySeconds2 } from '~/utils/time/timeConverter'
+import { ResponsiveBlock } from '~/common/mui/ResponsiveBlock'
 
 const apiUrl = getApiUrl()
 const GET_REMONTS = `
@@ -428,7 +429,7 @@ export const Projects = () => {
   )
 
   return (
-    <>
+    <ResponsiveBlock isLimited>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems:'center' }}>
         <h1 style={{ display: 'inline' }}>Проекты</h1>
         {!!userData?.id && (
@@ -466,6 +467,6 @@ export const Projects = () => {
           </Grid>
         )} */}
       </Grid>
-    </>
+    </ResponsiveBlock>
   )
 }
