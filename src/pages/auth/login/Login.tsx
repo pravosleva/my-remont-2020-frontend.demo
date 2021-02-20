@@ -60,6 +60,7 @@ export const Login = () => {
       })
       .then(httpErrorHandler) // res -> res.json()
       .then((data) => {
+        console.log(data)
         if (!!data.jwt && !!data.user) {
           setCookie('jwt', data.jwt, {
             maxAge: REACT_APP_COOKIE_MAXAGE_IN_DAYS * 24 * 60 * 60,
@@ -75,7 +76,7 @@ export const Login = () => {
         console.log(err.message)
         return Promise.reject(err.message || 'Errored')
       })
-  }, [])
+  }, [setUserData])
 
   return (
     <Container component="main" maxWidth="xs">

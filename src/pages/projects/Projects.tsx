@@ -2,7 +2,6 @@ import React, {
   useCallback,
   useState,
   useEffect,
-  useRef,
   useMemo,
 } from 'react'
 import { getApiUrl } from '~/utils/getApiUrl'
@@ -96,7 +95,7 @@ const responseDataValidator = (data: any) => {
 
 export const Projects = () => {
   const router = useRouter()
-  const [projects, setProjects] = useState<any>([])
+  const [projects, setProjects] = useState<any[]>([])
   // NOTE: Больше не нужно (придет по сокету)
   // const addProject = useCallback(
   //   (newP) => {
@@ -208,26 +207,28 @@ export const Projects = () => {
     [logout, setIsLoading, setIsLoaded, axiosRemoteGraphQL]
   )
 
-  const count = useRef<number>(0)
+  // const count = useRef<number>(0)
   useEffect(() => {
     // V2:
     // TODO: Убрать костыль co счетчиком!
     // - (hook for axiosRemoteGraphQL)
     // - Давать действия со списком в соответствии с результатами
-    if (count.current === 0) {
+    // if (count.current === 0) {}
       fetch({
         userId: null,
         forType: null,
         onSuccess: (ps) => {
-          count.current += 1
+          // count.current += 1
           setProjects(ps)
         },
         onFail: (msg: string) => {
           toast(msg, { appearance: 'error' })
         },
       })
-    }
-  }, [userData, setProjects])
+  }, [
+    // userData,
+    // setProjects,
+  ])
 
   // V1:
   // const [projects, isLoaded, isLoading]: TAns = useRemoteDataByFetch({

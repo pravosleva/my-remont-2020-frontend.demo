@@ -2,6 +2,7 @@ import React, { createContext, useState, useCallback, useEffect, useContext, use
 import { httpClient } from '~/utils/httpClient'
 import { useCookies } from 'react-cookie'
 import { getNormalizedUserDataResponse } from '~/utils/strapi/getNormalizedUserDataResponse'
+import { useRouter } from '~/common/hooks'
 
 type TRole = {
   _id: string
@@ -72,10 +73,13 @@ export const UserAuthContextProvider: React.FC<any> = ({ children }: any) => {
   )
   const [isUserDataLoading, setIsUserDataLoading] = useState<boolean>(false)
   const [isUserDataLoaded, setIsUserDataLoaded] = useState<boolean>(false)
+  const { pathname } = useRouter()
+  const jwt = useMemo(() => cookies.jwt, [cookies.jwt])
   useEffect(() => {
+    console.log(pathname)
     setIsUserDataLoading(true)
     setIsUserDataLoaded(false)
-    httpClient.getMe(cookies.jwt)
+    httpClient.getMe(jwt)
       .then((originalUserData: any) => {
         setIsUserDataLoading(false)
         setIsUserDataLoaded(true)
@@ -83,11 +87,12 @@ export const UserAuthContextProvider: React.FC<any> = ({ children }: any) => {
       })
       .catch((err) => {
         setIsUserDataLoading(false)
+        setIsUserDataLoaded(true)
         const msg = err?.message || 'Auth error'
         // addToast(msg, { appearance: 'error' })
         handleLogout(msg)
       })
-  }, [])
+  }, [pathname])
 
   return (
     <UserAuthConxtext.Provider
