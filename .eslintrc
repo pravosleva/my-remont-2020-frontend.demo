@@ -1,4 +1,19 @@
 {
+  "lib": [
+    "es2016",
+    "dom"
+  ],
+  "env": {
+    "commonjs": true,
+    "browser": true,
+    "node": true,
+    "es6": true
+  },
+  "globals": {
+    "process": true,
+    "Atomics": "readonly",
+    "SharedArrayBuffer": "readonly"
+  },
   "parser": "@typescript-eslint/parser",
   "extends": [
     "eslint-config-prettier",
@@ -6,13 +21,16 @@
     "plugin:react/recommended"
   ],
   "plugins": ["prettier", "eslint-plugin-prettier", "react", "standard", "@typescript-eslint", "react-hooks"],
+  "parserOptions": {
+    "ecmaVersion": 2018
+  },
   "rules": {
+    "react/prop-types": 0,
     "prettier/prettier": "off",
     "semi": "off",
     "no-unused-vars": [
       "off",
       {
-        "vars": "local",
         "args": "none",
         "ignoreRestSiblings": false,
         "varsIgnorePattern": "React",

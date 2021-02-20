@@ -327,6 +327,23 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
               </Typography>
             </Grid>
           )}
+
+          <Grid item>
+            <Typography gutterBottom variant="h5">
+              Оплачено: {getPrettyPrice(data.payed)}
+            </Typography>
+          </Grid>
+          <Grid item>
+            <b
+              className={clsx({
+                [classes.dangerText]: diff < 0,
+                [classes.successText]: diff >= 0,
+              })}
+            >
+              Остаток: {getPrettyPrice(diff)}
+            </b>
+          </Grid>
+
           <Grid item>
             <Collabsible
               title='Итог'
@@ -345,21 +362,7 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
               )}
             />
           </Grid>
-          <Grid item>
-            <Typography gutterBottom variant="h5">
-              Оплачено: {getPrettyPrice(data.payed)}
-            </Typography>
-          </Grid>
-          <Grid item>
-            <b
-              className={clsx({
-                [classes.dangerText]: diff < 0,
-                [classes.successText]: diff >= 0,
-              })}
-            >
-              Остаток: {getPrettyPrice(diff)}
-            </b>
-          </Grid>
+
           <Grid item>
             <Collabsible
               title='План'

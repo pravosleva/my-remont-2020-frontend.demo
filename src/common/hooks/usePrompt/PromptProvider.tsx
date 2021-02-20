@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React, {
   useState,
   useCallback,
@@ -45,7 +47,7 @@ const buildOptions = (defaultOptions, options) => {
   }
 }
 
-export const PromptProvider = ({ children, defaultOptions = {} }) => {
+export const PromptProvider: React.FC<any> = ({ children, defaultOptions = {} }) => {
   const [options, setOptions] = useState({
     ...DEFAULT_OPTIONS,
     ...defaultOptions,

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import {
   // BrowserRouter,
   HashRouter,
@@ -12,16 +12,13 @@ import 'react-image-gallery/styles/css/image-gallery.css'
 import { ToastProvider } from 'react-toast-notifications'
 import { CustomToastContextProvider } from '~/common/context'
 
+
 const REACT_APP_SOCKET_ENDPOINT = process.env.REACT_APP_SOCKET_ENDPOINT
 
 function App() {
   const [socket] = useSocket(REACT_APP_SOCKET_ENDPOINT, {
     autoConnect: true,
     //any other options
-  })
-
-  useEffect(() => {
-    console.log(socket)
   })
 
   return (
