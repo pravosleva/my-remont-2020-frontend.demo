@@ -10,7 +10,7 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle'
 export const SiteHeader = () => {
   const classes = useStyles()
   const { remontLogic } = useMainContext()
-  const { isUserDataLoading, userData, logout } = useUserAuthContext()
+  const { isUserDataLoading, logout, isUserLogged } = useUserAuthContext()
   const router = useRouter()
   // const [cookies, setCookie, removeCookie] = useCookies(['jwt'])
   const {
@@ -38,7 +38,7 @@ export const SiteHeader = () => {
                 color="primary"
               />
             </div>
-          ) : !userData ? (
+          ) : !isUserLogged ? (
             <Button
               // style={{ marginLeft: '10px' }}
               onClick={() => {
@@ -62,7 +62,17 @@ export const SiteHeader = () => {
             <div style={{ display: 'flex', alignItems: 'center' }}>
               {/* <NavLink to="/profile" style={{ marginLeft: '10px' }}>Профиль</NavLink> */}
               <Button
-                // style={{ marginLeft: '10px' }}
+                onClick={() => {
+                  router.push('/try-ui')
+                }}
+                size="small"
+                variant="outlined"
+                disabled={router.pathname === '/try-ui'}
+              >
+                <span>Try UI</span>
+              </Button>
+              <Button
+                style={{ marginLeft: '10px' }}
                 onClick={() => {
                   router.push('/profile')
                 }}
@@ -80,7 +90,7 @@ export const SiteHeader = () => {
                 size="small"
                 variant="outlined"
                 color="primary"
-                endIcon={<ExitToAppIcon />}
+                // endIcon={<ExitToAppIcon />}
               >
                 {/* <span>{userData?.username}</span> */}
                 <span>Logout</span>

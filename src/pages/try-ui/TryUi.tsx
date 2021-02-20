@@ -17,34 +17,39 @@ export const TryUi = () => {
 
   return (
     <>
-      <ResponsiveBlock isLimited>
-        <h1>Try UI</h1>
-      </ResponsiveBlock>
       <ResponsiveBlock
-        isPaddedMobile
-        style={{
-          marginTop: '16px',
-          marginBottom: '16px',
-          border: '1px solid red',
-        }}
+        isLimited
       >
-        ResponsiveBlock: isPaddedMobile
+        <h1>Try UI</h1>
+        <p>
+          This is simple sketch
+        </p>
       </ResponsiveBlock>
       <ResponsiveBlock
         isLimited
         style={{
           marginTop: '16px',
           marginBottom: '16px',
-          border: '1px solid red',
+          border: '1px dashed red',
         }}
       >
         ResponsiveBlock: isLimited
       </ResponsiveBlock>
       <ResponsiveBlock
+        isPaddedMobile
         style={{
           marginTop: '16px',
           marginBottom: '16px',
-          border: '1px solid red',
+          border: '1px dashed red',
+        }}
+      >
+        ResponsiveBlock: isPaddedMobile
+      </ResponsiveBlock>
+      <ResponsiveBlock
+        style={{
+          marginTop: '16px',
+          marginBottom: '16px',
+          border: '1px dashed red',
         }}
       >
         ResponsiveBlock
