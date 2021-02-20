@@ -18,7 +18,7 @@ import {
 import DateFnsAdapter from '@material-ui/pickers/adapter/date-fns'
 import ruLocale from 'date-fns/locale/ru'
 import SaveIcon from '@material-ui/icons/Save'
-import { MainContext } from '~/common/context/MainContext'
+import { useCustomToastContext, useMainContext, useUserAuthContext } from '~/common/hooks'
 import { Collabsible } from './components/Collabsible'
 import { httpClient } from '~/utils/httpClient'
 import { DropzoneAreaBase } from 'material-ui-dropzone';
@@ -42,7 +42,9 @@ interface IProps {
 }
 
 export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IProps) => {
-  const { userData, remontLogic, toast, changeJobFieldPromise, jobsLogic } = useContext(MainContext)
+  const { remontLogic, changeJobFieldPromise, jobsLogic } = useMainContext()
+  const { toast } = useCustomToastContext()
+  const { userData } = useUserAuthContext()
   const isOwner: boolean = useMemo(() => remontLogic?.isOwner(userData?.id), [
     remontLogic,
     userData,

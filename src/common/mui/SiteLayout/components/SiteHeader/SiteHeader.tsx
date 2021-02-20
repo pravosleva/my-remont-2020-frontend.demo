@@ -1,17 +1,16 @@
-import React, { useCallback, useContext } from 'react'
+import React, { useCallback } from 'react'
 import { Button } from '@material-ui/core'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 // import { NavLink } from 'react-router-dom'
 import { useRouter } from '~/common/hooks/useRouter'
-import { MainContext } from '~/common/context/MainContext'
+import { useUserAuthContext, useMainContext } from '~/common/hooks'
 import { useStyles } from './styles'
 import AccountCircleIcon from '@material-ui/icons/AccountCircle'
 
 export const SiteHeader = () => {
   const classes = useStyles()
-  const { remontLogic, isUserDataLoading, userData, logout } = useContext(
-    MainContext
-  )
+  const { remontLogic } = useMainContext()
+  const { isUserDataLoading, userData, logout } = useUserAuthContext()
   const router = useRouter()
   // const [cookies, setCookie, removeCookie] = useCookies(['jwt'])
   const {

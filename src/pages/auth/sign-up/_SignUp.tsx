@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useContext, useMemo } from 'react'
+import React, { useCallback, useState, useMemo } from 'react'
 import {
   Typography,
   Container,
@@ -12,7 +12,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import { getNormalizedInputs } from '~/utils/strapi/getNormalizedInputs'
 import { getApiUrl } from '~/utils/getApiUrl'
 import { useCookies } from 'react-cookie'
-import { MainContext } from '~/common/context/MainContext'
+import { useCustomToastContext, useUserAuthContext } from '~/common/hooks'
 import { useRouter } from '~/common/hooks/useRouter'
 import { httpErrorHandler } from '~/utils/errors/http/fetch'
 
@@ -28,8 +28,9 @@ export const SignUp = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [password2, setPassword2] = useState('')
-  const [cookies, setCookie, removeCookie] = useCookies(['jwt'])
-  const { setUserData, toast, isUserDataLoading } = useContext(MainContext)
+  const [_cookies, setCookie, _removeCookie] = useCookies(['jwt'])
+  const { toast } = useCustomToastContext()
+  const { setUserData, isUserDataLoading } = useUserAuthContext()
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const validate = (values: any) => {
     let errors = {

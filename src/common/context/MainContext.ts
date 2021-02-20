@@ -1,30 +1,7 @@
-import { createContext } from 'react'
+import { createContext, useContext } from 'react'
 import { JobsLogic } from '~/utils/logic'
 import { RemontLogic } from '~/utils/logic'
 
-interface IRole {
-  _id: string
-  name: String
-  description: string
-  type: string
-  createdAt: Date
-  updatedAt: Date
-  __v: number
-  id: string
-}
-export interface IUserData {
-  confirmed: boolean
-  blocked: boolean
-  _id: string
-  username: string
-  email: string
-  provider: string
-  createdAt: Date
-  updatedAt: Date
-  __v: number
-  role: IRole
-  id: string
-}
 export interface IJob {
   name: string
   _id: string
@@ -58,12 +35,11 @@ interface Socket {
 interface IMainContext {
   setProjectData: (remont: any) => void
   resetProjectData: () => void
-  logout: (msg?: string) => Promise<boolean>
-  userData: IUserData | null
-  isUserDataLoading: boolean
-  isUserDataLoaded: boolean
-  setUserData: (uData: IUserData | null, jwt?: string) => void
-  // joblist: IJob[]
+  // logout: (msg?: string) => Promise<boolean>
+  // userData: IUserData | null
+  // isUserDataLoading: boolean
+  // isUserDataLoaded: boolean
+  // setUserData: (uData: IUserData | null, jwt?: string) => void
   changeJobFieldPromise: (
     id: string,
     fieldName: string,
@@ -73,10 +49,10 @@ interface IMainContext {
   jobsLogic: JobsLogic | null
   remontLogic: RemontLogic | null
   updateRemont: (remont: any) => void
-  toast: (
-    msg: string,
-    opts: { appearance: 'success' | 'error' | 'info' | 'warning' }
-  ) => void
+  // toast: (
+  //   msg: string,
+  //   opts: { appearance: 'success' | 'error' | 'info' | 'warning' }
+  // ) => void
   socket: null | Socket
   filterState: { selectedGroup: 'all' | 'isDone' | 'inProgress' }
   onSelectAll: () => void
@@ -93,16 +69,15 @@ export const MainContext = createContext<IMainContext>({
   resetProjectData: () => {
     throw new Error('resetProjectData method should be implemented')
   },
-  userData: null,
-  logout: () => {
-    throw new Error('logout method should be implemented')
-  },
-  isUserDataLoading: false,
-  isUserDataLoaded: false,
-  setUserData: () => {
-    throw new Error('setUserData method should be implemented')
-  },
-  // joblist: [],
+  // userData: null,
+  // logout: () => {
+  //   throw new Error('logout method should be implemented')
+  // },
+  // isUserDataLoading: false,
+  // isUserDataLoaded: false,
+  // setUserData: () => {
+  //   throw new Error('setUserData method should be implemented')
+  // },
   changeJobFieldPromise: () => () => {
     return Promise.reject('changeJobFieldPromise method should be implemented')
   },
@@ -111,9 +86,9 @@ export const MainContext = createContext<IMainContext>({
   },
   jobsLogic: null,
   remontLogic: null,
-  toast: () => {
-    throw new Error('addToast method should be implemented')
-  },
+  // toast: () => {
+  //   throw new Error('addToast method should be implemented')
+  // },
   updateRemont: () => {
     throw new Error('addToast method should be implemented')
   },
@@ -133,3 +108,5 @@ export const MainContext = createContext<IMainContext>({
     throw new Error('removeJobPromise method should be implemented')
   },
 })
+
+export const useMainContext = () => useContext(MainContext)

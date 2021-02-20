@@ -1,4 +1,4 @@
-import React, { useContext, useCallback } from 'react'
+import React, { useCallback } from 'react'
 import { Formik, Form, Field } from 'formik'
 import { TextField } from 'formik-material-ui'
 import {
@@ -14,18 +14,18 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import { validShape } from './yup'
 import { validateEmail, isCiryllic } from '~/utils/validators'
 import { useStyles } from './styles'
-import { Link, Router } from 'react-router-dom'
-import { MainContext } from '~/common/context/MainContext'
+import { Link } from 'react-router-dom'
+// import { MainContext } from '~/common/context/MainContext'
+import { useCustomToastContext, useUserAuthContext } from '~/common/hooks'
 import axios from 'axios'
 import { getApiUrl } from '~/utils/getApiUrl'
-import { useCookies } from 'react-cookie'
 import { useRouter } from '~/common/hooks/useRouter'
 
 const apiUrl = getApiUrl()
-const REACT_APP_COOKIE_MAXAGE_IN_DAYS = process.env
-  .REACT_APP_COOKIE_MAXAGE_IN_DAYS
-  ? parseInt(process.env.REACT_APP_COOKIE_MAXAGE_IN_DAYS)
-  : 1
+// const REACT_APP_COOKIE_MAXAGE_IN_DAYS = process.env
+//   .REACT_APP_COOKIE_MAXAGE_IN_DAYS
+//   ? parseInt(process.env.REACT_APP_COOKIE_MAXAGE_IN_DAYS)
+//   : 1
 
 interface IValues {
   username: string
@@ -38,11 +38,13 @@ export const SignUp = () => {
   const classes = useStyles()
   const {
     toast,
+  } = useCustomToastContext()
+  const {
     isUserDataLoading,
     isUserDataLoaded,
-    setUserData,
-  } = useContext(MainContext)
-  const [, setCookie] = useCookies(['jwt'])
+    // setUserData,
+  } = useUserAuthContext()
+  // const [, setCookie] = useCookies(['jwt'])
   const handleSubmit = useCallback(
     async (values: IValues): Promise<string | undefined> => {
       const res = await axios({
@@ -68,9 +70,7 @@ export const SignUp = () => {
           throw data
         })
         // .then(({ jwt, user }) => {
-        //   setCookie('jwt', jwt, {
-        //     maxAge: REACT_APP_COOKIE_MAXAGE_IN_DAYS * 24 * 60 * 60,
-        //   })
+        //   setCookie('jwt', jwt, { maxAge: REACT_APP_COOKIE_MAXAGE_IN_DAYS * 24 * 60 * 60 })
         //   return 'Проверьте почту'
         // })
         .then(({ user }) => {

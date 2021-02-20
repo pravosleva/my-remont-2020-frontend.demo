@@ -1,6 +1,5 @@
 import React, {
   useCallback,
-  useContext,
   useState,
   useEffect,
   useMemo,
@@ -32,7 +31,7 @@ import {
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { useStyles } from './styles'
 import clsx from 'clsx'
-import { MainContext } from '~/common/context/MainContext'
+import { useCustomToastContext, useMainContext, useUserAuthContext } from '~/common/hooks'
 import { useCookies } from 'react-cookie'
 import { getApiUrl } from '~/utils/getApiUrl'
 import { getPrettyPrice } from '~/utils/getPrettyPrice'
@@ -91,16 +90,16 @@ const getUniqueKey = (data: IJob): string => {
 export const Joblist = ({ remontId, removeJob }: IProps) => {
   const classes = useStyles()
   const {
-    userData,
     changeJobFieldPromise,
     // joblist,
     jobsLogic,
     remontLogic,
     updateJoblist,
-    toast,
     filterState,
     removeJobPromise,
-  } = useContext(MainContext)
+  } = useMainContext()
+  const { toast } = useCustomToastContext()
+  const { userData } = useUserAuthContext()
   // --
   const [expanded, setExpanded] = React.useState<string | false>(false)
   const [getRef, setRef] =  useDynamicRefs();

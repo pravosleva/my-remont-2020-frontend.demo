@@ -1,5 +1,4 @@
 import React, {
-  useContext,
   useCallback,
   useState,
   useEffect,
@@ -7,7 +6,7 @@ import React, {
   useMemo,
 } from 'react'
 import { getApiUrl } from '~/utils/getApiUrl'
-import { MainContext } from '~/common/context/MainContext'
+import { useCustomToastContext, useMainContext, useUserAuthContext } from '~/common/hooks'
 import { useRouter } from '~/common/hooks/useRouter'
 import { httpErrorHandler } from '~/utils/errors/http/axios'
 import { HttpError } from '~/utils/errors/http'
@@ -141,9 +140,9 @@ export const Projects = () => {
   )
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [isLoaded, setIsLoaded] = useState<boolean>(false)
-  const { socket, userData, logout, toast, axiosRemoteGraphQL } = useContext(
-    MainContext
-  )
+  const { socket, axiosRemoteGraphQL } = useMainContext()
+  const { toast } = useCustomToastContext()
+  const { userData, logout } = useUserAuthContext()
   const onRemontCreateOrUpdate = useCallback(
     ({ result }) => {
       if (!!result.id) {

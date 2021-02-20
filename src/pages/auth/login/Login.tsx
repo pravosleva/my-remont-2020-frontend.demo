@@ -15,7 +15,7 @@ import LockOpenIcon from '@material-ui/icons/LockOpen'
 import { getNormalizedInputs } from '~/utils/strapi/getNormalizedInputs'
 import { getApiUrl } from '~/utils/getApiUrl'
 import { useCookies } from 'react-cookie'
-import { MainContext } from '~/common/context/MainContext'
+import { useCustomToastContext, useUserAuthContext } from '~/common/hooks'
 import { useRouter } from '~/common/hooks/useRouter'
 import { httpErrorHandler } from '~/utils/errors/http/fetch'
 import { Link } from 'react-router-dom'
@@ -37,12 +37,8 @@ export const Login = () => {
   const router = useRouter()
   const classes = useStyles()
   const [, setCookie] = useCookies(['jwt'])
-  const {
-    setUserData,
-    toast,
-    isUserDataLoading,
-    // isUserDataLoaded,
-  } = useContext(MainContext)
+  const { toast } = useCustomToastContext()
+  const { isUserDataLoading, setUserData } = useUserAuthContext()
   const handleSubmit = useCallback(({ email, password }: IValues) => {
     const normalizedObj = getNormalizedInputs({ email, password })
     // const body = new FormData()

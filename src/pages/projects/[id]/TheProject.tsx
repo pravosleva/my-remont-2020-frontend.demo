@@ -1,6 +1,5 @@
 import React, {
   useCallback,
-  useContext,
   useEffect,
   useReducer,
   useState,
@@ -10,9 +9,9 @@ import React, {
 // import { getApiUrl } from '~/utils/getApiUrl'
 import { useParams } from 'react-router-dom'
 import { Joblist } from './components/Joblist'
-import { Box, Button, CircularProgress, Grid, Paper } from '@material-ui/core'
+import { Box, Button, CircularProgress, Grid } from '@material-ui/core'
 import { TotalInfo } from './components/TotalInfo'
-import { MainContext } from '~/common/context/MainContext'
+import { useCustomToastContext, useMainContext, useUserAuthContext } from '~/common/hooks'
 import { useCookies } from 'react-cookie'
 import {
   initialState as createNewJobInitialState,
@@ -60,15 +59,15 @@ export const TheProject = () => {
     setProjectData,
     updateJoblist,
     jobsLogic,
-    userData,
     remontLogic,
-    toast,
     filterState,
     onSelectAll,
     onSelectIsDone,
     onSelectInProgress,
     updateRemont,
-  } = useContext(MainContext)
+  } = useMainContext()
+  const { toast } = useCustomToastContext()
+  const { userData } = useUserAuthContext()
   // --- GET REMONT INFO
   const [cookies] = useCookies(['jwt'])
   const router: any = useRouter()

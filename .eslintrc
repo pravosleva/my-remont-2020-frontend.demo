@@ -1,10 +1,13 @@
 {
   "parser": "@typescript-eslint/parser",
-  "presets": ["@babel/env", "@babel/typescript"],
-  "extends": ["prettier"],
-  "plugins": ["react", "standard", "@typescript-eslint", "react-hooks"],
+  "extends": [
+    "eslint-config-prettier",
+    "eslint:recommended",
+    "plugin:react/recommended"
+  ],
+  "plugins": ["prettier", "eslint-plugin-prettier", "react", "standard", "@typescript-eslint", "react-hooks"],
   "rules": {
-    "prettier/prettier": "error",
+    "prettier/prettier": "off",
     "semi": "off",
     "no-unused-vars": [
       "off",
