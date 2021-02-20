@@ -1,0 +1,57 @@
+@import '~/common/mui/scss-vars/color-standard.scss';
+@import '~/common/mui/scss-vars/device-width-standard.scss';
+
+.hello-styled-jsx-plugin-sass {
+  border: 1px solid $green;
+  &:hover {
+    border: 1px solid $red;
+  }
+}
+
+.bg-image {
+  @media (max-width: calc(#{$sm}px - 1px)) {
+    background-image: url(../../../assets/images/space-1.jpg);
+    padding: 0px 16px 0px 16px;
+  }
+  @media (min-width: #{$sm}px) and (max-width: #{$md}px) {
+    background-image: url(../../../assets/images/interier-1.jpg);
+    padding: 0px 24px 0px 24px;
+  }
+  @media (min-width: calc(#{$md}px + 1px)) {
+    background-image: url(../../../assets/images/interier-0.jpg);
+    padding: 85px 0px 85px 0px;
+  }
+  background-position: bottom;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.wrapper {
+  color: #fff;
+  font-family: Fira Sans, inherit;
+  font-style: normal;
+  font-weight: normal;
+
+  display: flex;
+  @media (min-width: calc(#{$md}px + 1px)) {
+    font-size: 16px;
+    line-height: 20px;
+    max-width: calc(#{$md}px - 24px - 24px);
+    margin: 0 auto;
+
+    flex-direction: row;
+    align-items: center;
+  }
+  @media (max-width: #{$md}px) and (max-width: #{$lg}px) {
+    flex-direction: column;
+    font-size: 16px;
+    line-height: 20px;
+  }
+  position: relative;
+}
+
+.text {
+  @media (max-width: #{$md}px) and (max-width: #{$lg}px) {
+    padding: 40px 0px 40px 0px;
+  }
+}

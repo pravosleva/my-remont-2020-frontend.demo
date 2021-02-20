@@ -4,6 +4,7 @@ import React from 'react'
 // import { useStyles } from './styles'
 // import { useRouter } from '~/common/hooks/useRouter'
 import { ResponsiveBlock } from '~/common/mui/ResponsiveBlock'
+import { NoNameSection2 } from '~/common/mui/NoNameSection2'
 
 export const TryUi = () => {
   // const classes = useStyles()
@@ -53,6 +54,14 @@ export const TryUi = () => {
         }}
       >
         ResponsiveBlock
+      </ResponsiveBlock>
+      <ResponsiveBlock
+        style={{
+          marginTop: '16px',
+          marginBottom: '16px',
+        }}
+      >
+        <NoNameSection2 />
       </ResponsiveBlock>
     </>
   )
