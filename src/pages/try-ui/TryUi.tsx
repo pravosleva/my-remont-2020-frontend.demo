@@ -38,6 +38,7 @@ export const TryUi = () => {
         }}
       >
         <h2>ResponsiveBlock</h2>
+        <em>props:</em>
         <ul><li>isLimited</li></ul>
       </ResponsiveBlock>
       <ResponsiveBlock
@@ -52,10 +53,16 @@ export const TryUi = () => {
       >
         <div className={clsx(baseClasses.desktopFrameInternalBox, baseClasses.isRoundedDesktop)} style={{ background: '#147ec1', color: '#FFF' }}>
           <h2>ResponsiveBlock</h2>
+          <em>props:</em>
           <ul>
             <li>isLimited</li>
             <li>isPaddedMobile</li>
             <li>hasDesktopFrame</li>
+          </ul>
+          <em>For internal box:</em>
+          <ul>
+            <li>baseClasses.desktopFrameInternalBox</li>
+            <li>baseClasses.isRoundedDesktop</li>
           </ul>
         </div>
       </ResponsiveBlock>
@@ -70,10 +77,16 @@ export const TryUi = () => {
       >
         <div className={clsx(baseClasses.desktopFrameInternalBox, baseClasses.isRounded)} style={{ background: '#147ec1', color: '#FFF' }}>
           <h2>ResponsiveBlock</h2>
+          <em>props:</em>
           <ul>
             <li>isLimited</li>
             <li>isPaddedMobile</li>
             <li>hasDesktopFrame</li>
+          </ul>
+          <em>For internal box:</em>
+          <ul>
+            <li>baseClasses.desktopFrameInternalBox</li>
+            <li>baseClasses.isRounded</li>
           </ul>
         </div>
       </ResponsiveBlock>
@@ -86,6 +99,7 @@ export const TryUi = () => {
         }}
       >
         <h2>ResponsiveBlock</h2>
+        <em>props:</em>
         <ul>
           <li>isPaddedMobile</li>
         </ul>
@@ -98,6 +112,7 @@ export const TryUi = () => {
         }}
       >
         <h2>ResponsiveBlock</h2>
+        <em>no props</em>
       </ResponsiveBlock>
       <ResponsiveBlock
         style={{
