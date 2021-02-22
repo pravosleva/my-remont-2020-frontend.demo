@@ -5,6 +5,8 @@ import React from 'react'
 // import { useRouter } from '~/common/hooks/useRouter'
 import { ResponsiveBlock } from '~/common/mui/ResponsiveBlock'
 import { NoNameSection2 } from '~/common/mui/NoNameSection2'
+import { useBaseStyles } from '~/common/mui/baseStyles'
+import clsx from 'clsx'
 
 export const TryUi = () => {
   // const classes = useStyles()
@@ -15,6 +17,7 @@ export const TryUi = () => {
   //   },
   //   [router]
   // )
+  const baseClasses = useBaseStyles()
 
   return (
     <>
@@ -34,7 +37,45 @@ export const TryUi = () => {
           border: '1px dashed red',
         }}
       >
-        ResponsiveBlock: isLimited
+        <h2>ResponsiveBlock</h2>
+        <ul><li>isLimited</li></ul>
+      </ResponsiveBlock>
+      <ResponsiveBlock
+        isLimited
+        isPaddedMobile
+        hasDesktopFrame
+        style={{
+          marginTop: '16px',
+          marginBottom: '16px',
+          // border: '1px dashed red',
+        }}
+      >
+        <div className={clsx(baseClasses.desktopFrameInternalBox, baseClasses.isRoundedDesktop)} style={{ background: '#147ec1', color: '#FFF' }}>
+          <h2>ResponsiveBlock</h2>
+          <ul>
+            <li>isLimited</li>
+            <li>isPaddedMobile</li>
+            <li>hasDesktopFrame</li>
+          </ul>
+        </div>
+      </ResponsiveBlock>
+      <ResponsiveBlock
+        isLimited
+        hasDesktopFrame
+        style={{
+          marginTop: '16px',
+          marginBottom: '16px',
+          // border: '1px dashed red',
+        }}
+      >
+        <div className={clsx(baseClasses.desktopFrameInternalBox, baseClasses.isRounded)} style={{ background: '#147ec1', color: '#FFF' }}>
+          <h2>ResponsiveBlock</h2>
+          <ul>
+            <li>isLimited</li>
+            <li>isPaddedMobile</li>
+            <li>hasDesktopFrame</li>
+          </ul>
+        </div>
       </ResponsiveBlock>
       <ResponsiveBlock
         isPaddedMobile
@@ -44,7 +85,10 @@ export const TryUi = () => {
           border: '1px dashed red',
         }}
       >
-        ResponsiveBlock: isPaddedMobile
+        <h2>ResponsiveBlock</h2>
+        <ul>
+          <li>isPaddedMobile</li>
+        </ul>
       </ResponsiveBlock>
       <ResponsiveBlock
         style={{
@@ -53,7 +97,7 @@ export const TryUi = () => {
           border: '1px dashed red',
         }}
       >
-        ResponsiveBlock
+        <h2>ResponsiveBlock</h2>
       </ResponsiveBlock>
       <ResponsiveBlock
         style={{

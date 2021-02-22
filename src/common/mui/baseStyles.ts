@@ -35,4 +35,33 @@ export const useBaseStyles = makeStyles((theme) => ({
       padding: theme.spacing(1, 2, 1, 2),
     },
   },
+  noPaddedMobile: {
+    [theme.breakpoints.down('xs')]: {
+      padding: theme.spacing(0),
+    },
+  },
+  desktopFrameInternalBox: {
+    color: 'blue',
+    [theme.breakpoints.up('lg')]: {
+      padding: theme.spacing(1, 2, 1, 2),
+    },
+    [theme.breakpoints.down('md')]: {
+      padding: theme.spacing(1, 2, 1, 2),
+    },
+    [theme.breakpoints.between('sm', 'md')]: {
+      padding: theme.spacing(1, 3, 1, 3),
+      // border: '1px dashed green',
+    },
+    [theme.breakpoints.down('xs')]: {
+      padding: theme.spacing(1, 2, 1, 2),
+    },
+  },
+  isRounded: {
+    borderRadius: '4px',
+  },
+  isRoundedDesktop: {
+    [theme.breakpoints.up('sm')]: {
+      borderRadius: '4px',
+    },
+  },
 }))
