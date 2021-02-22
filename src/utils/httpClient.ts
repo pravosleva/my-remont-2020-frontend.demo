@@ -10,7 +10,7 @@ class HttpClientSingletone {
   getMeController: any;
   getRemontController: any;
   putRemontController: any;
-  uploadFileController: any;
+  uploadFilesController: any;
 
   constructor() {
     if (HttpClientSingletone._instance) {
@@ -22,7 +22,7 @@ class HttpClientSingletone {
     this.getMeController = null;
     this.getRemontController = null;
     this.putRemontController = null;
-    this.uploadFileController = null;
+    this.uploadFilesController = null;
   }
 
   static getInstance(): HttpClientSingletone {
@@ -235,10 +235,10 @@ class HttpClientSingletone {
 
   async uploadFiles(files: any, jwt?: string): Promise<any> {
     if (files.length === 0) throw new Error('ERR: !files.length');
-    if (!!this.uploadFileController) {
-      this.uploadFileController.abort();
+    if (!!this.uploadFilesController) {
+      this.uploadFilesController.abort();
     }
-    this.uploadFileController = new FetcherController();
+    this.uploadFilesController = new FetcherController();
 
     let headers: any = {
       // 'Access-Control-Allow-Origin': '*',
@@ -261,7 +261,7 @@ class HttpClientSingletone {
       data: body,
       mode: 'cors',
       headers,
-      controller: this.uploadFileController,
+      controller: this.uploadFilesController,
       // NOTE: From docs
       // `validateStatus` defines whether to resolve or reject the promise for a given
       // HTTP response status code. If `validateStatus` returns `true` (or is set to `null`

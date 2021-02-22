@@ -1,3 +1,4 @@
+/* by Gena (smartprice.ru) */
 import axios from 'axios'
 
 const Wget = (args) => {
