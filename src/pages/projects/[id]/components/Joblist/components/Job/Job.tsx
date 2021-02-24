@@ -132,22 +132,10 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
     // console.log('TODO: assign ids')
     // console.log(fileUrls)
 
-    changeJobFieldPromise(data._id, 'add@imagesUrls', formats)()
-      .then(() => {
-        // console.log(data)
-        if (!!data.imagesUrls) {
-          setIsLoading(true)
-          httpClient.updateMedia(remontId, joblist, cookies?.jwt)
-            .finally(() => {
-              setIsLoading(false)
-            })
-          // .then(() => { setFileUrls(null); })
-        }
-      })
+    return changeJobFieldPromise(data._id, 'add@imagesUrls', formats)()
   }, [
     // fileUrls, setFileUrls,
     JSON.stringify(data),
-    JSON.stringify(joblist),
     setIsLoading,
   ])
   // ---
@@ -196,16 +184,31 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
         const formats = res.map(({ formats }) => formats)
         // setFileUrls(formats)
         handleAssignFiles(formats)
+          .then(() => {
+            // console.log(data)
+            if (!!data.imagesUrls) {
+              setIsLoading(true)
+              httpClient.updateMedia(remontId, joblist, cookies?.jwt)
+                .finally(() => {
+                  setIsLoading(false)
+                })
+              // .then(() => { setFileUrls(null); })
+            }
+          })
       } catch (err) {
         console.log(err)
       }
     }
   }, [
+    remontId,
+    JSON.stringify(data),
     JSON.stringify(files),
     setFiles,
     // setFileUrls,
     handleAssignFiles,
     setIsLoading,
+    joblist,
+    cookies?.jwt,
   ])
 
   return (

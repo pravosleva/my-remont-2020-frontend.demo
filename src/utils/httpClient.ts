@@ -244,16 +244,11 @@ class HttpClientSingletone {
       // 'Access-Control-Allow-Origin': '*',
       'Content-Type': 'application/json',
     }
-    if (!!jwt) {
-      headers = {
-        ...headers,
-        Authorization: `Bearer ${jwt}`,
-      }
-    }
+    if (!!jwt) headers = { ...headers, Authorization: `Bearer ${jwt}` }
 
     const body = new FormData();
 
-    files.forEach(file => body.append('files', file.file));
+    files.forEach((file: any) => body.append('files', file.file));
 
     const response = await fetch({
       method: 'POST',
