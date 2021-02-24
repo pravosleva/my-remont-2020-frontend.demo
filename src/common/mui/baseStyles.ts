@@ -37,7 +37,7 @@ export const useBaseStyles = makeStyles((theme) => ({
   },
   noPaddedMobile: {
     [theme.breakpoints.down('xs')]: {
-      padding: theme.spacing(0),
+      padding: '0px !important',
     },
   },
   desktopFrameInternalBox: {

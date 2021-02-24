@@ -80,7 +80,6 @@ export const TryUi = () => {
           <em>props:</em>
           <ul>
             <li>isLimited</li>
-            <li>isPaddedMobile</li>
             <li>hasDesktopFrame</li>
           </ul>
           <em>For internal box:</em>

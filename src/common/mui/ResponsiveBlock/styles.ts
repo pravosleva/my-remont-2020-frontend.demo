@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles'
 
 export const useStyles = makeStyles((theme) => ({
   responsiveBlock: {
-    borderTop: '1px solid transparent',
+    // borderTop: '1px solid transparent',
     // border: 'none !important',
   },
 }))
