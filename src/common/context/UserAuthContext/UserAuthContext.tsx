@@ -77,9 +77,10 @@ export const UserAuthContextProvider: React.FC<any> = ({ children }: any) => {
   const jwt = useMemo(() => cookies.jwt, [cookies.jwt])
   useEffect(() => {
     console.log(pathname)
-    setIsUserDataLoading(true)
-    setIsUserDataLoaded(false)
-    httpClient.getMe(jwt)
+    if (pathname !== '/login') {
+      setIsUserDataLoading(true)
+      setIsUserDataLoaded(false)
+      httpClient.getMe(jwt)
       .then((originalUserData: any) => {
         setIsUserDataLoading(false)
         setIsUserDataLoaded(true)
@@ -92,6 +93,7 @@ export const UserAuthContextProvider: React.FC<any> = ({ children }: any) => {
         // addToast(msg, { appearance: 'error' })
         handleLogout(msg)
       })
+    }
   }, [pathname])
 
   return (
