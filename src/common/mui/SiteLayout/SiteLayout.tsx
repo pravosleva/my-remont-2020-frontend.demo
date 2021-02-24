@@ -53,6 +53,7 @@ export const SiteLayout = ({ socket, children }: any) => {
   const [remontState, dispatch] = useReducer(remontReducer, remontInitialState)
   const handleChangeJobField = useCallback(
     (id: string, fieldName: string, value: number | boolean | string | any) => () => {
+      console.log(fieldName, value)
       try {
         if (
           (fieldName === 'realFinishDate' ||
@@ -85,18 +86,19 @@ export const SiteLayout = ({ socket, children }: any) => {
     },
     [dispatch]
   )
-  const handleUpdateJoblist = useCallback(
-    (payload: IJob[]) => {
-      dispatch({ type: 'UPDATE_JOBLIST', payload })
-    },
-    [dispatch]
-  )
+  // const handleUpdateJoblist = useCallback(
+  //   (payload: IJob[]) => {
+  //     dispatch({ type: 'UPDATE_JOBLIST', payload })
+  //   },
+  //   [dispatch]
+  // )
   // ---
   const handleResetProjectData = useCallback(() => {
     dispatch({ type: 'UPDATE_REMONT', payload: null })
   }, [dispatch])
   const handleSetProjectData = useCallback(
     (data: any | null) => {
+      console.log(data)
       dispatch({ type: 'UPDATE_REMONT', payload: data })
     },
     [dispatch]
@@ -169,13 +171,13 @@ export const SiteLayout = ({ socket, children }: any) => {
         // console.log(data)
         if (!!data?.joblist && !isEqual(remontState.jobs, result.joblist)) {
           // NOTE: data.joblist по сокету приходит без ids (Dont use data.joblist for update state)
-          handleUpdateJoblist(result.joblist)
+          // handleUpdateJoblist(result.joblist)
           handleSetProjectData(result)
           toast(`joblist (${result.joblist.length}) updated`, { appearance: 'info' })
         }
       }
     },
-    [remontState.jobs, remontState.remontLogic, handleUpdateJoblist, handleSetProjectData, toast]
+    [remontState.jobs, remontState.remontLogic, handleSetProjectData, toast]
   )
   // --- SOCKET SUBSCRIBER; GET REMONT IF NECESSARY;
   /*
@@ -287,9 +289,9 @@ export const SiteLayout = ({ socket, children }: any) => {
           // isUserDataLoaded,
           // setUserData: handleSetUserData,
           // -- Joblist logic && Remont logic:
-          jobsLogic: remontState.jobsLogic,
+          jobsLogic: remontState.remontLogic?.jobsLogic || null,
           changeJobFieldPromise: handleChangeJobField,
-          updateJoblist: handleUpdateJoblist,
+          // updateJoblist: handleUpdateJoblist,
           remontLogic: remontState.remontLogic,
           updateRemont: handleSetProjectData,
           removeJobPromise: handleDeleteJob,

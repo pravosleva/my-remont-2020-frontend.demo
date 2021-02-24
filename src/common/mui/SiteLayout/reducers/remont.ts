@@ -21,7 +21,7 @@ type TRemontAction =
       fieldName: string
       payload: number | boolean | string
     }
-  | { type: 'UPDATE_JOBLIST'; payload: IJob[] }
+  // | { type: 'UPDATE_JOBLIST'; payload: IJob[] }
   | { type: 'UPDATE_REMONT'; payload: any }
   | {
     type: 'UPDATE_JOB_FIELD@ADD_IMAGES_URLS',
@@ -40,6 +40,8 @@ export function remontReducer(
   let targetJobIndex = -1;
   let newState
   const { payload } = action
+
+  console.log(action)
 
   switch (action.type) {
     case 'UPDATE_JOB_FIELD':
@@ -73,12 +75,14 @@ export function remontReducer(
 
       return { ...state, jobs: [...newState] }
       // return { ...state, jobs: payload, jobsLogic }
-    case 'UPDATE_JOBLIST':
-      // @ts-ignore
-      return { ...state, jobs: payload, jobsLogic: new JobsLogic(payload) }
+    // case 'UPDATE_JOBLIST':
+    //   // @ts-ignore
+    //   return { ...state, jobs: payload, jobsLogic: new JobsLogic(payload) }
     case 'UPDATE_REMONT':
+      const remontLogic = new RemontLogic(payload)
+      const jobsLogic = new JobsLogic(remontLogic.joblist)
       // @ts-ignore
-      return { ...state, remontLogic: new RemontLogic(payload) }
+      return { ...state, remontLogic, jobsLogic, jobs: remontLogic.joblist }
     case 'DELETE_JOB':
       newState = [...state.jobs].filter(({ _id }) => _id !== payload)
       // console.log(newState)

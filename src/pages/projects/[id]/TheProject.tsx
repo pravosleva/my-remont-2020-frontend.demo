@@ -58,7 +58,7 @@ export const TheProject = () => {
   const {
     resetProjectData,
     setProjectData,
-    updateJoblist,
+    // updateJoblist,
     jobsLogic,
     remontLogic,
     filterState,
@@ -127,7 +127,7 @@ export const TheProject = () => {
         setIsLoaded(true)
         setProjectData(data)
         updateRemont(data)
-        updateJoblist(data.joblist)
+        // updateJoblist(data.joblist)
         toast('Remont data received', { appearance: 'success' })
       })
       .catch((err) => {
@@ -234,7 +234,7 @@ export const TheProject = () => {
     createJobState.name,
     setIsCreateNewJobLoading,
     handleCloseCreateJobForm,
-    updateJoblist,
+    // updateJoblist,
     toast,
     accessToken,
   ])

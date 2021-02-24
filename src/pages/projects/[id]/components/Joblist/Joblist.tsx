@@ -91,10 +91,10 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
   const classes = useStyles()
   const {
     changeJobFieldPromise,
-    // joblist,
-    jobsLogic,
+    // jobsLogic,
     remontLogic,
-    updateJoblist,
+    // updateJoblist,
+    updateRemont,
     filterState,
     removeJobPromise,
   } = useMainContext()
@@ -118,7 +118,10 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
     remontLogic,
     userData,
   ])
-  const joblist = useMemo(() => jobsLogic?.jobs || [], [jobsLogic])
+  useEffect(() => {
+    console.log(remontLogic?.joblist)
+  }, [JSON.stringify(remontLogic?.joblist)])
+  const joblist = useMemo(() => remontLogic?.jobsLogic?.joblist || [], [JSON.stringify(remontLogic?.jobsLogic)])
   const [openedEditorId, setOpenedEditorId] = useState<string | null>(null)
   const handleOpenEditor = useCallback(
     (id: string) => () => {
@@ -177,11 +180,13 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
       // .then((res) => res.json())
       .then((data) => {
         if (!!data.id) {
+
           setIsLoading(false)
           handleCloseEditor()
           handleCloseMarkdownEditor()
           if (!!data?.joblist && Array.isArray(data.joblist)) {
-            updateJoblist(data.joblist)
+            // updateJoblist(data.joblist)
+            updateRemont(data)
             toast('Успешно', { appearance: 'success' })
             return
           }
@@ -210,7 +215,8 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
     joblist,
     handleCloseEditor,
     handleCloseMarkdownEditor,
-    updateJoblist,
+    // updateJoblist,
+    updateRemont,
     toast,
   ])
   const confirm = useConfirm()

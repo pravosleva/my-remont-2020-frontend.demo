@@ -1,16 +1,22 @@
 import { IJob } from '~/common/context/MainContext'
+import { JobsLogic } from './JobsLogic'
 
 export class RemontLogic extends Object {
   remont: any | null
+  jobsLogic: JobsLogic
   constructor(remont: any | null) {
     super()
     this.remont = remont
+    this.jobsLogic = new JobsLogic(remont?.joblist || [])
   }
   get id() {
     return this.remont?.id || null
   }
   get name() {
     return this.remont?.name || null
+  }
+  get joblist() {
+    return this.remont.joblist || []
   }
 
   isOwner(userId: string): boolean {

@@ -45,7 +45,7 @@ interface IMainContext {
     fieldName: string,
     value: number | boolean | string | any[]
   ) => () => Promise<any>
-  updateJoblist: (joblist: IJob[]) => void
+  // updateJoblist: (joblist: IJob[]) => void
   jobsLogic: JobsLogic | null
   remontLogic: RemontLogic | null
   updateRemont: (remont: any) => void
@@ -81,9 +81,9 @@ export const MainContext = createContext<IMainContext>({
   changeJobFieldPromise: () => () => {
     return Promise.reject('changeJobFieldPromise method should be implemented')
   },
-  updateJoblist: () => {
-    throw new Error('updateJoblist method should be implemented')
-  },
+  // updateJoblist: () => {
+  //   throw new Error('updateJoblist method should be implemented')
+  // },
   jobsLogic: null,
   remontLogic: null,
   // toast: () => {
