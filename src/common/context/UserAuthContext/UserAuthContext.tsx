@@ -77,7 +77,7 @@ export const UserAuthContextProvider: React.FC<any> = ({ children }: any) => {
   const jwt = useMemo(() => cookies.jwt, [cookies.jwt])
   useEffect(() => {
     console.log(pathname)
-    if (pathname !== '/login') {
+    if (pathname !== '/auth/login') {
       setIsUserDataLoading(true)
       setIsUserDataLoaded(false)
       httpClient.getMe(jwt)
