@@ -40,8 +40,7 @@ export function remontReducer(
   let targetJobIndex = -1;
   let newState
   const { payload } = action
-
-  console.log(action)
+  let newJobsLogic
 
   switch (action.type) {
     case 'UPDATE_JOB_FIELD':
@@ -55,7 +54,9 @@ export function remontReducer(
         newState[targetJobIndex][action.fieldName] = action.payload
       }
 
-      return { ...state, jobs: [...newState] }
+      newJobsLogic = new JobsLogic(newState)
+
+      return { ...state, jobs: [...newState], jobsLogic: newJobsLogic }
     case 'UPDATE_JOB_FIELD@ADD_IMAGES_URLS':
       newState = [...state.jobs]
 
@@ -73,7 +74,9 @@ export function remontReducer(
         }
       }
 
-      return { ...state, jobs: [...newState] }
+      newJobsLogic = new JobsLogic(newState)
+
+      return { ...state, jobs: [...newState], jobsLogic: newJobsLogic }
       // return { ...state, jobs: payload, jobsLogic }
     // case 'UPDATE_JOBLIST':
     //   // @ts-ignore

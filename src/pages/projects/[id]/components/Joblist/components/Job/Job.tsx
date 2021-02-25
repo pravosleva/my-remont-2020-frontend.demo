@@ -107,7 +107,7 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
   )
 
   const [files, setFiles] = useState<any[]>([])
-  // const [fileUrls, setFileUrls] = useState<any>(null)
+  const [fileUrls, setFileUrls] = useState<any>(null)
 
   const addFile = (fs: any) => {
     setFiles((s) => [...s, ...fs]);
@@ -178,37 +178,20 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
     */
 
     if (Array.isArray(res)) {
-      setFiles([])
-      console.log(res)
-      try {
-        const formats = res.map(({ formats }) => formats)
-        // setFileUrls(formats)
-        handleAssignFiles(formats)
-          .then(() => {
-            // console.log(data)
-            if (!!data.imagesUrls) {
-              setIsLoading(true)
-              httpClient.updateMedia(remontId, joblist, cookies?.jwt)
-                .finally(() => {
-                  setIsLoading(false)
-                })
-              // .then(() => { setFileUrls(null); })
-            }
-          })
-      } catch (err) {
-        console.log(err)
-      }
+      setFileUrls(res)
+      return Promise.resolve(res)
     }
+    return Promise.reject(res)
   }, [
-    remontId,
-    JSON.stringify(data),
+    // remontId,
+    // JSON.stringify(data),
     JSON.stringify(files),
     setFiles,
-    // setFileUrls,
-    handleAssignFiles,
+    setFileUrls,
+    // handleAssignFiles,
     setIsLoading,
-    joblist,
-    cookies?.jwt,
+    // joblist,
+    // cookies?.jwt,
   ])
 
   return (
@@ -258,7 +241,21 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
                         fullWidth
                         variant="outlined"
                         color="primary"
-                        onClick={handleUploadFiles}
+                        onClick={() => {
+                          handleUploadFiles()
+                            .then(res => {
+                              // console.log(res)
+                              if (Array.isArray(res)) {
+                                const formats = res.map(({ formats }) => formats)
+
+                                setFiles([])
+                                handleAssignFiles(formats)
+                              }
+                            })
+                            .catch(err => {
+                              toast(err?.message || '#2 Что-то пошло не так', { appearance: 'error' })
+                            })
+                        }}
                         // disabled={isSubmitDisabled}
                         endIcon={
                           isLoading ? (
@@ -274,30 +271,48 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
                       >
                         Upload files
                       </Button>
-                      {/*
-                        !!fileUrls && fileUrls.length > 0 && (
-                          <Button
-                            fullWidth
-                            variant="outlined"
-                            color="primary"
-                            onClick={handleAssignFiles}
-                            // disabled={isSubmitDisabled}
-                            endIcon={
-                              isLoading ? (
-                                <CircularProgress
-                                  size={20}
-                                  color="primary"
-                                  style={{ marginLeft: 'auto' }}
-                                />
-                              ) : (
-                                <SaveIcon />
-                              )
+                    </Grid>
+                  )
+                }
+                {
+                  !!fileUrls && fileUrls?.length > 0 && (
+                    <Grid item xs={12}>
+                      <Button
+                        fullWidth
+                        variant="outlined"
+                        color="primary"
+                        onClick={() => {
+                          // console.log(data)
+                          try {
+                            if (!!data.imagesUrls) {
+                              setIsLoading(true)
+                              httpClient.updateMedia(remontId, joblist, cookies?.jwt)
+                                .then(() => {
+                                  setFileUrls(null)
+                                })
+                                .finally(() => {
+                                  setIsLoading(false)
+                                })
                             }
-                          >
-                            Assign files
-                          </Button>
-                        )
-                      */}
+                          } catch (err) {
+                            toast(err?.message || '#1 Что-то пошло не так', { appearance: 'error' })
+                          }
+                        }}
+                        // disabled={isSubmitDisabled}
+                        endIcon={
+                          isLoading ? (
+                            <CircularProgress
+                              size={20}
+                              color="primary"
+                              style={{ marginLeft: 'auto' }}
+                            />
+                          ) : (
+                            <SaveIcon />
+                          )
+                        }
+                      >
+                        Assign files
+                      </Button>
                     </Grid>
                   )
                 }

@@ -16,7 +16,7 @@ export class RemontLogic extends Object {
     return this.remont?.name || null
   }
   get joblist() {
-    return this.remont.joblist || []
+    return this.remont?.joblist || []
   }
 
   isOwner(userId: string): boolean {

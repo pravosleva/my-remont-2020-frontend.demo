@@ -53,7 +53,6 @@ export const SiteLayout = ({ socket, children }: any) => {
   const [remontState, dispatch] = useReducer(remontReducer, remontInitialState)
   const handleChangeJobField = useCallback(
     (id: string, fieldName: string, value: number | boolean | string | any) => () => {
-      console.log(fieldName, value)
       try {
         if (
           (fieldName === 'realFinishDate' ||
@@ -98,7 +97,7 @@ export const SiteLayout = ({ socket, children }: any) => {
   }, [dispatch])
   const handleSetProjectData = useCallback(
     (data: any | null) => {
-      console.log(data)
+      // console.log(data)
       dispatch({ type: 'UPDATE_REMONT', payload: data })
     },
     [dispatch]

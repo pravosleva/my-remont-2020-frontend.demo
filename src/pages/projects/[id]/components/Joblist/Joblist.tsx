@@ -118,9 +118,9 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
     remontLogic,
     userData,
   ])
-  useEffect(() => {
-    console.log(remontLogic?.joblist)
-  }, [JSON.stringify(remontLogic?.joblist)])
+  // useEffect(() => {
+  //   console.log(remontLogic?.joblist)
+  // }, [JSON.stringify(remontLogic?.joblist)])
   const joblist = useMemo(() => remontLogic?.jobsLogic?.joblist || [], [JSON.stringify(remontLogic?.jobsLogic)])
   const [openedEditorId, setOpenedEditorId] = useState<string | null>(null)
   const handleOpenEditor = useCallback(
@@ -508,46 +508,21 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                   aria-controls={`panel${data._id}bh-content`}
                   id={`panel${data._id}bh-header`}
                 >
-                  {isOwner ? (
-                    <FormControlLabel
-                      aria-label="Acknowledge"
-                      onClick={(e: any) => {
-                        e.stopPropagation()
-                        if (!data.isStarted) {
-                          return
-                        } else {
-                          handleDoneJob(data._id, e.target?.checked)
-                        }
-                      }}
-                      disabled={!data.isStarted}
-                      // onFocus={(event) => { event.stopPropagation() }}
-                      control={
-                        <Checkbox checked={data.isDone} color="primary" />
-                      }
-                      label={(data.isStarted && !data.isDone) ? <span>{data.name} <span className='price'>({getPrettyPrice(getDifference(data))})</span></span> : data.name}
-                      className={clsx(classes.checkbox, {
-                        [classes.dangerText]:
-                          data.payed - (data.priceMaterials + data.priceJobs) <
-                          0,
-                        [classes.successText]:
-                          data.payed - (data.priceMaterials + data.priceJobs) >=
-                          0,
-                      })}
-                    />
-                  ) : (
+                  {
                     <Typography
                       className={clsx({
+                        [classes.greyText]: !data.isStarted,
                         [classes.dangerText]:
-                          data.payed - (data.priceMaterials + data.priceJobs) <
+                          data.isStarted && data.payed - (data.priceMaterials + data.priceJobs) <
                           0,
                         [classes.successText]:
-                          data.payed - (data.priceMaterials + data.priceJobs) >=
+                          data.isStarted && data.payed - (data.priceMaterials + data.priceJobs) >=
                           0,
                       })}
                     >
-                      {data.name}
+                      {isOwner && <><span style={{ marginRight: '8px' }}>⚙️</span>{(data.isStarted && !data.isDone) && <span className='price'>({getPrettyPrice(getDifference(data))})</span>}</>} {data.name}
                     </Typography>
-                  )}
+                  }
                 </AccordionSummary>
                 <Divider />
                 <AccordionDetails className={classes.details}>
