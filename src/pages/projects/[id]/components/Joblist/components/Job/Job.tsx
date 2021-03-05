@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect, useState, useContext, useCallback } from 'react'
+import React, { useMemo, useEffect, useState, useCallback } from 'react'
 import { IJob } from '~/common/context/MainContext'
 import { useStyles } from './styles'
 import { Button, CircularProgress, Grid, Typography } from '@material-ui/core'
@@ -143,7 +143,7 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
     // if (files.length === 0) { console.log('No files'); return; }
     setIsLoading(true)
 
-    const res = await httpClient.uploadFiles(files)
+    const res = await httpClient.uploadFiles(files, cookies?.jwt)
       .then((d) => {
         toast('Ok', { appearance: 'success' })
         return d;
@@ -191,7 +191,7 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
     // handleAssignFiles,
     setIsLoading,
     // joblist,
-    // cookies?.jwt,
+    cookies?.jwt,
   ])
 
   return (

@@ -2,7 +2,7 @@ import React, { createContext, useState, useCallback, useEffect, useContext, use
 import { httpClient } from '~/utils/httpClient'
 import { useCookies } from 'react-cookie'
 import { getNormalizedUserDataResponse } from '~/utils/strapi/getNormalizedUserDataResponse'
-import { useRouter } from '~/common/hooks'
+import { useRouter, useCustomToastContext } from '~/common/hooks'
 
 type TRole = {
   _id: string
@@ -62,11 +62,12 @@ export const UserAuthContextProvider: React.FC<any> = ({ children }: any) => {
     [setCookie, setUserData]
   )
   // const { addToast } = useToasts()
+  const { toast } = useCustomToastContext()
   const handleLogout = useCallback(
     (msg?: string) => {
       setUserData(null)
       removeCookie('jwt')
-      // if (!!msg) addToast(`Logout: ${msg}`, { appearance: 'info' })
+      if (!!msg) toast(`Logout: ${msg}`, { appearance: 'info' })
       return Promise.resolve(true)
     },
     [setUserData, removeCookie]
@@ -76,23 +77,19 @@ export const UserAuthContextProvider: React.FC<any> = ({ children }: any) => {
   const { pathname } = useRouter()
   const jwt = useMemo(() => cookies.jwt, [cookies.jwt])
   useEffect(() => {
-    console.log(pathname)
+    // console.log(pathname)
     if (pathname !== '/auth/login') {
       setIsUserDataLoading(true)
       setIsUserDataLoaded(false)
-      httpClient.getMe(jwt)
-      .then((originalUserData: any) => {
-        setIsUserDataLoading(false)
-        setIsUserDataLoaded(true)
-        handleSetUserData(originalUserData)
-      })
-      .catch((err) => {
-        setIsUserDataLoading(false)
-        setIsUserDataLoaded(true)
-        const msg = err?.message || 'Auth error'
-        // addToast(msg, { appearance: 'error' })
-        handleLogout(msg)
-      })
+      httpClient.getMe(jwt, { on401: handleLogout })
+        .then((originalUserData: any) => {
+          handleSetUserData(originalUserData)
+        })
+        .catch(console.log)
+        .finally(() => {
+          setIsUserDataLoading(false)
+          setIsUserDataLoaded(true)
+        })
     }
   }, [pathname])
 

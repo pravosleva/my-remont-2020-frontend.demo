@@ -1,9 +1,13 @@
 import { Wget as fetch, FetcherController } from '~/utils/fetcher';
+import axios from 'axios'
 import { getApiUrl } from '~/utils/getApiUrl'
 import { HttpError } from '~/utils/errors/http/HttpError'
 import { httpErrorHandler } from '~/utils/errors/http/axios'
 import { IJob } from '~/common/context/MainContext'
 
+const CancelToken = axios.CancelToken
+
+type TCbOpts = { on401?: (msg: string) => void }
 class HttpClientSingletone {
   static _instance = new HttpClientSingletone();
   apiUrl: string;
@@ -68,11 +72,22 @@ class HttpClientSingletone {
         'Извините, что-то пошло не так';
   }
 
-  async getMe(jwt: string): Promise<any> {
-    if (!!this.getMeController) {
-      this.getMeController.abort();
+  async getMe(jwt: string, { on401 }: TCbOpts): Promise<any> {
+    // if (!!this.getMeController) this.getMeController.abort();
+    // this.getMeController = new FetcherController();
+
+    try {
+      if (!!this.getMeController) {
+        this.getMeController.cancel();
+        // console.log('-- canceled')
+        // console.log(this.getMeController)
+      }
+    } catch (err) {
+      console.log(err)
     }
-    this.getMeController = new FetcherController();
+    this.getMeController = CancelToken.source()
+    // console.log('-- reset')
+    // console.log(this.getMeController)
 
     let headers: any = {}
     if (!!jwt) {
@@ -82,17 +97,28 @@ class HttpClientSingletone {
       }
     }
 
-    const response = await fetch({
+    const response = await axios({
       method: 'GET',
       url: `${this.apiUrl}/users/me`,
       headers,
-      // data,
-      controller: this.getMeController,
+      cancelToken: this.getMeController.token,
+      validateStatus: (status) => status >= 200 && status < 500,
     })
+      .then((res) => {
+        switch (true) {
+          case res.status === 401:
+            on401(res.statusText)
+            throw new Error(res.statusText)
+          case res.status >= 300:
+            throw new Error(res.statusText)
+          default:
+            return res.data
+        }
+      })
       .then(
-        this.universalAxiosResponseHandler((res: any) => !!res?.data?.id)
+        this.responseDataHandlerAfterHttpErrorHandler((data: any) => !!data?._id)
       )
-      .catch((err) => ({ isOk: false, data: err }));
+      .catch((err) => ({ isOk: false, data: err }))
 
     if (response.isOk) {
       return Promise.resolve(response.data);
@@ -108,12 +134,7 @@ class HttpClientSingletone {
     this.getRemontController = new FetcherController();
 
     let headers: any = {}
-    // if (!!jwt) {
-    //   headers = {
-    //     ...headers,
-    //     Authorization: `Bearer ${jwt}`,
-    //   }
-    // }
+    // if (!!jwt) headers[Authorization] = `Bearer ${jwt}`
 
     const response = await fetch({
       method: 'GET',

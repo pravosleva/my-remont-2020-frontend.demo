@@ -9,8 +9,11 @@ import { SiteLayout } from '~/common/mui/SiteLayout'
 import useSocket from 'use-socket.io-client'
 // import io from 'socket.io-client'
 import 'react-image-gallery/styles/css/image-gallery.css'
-import { ToastProvider } from 'react-toast-notifications'
-import { CustomToastContextProvider } from '~/common/context'
+// import { ToastProvider } from 'react-toast-notifications'
+import { NotifsContextProvider } from '~/common/context'
+import 'react-notifications-component/dist/theme.css'
+// preferred way to import (from `v4`). Uses `animate__` prefix.
+import 'animate.css/animate.min.css'
 
 
 const REACT_APP_SOCKET_ENDPOINT = process.env.REACT_APP_SOCKET_ENDPOINT
@@ -23,18 +26,11 @@ function App() {
 
   return (
     <HashRouter>
-      <ToastProvider
-        autoDismiss
-        autoDismissTimeout={10000}
-        // components={{ Toast: Snack }}
-        placement="bottom-center"
-      >
-        <CustomToastContextProvider>
-          <SiteLayout socket={socket}>
-            <Routes />
-          </SiteLayout>
-        </CustomToastContextProvider>
-      </ToastProvider>
+      <NotifsContextProvider>
+        <SiteLayout socket={socket}>
+          <Routes />
+        </SiteLayout>
+      </NotifsContextProvider>
     </HashRouter>
   )
 }

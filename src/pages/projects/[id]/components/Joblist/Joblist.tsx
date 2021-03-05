@@ -221,29 +221,27 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
   ])
   const confirm = useConfirm()
 
-  const handleDoneJob = useCallback(
-    (id, checked) => {
-      confirm({
-        title: 'Статус работы',
-        description: `Статус будет изменен на ${
-          checked ? '"Выполнено"' : '"Незавершено"'
-        }. Ok?`,
-      })
-        .then(() => {
-          changeJobFieldPromise(id, 'isDone', checked)()
-            .then(handleSubmit)
-            .catch((msg) => {
-              throw new Error(msg)
-            })
-        })
-        .catch((err) => {
-          toast(err?.message || 'handleDoneJob: Declined', {
-            appearance: 'error',
-          })
-        })
-    },
-    [handleSubmit, changeJobFieldPromise]
-  )
+  // const handleDoneJob = useCallback(
+  //   (id, checked) => {
+  //     confirm({
+  //       title: 'Статус работы',
+  //       description: `Статус будет изменен на ${
+  //         checked ? '"Выполнено"' : '"Незавершено"'
+  //       }. Ok?`,
+  //     })
+  //       .then(() => {
+  //         changeJobFieldPromise(id, 'isDone', checked)()
+  //           // .then(handleSubmit)
+  //           // .catch((msg) => { throw new Error(msg) })
+  //       })
+  //       .catch((err) => {
+  //         toast(err?.message || 'handleDoneJob: Declined', {
+  //           appearance: 'error',
+  //         })
+  //       })
+  //   },
+  //   [handleSubmit, changeJobFieldPromise]
+  // )
   const isItemExpanded = (id: string) => expanded === `panel${id}`
   const displayedJoblist = useMemo(() => {
     switch (filterState.selectedGroup) {
@@ -267,10 +265,8 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
       })
         .then((value: number) => {
           changeJobFieldPromise(id, 'priceJobs', initPrice + value)()
-            .then(handleSubmit)
-            .catch((msg) => {
-              throw new Error(msg)
-            })
+            // .then(handleSubmit)
+            // .catch((msg) => { throw new Error(msg) })
         })
         .catch((err) => {
           toast(err?.message || 'handleAddPriceJobs: Declined', {
@@ -278,7 +274,7 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
           })
         })
     },
-    [prompt, changeJobFieldPromise, toast, handleSubmit]
+    [prompt, changeJobFieldPromise, toast]
   )
   const handleRemovePriceJobs = useCallback(
     (id, initPrice) => () => {
@@ -289,10 +285,8 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
       })
         .then((value: number) => {
           changeJobFieldPromise(id, 'priceJobs', initPrice - value)()
-            .then(handleSubmit)
-            .catch((msg) => {
-              throw new Error(msg)
-            })
+            // .then(handleSubmit)
+            // .catch((msg) => { throw new Error(msg) })
         })
         .catch((err) => {
           toast(err?.message || 'handleRemovePriceJobs: Declined', {
@@ -300,7 +294,7 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
           })
         })
     },
-    [prompt, changeJobFieldPromise, toast, handleSubmit]
+    [prompt, changeJobFieldPromise, toast]
   )
   // priceMaterials:
   const handleAddPriceMaterials = useCallback(
@@ -312,10 +306,8 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
       })
         .then((value: number) => {
           changeJobFieldPromise(id, 'priceMaterials', initPrice + value)()
-            .then(handleSubmit)
-            .catch((msg) => {
-              throw new Error(msg)
-            })
+            // .then(handleSubmit)
+            // .catch((msg) => { throw new Error(msg) })
         })
         .catch((err) => {
           toast(err?.message || 'handleAddPriceMaterials: Declined', {
@@ -323,7 +315,7 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
           })
         })
     },
-    [prompt, changeJobFieldPromise, toast, handleSubmit]
+    [prompt, changeJobFieldPromise, toast]
   )
   const handleRemovePriceMaterials = useCallback(
     (id, initPrice) => () => {
@@ -334,10 +326,8 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
       })
         .then((value: number) => {
           changeJobFieldPromise(id, 'priceMaterials', initPrice - value)()
-            .then(handleSubmit)
-            .catch((msg) => {
-              throw new Error(msg)
-            })
+            // .then(handleSubmit)
+            // .catch((msg) => { throw new Error(msg) })
         })
         .catch((err) => {
           toast(err?.message || 'handleRemovePriceMaterials: Declined', {
@@ -345,7 +335,7 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
           })
         })
     },
-    [prompt, changeJobFieldPromise, toast, handleSubmit]
+    [prompt, changeJobFieldPromise, toast]
   )
   // priceDelivery:
   const handleAddPriceDelivery = useCallback(
@@ -357,10 +347,8 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
       })
         .then((value: number) => {
           changeJobFieldPromise(id, 'priceDelivery', initPrice + value)()
-            .then(handleSubmit)
-            .catch((msg) => {
-              throw new Error(msg)
-            })
+            // .then(handleSubmit)
+            // .catch((msg) => { throw new Error(msg) })
         })
         .catch((err) => {
           toast(err?.message || 'handleAddPriceDelivery: Declined', {
@@ -368,7 +356,7 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
           })
         })
     },
-    [prompt, changeJobFieldPromise, toast, handleSubmit]
+    [prompt, changeJobFieldPromise, toast]
   )
   const handleRemovePriceDelivery = useCallback(
     (id, initPrice) => () => {
@@ -379,10 +367,8 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
       })
         .then((value: number) => {
           changeJobFieldPromise(id, 'priceDelivery', initPrice - value)()
-            .then(handleSubmit)
-            .catch((msg) => {
-              throw new Error(msg)
-            })
+            // .then(handleSubmit)
+            // .catch((msg) => { throw new Error(msg) })
         })
         .catch((err) => {
           toast(err?.message || 'handleRemovePriceDelivery: Declined', {
@@ -390,7 +376,7 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
           })
         })
     },
-    [prompt, changeJobFieldPromise, toast, handleSubmit]
+    [prompt, changeJobFieldPromise, toast]
   )
   // payed:
   const handleAddPayed = useCallback(
@@ -402,10 +388,8 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
       })
         .then((value: number) => {
           changeJobFieldPromise(id, 'payed', initPrice + value)()
-            .then(handleSubmit)
-            .catch((msg) => {
-              throw new Error(msg)
-            })
+            // .then(handleSubmit)
+            // .catch((msg) => { throw new Error(msg) })
         })
         .catch((err) => {
           toast(err?.message || 'handleAddPayed: Declined', {
@@ -413,7 +397,7 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
           })
         })
     },
-    [prompt, changeJobFieldPromise, toast, handleSubmit]
+    [prompt, changeJobFieldPromise, toast]
   )
   const handleRemovePayed = useCallback(
     (id, initPrice) => () => {
@@ -424,10 +408,8 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
       })
         .then((value: number) => {
           changeJobFieldPromise(id, 'payed', initPrice - value)()
-            .then(handleSubmit)
-            .catch((msg) => {
-              throw new Error(msg)
-            })
+            // .then(handleSubmit)
+            // .catch((msg) => { throw new Error(msg) })
         })
         .catch((err) => {
           toast(err?.message || 'handleRemovePayed: Declined', {
@@ -435,7 +417,7 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
           })
         })
     },
-    [prompt, changeJobFieldPromise, toast, handleSubmit]
+    [prompt, changeJobFieldPromise, toast]
   )
   const { width } = useWindowSize()
   const handleSetDates = useCallback(
@@ -484,7 +466,7 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
           })
         })
     },
-    [handleSubmit, removeJobPromise, joblist]
+    [removeJob]
   )
 
   return (
