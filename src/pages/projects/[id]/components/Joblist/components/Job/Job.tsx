@@ -148,7 +148,7 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
 
     const res = await httpClient.uploadFiles(files, cookies?.jwt)
       .then((d) => {
-        toast('Ok', { appearance: 'success' })
+        toast(`Ok | Не забудьте прикрепить загруженные файлы (${files.length} шт)!`, { appearance: 'success' })
         return d;
       })
       .catch((err) => {
@@ -228,64 +228,65 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
                 </div> */}
                 <SimpleReactLightbox>
                   <div className={classes.srLWrapperLayout}>
-                <SRLWrapper
-                  options={{
-                    settings: {
-                      // overlayColor: "rgb(25, 136, 124)",
-                    },
-                    caption: {
-                      captionAlignment: 'start',
-                      captionColor: '#FFFFFF',
-                      captionContainerPadding: '20px 0 30px 0',
-                      captionFontFamily: 'inherit',
-                      captionFontSize: 'inherit',
-                      captionFontStyle: 'inherit',
-                      captionFontWeight: 'inherit',
-                      captionTextTransform: 'inherit',
-                      showCaption: true
-                    },
-                    buttons: {
-                      showDownloadButton: false,
-                      showAutoplayButton: false,
-                      // backgroundColor: 'rgba(30,30,36,0.8)',
-                      // backgroundColor: 'rgb(25, 136, 124)',
-                      backgroundColor: '#556cd6',
-                      iconColor: 'rgba(255, 255, 255, 1)',
-                      iconPadding: '10px',
-                    },
-                    thumbnails: {
-                      showThumbnails: true,
-                      thumbnailsAlignment: 'center',
-                      thumbnailsContainerBackgroundColor: 'transparent',
-                      thumbnailsContainerPadding: '0',
-                      thumbnailsGap: '0 1px',
-                      thumbnailsIconColor: '#ffffff',
-                      thumbnailsOpacity: 0.4,
-                      thumbnailsPosition: 'bottom',
-                      thumbnailsSize: ['100px', '80px']
-                    },
-                    progressBar:{
-                      backgroundColor: '#f2f2f2',
-                      fillColor: '#000000',
-                      height: '3px',
-                      showProgressBar: true
-                    },
-                    translations: {}, // PRO ONLY
-                    icons: {} // PRO ONLY
-                  }}
-                >
-                  {
-                    data.imagesUrls.map(({ large, medium, thumbnail, small }: any) => {
-                      const src = !!large ? `${apiUrl}${large.url}` : medium ? `${apiUrl}${medium.url}` : `${apiUrl}${small.url}`
-                      return (
-                        <a href={src} key={`${src}_${slugify(data.comment)}`}>
-                          <img src={src} alt={data.comment || 'No comment'} />
-                        </a>
-                      )
-                    })
-                  }
-                  </SRLWrapper></div>
-                  </SimpleReactLightbox>
+                    <SRLWrapper
+                      options={{
+                        settings: {
+                          // overlayColor: "rgb(25, 136, 124)",
+                        },
+                        caption: {
+                          captionAlignment: 'start',
+                          captionColor: '#FFFFFF',
+                          captionContainerPadding: '20px 0 30px 0',
+                          captionFontFamily: 'inherit',
+                          captionFontSize: 'inherit',
+                          captionFontStyle: 'inherit',
+                          captionFontWeight: 'inherit',
+                          captionTextTransform: 'inherit',
+                          showCaption: true
+                        },
+                        buttons: {
+                          showDownloadButton: false,
+                          showAutoplayButton: false,
+                          // backgroundColor: 'rgba(30,30,36,0.8)',
+                          // backgroundColor: 'rgb(25, 136, 124)',
+                          backgroundColor: '#556cd6',
+                          iconColor: 'rgba(255, 255, 255, 1)',
+                          iconPadding: '10px',
+                        },
+                        thumbnails: {
+                          showThumbnails: true,
+                          thumbnailsAlignment: 'center',
+                          thumbnailsContainerBackgroundColor: 'transparent',
+                          thumbnailsContainerPadding: '0',
+                          thumbnailsGap: '0 1px',
+                          thumbnailsIconColor: '#ffffff',
+                          thumbnailsOpacity: 0.4,
+                          thumbnailsPosition: 'bottom',
+                          thumbnailsSize: ['100px', '80px']
+                        },
+                        progressBar:{
+                          backgroundColor: '#f2f2f2',
+                          fillColor: '#000000',
+                          height: '3px',
+                          showProgressBar: true
+                        },
+                        translations: {}, // PRO ONLY
+                        icons: {} // PRO ONLY
+                      }}
+                    >
+                      {
+                        data.imagesUrls.map(({ large, medium, thumbnail, small }: any) => {
+                          const src = !!large ? `${apiUrl}${large.url}` : medium ? `${apiUrl}${medium.url}` : `${apiUrl}${small.url}`
+                          return (
+                            <a href={src} key={`${src}_${slugify(data.comment)}`}>
+                              <img src={src} alt={data.comment || 'No comment'} />
+                            </a>
+                          )
+                        })
+                      }
+                    </SRLWrapper>
+                  </div>
+                </SimpleReactLightbox>
               </Grid>
             )
           }
