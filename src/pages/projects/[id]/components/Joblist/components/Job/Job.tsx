@@ -18,14 +18,16 @@ import {
 import DateFnsAdapter from '@material-ui/pickers/adapter/date-fns'
 import ruLocale from 'date-fns/locale/ru'
 import SaveIcon from '@material-ui/icons/Save'
-import { useCustomToastContext, useMainContext, useUserAuthContext, useWindowSize } from '~/common/hooks'
+import {useCustomToastContext, useMainContext, useUserAuthContext } from '~/common/hooks'
 import { Collabsible } from './components/Collabsible'
 import { httpClient } from '~/utils/httpClient'
 import { DropzoneAreaBase } from 'material-ui-dropzone';
 import { useCookies } from 'react-cookie'
 // import ImageGallery from 'react-image-gallery';
-import Lightbox from 'react-lightbox-component'
+// import Lightbox from 'react-lightbox-component'
 import { getApiUrl } from '~/utils/getApiUrl'
+import SimpleReactLightbox, { SRLWrapper } from "simple-react-lightbox"
+import slugify from 'slugify'
 
 const apiUrl = getApiUrl()
 
@@ -194,7 +196,7 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
     // joblist,
     cookies?.jwt,
   ])
-  const { isDesktop } = useWindowSize()
+  // const { isDesktop } = useWindowSize()
 
   return (
     <LocalizationProvider dateAdapter={DateFnsAdapter} locale={ruLocale}>
@@ -210,21 +212,80 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
                     thumbnail: `${apiUrl}${thumbnail.url}`
                   }))}
                 /> */}
-                <Lightbox
-                  // images={[
-                  //   {
-                  //     src: 'some image url',
-                  //     title: 'image title',
-                  //     description: 'image description'
-                  //   }
-                  // ]}
-                  images={data.imagesUrls.map(({ large, medium, thumbnail, small }: any) => ({
-                    src: isDesktop ? (!!large ? `${apiUrl}${large.url}` : medium ? `${apiUrl}${medium.url}` : `${apiUrl}${small.url}`) : `${apiUrl}${thumbnail.url}`,
-                    // thumbnail: `${apiUrl}${thumbnail.url}`,
-                    title: data.name,
-                    description: data.comment || 'No comment',
-                  }))}
-                />
+                {/* <div className={classes.lightboxWrapper}>
+                  <Lightbox
+                    // images={[
+                    //   { src: 'some image url', title: 'image title', description: 'image description' }
+                    // ]}
+                    images={data.imagesUrls.map(({ large, medium, thumbnail, small }: any) => ({
+                      // src: isDesktop ? (!!large ? `${apiUrl}${large.url}` : medium ? `${apiUrl}${medium.url}` : `${apiUrl}${small.url}`) : `${apiUrl}${thumbnail.url}`,
+                      src: !!large ? `${apiUrl}${large.url}` : medium ? `${apiUrl}${medium.url}` : `${apiUrl}${small.url}`,
+                      // thumbnail: `${apiUrl}${thumbnail.url}`,
+                      title: data.name,
+                      description: data.comment || 'No comment',
+                    }))}
+                  />
+                </div> */}
+                <SimpleReactLightbox>
+                  <div className={classes.srLWrapperLayout}>
+                <SRLWrapper
+                  options={{
+                    settings: {
+                      // overlayColor: "rgb(25, 136, 124)",
+                    },
+                    caption: {
+                      captionAlignment: 'start',
+                      captionColor: '#FFFFFF',
+                      captionContainerPadding: '20px 0 30px 0',
+                      captionFontFamily: 'inherit',
+                      captionFontSize: 'inherit',
+                      captionFontStyle: 'inherit',
+                      captionFontWeight: 'inherit',
+                      captionTextTransform: 'inherit',
+                      showCaption: true
+                    },
+                    buttons: {
+                      showDownloadButton: false,
+                      showAutoplayButton: false,
+                      // backgroundColor: 'rgba(30,30,36,0.8)',
+                      // backgroundColor: 'rgb(25, 136, 124)',
+                      backgroundColor: '#556cd6',
+                      iconColor: 'rgba(255, 255, 255, 1)',
+                      iconPadding: '10px',
+                    },
+                    thumbnails: {
+                      showThumbnails: true,
+                      thumbnailsAlignment: 'center',
+                      thumbnailsContainerBackgroundColor: 'transparent',
+                      thumbnailsContainerPadding: '0',
+                      thumbnailsGap: '0 1px',
+                      thumbnailsIconColor: '#ffffff',
+                      thumbnailsOpacity: 0.4,
+                      thumbnailsPosition: 'bottom',
+                      thumbnailsSize: ['100px', '80px']
+                    },
+                    progressBar:{
+                      backgroundColor: '#f2f2f2',
+                      fillColor: '#000000',
+                      height: '3px',
+                      showProgressBar: true
+                    },
+                    translations: {}, // PRO ONLY
+                    icons: {} // PRO ONLY
+                  }}
+                >
+                  {
+                    data.imagesUrls.map(({ large, medium, thumbnail, small }: any) => {
+                      const src = !!large ? `${apiUrl}${large.url}` : medium ? `${apiUrl}${medium.url}` : `${apiUrl}${small.url}`
+                      return (
+                        <a href={src} key={`${src}_${slugify(data.comment)}`}>
+                          <img src={src} alt={data.comment || 'No comment'} />
+                        </a>
+                      )
+                    })
+                  }
+                  </SRLWrapper></div>
+                  </SimpleReactLightbox>
               </Grid>
             )
           }

@@ -3,6 +3,43 @@ import green from '@material-ui/core/colors/green'
 import { makeStyles } from '@material-ui/core/styles'
 
 export const useStyles = makeStyles((theme) => ({
+  // Gallery 1: Lightbox
+  lightboxWrapper: {
+    marginTop: '10px',
+    "& > .lightbox-container > img": {
+      margin: '0 0 8px 0',
+      objectFit: 'cover',
+    },
+    '& > .lightbox-container > img:not(:last-child)': {
+      marginRight: '10px',
+    },
+  },
+  // Gallery 2: SRLWrapper
+  srLWrapperLayout: {
+    // border: '1px solid red',
+    '& > div': {
+      display: 'flex',
+      flexWrap: 'wrap',
+    },
+    '& > div > a': {
+      width: '100%',
+      maxWidth: 'calc(33% - 1px)',
+      display: 'block',
+      height: 'auto',
+      margin: '0 0 1px 0',
+      borderRadius: '4px',
+    },
+    '& > div > a > img': {
+      // border: '1px dashed red',
+      width: '100%',
+      height: '100%',
+      objectFit: 'cover',
+      borderRadius: '4px',
+    },
+    '& > div > a:not(:last-child)': {
+      marginRight: '1px',
+    },
+  },
   title: {
     marginBottom: '15px',
   },
