@@ -18,12 +18,13 @@ import {
 import DateFnsAdapter from '@material-ui/pickers/adapter/date-fns'
 import ruLocale from 'date-fns/locale/ru'
 import SaveIcon from '@material-ui/icons/Save'
-import { useCustomToastContext, useMainContext, useUserAuthContext } from '~/common/hooks'
+import { useCustomToastContext, useMainContext, useUserAuthContext, useWindowSize } from '~/common/hooks'
 import { Collabsible } from './components/Collabsible'
 import { httpClient } from '~/utils/httpClient'
 import { DropzoneAreaBase } from 'material-ui-dropzone';
 import { useCookies } from 'react-cookie'
-import ImageGallery from 'react-image-gallery';
+// import ImageGallery from 'react-image-gallery';
+import Lightbox from 'react-lightbox-component'
 import { getApiUrl } from '~/utils/getApiUrl'
 
 const apiUrl = getApiUrl()
@@ -193,6 +194,7 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
     // joblist,
     cookies?.jwt,
   ])
+  const { isDesktop } = useWindowSize()
 
   return (
     <LocalizationProvider dateAdapter={DateFnsAdapter} locale={ruLocale}>
@@ -202,10 +204,27 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
             !!data.imagesUrls && data.imagesUrls.length > 0 && (
               <Grid item className={classes.galleryWrapper}>
                 {/* <div className={classes.title}><b>Фото ({data.imagesUrls.length})</b></div> */}
-                <ImageGallery items={data.imagesUrls.map(({ large, medium, thumbnail, small }: any) => ({
-                  original: !!large ? `${apiUrl}${large.url}` : medium ? `${apiUrl}${medium.url}` : `${apiUrl}${small.url}`,
-                  thumbnail: `${apiUrl}${thumbnail.url}`
-                }))} />
+                {/* <ImageGallery
+                  items={data.imagesUrls.map(({ large, medium, thumbnail, small }: any) => ({
+                    original: !!large ? `${apiUrl}${large.url}` : medium ? `${apiUrl}${medium.url}` : `${apiUrl}${small.url}`,
+                    thumbnail: `${apiUrl}${thumbnail.url}`
+                  }))}
+                /> */}
+                <Lightbox
+                  // images={[
+                  //   {
+                  //     src: 'some image url',
+                  //     title: 'image title',
+                  //     description: 'image description'
+                  //   }
+                  // ]}
+                  images={data.imagesUrls.map(({ large, medium, thumbnail, small }: any) => ({
+                    src: isDesktop ? (!!large ? `${apiUrl}${large.url}` : medium ? `${apiUrl}${medium.url}` : `${apiUrl}${small.url}`) : `${apiUrl}${thumbnail.url}`,
+                    // thumbnail: `${apiUrl}${thumbnail.url}`,
+                    title: data.name,
+                    description: data.comment || 'No comment',
+                  }))}
+                />
               </Grid>
             )
           }
