@@ -28,6 +28,7 @@ import { useCookies } from 'react-cookie'
 import { getApiUrl } from '~/utils/getApiUrl'
 import SimpleReactLightbox, { SRLWrapper } from "simple-react-lightbox"
 import slugify from 'slugify'
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 
 const apiUrl = getApiUrl()
 
@@ -148,7 +149,7 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
 
     const res = await httpClient.uploadFiles(files, cookies?.jwt)
       .then((d) => {
-        toast(`Ok | Не забудьте прикрепить загруженные файлы (${files.length} шт)!`, { appearance: 'success' })
+        toast(`Не забудьте прикрепить загруженные файлы (${files.length} шт)!`, { appearance: 'success' })
         return d;
       })
       .catch((err) => {
@@ -346,7 +347,7 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
                               style={{ marginLeft: 'auto' }}
                             />
                           ) : (
-                            <SaveIcon />
+                            <CloudUploadIcon />
                           )
                         }
                       >
@@ -370,6 +371,7 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
                               httpClient.updateMedia(remontId, joblist, cookies?.jwt)
                                 .then(() => {
                                   setFileUrls(null)
+                                  toast('Файлы сохранены', { appearance: 'success' })
                                 })
                                 .finally(() => {
                                   setIsLoading(false)
