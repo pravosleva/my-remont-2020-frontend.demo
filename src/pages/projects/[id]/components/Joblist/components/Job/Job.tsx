@@ -29,6 +29,7 @@ import { getApiUrl } from '~/utils/getApiUrl'
 import SimpleReactLightbox, { SRLWrapper } from "simple-react-lightbox"
 import slugify from 'slugify'
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import { useBaseStyles } from '~/common/mui/baseStyles'
 
 const apiUrl = getApiUrl()
 
@@ -46,6 +47,7 @@ interface IProps {
 }
 
 export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IProps) => {
+  const baseClasses = useBaseStyles()
   const { remontLogic, changeJobFieldPromise, jobsLogic } = useMainContext()
   const { toast } = useCustomToastContext()
   const { userData } = useUserAuthContext()
@@ -202,10 +204,10 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
   return (
     <LocalizationProvider dateAdapter={DateFnsAdapter} locale={ruLocale}>
       <div className={classes.paper}>
-        <Grid container direction="column" spacing={2}>
+        <>
           {
             !!data.imagesUrls && data.imagesUrls.length > 0 && (
-              <Grid item className={classes.galleryWrapper}>
+              <div className={classes.galleryWrapper}>
                 {/* <div className={classes.title}><b>Фото ({data.imagesUrls.length})</b></div> */}
                 {/* <ImageGallery
                   items={data.imagesUrls.map(({ large, medium, thumbnail, small }: any) => ({
@@ -288,13 +290,13 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
                     </SRLWrapper>
                   </div>
                 </SimpleReactLightbox>
-              </Grid>
+              </div>
             )
           }
           {
             isOwner && (
-              <>
-                <Grid item xs={12} className={classes.dropZoneWrapper}>
+              <div className={baseClasses.standardJobInternalBox}>
+                <div className={classes.dropZoneWrapper}>
                   <DropzoneAreaBase
                     // Icon={BackupIcon}
                     filesLimit={5}
@@ -315,10 +317,10 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
                       // 'image/bmp',
                     ]}
                   />
-                </Grid>
+                </div>
                 {
                   files.length > 0 && (
-                    <Grid item xs={12}>
+                    <div>
                       <Button
                         fullWidth
                         variant="outlined"
@@ -353,12 +355,12 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
                       >
                         Upload files
                       </Button>
-                    </Grid>
+                    </div>
                   )
                 }
                 {
                   !!fileUrls && fileUrls?.length > 0 && (
-                    <Grid item xs={12}>
+                    <div>
                       <Button
                         fullWidth
                         variant="outlined"
@@ -396,14 +398,14 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
                       >
                         Assign files
                       </Button>
-                    </Grid>
+                    </div>
                   )
                 }
-              </>
+              </div>
             )
           }
           {!!data.comment && (
-            <Grid item xs={12}>
+            <div className={baseClasses.standardJobInternalBox}>
               {/* <Collabsible
                 title='Комментарий'
                 isOpenedByDefault
@@ -426,15 +428,15 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
               >
                 {data.comment}
               </Typography>
-            </Grid>
+            </div>
           )}
 
-          <Grid item>
+          <div className={baseClasses.standardJobInternalBox}>
             <Typography gutterBottom variant="h5">
               Оплачено: {getPrettyPrice(data.payed)}
             </Typography>
-          </Grid>
-          <Grid item>
+          </div>
+          <div className={baseClasses.standardJobInternalBox}>
             <b
               className={clsx({
                 [classes.dangerText]: diff < 0,
@@ -443,9 +445,9 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
             >
               Остаток: {getPrettyPrice(diff)}
             </b>
-          </Grid>
+          </div>
 
-          <Grid item>
+          <div className={baseClasses.standardJobInternalBox}>
             <Collabsible
               title='Итог'
               contentRenderer={() => (
@@ -462,9 +464,9 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
                 </>
               )}
             />
-          </Grid>
+          </div>
 
-          <Grid item>
+          <div className={baseClasses.standardJobInternalBox}>
             <Collabsible
               title='План'
               contentRenderer={() => (
@@ -547,9 +549,9 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
                 </>
               )}
             />
-          </Grid>
+          </div>
           {!!data.description && (
-            <Grid item xs={12} className="job-description-markdown">
+            <div className={clsx(baseClasses.standardJobInternalBox, "job-description-markdown")}>
               <Collabsible
                 title='Описание'
                 contentRenderer={() => (
@@ -559,7 +561,7 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
                   />
                 )}
               />
-            </Grid>
+            </div>
           )}
           {/* https://next.material-ui-pickers.dev/demo/daterangepicker
           <Grid item>
@@ -567,7 +569,7 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
             <pre>{JSON.stringify(data.dateStart)}</pre>
           </Grid>
           */}
-        </Grid>
+        </>
       </div>
     </LocalizationProvider>
   )

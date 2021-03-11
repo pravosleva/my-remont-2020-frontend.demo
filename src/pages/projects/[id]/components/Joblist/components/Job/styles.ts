@@ -18,23 +18,50 @@ export const useStyles = makeStyles((theme) => ({
   srLWrapperLayout: {
     // border: '1px solid red',
     '& > div': {
-      display: 'flex',
-      flexWrap: 'wrap',
+      // display: 'flex',
+      // flexWrap: 'wrap',
+
+      // GRID:
+      display: 'grid',
+      columnGap: '8px',
+      rowGap: '8px',
+
+      [theme.breakpoints.down('sm')]: {
+        gridTemplateColumns: 'repeat(auto-fit, minmax(90px, 100px))',
+      },
+      [theme.breakpoints.up('md')]: {
+        gridTemplateColumns: 'repeat(auto-fit, minmax(calc(33% - 16px), 133px))',
+      },
+      // gridAutoRows: 'minmax(auto, auto)',
+      gridAutoFlow: 'dense',
     },
     '& > div > a': {
-      width: '100%',
-      maxWidth: 'calc(33% - 1px)',
-      display: 'block',
-      height: 'auto',
-      margin: '0 0 1px 0',
-      borderRadius: '4px',
+      // width: '100%',
+      // maxWidth: 'calc(33% - 1px)',
+      // display: 'block',
+      // height: 'auto',
+      // margin: '0 0 1px 0',
+      // borderRadius: '4px',
+
+      // GRID ITEM:
+      textDecoration: 'none',
+      color: 'inherit',
+      borderRadius: '8px',
+      // [theme.breakpoints.up('md')]: { maxWidth: '265px' },
     },
     '& > div > a > img': {
-      // border: '1px dashed red',
+      // border: '2px solid transparent',
       width: '100%',
       height: '100%',
       objectFit: 'cover',
-      borderRadius: '4px',
+      borderRadius: '8px',
+      transition: 'all 0.3s linear',
+    },
+    '& > div > a:hover > img': {
+      boxShadow: '0px 5px 8px rgba(144, 164, 183, 0.6)',
+      // border: '2px solid #FFF',
+      // border: '2px solid #556cd6',
+      // scale: 1.1,
     },
     '& > div > a:not(:last-child)': {
       marginRight: '1px',
@@ -109,5 +136,8 @@ export const useStyles = makeStyles((theme) => ({
   },
   galleryWrapper: {
     maxWidth: '100%',
+    // border: '1px solid red',
+    // '& > div': { border: '1px solid red' },
+    marginBottom: theme.spacing(1),
   },
 }))

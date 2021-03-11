@@ -64,4 +64,8 @@ export const useBaseStyles = makeStyles((theme) => ({
       borderRadius: '4px',
     },
   },
+
+  standardJobInternalBox: {
+    padding: theme.spacing(1, 0, 1, 0),
+  },
 }))
