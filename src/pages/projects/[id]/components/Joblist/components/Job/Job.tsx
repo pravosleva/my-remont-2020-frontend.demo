@@ -30,6 +30,8 @@ import SimpleReactLightbox, { SRLWrapper } from "simple-react-lightbox"
 import slugify from 'slugify'
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import { useBaseStyles } from '~/common/mui/baseStyles'
+// import Icon from '@mdi/react'
+// import { mdiClose } from '@mdi/js'
 
 const apiUrl = getApiUrl()
 

@@ -12,9 +12,10 @@ class HttpClientSingletone {
   static _instance = new HttpClientSingletone();
   apiUrl: string;
   getMeController: any;
-  getRemontController: any;
-  putRemontController: any;
-  uploadFilesController: any;
+  getRemontController: FetcherController;
+  putRemontController: FetcherController;
+  uploadFilesController: FetcherController;
+  deleteFileController: FetcherController;
 
   constructor() {
     if (HttpClientSingletone._instance) {
@@ -27,6 +28,7 @@ class HttpClientSingletone {
     this.getRemontController = null;
     this.putRemontController = null;
     this.uploadFilesController = null;
+    this.deleteFileController = null;
   }
 
   static getInstance(): HttpClientSingletone {
@@ -47,7 +49,7 @@ class HttpClientSingletone {
   }
   responseDataHandlerAfterHttpErrorHandler(dataValidator: (data: any) => boolean) {
     return (data: any) => {
-      // console.log(axiosRes)
+      console.log(data)
       if (!dataValidator(data)) {
         throw new Error('Data is incorrect');
       }
@@ -291,6 +293,52 @@ class HttpClientSingletone {
       .then(httpErrorHandler)
       .then(
         this.responseDataHandlerAfterHttpErrorHandler((data: any) => !!data)
+      )
+      .catch((err) => ({ isOk: false, data: err }));
+
+    if (response.isOk) {
+      return Promise.resolve(response.data);
+    }
+    if (response.data instanceof HttpError) {
+      return Promise.reject(response.data.resStatus);
+    }
+    return Promise.reject(this.getErrorMsg(response.data));
+  }
+  async deleteFile(id: string, jwt?: string): Promise<any> {
+    if (!id) throw new Error('ERR: File id should be provided')
+    if (!!this.deleteFileController) this.deleteFileController.abort();
+    this.deleteFileController = new FetcherController();
+
+    let headers: any = {
+      // 'Access-Control-Allow-Origin': '*',
+      'Content-Type': 'application/json',
+    }
+    if (!!jwt) {
+      headers = {
+        ...headers,
+        Authorization: `Bearer ${jwt}`,
+      }
+    }
+
+    const response = await fetch({
+      method: 'DELETE',
+      url: `${this.apiUrl}/upload/files/${id}`,
+      mode: 'cors',
+      headers,
+      controller: this.deleteFileController,
+      // NOTE: From docs
+      // `validateStatus` defines whether to resolve or reject the promise for a given
+      // HTTP response status code. If `validateStatus` returns `true` (or is set to `null`
+      // or `undefined`), the promise will be resolved; otherwise, the promise will be
+      // rejected.
+      validateStatus: function (status: number) {
+        // return status >= 200 && status < 300; // default
+        return status >= 200 && status < 500; // default
+      },
+    })
+      .then(httpErrorHandler)
+      .then(
+        this.responseDataHandlerAfterHttpErrorHandler((data: any) => !!data?.id)
       )
       .catch((err) => ({ isOk: false, data: err }));
 
