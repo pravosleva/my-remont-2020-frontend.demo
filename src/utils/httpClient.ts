@@ -4,6 +4,7 @@ import { getApiUrl } from '~/utils/getApiUrl'
 import { HttpError } from '~/utils/errors/http/HttpError'
 import { httpErrorHandler } from '~/utils/errors/http/axios'
 import { IJob } from '~/common/context/MainContext'
+import { TFile } from '~/utils/strapi/files'
 
 const CancelToken = axios.CancelToken
 
@@ -15,7 +16,7 @@ class HttpClientSingletone {
   getRemontController: FetcherController;
   putRemontController: FetcherController;
   uploadFilesController: FetcherController;
-  deleteFileController: FetcherController;
+  // deleteFileController: FetcherController;
 
   constructor() {
     if (HttpClientSingletone._instance) {
@@ -28,7 +29,7 @@ class HttpClientSingletone {
     this.getRemontController = null;
     this.putRemontController = null;
     this.uploadFilesController = null;
-    this.deleteFileController = null;
+    // this.deleteFileController = null;
   }
 
   static getInstance(): HttpClientSingletone {
@@ -49,7 +50,7 @@ class HttpClientSingletone {
   }
   responseDataHandlerAfterHttpErrorHandler(dataValidator: (data: any) => boolean) {
     return (data: any) => {
-      console.log(data)
+      // console.log(data)
       if (!dataValidator(data)) {
         throw new Error('Data is incorrect');
       }
@@ -304,10 +305,44 @@ class HttpClientSingletone {
     }
     return Promise.reject(this.getErrorMsg(response.data));
   }
+  async searchFileByHash(hash: string, jwt?: string): Promise<any> {
+    if (!hash) throw new Error('ERR: File hash should be provided')
+
+    let headers: any = {
+      // 'Access-Control-Allow-Origin': '*',
+      'Content-Type': 'application/json',
+    }
+    if (!!jwt) {
+      headers = {
+        ...headers,
+        Authorization: `Bearer ${jwt}`,
+      }
+    }
+
+    const response = await fetch({
+      method: 'GET',
+      url: `${this.apiUrl}/upload/search/${hash}`,
+      mode: 'cors',
+      headers,
+    })
+      .then(httpErrorHandler)
+      .then(
+        this.responseDataHandlerAfterHttpErrorHandler((data: TFile[]) => Array.isArray(data) && data.length > 0)
+      )
+      .catch((err) => ({ isOk: false, data: err }));
+
+    if (response.isOk) {
+      return Promise.resolve(response.data);
+    }
+    if (response.data instanceof HttpError) {
+      return Promise.reject(response.data.resStatus);
+    }
+    return Promise.reject(this.getErrorMsg(response.data));
+  }
   async deleteFile(id: string, jwt?: string): Promise<any> {
     if (!id) throw new Error('ERR: File id should be provided')
-    if (!!this.deleteFileController) this.deleteFileController.abort();
-    this.deleteFileController = new FetcherController();
+    // if (!!this.deleteFileController) this.deleteFileController.abort();
+    // this.deleteFileController = new FetcherController();
 
     let headers: any = {
       // 'Access-Control-Allow-Origin': '*',
@@ -325,7 +360,7 @@ class HttpClientSingletone {
       url: `${this.apiUrl}/upload/files/${id}`,
       mode: 'cors',
       headers,
-      controller: this.deleteFileController,
+      // controller: this.deleteFileController,
       // NOTE: From docs
       // `validateStatus` defines whether to resolve or reject the promise for a given
       // HTTP response status code. If `validateStatus` returns `true` (or is set to `null`
@@ -338,7 +373,7 @@ class HttpClientSingletone {
     })
       .then(httpErrorHandler)
       .then(
-        this.responseDataHandlerAfterHttpErrorHandler((data: any) => !!data?.id)
+        this.responseDataHandlerAfterHttpErrorHandler((data: TFile) => !!data?._id)
       )
       .catch((err) => ({ isOk: false, data: err }));
 

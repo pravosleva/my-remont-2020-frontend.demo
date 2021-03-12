@@ -32,10 +32,12 @@ export const useStyles = makeStyles((theme) => ({
       [theme.breakpoints.up('md')]: {
         gridTemplateColumns: 'repeat(auto-fit, minmax(90px, 1fr))',
       },
-      // gridAutoRows: 'minmax(auto, auto)',
       gridAutoFlow: 'dense',
     },
-    '& > div > a': {
+    '& > div > div.grid-item': {
+      borderRadius: '8px',
+    },
+    '& > div > div.grid-item > a': {
       // width: '100%',
       // maxWidth: 'calc(33% - 1px)',
       // display: 'block',
@@ -44,12 +46,41 @@ export const useStyles = makeStyles((theme) => ({
       // borderRadius: '4px',
 
       // GRID ITEM:
+      display: 'block',
+      [theme.breakpoints.down('sm')]: {
+        height: '85px',
+      },
+      [theme.breakpoints.up('md')]: {
+        height: '120px',
+      },
       textDecoration: 'none',
       color: 'inherit',
       borderRadius: '8px',
       // [theme.breakpoints.up('md')]: { maxWidth: '265px' },
     },
-    '& > div > a > img': {
+    // EDITABLE:
+    '& > div > div.grid-item > a.editable, & > div > div.grid-item > a.editable > img': {
+      borderBottomLeftRadius: '0px ',
+      borderBottomRightRadius: '0px ',
+    },
+    // DEL BTN:
+    '& > div > div.grid-item > a.editable + div.del-btn': {
+      textAlign: 'right',
+      padding: theme.spacing(1),
+      cursor: 'pointer',
+      borderRadius: 'inherit',
+      borderTopLeftRadius: '0px ',
+      borderTopRightRadius: '0px ',
+      transition: 'all 0.2s linear',
+
+      backgroundColor: red[500],
+      color: '#FFF',
+    },
+    '& > div > div.grid-item > a.editable + div.del-btn:hover': {
+      backgroundColor: 'rgba(244, 67, 54, 0.5)',
+    },
+
+    '& > div > div.grid-item > a > img': {
       // border: '2px solid transparent',
       width: '100%',
       height: '100%',
@@ -57,14 +88,11 @@ export const useStyles = makeStyles((theme) => ({
       borderRadius: '8px',
       transition: 'all 0.3s linear',
     },
-    '& > div > a:hover > img': {
+    '& > div > div.grid-item > a:not(.editable):hover > img': {
       boxShadow: '0px 5px 8px rgba(144, 164, 183, 0.6)',
       // border: '2px solid #FFF',
       // border: '2px solid #556cd6',
       // scale: 1.1,
-    },
-    '& > div > a:not(:last-child)': {
-      marginRight: '1px',
     },
   },
   title: {
@@ -75,7 +103,15 @@ export const useStyles = makeStyles((theme) => ({
   },
   paper: {
     width: '100%',
-    padding: theme.spacing(1),
+    padding: theme.spacing(1, 1, 0, 1),
+    '& > div': {
+      // border: '1px solid red',
+      padding: theme.spacing(0, 0, 1, 0),
+    },
+    '& > div:not(:first-child)': {
+      // border: '1px solid red',
+      padding: theme.spacing(1, 0, 1, 0),
+    },
   },
   dangerText: {
     color: red[500],
@@ -138,6 +174,6 @@ export const useStyles = makeStyles((theme) => ({
     maxWidth: '100%',
     // border: '1px solid red',
     // '& > div': { border: '1px solid red' },
-    marginBottom: theme.spacing(1),
+    // marginBottom: theme.spacing(1),
   },
 }))

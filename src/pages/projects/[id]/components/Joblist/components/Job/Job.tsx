@@ -1,7 +1,7 @@
 import React, { useMemo, useEffect, useState, useCallback } from 'react'
 import { IJob } from '~/common/context/MainContext'
 import { useStyles } from './styles'
-import { Button, CircularProgress, Grid, Typography } from '@material-ui/core'
+import { Button, CircularProgress, Typography } from '@material-ui/core'
 import Markdown from 'react-markdown'
 import { getPrettyPrice } from '~/utils/getPrettyPrice'
 import clsx from 'clsx'
@@ -31,7 +31,10 @@ import slugify from 'slugify'
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import { useBaseStyles } from '~/common/mui/baseStyles'
 // import Icon from '@mdi/react'
-// import { mdiClose } from '@mdi/js'
+// import { mdiDelete } from '@mdi/js';
+// <Icon path={mdiDelete} size={0.7} />
+import { getHash, TFormatsData } from '~/utils/strapi/files'
+import pluralize from 'pluralize'
 
 const apiUrl = getApiUrl()
 
@@ -202,6 +205,58 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
     cookies?.jwt,
   ])
   // const { isDesktop } = useWindowSize()
+  const getFirst = (files) => files.length > 0 ? files[0] : null
+  const handleDeleteImage = (arg: TFormatsData): void => {
+    console.log(arg)
+    const { thumbnail: { hash: strapiHash } } = arg
+    const hash = getHash(arg)
+    // TODO:
+    // 1) Confirmation dialog;
+    // 2) Get hash;
+    // 3) GET: httpClient.searchFileByHash -> get first from array;
+    // 4) DELETE: httpClient.deleteFile
+    // 5) PUT: httpClient.updateMedia (State will be updated by socket);
+    toast(`В разработке, ${hash}`, { appearance: 'error' })
+
+    httpClient.searchFileByHash(hash, cookies?.jwt)
+      .then((res) => {
+        console.log(res)
+        toast(`${pluralize('file', res.length, true)} found: Deleting...`, { appearance: 'info' })
+        return getFirst(res)
+      })
+      .then((file) => {
+        if (!file?._id) throw new Error('Oops, file info is incorrect!')
+        // toast(file._id, { appearance: 'info' })
+
+        return file._id
+      })
+      .then(async (fileId) => {
+        // 4. DEL
+        await httpClient.deleteFile(fileId, cookies?.jwt)
+          .then((_file) => {
+            const jobId = data._id
+            const newImagesUrls = data.imagesUrls.filter(({ thumbnail: { hash: strapiHashOld } }: TFormatsData) => strapiHashOld !== strapiHash)
+            const thisJobIndex = joblist.findIndex((job: IJob) => job._id === jobId)
+            const newJobList = [...joblist]
+
+            // 5. PUT new state
+            newJobList[thisJobIndex].imagesUrls = newImagesUrls
+            httpClient.updateMedia(remontId, newJobList, cookies?.jwt)
+              .then((res) => {
+                console.log(res)
+              })
+              .catch((err) => {
+                toast(err, { appearance: 'error' })
+              })
+          })
+          .catch((err) => {
+            toast(err, { appearance: 'error' })
+          })
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
 
   return (
     <LocalizationProvider dateAdapter={DateFnsAdapter} locale={ruLocale}>
@@ -280,12 +335,18 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
                       }}
                     >
                       {
-                        data.imagesUrls.map(({ large, medium, thumbnail, small }: any) => {
+                        data.imagesUrls.map((data: any) => {
+                          const { large, medium, thumbnail, small } = data
                           const src = !!large ? `${apiUrl}${large.url}` : medium ? `${apiUrl}${medium.url}` : `${apiUrl}${small.url}`
                           return (
-                            <a href={src} key={`${src}_${slugify(data.comment)}`}>
-                              <img src={src} alt={data.comment || 'No comment'} />
-                            </a>
+                            <div className='grid-item' key={`${src}_${slugify(data.comment || 'no-comment')}`}>
+                              <a href={src} className={clsx({ ['editable']: isOwner })}>
+                                <img src={src} alt={data.comment || 'No comment'} />
+                              </a>
+                              {isOwner && <div className='del-btn' onClick={() => {
+                                handleDeleteImage(data)
+                              }}>DEL</div>}
+                            </div>
                           )
                         })
                       }
@@ -322,7 +383,7 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
                 </div>
                 {
                   files.length > 0 && (
-                    <div>
+                    <div style={{ marginTop: '8px' }}>
                       <Button
                         fullWidth
                         variant="outlined"
@@ -362,10 +423,10 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
                 }
                 {
                   !!fileUrls && fileUrls?.length > 0 && (
-                    <div>
+                    <div style={{ marginTop: '8px' }}>
                       <Button
                         fullWidth
-                        variant="outlined"
+                        variant="contained"
                         color="primary"
                         onClick={() => {
                           // console.log(data)
@@ -390,7 +451,7 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
                           isLoading ? (
                             <CircularProgress
                               size={20}
-                              color="primary"
+                              color="inherit"
                               style={{ marginLeft: 'auto' }}
                             />
                           ) : (
