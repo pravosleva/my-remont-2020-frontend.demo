@@ -96,7 +96,7 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
     // updateJoblist,
     updateRemont,
     filterState,
-    removeJobPromise,
+    // removeJobPromise,
   } = useMainContext()
   const { toast } = useCustomToastContext()
   const { userData } = useUserAuthContext()
@@ -109,9 +109,7 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
   ) => {
     setExpanded(isExpanded ? panelName : false)
     // console.log(panelName, id)
-    if (!!id) {
-      setTimeout(() => scrollTo(getRef(id)), 500)
-    }
+    if (!!id) setTimeout(() => scrollTo(getRef(id), true), 1500)
   }
   // --
   const isOwner: boolean = useMemo(() => remontLogic?.isOwner(userData?.id), [
