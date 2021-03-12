@@ -54,6 +54,7 @@ import { scrollTo } from '~/utils/scrollTo'
 import { getDifference } from '~/utils/getDifference'
 import Icon from '@mdi/react'
 import { mdiDelete } from '@mdi/js'
+import { useBaseStyles } from '~/common/mui/baseStyles'
 
 // Register plugins if required
 // MdEditor.use(YOUR_PLUGINS_HERE);
@@ -89,6 +90,7 @@ const getUniqueKey = (data: IJob): string => {
 
 export const Joblist = ({ remontId, removeJob }: IProps) => {
   const classes = useStyles()
+  const baseClasses = useBaseStyles()
   const {
     changeJobFieldPromise,
     // jobsLogic,
@@ -103,13 +105,18 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
   // --
   const [expanded, setExpanded] = React.useState<string | false>(false)
   const [getRef, setRef] =  useDynamicRefs();
+  const [isAbsolutePreloaderActive, setIsAbsolutePreloaderActive] = useState<boolean>(false)
   const handleChangeAccoddionItem = (panelName: string, id: string) => (
     _event: React.ChangeEvent<{}>,
     isExpanded: boolean
   ) => {
+    setIsAbsolutePreloaderActive(true)
     setExpanded(isExpanded ? panelName : false)
     // console.log(panelName, id)
-    if (!!id) setTimeout(() => scrollTo(getRef(id), true), 1500)
+    if (!!id) setTimeout(() => {
+      scrollTo(getRef(id), true)
+      setIsAbsolutePreloaderActive(false)
+    }, 1000)
   }
   // --
   const isOwner: boolean = useMemo(() => remontLogic?.isOwner(userData?.id), [
@@ -471,6 +478,14 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
     <>
       {displayedJoblist.length > 0 && (
         <>
+          {isAbsolutePreloaderActive && (
+            <div className={baseClasses.fixedPreloader}>
+              <CircularProgress
+                size={20}
+                color="primary"
+              />
+            </div>
+          )}
           {displayedJoblist.map((data, i) => (
             <React.Fragment key={data._id}>
               <Accordion

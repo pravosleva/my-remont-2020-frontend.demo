@@ -68,4 +68,18 @@ export const useBaseStyles = makeStyles((theme) => ({
   standardJobInternalBox: {
     padding: theme.spacing(1, 0, 1, 0),
   },
+  fixedPreloader: {
+    zIndex: 2,
+    position: 'fixed',
+    bottom: '16px',
+    left: '50%',
+    transform: 'translateX(-50%)',
+    width: '20px',
+    height: '20px',
+    backgroundColor: 'transparent',
+
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 }))
