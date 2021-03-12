@@ -27,10 +27,10 @@ export const useStyles = makeStyles((theme) => ({
       rowGap: '8px',
 
       [theme.breakpoints.down('sm')]: {
-        gridTemplateColumns: 'repeat(auto-fit, minmax(90px, 100px))',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(90px, 1fr))',
       },
       [theme.breakpoints.up('md')]: {
-        gridTemplateColumns: 'repeat(auto-fit, minmax(calc(33% - 16px), 133px))',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
       },
       // gridAutoRows: 'minmax(auto, auto)',
       gridAutoFlow: 'dense',
