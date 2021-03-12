@@ -216,7 +216,6 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
     // 3) GET: httpClient.searchFileByHash -> get first from array;
     // 4) DELETE: httpClient.deleteFile
     // 5) PUT: httpClient.updateMedia (State will be updated by socket);
-    toast(`В разработке, ${hash}`, { appearance: 'error' })
 
     httpClient.searchFileByHash(hash, cookies?.jwt)
       .then((res) => {
