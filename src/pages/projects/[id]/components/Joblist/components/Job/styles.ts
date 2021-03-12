@@ -30,7 +30,7 @@ export const useStyles = makeStyles((theme) => ({
         gridTemplateColumns: 'repeat(auto-fit, minmax(90px, 1fr))',
       },
       [theme.breakpoints.up('md')]: {
-        gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(90px, 1fr))',
       },
       // gridAutoRows: 'minmax(auto, auto)',
       gridAutoFlow: 'dense',
