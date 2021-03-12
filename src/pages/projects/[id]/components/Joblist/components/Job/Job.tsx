@@ -1,7 +1,7 @@
 import React, { useMemo, useEffect, useState, useCallback } from 'react'
 import { IJob } from '~/common/context/MainContext'
 import { useStyles } from './styles'
-import { Button, CircularProgress, Grid, Typography } from '@material-ui/core'
+import { Button, CircularProgress, Typography } from '@material-ui/core'
 import Markdown from 'react-markdown'
 import { getPrettyPrice } from '~/utils/getPrettyPrice'
 import clsx from 'clsx'
@@ -31,7 +31,9 @@ import slugify from 'slugify'
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import { useBaseStyles } from '~/common/mui/baseStyles'
 // import Icon from '@mdi/react'
-// import { mdiClose } from '@mdi/js'
+// import { mdiDelete } from '@mdi/js';
+// <Icon path={mdiDelete} size={0.7} />
+import { getHash, TFormatsData } from '~/utils/strapi/files/getHash'
 
 const apiUrl = getApiUrl()
 
@@ -202,6 +204,17 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
     cookies?.jwt,
   ])
   // const { isDesktop } = useWindowSize()
+  const handleDeleteImage = (arg: TFormatsData): void => {
+    console.log(arg)
+    const hash = getHash(arg)
+    // TODO:
+    // 1) Confirmation dialog;
+    // 2) Get hash;
+    // 3) Search file id by hash -> get first from array;
+    // 4) Delete file by id;
+    // 5) Remove file from state;
+    toast(`В разработке, ${hash}`, { appearance: 'error' })
+  }
 
   return (
     <LocalizationProvider dateAdapter={DateFnsAdapter} locale={ruLocale}>
@@ -280,12 +293,18 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
                       }}
                     >
                       {
-                        data.imagesUrls.map(({ large, medium, thumbnail, small }: any) => {
+                        data.imagesUrls.map((data: any) => {
+                          const { large, medium, thumbnail, small } = data
                           const src = !!large ? `${apiUrl}${large.url}` : medium ? `${apiUrl}${medium.url}` : `${apiUrl}${small.url}`
                           return (
-                            <a href={src} key={`${src}_${slugify(data.comment)}`}>
-                              <img src={src} alt={data.comment || 'No comment'} />
-                            </a>
+                            <div className='grid-item' key={`${src}_${slugify(data.comment || 'no-comment')}`}>
+                              <a href={src} className={clsx({ ['editable']: isOwner })}>
+                                <img src={src} alt={data.comment || 'No comment'} />
+                              </a>
+                              {isOwner && <div className='del-btn' onClick={() => {
+                                handleDeleteImage(data)
+                              }}>DEL</div>}
+                            </div>
                           )
                         })
                       }
