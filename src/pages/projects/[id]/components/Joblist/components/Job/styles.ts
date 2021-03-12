@@ -47,7 +47,12 @@ export const useStyles = makeStyles((theme) => ({
 
       // GRID ITEM:
       display: 'block',
-      height: '90px',
+      [theme.breakpoints.down('sm')]: {
+        height: '85px',
+      },
+      [theme.breakpoints.up('md')]: {
+        height: '120px',
+      },
       textDecoration: 'none',
       color: 'inherit',
       borderRadius: '8px',
@@ -98,7 +103,15 @@ export const useStyles = makeStyles((theme) => ({
   },
   paper: {
     width: '100%',
-    padding: theme.spacing(1),
+    padding: theme.spacing(1, 1, 0, 1),
+    '& > div': {
+      // border: '1px solid red',
+      padding: theme.spacing(0, 0, 1, 0),
+    },
+    '& > div:not(:first-child)': {
+      // border: '1px solid red',
+      padding: theme.spacing(1, 0, 1, 0),
+    },
   },
   dangerText: {
     color: red[500],
@@ -161,6 +174,6 @@ export const useStyles = makeStyles((theme) => ({
     maxWidth: '100%',
     // border: '1px solid red',
     // '& > div': { border: '1px solid red' },
-    marginBottom: theme.spacing(1),
+    // marginBottom: theme.spacing(1),
   },
 }))

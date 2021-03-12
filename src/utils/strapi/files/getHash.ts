@@ -1,14 +1,6 @@
-type TFormat = {
-  hash: string
-  [key: string]: any
-}
-export type TFormatsData = {
-  large?: TFormat
-  medium?: TFormat
-  thumbnail?: TFormat
-  small?: TFormat
-}
-export const getHash = (data: TFormatsData) => {
+import { TFormatsData } from './interfaces'
+
+export const getHash = (data: TFormatsData): string | null => {
   const possibleFields = ['large', 'medium', 'small', 'thumbnail']
   let fileHash = null
   let result = null

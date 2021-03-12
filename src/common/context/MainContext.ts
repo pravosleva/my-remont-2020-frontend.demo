@@ -1,6 +1,7 @@
 import { createContext, useContext } from 'react'
 import { JobsLogic } from '~/utils/logic'
 import { RemontLogic } from '~/utils/logic'
+import { TFormatsData } from '~/utils/strapi/files'
 
 export interface IJob {
   name: string
@@ -20,7 +21,7 @@ export interface IJob {
   plannedStartDate?: string
   plannedFinishDate?: string
   realFinishDate?: string
-  imagesUrls: string[]
+  imagesUrls: TFormatsData[]
 }
 
 declare var io: {

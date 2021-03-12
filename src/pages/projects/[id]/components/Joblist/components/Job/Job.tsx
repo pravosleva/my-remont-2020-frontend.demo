@@ -33,7 +33,8 @@ import { useBaseStyles } from '~/common/mui/baseStyles'
 // import Icon from '@mdi/react'
 // import { mdiDelete } from '@mdi/js';
 // <Icon path={mdiDelete} size={0.7} />
-import { getHash, TFormatsData } from '~/utils/strapi/files/getHash'
+import { getHash, TFormatsData } from '~/utils/strapi/files'
+import pluralize from 'pluralize'
 
 const apiUrl = getApiUrl()
 
@@ -204,16 +205,57 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
     cookies?.jwt,
   ])
   // const { isDesktop } = useWindowSize()
+  const getFirst = (files) => files.length > 0 ? files[0] : null
   const handleDeleteImage = (arg: TFormatsData): void => {
     console.log(arg)
+    const { thumbnail: { hash: strapiHash } } = arg
     const hash = getHash(arg)
     // TODO:
     // 1) Confirmation dialog;
     // 2) Get hash;
-    // 3) Search file id by hash -> get first from array;
-    // 4) Delete file by id;
-    // 5) Remove file from state;
+    // 3) GET: httpClient.searchFileByHash -> get first from array;
+    // 4) DELETE: httpClient.deleteFile
+    // 5) PUT: httpClient.updateMedia (State will be updated by socket);
     toast(`В разработке, ${hash}`, { appearance: 'error' })
+
+    httpClient.searchFileByHash(hash, cookies?.jwt)
+      .then((res) => {
+        console.log(res)
+        toast(`${pluralize('file', res.length, true)} found: Deleting...`, { appearance: 'info' })
+        return getFirst(res)
+      })
+      .then((file) => {
+        if (!file?._id) throw new Error('Oops, file info is incorrect!')
+        // toast(file._id, { appearance: 'info' })
+
+        return file._id
+      })
+      .then(async (fileId) => {
+        // 4. DEL
+        await httpClient.deleteFile(fileId, cookies?.jwt)
+          .then((_file) => {
+            const jobId = data._id
+            const newImagesUrls = data.imagesUrls.filter(({ thumbnail: { hash: strapiHashOld } }: TFormatsData) => strapiHashOld !== strapiHash)
+            const thisJobIndex = joblist.findIndex((job: IJob) => job._id === jobId)
+            const newJobList = [...joblist]
+
+            // 5. PUT new state
+            newJobList[thisJobIndex].imagesUrls = newImagesUrls
+            httpClient.updateMedia(remontId, newJobList, cookies?.jwt)
+              .then((res) => {
+                console.log(res)
+              })
+              .catch((err) => {
+                toast(err, { appearance: 'error' })
+              })
+          })
+          .catch((err) => {
+            toast(err, { appearance: 'error' })
+          })
+      })
+      .catch((err) => {
+        console.log(err)
+      })
   }
 
   return (
@@ -341,7 +383,7 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
                 </div>
                 {
                   files.length > 0 && (
-                    <div>
+                    <div style={{ marginTop: '8px' }}>
                       <Button
                         fullWidth
                         variant="outlined"
@@ -381,10 +423,10 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
                 }
                 {
                   !!fileUrls && fileUrls?.length > 0 && (
-                    <div>
+                    <div style={{ marginTop: '8px' }}>
                       <Button
                         fullWidth
-                        variant="outlined"
+                        variant="contained"
                         color="primary"
                         onClick={() => {
                           // console.log(data)
@@ -409,7 +451,7 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
                           isLoading ? (
                             <CircularProgress
                               size={20}
-                              color="primary"
+                              color="inherit"
                               style={{ marginLeft: 'auto' }}
                             />
                           ) : (
