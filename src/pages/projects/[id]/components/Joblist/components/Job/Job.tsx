@@ -35,6 +35,7 @@ import { useBaseStyles } from '~/common/mui/baseStyles'
 // <Icon path={mdiDelete} size={0.7} />
 import { getHash, TFormatsData } from '~/utils/strapi/files'
 import pluralize from 'pluralize'
+import { useConfirm } from 'material-ui-confirm'
 
 const apiUrl = getApiUrl()
 
@@ -286,6 +287,19 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
         toast(err, { appearance: 'error' })
       })
   }
+  const confirm = useConfirm()
+  const confirmThenDelete = (data) => {
+      confirm({
+        title: 'Удаление файла',
+        description: 'Вы уверены?',
+      })
+        .then(() => {
+          handleDeleteImage(data)
+        })
+        .catch((err) => {
+          toast(err?.message || 'Delete file: Declined', { appearance: 'error' })
+        })
+  }
 
   return (
     <LocalizationProvider dateAdapter={DateFnsAdapter} locale={ruLocale}>
@@ -374,7 +388,7 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
                                 <img src={thumbnailSrc} alt={data.comment || 'No comment'} />
                               </a>
                               {isOwner && <div className='del-btn' onClick={() => {
-                                handleDeleteImage(data)
+                                confirmThenDelete(data)
                               }}>
                                 {
                                   (isFileSearching[thumbnailSrc] || isFileDeleting[thumbnailSrc] || isJoblistUpdating[thumbnailSrc])
@@ -402,7 +416,7 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
             isOwner && (
               <div className={baseClasses.standardJobInternalBox}>
                 <Collabsible
-                  title='Загрузить файлы'
+                  title='Загрузка файлов'
                   contentRenderer={() => (
                     <div className={classes.dropZoneWrapper}>
                       <DropzoneAreaBase

@@ -20,7 +20,6 @@ import {
   ListItemText,
 } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/Add'
-// import { useConfirm } from 'material-ui-confirm'
 import { usePrompt } from '~/common/hooks/usePrompt'
 import { useStyles } from './styles'
 import { useCookies } from 'react-cookie'
