@@ -401,28 +401,33 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
           {
             isOwner && (
               <div className={baseClasses.standardJobInternalBox}>
-                <div className={classes.dropZoneWrapper}>
-                  <DropzoneAreaBase
-                    // Icon={BackupIcon}
-                    filesLimit={5}
-                    maxFileSize={50 * 1024 * 1024}
-                    onAdd={handleAddFile}
-                    // onDrop={handleAdd}
-                    onDelete={handleDeleteFile}
-                    showPreviewsInDropzone={true}
-                    showAlerts={false}
-                    // onAlert={this.onDropzoneAlert}
-                    fileObjects={files}
-                    dropzoneText="Загрузите или перетащите файл в выделенную область в формате .jpg или .png"
-                    dropzoneClass="smartprice-dropzone"
-                    acceptedFiles={[
-                      // 'application/msword',
-                      'image/jpeg',
-                      'image/png',
-                      // 'image/bmp',
-                    ]}
-                  />
-                </div>
+                <Collabsible
+                  title='Загрузить файлы'
+                  contentRenderer={() => (
+                    <div className={classes.dropZoneWrapper}>
+                      <DropzoneAreaBase
+                        // Icon={BackupIcon}
+                        filesLimit={5}
+                        maxFileSize={50 * 1024 * 1024}
+                        onAdd={handleAddFile}
+                        // onDrop={handleAdd}
+                        onDelete={handleDeleteFile}
+                        showPreviewsInDropzone={true}
+                        showAlerts={false}
+                        // onAlert={this.onDropzoneAlert}
+                        fileObjects={files}
+                        dropzoneText="Загрузите или перетащите файл в выделенную область в формате .jpg или .png"
+                        dropzoneClass="smartprice-dropzone"
+                        acceptedFiles={[
+                          // 'application/msword',
+                          'image/jpeg',
+                          'image/png',
+                          // 'image/bmp',
+                        ]}
+                      />
+                    </div>
+                  )}
+                />
                 {
                   files.length > 0 && (
                     <div style={{ marginTop: '8px' }}>
