@@ -206,9 +206,30 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
   ])
   // const { isDesktop } = useWindowSize()
   const getFirst = (files) => files.length > 0 ? files[0] : null
+
+  const [isFileSearching, setIsFileSearching] = useState<{[key: string]: boolean}>({})
+  const handleChangeSearchingState = (thumbnailSrc: string, value: boolean) => {
+    setIsFileSearching((prevState) => ({
+      ...prevState,
+      [thumbnailSrc]: value,
+    }))
+  }
+  const [isFileDeleting, setIsFileDeleting] = useState<{[key: string]: boolean}>({})
+  const handleChangeDeletingState = (thumbnailSrc: string, value: boolean) => {
+    setIsFileDeleting((prevState) => ({
+      ...prevState,
+      [thumbnailSrc]: value,
+    }))
+  }
+  const [isJoblistUpdating, setIsJoblistUpdating] = useState<{[key: string]: boolean}>({})
+  const handleChangeJoblistUpdatingState = (thumbnailSrc: string, value: boolean) => {
+    setIsJoblistUpdating((prevState) => ({
+      ...prevState,
+      [thumbnailSrc]: value,
+    }))
+  }
   const handleDeleteImage = (arg: TFormatsData): void => {
-    console.log(arg)
-    const { thumbnail: { hash: strapiHash } } = arg
+    const { thumbnail: { hash: strapiHash, url } } = arg
     const hash = getHash(arg)
     // TODO:
     // 1) Confirmation dialog;
@@ -217,9 +238,10 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
     // 4) DELETE: httpClient.deleteFile
     // 5) PUT: httpClient.updateMedia (State will be updated by socket);
 
+    handleChangeSearchingState(`${apiUrl}${url}`, true)
     httpClient.searchFileByHash(hash, cookies?.jwt)
       .then((res) => {
-        console.log(res)
+        handleChangeSearchingState(`${apiUrl}${url}`, false)
         toast(`${pluralize('file', res.length, true)} found: Deleting...`, { appearance: 'info' })
         return getFirst(res)
       })
@@ -231,8 +253,10 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
       })
       .then(async (fileId) => {
         // 4. DEL
+        handleChangeDeletingState(`${apiUrl}${url}`, true)
         await httpClient.deleteFile(fileId, cookies?.jwt)
           .then((_file) => {
+            handleChangeDeletingState(`${apiUrl}${url}`, false)
             const jobId = data._id
             const newImagesUrls = data.imagesUrls.filter(({ thumbnail: { hash: strapiHashOld } }: TFormatsData) => strapiHashOld !== strapiHash)
             const thisJobIndex = joblist.findIndex((job: IJob) => job._id === jobId)
@@ -240,20 +264,26 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
 
             // 5. PUT new state
             newJobList[thisJobIndex].imagesUrls = newImagesUrls
+            handleChangeJoblistUpdatingState(`${apiUrl}${url}`, true)
             httpClient.updateMedia(remontId, newJobList, cookies?.jwt)
               .then((res) => {
+                handleChangeJoblistUpdatingState(`${apiUrl}${url}`, false)
                 console.log(res)
               })
               .catch((err) => {
+                handleChangeJoblistUpdatingState(`${apiUrl}${url}`, false)
                 toast(err, { appearance: 'error' })
               })
           })
           .catch((err) => {
+            handleChangeDeletingState(`${apiUrl}${url}`, false)
             toast(err, { appearance: 'error' })
           })
       })
       .catch((err) => {
+        handleChangeSearchingState(`${apiUrl}${url}`, false)
         console.log(err)
+        toast(err, { appearance: 'error' })
       })
   }
 
@@ -337,14 +367,27 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
                         data.imagesUrls.map((data: any) => {
                           const { large, medium, thumbnail, small } = data
                           const src = !!large ? `${apiUrl}${large.url}` : medium ? `${apiUrl}${medium.url}` : `${apiUrl}${small.url}`
+                          const thumbnailSrc = !!thumbnail ? `${apiUrl}${thumbnail.url}` : src
                           return (
                             <div className='grid-item' key={`${src}_${slugify(data.comment || 'no-comment')}`}>
                               <a href={src} className={clsx({ ['editable']: isOwner })}>
-                                <img src={src} alt={data.comment || 'No comment'} />
+                                <img src={thumbnailSrc} alt={data.comment || 'No comment'} />
                               </a>
                               {isOwner && <div className='del-btn' onClick={() => {
                                 handleDeleteImage(data)
-                              }}>DEL</div>}
+                              }}>
+                                {
+                                  (isFileSearching[thumbnailSrc] || isFileDeleting[thumbnailSrc] || isJoblistUpdating[thumbnailSrc])
+                                    ? (
+                                      isFileSearching[thumbnailSrc]
+                                      ? 'T__'
+                                      : isFileDeleting[thumbnailSrc]
+                                      ? '_T_'
+                                      : '__T'
+                                    )
+                                    : 'DEL'
+                                }
+                              </div>}
                             </div>
                           )
                         })
