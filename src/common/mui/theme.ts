@@ -1,8 +1,6 @@
 import red from '@material-ui/core/colors/red'
 import {
   createMuiTheme,
-  ThemeOptions,
-  Theme,
   withStyles,
 } from '@material-ui/core/styles'
 // import { Breakpoint } from '@material-ui/core/styles/createBreakpoints'
@@ -33,6 +31,14 @@ export const defaultTheme = {
     background: {
       default: '#fff',
     },
+    svyaznoy: {
+      main: '#4c1e87',
+      yellow: '#ffc800',
+
+      light: '#757ce8',
+      dark: '#002884',
+      contrastText: '#fff',
+    },
   },
   breakpoints: {
     values: {
@@ -47,7 +53,7 @@ export const defaultTheme = {
 
 export const { breakpoints: { values: { md } } } = defaultTheme
 
-export const GlobalCss = withStyles({
+export const GlobalCss = withStyles((theme) => ({
   // @global is handled by jss-plugin-global.
   '@global': {
     // You should target [class*="MuiButton-root"] instead if you nest themes.
@@ -80,7 +86,34 @@ export const GlobalCss = withStyles({
       // color: '#556cd6',
       color: '#22577a',
     },
+    h1: {
+      margin: theme.spacing(4, 0, 4, 0),
+    },
+    blockquote: {
+      fontSize: '1em',
+      maxWidth: '100%',
+      borderRadius: '4px',
+      margin: '10px auto 20px auto',
+      fontFamily: 'Open Sans',
+      fontStyle: 'italic',
+      color: '#555555',
+      padding: '1.2em 30px 1.2em 45px',
+      borderLeft: '8px solid #78c0a8',
+      borderLeftColor: theme.palette.primary.main,
+      lineHeight: 1.6,
+      position: 'relative',
+      background: '#ededed',
+      '&::before': {
+        fontFamily: 'Arial',
+        content: 'open-quote',
+        color: theme.palette.primary.main,
+        fontSize: '4em',
+        position: 'absolute',
+        left: '10px',
+        top: '-10px',
+      },
+    },
   },
-})(() => null)
+}))(() => null)
 
 export const theme = createMuiTheme(defaultTheme)

@@ -82,4 +82,24 @@ export const useBaseStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  wrapperAsGrid: {
+    [theme.breakpoints.down('xs')]: {
+      display: 'flex',
+      flexDirection: 'column',
+      '& > div:not(:last-child)': {
+        marginBottom: '20px',
+      }
+    },
+    [theme.breakpoints.up('sm')]: {
+      display: 'grid',
+      columnGap: '20px',
+      rowGap: '20px',
+      gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))',
+    },
+  },
+  subWrapper: {
+    '& > div:not(:last-child)': {
+      marginBottom: '20px',
+    },
+  },
 }))

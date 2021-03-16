@@ -7,6 +7,7 @@ import { ResponsiveBlock } from '~/common/mui/ResponsiveBlock'
 import { NoNameSection2 } from '~/common/mui/NoNameSection2'
 import { useBaseStyles } from '~/common/mui/baseStyles'
 import clsx from 'clsx'
+import { ThemingSample } from './components/ThemingSample'
 
 export const TryUi = () => {
   // const classes = useStyles()
@@ -25,15 +26,15 @@ export const TryUi = () => {
         isLimited
       >
         <h1>Try UI</h1>
-        <p>
-          This is simple sketch
-        </p>
+        <blockquote>
+          <em>Sketches</em>
+        </blockquote>
       </ResponsiveBlock>
       <ResponsiveBlock
         isLimited
         style={{
-          marginTop: '16px',
-          marginBottom: '16px',
+          marginTop: '50px',
+          marginBottom: '50px',
           border: '1px dashed red',
         }}
       >
@@ -41,13 +42,23 @@ export const TryUi = () => {
         <em>props:</em>
         <ul><li>isLimited</li></ul>
       </ResponsiveBlock>
+      <ResponsiveBlock
+        isLimited
+        style={{
+          marginTop: '50px',
+          marginBottom: '50px',
+        }}
+      >
+        <h2>Material UI theming sample</h2>
+        <ThemingSample />
+      </ResponsiveBlock>
 
       <ResponsiveBlock
         isLimited
         hasDesktopFrame
         style={{
-          marginTop: '16px',
-          marginBottom: '16px',
+          marginTop: '50px',
+          marginBottom: '50px',
           // border: '1px dashed red',
         }}
       >
@@ -70,8 +81,8 @@ export const TryUi = () => {
         isPaddedMobile
         hasDesktopFrame
         style={{
-          marginTop: '16px',
-          marginBottom: '16px',
+          marginTop: '50px',
+          marginBottom: '50px',
           // border: '1px dashed red',
         }}
       >
@@ -93,8 +104,8 @@ export const TryUi = () => {
       <ResponsiveBlock
         isPaddedMobile
         style={{
-          marginTop: '16px',
-          marginBottom: '16px',
+          marginTop: '50px',
+          marginBottom: '50px',
           border: '1px dashed red',
         }}
       >
@@ -106,8 +117,8 @@ export const TryUi = () => {
       </ResponsiveBlock>
       <ResponsiveBlock
         style={{
-          marginTop: '16px',
-          marginBottom: '16px',
+          marginTop: '50px',
+          marginBottom: '50px',
         }}
       >
         <NoNameSection2 />
@@ -115,8 +126,8 @@ export const TryUi = () => {
 
       <ResponsiveBlock
         style={{
-          marginTop: '16px',
-          marginBottom: '16px',
+          marginTop: '50px',
+          marginBottom: '50px',
           border: '1px dashed red',
         }}
       >

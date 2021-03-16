@@ -2,9 +2,9 @@ import { makeStyles } from '@material-ui/core/styles'
 import grey from '@material-ui/core/colors/grey'
 import { contentBottomMargin, breadCrumbsHeight, siteHeaderHeight } from '~/common/mui/baseStyles'
 
-export const useStyles = makeStyles((theme) => ({
+export const useStyles = makeStyles((_theme) => ({
   bg: {
-    backgroundColor: grey[100],
+    backgroundColor: grey[200],
   },
   content: {
     minHeight: `calc(100vh - ${breadCrumbsHeight}px - ${siteHeaderHeight.desktop}px - ${contentBottomMargin}px)`,
