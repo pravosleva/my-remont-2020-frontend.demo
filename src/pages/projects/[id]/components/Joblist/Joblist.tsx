@@ -56,6 +56,9 @@ import Icon from '@mdi/react'
 import { mdiDelete } from '@mdi/js'
 import { useBaseStyles } from '~/common/mui/baseStyles'
 
+// NOTE: See also: Настраиваемый аккордеон
+// https://material-ui.com/ru/components/accordion/#customized-accordions
+
 // Register plugins if required
 // MdEditor.use(YOUR_PLUGINS_HERE);
 
@@ -114,9 +117,9 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
     setExpanded(isExpanded ? panelName : false)
     // console.log(panelName, id)
     if (!!id) setTimeout(() => {
-      scrollTo(getRef(id), true)
+      scrollTo(getRef(id), false)
       setIsAbsolutePreloaderActive(false)
-    }, 1000)
+    }, 100)
   }
   // --
   const isOwner: boolean = useMemo(() => remontLogic?.isOwner(userData?.id), [
@@ -497,6 +500,9 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                 onChange={handleChangeAccoddionItem(`panel${data._id}`, data._id)}
                 // @ts-ignore
                 ref={setRef(data._id)}
+                TransitionProps={{
+                  timeout: 0
+                }}
               >
                 <AccordionSummary
                   expandIcon={<ExpandMoreIcon />}
