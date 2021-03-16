@@ -352,7 +352,7 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
                           showAutoplayButton: false,
                           // backgroundColor: 'rgba(30,30,36,0.8)',
                           // backgroundColor: 'rgb(25, 136, 124)',
-                          backgroundColor: '#556cd6',
+                          backgroundColor: '#22577a',
                           iconColor: 'rgba(255, 255, 255, 1)',
                           iconPadding: '10px',
                         },

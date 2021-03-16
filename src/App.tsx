@@ -12,6 +12,7 @@ import 'react-image-gallery/styles/css/image-gallery.css'
 // import { ToastProvider } from 'react-toast-notifications'
 import { NotifsContextProvider } from '~/common/context'
 import 'react-notifications-component/dist/theme.css'
+import './react-notifications-component.css'
 // preferred way to import (from `v4`). Uses `animate__` prefix.
 import 'animate.css/animate.min.css'
 // import 'react-lightbox-component/build/css/index.css'

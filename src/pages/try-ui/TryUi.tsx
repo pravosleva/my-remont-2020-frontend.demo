@@ -41,6 +41,7 @@ export const TryUi = () => {
         <em>props:</em>
         <ul><li>isLimited</li></ul>
       </ResponsiveBlock>
+
       <ResponsiveBlock
         isLimited
         hasDesktopFrame
@@ -107,19 +108,20 @@ export const TryUi = () => {
         style={{
           marginTop: '16px',
           marginBottom: '16px',
+        }}
+      >
+        <NoNameSection2 />
+      </ResponsiveBlock>
+
+      <ResponsiveBlock
+        style={{
+          marginTop: '16px',
+          marginBottom: '16px',
           border: '1px dashed red',
         }}
       >
         <h2>ResponsiveBlock</h2>
         <em>no props</em>
-      </ResponsiveBlock>
-      <ResponsiveBlock
-        style={{
-          marginTop: '16px',
-          marginBottom: '16px',
-        }}
-      >
-        <NoNameSection2 />
       </ResponsiveBlock>
     </>
   )

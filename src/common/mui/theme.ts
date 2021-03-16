@@ -15,13 +15,15 @@ export const defaultTheme = {
     primary: {
       light: '#757ce8',
       // main: '#3f50b5', // Official
-      main: '#556cd6',
+      // main: '#556cd6',
+      main: '#22577a',
       dark: '#002884',
       contrastText: '#fff',
     },
     secondary: {
       light: '#ff7961',
       main: '#f44336',
+      // main: '#38a3a5',
       dark: '#ba000d',
       contrastText: '#000',
     },
@@ -75,7 +77,8 @@ export const GlobalCss = withStyles({
       overflowX: 'hidden',
     },
     a: {
-      color: '#556cd6',
+      // color: '#556cd6',
+      color: '#22577a',
     },
   },
 })(() => null)

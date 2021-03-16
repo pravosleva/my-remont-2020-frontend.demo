@@ -36,12 +36,3 @@ button:active {
 body {
   -webkit-tap-highlight-color: transparent; /* for removing the highlight */
 }
-
-.react-toast-notifications__container {
-  padding: 0;
-  overflow-y: hidden !important;
-}
-.react-toast-notifications__toast {
-  width: 100%;
-  max-width: 300px;
-}

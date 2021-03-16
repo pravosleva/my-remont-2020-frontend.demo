@@ -72,7 +72,8 @@ export const useStyles = makeStyles((theme: Theme) =>
       color: red[500],
     },
     successText: {
-      color: green[500],
+      // color: green[500],
+      color: '#rgb(34,87,122)',
     },
     greyText: {
       color: grey[500]
