@@ -7,6 +7,8 @@ export const SvyaznoyMainTextField = withStyles((theme: Theme & { palette : { sv
     // margin: theme.spacing(2),
     // width: 400,
     // '& .MuiInputBase-root': { color: theme.palette.svyaznoy.contrastText },
+
+    // NOTE: Or this: '& div:nth-child(2)': {
     '& .MuiOutlinedInput-root': {
       '& fieldset': {
         // borderColor: 'white',
