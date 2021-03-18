@@ -48,7 +48,7 @@ export const ThemingSample = () => {
           />
         </div>
         <div className={baseClasses.subWrapper} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          [ subWrapper ]
+          <b>[ Something in progress... ]</b>
         </div>
       </div>
       <SvyaznoyMainTextField

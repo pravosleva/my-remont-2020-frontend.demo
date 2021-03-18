@@ -55,29 +55,6 @@ export const TryUi = () => {
 
       <ResponsiveBlock
         isLimited
-        hasDesktopFrame
-        style={{
-          marginTop: '50px',
-          marginBottom: '50px',
-          // border: '1px dashed red',
-        }}
-      >
-        <div className={clsx(baseClasses.desktopFrameInternalBox, baseClasses.isRounded)} style={{ background: '#147ec1', color: '#FFF' }}>
-          <h2>ResponsiveBlock</h2>
-          <em>props:</em>
-          <ul>
-            <li>isLimited</li>
-            <li>hasDesktopFrame</li>
-          </ul>
-          <em>For internal box:</em>
-          <ul>
-            <li>baseClasses.desktopFrameInternalBox</li>
-            <li>baseClasses.isRounded</li>
-          </ul>
-        </div>
-      </ResponsiveBlock>
-      <ResponsiveBlock
-        isLimited
         isPaddedMobile
         hasDesktopFrame
         style={{
@@ -122,6 +99,30 @@ export const TryUi = () => {
         }}
       >
         <NoNameSection2 />
+      </ResponsiveBlock>
+
+      <ResponsiveBlock
+        isLimited
+        hasDesktopFrame
+        style={{
+          marginTop: '50px',
+          marginBottom: '50px',
+          // border: '1px dashed red',
+        }}
+      >
+        <div className={clsx(baseClasses.desktopFrameInternalBox, baseClasses.isRounded)} style={{ background: '#147ec1', color: '#FFF' }}>
+          <h2>ResponsiveBlock</h2>
+          <em>props:</em>
+          <ul>
+            <li>isLimited</li>
+            <li>hasDesktopFrame</li>
+          </ul>
+          <em>For internal box:</em>
+          <ul>
+            <li>baseClasses.desktopFrameInternalBox</li>
+            <li>baseClasses.isRounded</li>
+          </ul>
+        </div>
       </ResponsiveBlock>
 
       <ResponsiveBlock

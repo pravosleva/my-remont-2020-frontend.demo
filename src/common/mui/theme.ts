@@ -12,8 +12,6 @@ export const defaultTheme = {
   palette: {
     primary: {
       light: '#757ce8',
-      // main: '#3f50b5', // Official
-      // main: '#556cd6',
       main: '#22577a',
       dark: '#002884',
       contrastText: '#fff',
@@ -21,7 +19,6 @@ export const defaultTheme = {
     secondary: {
       light: '#ff7961',
       main: '#f44336',
-      // main: '#38a3a5',
       dark: '#ba000d',
       contrastText: '#000',
     },
@@ -35,6 +32,7 @@ export const defaultTheme = {
       main: '#4c1e87',
       yellow: '#ffc800',
 
+      // Fake:
       light: '#757ce8',
       dark: '#002884',
       contrastText: '#fff',
@@ -61,12 +59,6 @@ export const GlobalCss = withStyles((theme) => ({
       outline: 'none !important',
       userSelect: 'none !important',
     },
-    // '.MuiButton-containedPrimary:focus': {
-    //   backgroundColor: 'rgba(255,255,255,1) !important',
-    // },
-    // '.MuiButton-containedPrimary:active': {
-    //   backgroundColor: 'rgba(255,255,255,0.5) !important',
-    // },
     // See also: https://material-ui.com/ru/customization/components/
     code: {
       background: 'rgba(250, 239, 240, 0.78)',
@@ -83,8 +75,7 @@ export const GlobalCss = withStyles((theme) => ({
       overflowX: 'hidden',
     },
     a: {
-      // color: '#556cd6',
-      color: '#22577a',
+      color: theme.palette.primary.main,
     },
     h1: {
       margin: theme.spacing(4, 0, 4, 0),
