@@ -31,7 +31,7 @@ import {
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { useStyles } from './styles'
 import clsx from 'clsx'
-import { useCustomToastContext, useMainContext, useUserAuthContext } from '~/common/hooks'
+import { useCustomToastContext, useMainContext, useUserAuthContext, useDebouncedCallback } from '~/common/hooks'
 import { useCookies } from 'react-cookie'
 import { getApiUrl } from '~/utils/getApiUrl'
 import { getPrettyPrice } from '~/utils/getPrettyPrice'
@@ -41,7 +41,6 @@ import MarkdownIt from 'markdown-it'
 import MDEditor from 'react-markdown-editor-lite'
 import 'react-markdown-editor-lite/lib/index.css'
 import Slide from '@material-ui/core/Slide'
-import { useDebouncedCallback } from '~/common/hooks'
 import { useConfirm } from 'material-ui-confirm'
 import { usePrompt } from '~/common/hooks/usePrompt'
 import { useWindowSize } from 'react-use'
@@ -102,6 +101,7 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
     updateRemont,
     filterState,
     // removeJobPromise,
+    onSelectAll,
   } = useMainContext()
   const { toast } = useCustomToastContext()
   const { userData } = useUserAuthContext()
@@ -188,7 +188,7 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
       // .then((res) => res.json())
       .then((data) => {
         if (!!data.id) {
-
+          // TODO: Set filter by all!
           setIsLoading(false)
           handleCloseEditor()
           handleCloseMarkdownEditor()
@@ -920,6 +920,12 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                                           'isStarted',
                                           e.target.checked
                                         )()
+                                          .then(() => {
+                                            onSelectAll()
+                                          })
+                                          .catch((err) => {
+                                            console.log(err)
+                                          })
                                       }}
                                       name="isStarted"
                                     />
@@ -941,6 +947,12 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                                       'isDone',
                                       e.target.checked
                                     )()
+                                      .then(() => {
+                                        onSelectAll()
+                                      })
+                                      .catch((err) => {
+                                        console.log(err)
+                                      })
                                   }}
                                   name="isDone"
                                 />
