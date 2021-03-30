@@ -378,8 +378,8 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
                       }}
                     >
                       {
-                        data.imagesUrls.map((data: any) => {
-                          const { large, medium, thumbnail, small } = data
+                        data.imagesUrls.map((photoData: any) => {
+                          const { large, medium, thumbnail, small } = photoData
                           const src = !!large ? `${apiUrl}${large.url}` : medium ? `${apiUrl}${medium.url}` : `${apiUrl}${small.url}`
                           const thumbnailSrc = !!thumbnail ? `${apiUrl}${thumbnail.url}` : src
                           return (
@@ -388,7 +388,7 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
                                 <img src={thumbnailSrc} alt={data.comment || 'No comment'} />
                               </a>
                               {isOwner && <div className='del-btn' onClick={() => {
-                                confirmThenDelete(data)
+                                confirmThenDelete(photoData)
                               }}>
                                 {
                                   (isFileSearching[thumbnailSrc] || isFileDeleting[thumbnailSrc] || isJoblistUpdating[thumbnailSrc])
