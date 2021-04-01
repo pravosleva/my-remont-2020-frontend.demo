@@ -381,7 +381,7 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
                       {
                         data.imagesUrls.map((photoData: any) => {
                           const { large, medium, thumbnail, small } = photoData
-                          const src = !!large ? `${apiUrl}${large.url}` : medium ? `${apiUrl}${medium.url}` : `${apiUrl}${small.url}`
+                          const src = !!large ? `${apiUrl}${large.url}` : medium ? `${apiUrl}${medium.url}` : !!small ? `${apiUrl}${small.url}` : `${apiUrl}${thumbnail.url}`
                           const thumbnailSrc = !!thumbnail ? `${apiUrl}${thumbnail.url}` : src
                           return (
                             <div className='grid-item' key={`${src}_${slugify(data.comment || 'no-comment')}`}>
@@ -500,11 +500,16 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
                             setFileUrls(null)
                             toast('Файлы сохранены', { appearance: 'success' })
                           })
+                          .catch((err) => {
+                            console.log(err)
+                            toast('ERR', { appearance: 'error' })
+                          })
                           .finally(() => {
                             setIsLoading(false)
                           })
                       }
                     } catch (err) {
+                      console.log(err)
                       toast(err?.message || '#1 Что-то пошло не так', { appearance: 'error' })
                     }
                   }}

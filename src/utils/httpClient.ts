@@ -62,7 +62,7 @@ class HttpClientSingletone {
     };
   }
   getErrorMsg(data: any): string {
-    // console.log(data) // { isAborted: false }
+    console.log(data)
     if (typeof data === 'string') return data
     return !!data?.message
       ? data?.message

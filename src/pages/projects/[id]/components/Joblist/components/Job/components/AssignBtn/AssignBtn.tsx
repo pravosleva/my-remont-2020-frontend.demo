@@ -12,7 +12,11 @@ export const AssignBtn = ({ click, isLoading }: IProps) => {
 
   useEffect(() => {
     console.log('Assign btn: cDM')
-    if (!!ref.current) ref.current.click()
+    try {
+      if (!!ref?.current) ref.current.click()
+    } catch (err) {
+      console.log(err)
+    }
   }, [])
 
   return (
