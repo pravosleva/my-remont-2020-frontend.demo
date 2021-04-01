@@ -445,7 +445,7 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
                 />
                 {
                   files.length > 0 && (
-                    <div>
+                    <div style={{ marginTop: '8px' }}>
                       <Button
                         fullWidth
                         variant="outlined"
@@ -488,7 +488,7 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
           }
           {
             !!fileUrls && fileUrls?.length > 0 && (
-              <div style={{ marginTop: '8px' }}>
+              <div>
                 <AssignBtn
                   click={() => {
                     // console.log(data)
