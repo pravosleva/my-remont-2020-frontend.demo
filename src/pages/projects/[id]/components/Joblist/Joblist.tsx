@@ -461,18 +461,22 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
   )
   const handleDeleteJob = useCallback(
     (data: IJob) => {
-      confirm({
-        title: <span style={{ color: 'red' }}>Работа будет удалена. Ok?</span>,
-        description: data.name,
-      })
-        .then(() => {
-          removeJob(data._id)
+      if (!!data.imagesUrls) {
+        toast('Сначала нужно удалить все изображения, прикрепленные к данной работе (TODO: dev roadmap)', { appearance: 'error' })
+      } else {
+        confirm({
+          title: <span style={{ color: 'red' }}>Работа будет удалена. Ok?</span>,
+          description: data.name,
         })
-        .catch((err) => {
-          toast(err?.message || 'handleDeleteJob: Declined', {
-            appearance: 'error',
+          .then(() => {
+            removeJob(data._id)
           })
-        })
+          .catch((err) => {
+            toast(err?.message || 'handleDeleteJob: Declined', {
+              appearance: 'error',
+            })
+          })
+      }
     },
     [removeJob]
   )

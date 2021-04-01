@@ -445,7 +445,7 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
                 />
                 {
                   files.length > 0 && (
-                    <div style={{ marginTop: '8px' }}>
+                    <div>
                       <Button
                         fullWidth
                         variant="outlined"
