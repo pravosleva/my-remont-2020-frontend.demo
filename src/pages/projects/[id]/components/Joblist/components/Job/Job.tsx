@@ -413,7 +413,7 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
             )
           }
           {
-            isOwner && (
+            isOwner && !(!!fileUrls && fileUrls?.length > 0) && (
               <div className={baseClasses.standardJobInternalBox}>
                 <Collabsible
                   title='Загрузка файлов'
@@ -482,49 +482,49 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
                     </div>
                   )
                 }
-                {
-                  !!fileUrls && fileUrls?.length > 0 && (
-                    <div style={{ marginTop: '8px' }}>
-                      <Button
-                        fullWidth
-                        variant="contained"
-                        color="primary"
-                        onClick={() => {
-                          // console.log(data)
-                          try {
-                            if (!!data.imagesUrls) {
-                              setIsLoading(true)
-                              httpClient.updateMedia(remontId, joblist, cookies?.jwt)
-                                .then(() => {
-                                  setFileUrls(null)
-                                  toast('Файлы сохранены', { appearance: 'success' })
-                                })
-                                .finally(() => {
-                                  setIsLoading(false)
-                                })
-                            }
-                          } catch (err) {
-                            toast(err?.message || '#1 Что-то пошло не так', { appearance: 'error' })
-                          }
-                        }}
-                        // disabled={isSubmitDisabled}
-                        endIcon={
-                          isLoading ? (
-                            <CircularProgress
-                              size={20}
-                              color="inherit"
-                              style={{ marginLeft: 'auto' }}
-                            />
-                          ) : (
-                            <SaveIcon />
-                          )
-                        }
-                      >
-                        Assign files
-                      </Button>
-                    </div>
-                  )
-                }
+              </div>
+            )
+          }
+          {
+            !!fileUrls && fileUrls?.length > 0 && (
+              <div style={{ marginTop: '8px' }}>
+                <Button
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  onClick={() => {
+                    // console.log(data)
+                    try {
+                      if (!!data.imagesUrls) {
+                        setIsLoading(true)
+                        httpClient.updateMedia(remontId, joblist, cookies?.jwt)
+                          .then(() => {
+                            setFileUrls(null)
+                            toast('Файлы сохранены', { appearance: 'success' })
+                          })
+                          .finally(() => {
+                            setIsLoading(false)
+                          })
+                      }
+                    } catch (err) {
+                      toast(err?.message || '#1 Что-то пошло не так', { appearance: 'error' })
+                    }
+                  }}
+                  // disabled={isSubmitDisabled}
+                  endIcon={
+                    isLoading ? (
+                      <CircularProgress
+                        size={20}
+                        color="inherit"
+                        style={{ marginLeft: 'auto' }}
+                      />
+                    ) : (
+                      <SaveIcon />
+                    )
+                  }
+                >
+                  Assign files
+                </Button>
               </div>
             )
           }
