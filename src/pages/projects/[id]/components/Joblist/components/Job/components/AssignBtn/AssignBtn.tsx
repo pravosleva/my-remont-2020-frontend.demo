@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react'
-import { Button, CircularProgress, Typography } from '@material-ui/core'
+import { Button, CircularProgress } from '@material-ui/core'
 import SaveIcon from '@material-ui/icons/Save'
 
 interface IProps {
@@ -9,32 +9,35 @@ interface IProps {
 
 export const AssignBtn = ({ click, isLoading }: IProps) => {
   const ref = useRef<HTMLButtonElement>(null)
+
   useEffect(() => {
-    console.log('cDM')
-    ref.current.click()
+    console.log('Assign btn: cDM')
+    if (!!ref.current) ref.current.click()
   }, [])
 
   return (
-    <Button
-      ref={ref}
-      fullWidth
-      variant="contained"
-      color="primary"
-      onClick={click}
-      disabled={isLoading}
-      endIcon={
-        isLoading ? (
-          <CircularProgress
-            size={20}
-            color="inherit"
-            style={{ marginLeft: 'auto' }}
-          />
-        ) : (
-          <SaveIcon />
-        )
-      }
-    >
-      Assign files
-    </Button>
+    <>
+      <Button
+        ref={ref}
+        fullWidth
+        variant="contained"
+        color="primary"
+        onClick={click}
+        disabled={isLoading}
+        endIcon={
+          isLoading ? (
+            <CircularProgress
+              size={20}
+              color="inherit"
+              style={{ marginLeft: 'auto' }}
+            />
+          ) : (
+            <SaveIcon />
+          )
+        }
+      >
+        Assign files
+      </Button>
+    </>
   )
 }
