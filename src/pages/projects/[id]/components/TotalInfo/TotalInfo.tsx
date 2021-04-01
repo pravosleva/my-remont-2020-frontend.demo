@@ -5,6 +5,7 @@ import { getPrettyPrice } from '~/utils/getPrettyPrice'
 import { Grid, Divider } from '@material-ui/core'
 import clsx from 'clsx'
 import { MainContext } from '~/common/context/MainContext'
+import CountUp from 'react-countup'
 
 export const TotalInfo = () => {
   const { jobsLogic } = useContext(MainContext)
@@ -44,7 +45,16 @@ export const TotalInfo = () => {
         </Grid>
         <Grid item>
           <Typography variant="h5">
-            ИТОГО затраты: {getPrettyPrice(totalPayed)}
+            ИТОГО затраты: <CountUp
+              end={totalPayed}
+              duration={2.75}
+              separator=" "
+              redraw
+            >
+              {({ countUpRef }) => (
+                <span ref={countUpRef} />
+              )}
+            </CountUp>
           </Typography>
         </Grid>
         <Divider />
