@@ -228,7 +228,7 @@ export const SignUp = () => {
                         (isSubmitting || isUserDataLoading) && (
                           <CircularProgress
                             size={20}
-                            color="primary"
+                            color="inherit"
                             style={{ marginLeft: 'auto' }}
                           />
                         )

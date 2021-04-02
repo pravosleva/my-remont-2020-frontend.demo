@@ -47,7 +47,7 @@ export const TotalInfo = () => {
           <Typography variant="h5">
             ИТОГО затраты: <CountUp
               end={totalPayed}
-              duration={2.75}
+              duration={2}
               separator=" "
               redraw
             >

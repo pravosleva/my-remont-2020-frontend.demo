@@ -158,7 +158,10 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
 
     const res = await httpClient.uploadFiles(files, cookies?.jwt)
       .then((d) => {
-        toast(`Не забудьте прикрепить загруженные файлы (${files.length} шт)!`, { appearance: 'success' })
+        console.log(d)
+        // NOTE: Toast msg if necessary:
+        // toast(`Не забудьте прикрепить загруженные файлы (${files.length} шт)!`, { appearance: 'success' })
+        toast(`Файл${files.length > 1 ? 'ы' : ''} залит${files.length > 1 ? 'ы' : ''} (${files.length} шт)!`, { appearance: 'success' })
         return d;
       })
       .catch((err) => {
@@ -353,7 +356,8 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
                           showAutoplayButton: false,
                           // backgroundColor: 'rgba(30,30,36,0.8)',
                           // backgroundColor: 'rgb(25, 136, 124)',
-                          backgroundColor: '#22577a',
+                          // backgroundColor: '#22577a',
+                          backgroundColor: '#f44336',
                           iconColor: 'rgba(255, 255, 255, 1)',
                           iconPadding: '10px',
                         },
@@ -445,10 +449,10 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
                 />
                 {
                   files.length > 0 && (
-                    <div style={{ marginTop: '8px' }}>
+                    <div style={{ marginTop: '16px' }}>
                       <Button
                         fullWidth
-                        variant="outlined"
+                        variant="contained"
                         color="primary"
                         onClick={() => {
                           handleUploadFiles()
@@ -470,7 +474,7 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
                           isLoading ? (
                             <CircularProgress
                               size={20}
-                              color="primary"
+                              color="inherit"
                               style={{ marginLeft: 'auto' }}
                             />
                           ) : (
@@ -498,7 +502,7 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
                         httpClient.updateMedia(remontId, joblist, cookies?.jwt)
                           .then(() => {
                             setFileUrls(null)
-                            toast('Файлы сохранены', { appearance: 'success' })
+                            // toast('Данные сохранены', { appearance: 'success' })
                           })
                           .catch((err) => {
                             console.log(err)
