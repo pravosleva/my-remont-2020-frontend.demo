@@ -465,7 +465,7 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
                               toast(err?.message || '#2 Что-то пошло не так', { appearance: 'error' })
                             })
                         }}
-                        // disabled={isSubmitDisabled}
+                        disabled={isLoading}
                         endIcon={
                           isLoading ? (
                             <CircularProgress

@@ -461,7 +461,7 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
   )
   const handleDeleteJob = useCallback(
     (data: IJob) => {
-      if (!!data.imagesUrls) {
+      if (!!data.imagesUrls ?? data.imagesUrls?.length > 0) {
         toast('Сначала нужно удалить все изображения, прикрепленные к данной работе (TODO: dev roadmap)', { appearance: 'error' })
       } else {
         confirm({
