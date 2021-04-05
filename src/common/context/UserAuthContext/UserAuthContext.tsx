@@ -4,6 +4,17 @@ import { useCookies } from 'react-cookie'
 import { getNormalizedUserDataResponse } from '~/utils/strapi/getNormalizedUserDataResponse'
 import { useRouter, useCustomToastContext } from '~/common/hooks'
 
+const { REACT_APP_ADMIN_USER_IDS } = process.env
+
+const adminIds = !!REACT_APP_ADMIN_USER_IDS ? REACT_APP_ADMIN_USER_IDS.split(',') : []
+const adminMap = new Map()
+
+if (adminIds.length > 0) {
+  adminIds.forEach((id) => {
+    adminMap.set(id, true)
+  })
+}
+
 type TRole = {
   _id: string
   name: String
@@ -34,6 +45,7 @@ type TUserAuthContext = {
   isUserDataLoading: boolean
   isUserDataLoaded: boolean
   isUserLogged: boolean
+  isUserAdmin: boolean
 }
 
 export const UserAuthConxtext = createContext<TUserAuthContext>({
@@ -47,11 +59,13 @@ export const UserAuthConxtext = createContext<TUserAuthContext>({
   isUserDataLoading: false,
   isUserDataLoaded: false,
   isUserLogged: false,
+  isUserAdmin: false
 })
 
 export const UserAuthContextProvider: React.FC<any> = ({ children }: any) => {
   const [userData, setUserData] = useState<TUserData | null>(null)
   const isUserLogged = useMemo(() => !!userData?._id, [userData])
+  const isUserAdmin = useMemo(() => adminMap.has(userData?._id), [userData])
   const [cookies, setCookie, removeCookie] = useCookies(['jwt'])
   const handleSetUserData = useCallback(
     (originalUserData: any) => {
@@ -102,6 +116,7 @@ export const UserAuthContextProvider: React.FC<any> = ({ children }: any) => {
         isUserDataLoading,
         isUserDataLoaded,
         isUserLogged,
+        isUserAdmin,
       }}
     >
       {children}

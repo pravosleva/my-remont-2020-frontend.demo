@@ -8,6 +8,8 @@ import { NoNameSection2 } from '~/common/mui/NoNameSection2'
 import { useBaseStyles } from '~/common/mui/baseStyles'
 import clsx from 'clsx'
 import { ThemingSample } from './components/ThemingSample'
+import { useUserAuthContext } from '~/common/hooks'
+import { UploadsCleanup } from './components/UploadsCleanup'
 
 export const TryUi = () => {
   // const classes = useStyles()
@@ -19,6 +21,7 @@ export const TryUi = () => {
   //   [router]
   // )
   const baseClasses = useBaseStyles()
+  const { isUserAdmin } = useUserAuthContext()
 
   return (
     <>
@@ -30,6 +33,23 @@ export const TryUi = () => {
           <em>Sketches</em>
         </blockquote>
       </ResponsiveBlock>
+
+      {
+        isUserAdmin && (
+          <ResponsiveBlock
+            isLimited
+            style={{
+              marginTop: '50px',
+              marginBottom: '50px',
+              // border: '1px dashed red',
+            }}
+          >
+            <h2>Admin tools: Uploads Cleanup</h2>
+            <UploadsCleanup />
+          </ResponsiveBlock>
+        )
+      }
+
       <ResponsiveBlock
         isLimited
         style={{

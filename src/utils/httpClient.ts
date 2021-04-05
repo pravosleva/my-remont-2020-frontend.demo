@@ -385,6 +385,34 @@ class HttpClientSingletone {
     }
     return Promise.reject(this.getErrorMsg(response.data));
   }
+  async getUploadsReport(): Promise<any> {
+    const response = await fetch({
+      method: 'GET',
+      url: `${this.apiUrl}/report.final.json`,
+      mode: 'cors',
+      // headers,
+      // controller: this.deleteFileController,
+      // NOTE: From docs
+      // `validateStatus` defines whether to resolve or reject the promise for a given
+      // HTTP response status code. If `validateStatus` returns `true` (or is set to `null`
+      // or `undefined`), the promise will be resolved; otherwise, the promise will be
+      // rejected.
+      // validateStatus: function (status: number) {
+      //   return status >= 200 && status < 300; // default
+      // },
+    })
+      .then(httpErrorHandler)
+      .then(this.responseDataHandlerAfterHttpErrorHandler((data: any) => !!data?.step2))
+      .catch((err) => ({ isOk: false, data: err }))
+
+    if (response.isOk) {
+      return Promise.resolve(response.data);
+    }
+    if (response.data instanceof HttpError) {
+      return Promise.reject(response.data.resStatus);
+    }
+    return Promise.reject(this.getErrorMsg(response.data));
+  }
 }
 
 export const httpClient = HttpClientSingletone.getInstance();
