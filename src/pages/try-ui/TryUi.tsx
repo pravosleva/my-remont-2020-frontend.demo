@@ -29,17 +29,13 @@ export const TryUi = () => {
         isLimited
       >
         <h1>Try UI</h1>
-        <blockquote>
-          <em>Sketches</em>
-        </blockquote>
       </ResponsiveBlock>
-
       {
         isUserAdmin && (
           <ResponsiveBlock
             isLimited
             style={{
-              marginTop: '50px',
+              // marginTop: '50px',
               marginBottom: '50px',
               // border: '1px dashed red',
             }}
