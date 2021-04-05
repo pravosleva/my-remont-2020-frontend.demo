@@ -17,6 +17,9 @@ export const TotalInfo = () => {
   const totalMaterials = useMemo(() => jobsLogic?.totalPriceMaterials || 0, [
     jobsLogic,
   ])
+  const totalDelivery = useMemo(() => jobsLogic?.totalPriceDelivery || 0, [
+    jobsLogic,
+  ])
   const totalDifferecne = useMemo(() => jobsLogic?.totalDifference || 0, [
     jobsLogic,
   ])
@@ -35,14 +38,26 @@ export const TotalInfo = () => {
         </Grid>
         <Divider />
 
-        <Grid className={classes.secondaryText} item>
-          <Typography>
-            Ценник за работу: {getPrettyPrice(totalPriceJobs)}
-          </Typography>
-          <Typography>
-            Ценник за материалы: {getPrettyPrice(totalMaterials)}
-          </Typography>
-        </Grid>
+        {(!!totalPriceJobs || !!totalMaterials || !!totalDelivery) && (
+          <Grid className={classes.secondaryText} item>
+            {!!totalPriceJobs && (
+              <Typography>
+                Ценник за работу: {getPrettyPrice(totalPriceJobs)}
+              </Typography>
+            )}
+            {!!totalMaterials && (
+              <Typography>
+                Ценник за материалы: {getPrettyPrice(totalMaterials)}
+              </Typography>
+            )}
+            {!!totalDelivery && (
+              <Typography>
+                Ценник за доставку: {getPrettyPrice(totalDelivery)}
+              </Typography>
+            )}
+          </Grid>
+        )}
+
         <Grid item>
           <Typography variant="h5">
             ИТОГО затраты: <CountUp
