@@ -49,7 +49,7 @@ export const TryUi = () => {
       <ResponsiveBlock
         isLimited
         style={{
-          marginTop: '50px',
+          marginTop: !isUserAdmin ? '50px' : '0px',
           marginBottom: '50px',
           border: '1px dashed red',
         }}
