@@ -293,16 +293,16 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
   }
   const confirm = useConfirm()
   const confirmThenDelete = (data) => {
-      confirm({
-        title: 'Удаление файла',
-        description: 'Вы уверены?',
+    confirm({
+      title: 'Удаление файла',
+      description: 'Вы уверены?',
+    })
+      .then(() => {
+        handleDeleteImage(data)
       })
-        .then(() => {
-          handleDeleteImage(data)
-        })
-        .catch((err) => {
-          toast(err?.message || 'Delete file: Declined', { appearance: 'error' })
-        })
+      .catch((err) => {
+        toast(err?.message || 'Delete file: Declined', { appearance: 'error' })
+      })
   }
 
   return (
@@ -399,10 +399,10 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
                                   (isFileSearching[thumbnailSrc] || isFileDeleting[thumbnailSrc] || isJoblistUpdating[thumbnailSrc])
                                     ? (
                                       isFileSearching[thumbnailSrc]
-                                      ? 'T__'
+                                      ? '❚__'
                                       : isFileDeleting[thumbnailSrc]
-                                      ? '_T_'
-                                      : '__T'
+                                      ? '_❚_'
+                                      : '__❚'
                                     )
                                     : 'DEL'
                                 }
