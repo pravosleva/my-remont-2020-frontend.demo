@@ -24,18 +24,22 @@ export const BreadCrumbs = () => {
 
         {pathname === '/' && (
           <div className={classes.rightSide}>
-            <Link to="/">Главная</Link>
+            <Link to="/" className={classes.muted}>Главная</Link>
           </div>
         )}
         {(pathname === '/projects' || pathname === '/projects/') && (
           <div className={classes.rightSide}>
-            <Link to="/">Главная</Link> /{' '}
+            <Link to="/">Главная</Link>
+            <span className={classes.muted}>/</span>
             <span className={classes.muted}>Проекты</span>
           </div>
         )}
         {pathname.includes('/projects/') && pathname.length > 10 && (
           <div className={classes.rightSide}>
-            <Link to="/">Главная</Link> / <Link to="/projects">Проекты</Link> /{' '}
+            <Link to="/">Главная</Link>
+            <span className={classes.muted}>/</span>
+            <Link to="/projects">Проекты</Link>
+            <span className={classes.muted}>/</span>
             {!remontLogic?.name && (
               <span className={classes.muted}>Please wait...</span>
             )}
@@ -48,25 +52,29 @@ export const BreadCrumbs = () => {
         )}
         {pathname === '/auth/login' && (
           <div className={classes.rightSide}>
-            <Link to="/">Главная</Link> /{' '}
+            <Link to="/">Главная</Link>
+            <span className={classes.muted}>/</span>
             <span className={classes.muted}>Авторизация</span>
           </div>
         )}
         {pathname === '/auth/sign-up' && (
           <div className={classes.rightSide}>
-            <Link to="/">Главная</Link> /{' '}
+            <Link to="/">Главная</Link>
+            <span className={classes.muted}>/</span>
             <span className={classes.muted}>Регистрация</span>
           </div>
         )}
         {pathname === '/profile' && (
           <div className={classes.rightSide}>
-            <Link to="/">Главная</Link> /{' '}
+            <Link to="/">Главная</Link>
+            <span className={classes.muted}>/</span>
             <span className={classes.muted}>Профиль</span>
           </div>
         )}
         {pathname === '/try-ui' && (
           <div className={classes.rightSide}>
-            <Link to="/">Главная</Link> /{' '}
+            <Link to="/">Главная</Link>
+            <span className={classes.muted}>/</span>
             <span className={classes.muted}>Try UI</span>
           </div>
         )}

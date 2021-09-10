@@ -17,7 +17,14 @@ export const useStyles = makeStyles((theme) => ({
     flexDirection: 'row',
     alignItems: 'center',
   },
-  rightSide: {},
+  rightSide: {
+    '& a': {
+      textDecoration: 'none',
+    },
+    '& > *:not(:last-child)': {
+      marginRight: theme.spacing(1),
+    },
+  },
   leftSide: {
     marginLeft: 'auto',
   },

@@ -6,6 +6,7 @@ import { CssBaseline } from '@material-ui/core'
 import { GlobalCss, theme } from '~/common/mui/theme'
 import { ThemeProvider } from '@material-ui/core/styles'
 import './index.module.scss'
+import './fix.simple-react-lightbox.scss'
 
 ReactDOM.render(
   <>
