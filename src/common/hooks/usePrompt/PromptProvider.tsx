@@ -73,7 +73,7 @@ export const PromptProvider: React.FC<any> = ({ children, defaultOptions = {} })
     ]
   )
 
-  const defaultValue = useMemo(() => (options.type === 'number' ? 0 : ''), [
+  const defaultValue = useMemo(() => (options.type === 'number' ? '': ''), [
     options.type,
   ])
   const [value, setValue] = useState<string | number>(defaultValue)

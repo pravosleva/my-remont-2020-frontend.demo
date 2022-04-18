@@ -708,6 +708,7 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                             )()
                           }}
                           fullWidth
+                          disabled={isLoading}
                         />
                       </Grid>
                       <Grid item xs={12}>
@@ -730,6 +731,7 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                             )()
                           }}
                           fullWidth
+                          disabled={isLoading}
                         />
                       </Grid>
                       <Grid item xs={12} style={{ marginBottom: '10px' }}>
@@ -751,6 +753,7 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                           }}
                           fullWidth
                           // disabled={true}
+                          disabled={isLoading}
                         />
                       </Grid>
                       <Grid item className={classes.buttonsWrapper}>
@@ -759,6 +762,7 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                           variant="outlined"
                           onClick={handleAddPriceJobs(data._id, data.priceJobs)}
                           // endIcon={<EditIcon />}
+                          disabled={isLoading}
                         >
                           Добавить сумму
                         </Button>
@@ -770,6 +774,7 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                             data.priceJobs
                           )}
                           // endIcon={<EditIcon />}
+                          disabled={isLoading}
                         >
                           Вычесть сумму
                         </Button>
@@ -792,6 +797,7 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                             )()
                           }}
                           fullWidth
+                          disabled={isLoading}
                         />
                       </Grid>
                       <Grid item className={classes.buttonsWrapper}>
@@ -803,6 +809,7 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                             data.priceMaterials
                           )}
                           // endIcon={<EditIcon />}
+                          disabled={isLoading}
                         >
                           Добавить сумму
                         </Button>
@@ -814,6 +821,7 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                             data.priceMaterials
                           )}
                           // endIcon={<EditIcon />}
+                          disabled={isLoading}
                         >
                           Вычесть сумму
                         </Button>
@@ -836,6 +844,7 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                             )()
                           }}
                           fullWidth
+                          disabled={isLoading}
                         />
                       </Grid>
                       <Grid item className={classes.buttonsWrapper}>
@@ -847,6 +856,7 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                             data.priceDelivery
                           )}
                           // endIcon={<EditIcon />}
+                          disabled={isLoading}
                         >
                           Добавить сумму
                         </Button>
@@ -858,6 +868,7 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                             data.priceDelivery
                           )}
                           // endIcon={<EditIcon />}
+                          disabled={isLoading}
                         >
                           Вычесть сумму
                         </Button>
@@ -880,10 +891,12 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                             )()
                           }}
                           fullWidth
+                          disabled={isLoading}
                         />
                       </Grid>
                       <Grid item className={classes.buttonsWrapper}>
                         <Button
+                          disabled={isLoading}
                           size="small"
                           variant="outlined"
                           onClick={handleAddPayed(data._id, data.payed)}
@@ -892,6 +905,7 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                           Добавить сумму
                         </Button>
                         <Button
+                          disabled={isLoading}
                           size="small"
                           variant="outlined"
                           onClick={handleRemovePayed(data._id, data.payed)}
@@ -914,6 +928,7 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                                 <FormControlLabel
                                   control={
                                     <Checkbox
+                                      disabled={isLoading}
                                       color="primary"
                                       checked={data.isStarted}
                                       onChange={(
@@ -941,6 +956,7 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                             <FormControlLabel
                               control={
                                 <Checkbox
+                                  disabled={isLoading}
                                   color="primary"
                                   checked={data.isDone}
                                   onChange={(
