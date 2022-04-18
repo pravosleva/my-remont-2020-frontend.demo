@@ -113,12 +113,12 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
     _event: React.ChangeEvent<{}>,
     isExpanded: boolean
   ) => {
-    setIsAbsolutePreloaderActive(true)
+    // setIsAbsolutePreloaderActive(true)
     setExpanded(isExpanded ? panelName : false)
     // console.log(panelName, id)
     if (!!id) setTimeout(() => {
-      scrollTo(getRef(id), false)
-      setIsAbsolutePreloaderActive(false)
+      scrollTo(getRef(id), true)
+      // setIsAbsolutePreloaderActive(false)
     }, 100)
   }
   // --

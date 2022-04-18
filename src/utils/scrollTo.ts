@@ -5,7 +5,7 @@ const scrollToRef = (ref: any, headerPx: number = 0, additionalPx: number = 0, n
   }
 }
 export const scrollTo = (ref: any, noAnimation?: boolean) => {
-  scrollToRef(ref, 37, 8, noAnimation)
+  scrollToRef(ref, 37, 65, noAnimation)
 }
 export const scrollTop = () => {
   window.scrollTo({ top: 0, behavior: 'smooth' })
