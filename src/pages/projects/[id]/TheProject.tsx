@@ -1,10 +1,4 @@
-import React, {
-  useCallback,
-  useEffect,
-  useReducer,
-  useState,
-  useMemo,
-} from 'react'
+import React, { useCallback, useEffect, useReducer, useState, useMemo } from 'react'
 // import { useRemoteDataByFetch, TAns } from '~/common/hooks'
 // import { getApiUrl } from '~/utils/getApiUrl'
 import { useParams } from 'react-router-dom'
@@ -13,10 +7,7 @@ import { Box, Button, CircularProgress, Grid } from '@material-ui/core'
 import { TotalInfo } from './components/TotalInfo'
 import { useCustomToastContext, useMainContext, useUserAuthContext } from '~/common/hooks'
 import { useCookies } from 'react-cookie'
-import {
-  initialState as createNewJobInitialState,
-  reducer as createNewJobReducer,
-} from './createNewProjectReducer'
+import { initialState as createNewJobInitialState, reducer as createNewJobReducer } from './createNewProjectReducer'
 import { CreateNewJob } from './components/CreateNewJob'
 import BuildIcon from '@material-ui/icons/Build'
 import { useStyles } from './styles'
@@ -121,7 +112,8 @@ export const TheProject = () => {
   const [isLoaded, setIsLoaded] = useState<boolean>(false)
   useEffect(() => {
     setIsLoading(true)
-    httpClient.getRemont(router.query?.id, cookies?.jwt)
+    httpClient
+      .getRemont(router.query?.id, cookies?.jwt)
       .then((data) => {
         setIsLoading(false)
         setIsLoaded(true)
@@ -146,10 +138,7 @@ export const TheProject = () => {
   )
   // ---
   // --- CREATE JOB FORM:
-  const [createJobState, dispatchCreateJob] = useReducer(
-    createNewJobReducer,
-    createNewJobInitialState
-  )
+  const [createJobState, dispatchCreateJob] = useReducer(createNewJobReducer, createNewJobInitialState)
   const handleCreateJob = useCallback(() => {
     dispatchCreateJob({ type: 'OPEN' })
   }, [])
@@ -175,9 +164,7 @@ export const TheProject = () => {
   // ---
   const joblist = useMemo(() => jobsLogic?.jobs || [], [jobsLogic])
   // --- SAVE JOB:
-  const [isCreateNewJobLoading, setIsCreateNewJobLoading] = useState<boolean>(
-    false
-  )
+  const [isCreateNewJobLoading, setIsCreateNewJobLoading] = useState<boolean>(false)
   const handleSaveNewJobs = useCallback(() => {
     setIsCreateNewJobLoading(true)
     const newJob: INewJob = {
@@ -197,7 +184,8 @@ export const TheProject = () => {
       __component: 'job.job',
     }
 
-    httpClient.updateRemontJoblist(id, [newJob, ...joblist], accessToken)
+    httpClient
+      .updateRemontJoblist(id, [newJob, ...joblist], accessToken)
       .then((data) => {
         if (!!data?.id) {
           handleCloseCreateJobForm()
@@ -225,7 +213,7 @@ export const TheProject = () => {
           toast(err.message, { appearance: 'error' })
         }
       })
-      setIsCreateNewJobLoading(false)
+    setIsCreateNewJobLoading(false)
   }, [
     id,
     cookies,
@@ -240,67 +228,71 @@ export const TheProject = () => {
   ])
   // ---
   // --- REMOVE JOB:
-  const handleRemoveJob = useCallback((jobId: string) => {
-    setIsCreateNewJobLoading(true)
-    const newJobList = joblist.filter(({ _id }) => _id !== jobId)
+  const handleRemoveJob = useCallback(
+    (jobId: string) => {
+      setIsCreateNewJobLoading(true)
+      const newJobList = joblist.filter(({ _id }) => _id !== jobId)
 
-    httpClient.updateRemontJoblist(id, newJobList, accessToken)
-      .then((data) => {
-        if (!!data?.id) {
-          handleCloseCreateJobForm()
-          if (Array.isArray(data.joblist)) {
-            // NOTE: Necessary, because already updated by socket
-            // updateJoblist(data.joblist)
-            toast('Ok', { appearance: 'success' })
-            return
+      httpClient
+        .updateRemontJoblist(id, newJobList, accessToken)
+        .then((data) => {
+          if (!!data?.id) {
+            handleCloseCreateJobForm()
+            if (Array.isArray(data.joblist)) {
+              // NOTE: Necessary, because already updated by socket
+              // updateJoblist(data.joblist)
+              toast('Ok', { appearance: 'success' })
+              return
+            }
           }
-        }
-        throw new Error('Fuckup')
-      })
-      .catch((err) => {
-        console.log(err)
-        if (err === 401) {
-          const url = buildUrl('/', {
-            path: 'auth/login',
-            // hash: 'contact',
-            queryParams: {
-              from: `/projects/${id}`,
-            },
-          })
-          router.history.push(url)
-        } else {
-          toast(err.message, { appearance: 'error' })
-        }
-      })
+          throw new Error('Fuckup')
+        })
+        .catch((err) => {
+          console.log(err)
+          if (err === 401) {
+            const url = buildUrl('/', {
+              path: 'auth/login',
+              // hash: 'contact',
+              queryParams: {
+                from: `/projects/${id}`,
+              },
+            })
+            router.history.push(url)
+          } else {
+            toast(err.message, { appearance: 'error' })
+          }
+        })
       setIsCreateNewJobLoading(false)
-  }, [
-    id,
-    accessToken,
-    setIsCreateNewJobLoading,
-    joblist,
-  ])
+    },
+    [id, accessToken, setIsCreateNewJobLoading, joblist]
+  )
   // ---
   const classes = useStyles()
-  const isOwner: boolean = useMemo(() => remontLogic?.isOwner(userData?.id), [
-    remontLogic,
-    userData,
-  ])
+  const isOwner: boolean = useMemo(() => remontLogic?.isOwner(userData?.id), [remontLogic, userData])
   const projectName: boolean = useMemo(() => remontLogic?.name, [remontLogic])
   const getFilterStateSelectedGroupInRussian = (value: string) => {
     switch (value) {
-      case 'all': return 'Все'
-      case 'inProgress': return 'В процессе'
-      case 'isDone': return 'Завершенные'
-      default: return 'FILTER'
+      case 'all':
+        return 'Все'
+      case 'inProgress':
+        return 'В процессе'
+      case 'isDone':
+        return 'Завершенные'
+      default:
+        return 'FILTER'
     }
   }
   const filterTogglerLabel = useMemo(() => {
     if (!remontLogic) return 'Filter'
     switch (filterState.selectedGroup) {
-      case 'isDone': return `${getFilterStateSelectedGroupInRussian(filterState.selectedGroup)} (${remontLogic.isDoneCounter})`
-      case 'inProgress': return `${getFilterStateSelectedGroupInRussian(filterState.selectedGroup)} (${remontLogic.inProgressCounter})`
-      case 'all': return `${getFilterStateSelectedGroupInRussian(filterState.selectedGroup)} (${remontLogic.allCounter})`
-      default: return 0;
+      case 'isDone':
+        return `${getFilterStateSelectedGroupInRussian(filterState.selectedGroup)} (${remontLogic.isDoneCounter})`
+      case 'inProgress':
+        return `${getFilterStateSelectedGroupInRussian(filterState.selectedGroup)} (${remontLogic.inProgressCounter})`
+      case 'all':
+        return `${getFilterStateSelectedGroupInRussian(filterState.selectedGroup)} (${remontLogic.allCounter})`
+      default:
+        return 0
     }
   }, [filterState.selectedGroup, remontLogic])
   const handleSelectAll = useCallback(() => {
@@ -324,10 +316,7 @@ export const TheProject = () => {
           [classes.openedWidget]: isWidgetOpened,
         })}
       >
-        <Box
-          boxShadow={3}
-          className={clsx(classes.widgetPaper, classes.buttonsWrapper)}
-        >
+        <Box boxShadow={3} className={clsx(classes.widgetPaper, classes.buttonsWrapper)}>
           <Button
             onClick={handleToggleWidget}
             size="small"
@@ -341,9 +330,7 @@ export const TheProject = () => {
           <Button
             onClick={handleSelectAll}
             size="small"
-            variant={
-              filterState.selectedGroup === 'all' ? 'contained' : 'outlined'
-            }
+            variant={filterState.selectedGroup === 'all' ? 'contained' : 'outlined'}
             color="primary"
             disabled={isLoading}
             // endIcon={<BuildIcon />}
@@ -354,9 +341,7 @@ export const TheProject = () => {
           <Button
             onClick={handleSelectIsDone}
             size="small"
-            variant={
-              filterState.selectedGroup === 'isDone' ? 'contained' : 'outlined'
-            }
+            variant={filterState.selectedGroup === 'isDone' ? 'contained' : 'outlined'}
             color="primary"
             disabled={isLoading}
             // endIcon={<BuildIcon />}
@@ -367,17 +352,11 @@ export const TheProject = () => {
           <Button
             onClick={handleSelectInProgress}
             size="small"
-            variant={
-              filterState.selectedGroup === 'inProgress'
-                ? 'contained'
-                : 'outlined'
-            }
+            variant={filterState.selectedGroup === 'inProgress' ? 'contained' : 'outlined'}
             color="primary"
             disabled={isLoading}
             // endIcon={<BuildIcon />}
-            className={
-              filterState.selectedGroup !== 'inProgress' ? 'inactive' : ''
-            }
+            className={filterState.selectedGroup !== 'inProgress' ? 'inactive' : ''}
           >
             В процессе{!!remontLogic ? ` (${remontLogic.inProgressCounter})` : ''}
           </Button>

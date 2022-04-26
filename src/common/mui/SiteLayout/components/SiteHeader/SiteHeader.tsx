@@ -23,7 +23,7 @@ export const SiteHeader = () => {
   }, [logout, history])
 
   return (
-    <Container maxWidth='md'>
+    <Container maxWidth="md">
       <div className={classes.wrapper}>
         <div className={classes.rightSide}>
           {isUserDataLoading ? (
@@ -33,10 +33,7 @@ export const SiteHeader = () => {
                 alignItems: 'center',
               }}
             >
-              <CircularProgress
-                size={20}
-                color="primary"
-              />
+              <CircularProgress size={20} color="primary" />
             </div>
           ) : !isUserLogged ? (
             <Button
@@ -44,14 +41,12 @@ export const SiteHeader = () => {
               onClick={() => {
                 router.push(
                   !!remontLogic?.id
-                    ? `/auth/login?from=${encodeURIComponent(
-                        `/projects/${remontLogic?.id}`
-                      )}`
+                    ? `/auth/login?from=${encodeURIComponent(`/projects/${remontLogic?.id}`)}`
                     : '/auth/login'
                 )
               }}
               size="small"
-              variant={pathname === '/auth/login' || isUserDataLoading ? "outlined" : "contained"}
+              variant={pathname === '/auth/login' || isUserDataLoading ? 'outlined' : 'contained'}
               color="primary"
               endIcon={<AccountCircleIcon />}
               disabled={pathname === '/auth/login'}

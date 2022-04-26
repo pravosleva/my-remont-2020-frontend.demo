@@ -88,7 +88,7 @@ export const useBaseStyles = makeStyles((theme) => ({
       flexDirection: 'column',
       '& > div:not(:last-child)': {
         marginBottom: '20px',
-      }
+      },
     },
     [theme.breakpoints.up('sm')]: {
       display: 'grid',

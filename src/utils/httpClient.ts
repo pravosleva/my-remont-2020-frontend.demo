@@ -1,4 +1,4 @@
-import { Wget as fetch, FetcherController } from '~/utils/fetcher';
+import { Wget as fetch, FetcherController } from '~/utils/fetcher'
 import axios from 'axios'
 import { getApiUrl } from '~/utils/getApiUrl'
 import { HttpError } from '~/utils/errors/http/HttpError'
@@ -10,56 +10,54 @@ const CancelToken = axios.CancelToken
 
 type TCbOpts = { on401?: (msg: string) => void }
 class HttpClientSingletone {
-  static _instance = new HttpClientSingletone();
-  apiUrl: string;
-  getMeController: any;
-  getRemontController: FetcherController;
-  putRemontController: FetcherController;
-  uploadFilesController: FetcherController;
+  static _instance = new HttpClientSingletone()
+  apiUrl: string
+  getMeController: any
+  getRemontController: FetcherController
+  putRemontController: FetcherController
+  uploadFilesController: FetcherController
   // deleteFileController: FetcherController;
 
   constructor() {
     if (HttpClientSingletone._instance) {
-      throw new Error(
-        'Instantiation failed: use HttpClientSingletone.getInstance() instead of new.'
-      );
+      throw new Error('Instantiation failed: use HttpClientSingletone.getInstance() instead of new.')
     }
     this.apiUrl = getApiUrl()
-    this.getMeController = null;
-    this.getRemontController = null;
-    this.putRemontController = null;
-    this.uploadFilesController = null;
+    this.getMeController = null
+    this.getRemontController = null
+    this.putRemontController = null
+    this.uploadFilesController = null
     // this.deleteFileController = null;
   }
 
   static getInstance(): HttpClientSingletone {
-    return HttpClientSingletone._instance;
+    return HttpClientSingletone._instance
   }
   universalAxiosResponseHandler(validator: (data: any) => boolean) {
     return (axiosRes) => {
       // console.log(axiosRes)
       if (!validator(axiosRes)) {
-        throw new Error('Data is incorrect');
+        throw new Error('Data is incorrect')
       }
       try {
-        return { isOk: true, data: axiosRes.data };
+        return { isOk: true, data: axiosRes.data }
       } catch (err) {
-        throw new Error(err.message);
+        throw new Error(err.message)
       }
-    };
+    }
   }
   responseDataHandlerAfterHttpErrorHandler(dataValidator: (data: any) => boolean) {
     return (data: any) => {
       // console.log(data)
       if (!dataValidator(data)) {
-        throw new Error('Data is incorrect');
+        throw new Error('Data is incorrect')
       }
       try {
-        return { isOk: true, data };
+        return { isOk: true, data }
       } catch (err) {
-        throw new Error(err.message);
+        throw new Error(err.message)
       }
-    };
+    }
   }
   getErrorMsg(data: any): string {
     console.log(data)
@@ -72,7 +70,7 @@ class HttpClientSingletone {
         // Этот хак для того, чтоб не показывать лишний раз сообщение об отмененном нетипичном запросе
         // (например, при изменении поля email - нецелевое действие клиента,
         // соотв. сообщение об ошибке не показываем)
-        'Извините, что-то пошло не так';
+        'Извините, что-то пошло не так'
   }
 
   async getMe(jwt: string, { on401 }: TCbOpts): Promise<any> {
@@ -81,7 +79,7 @@ class HttpClientSingletone {
 
     try {
       if (!!this.getMeController) {
-        this.getMeController.cancel();
+        this.getMeController.cancel()
         // console.log('-- canceled')
         // console.log(this.getMeController)
       }
@@ -118,23 +116,21 @@ class HttpClientSingletone {
             return res.data
         }
       })
-      .then(
-        this.responseDataHandlerAfterHttpErrorHandler((data: any) => !!data?._id)
-      )
+      .then(this.responseDataHandlerAfterHttpErrorHandler((data: any) => !!data?._id))
       .catch((err) => ({ isOk: false, data: err }))
 
     if (response.isOk) {
-      return Promise.resolve(response.data);
+      return Promise.resolve(response.data)
     }
-    return Promise.reject(this.getErrorMsg(response.data));
+    return Promise.reject(this.getErrorMsg(response.data))
   }
 
   async getRemont(id: string, jwt?: string): Promise<any> {
-    if (!id) throw new Error('getRemont: NO id');
+    if (!id) throw new Error('getRemont: NO id')
     if (!!this.getRemontController) {
-      this.getRemontController.abort();
+      this.getRemontController.abort()
     }
-    this.getRemontController = new FetcherController();
+    this.getRemontController = new FetcherController()
 
     let headers: any = {}
     // if (!!jwt) headers[Authorization] = `Bearer ${jwt}`
@@ -146,23 +142,21 @@ class HttpClientSingletone {
       headers,
       controller: this.getRemontController,
     })
-      .then(
-        this.universalAxiosResponseHandler((res: any) => !!res?.data?.id)
-      )
-      .catch((err) => ({ isOk: false, data: err }));
+      .then(this.universalAxiosResponseHandler((res: any) => !!res?.data?.id))
+      .catch((err) => ({ isOk: false, data: err }))
 
     if (response.isOk) {
-      return Promise.resolve(response.data);
+      return Promise.resolve(response.data)
     }
-    return Promise.reject(this.getErrorMsg(response.data));
+    return Promise.reject(this.getErrorMsg(response.data))
   }
 
   async updateRemontJoblist(id: string, joblist: Partial<IJob>[], jwt?: string): Promise<any> {
-    if (!id) throw new Error('ERR: !id');
+    if (!id) throw new Error('ERR: !id')
     if (!!this.putRemontController) {
-      this.putRemontController.abort();
+      this.putRemontController.abort()
     }
-    this.putRemontController = new FetcherController();
+    this.putRemontController = new FetcherController()
 
     let headers: any = {
       // 'Access-Control-Allow-Origin': '*',
@@ -189,30 +183,28 @@ class HttpClientSingletone {
       // rejected.
       validateStatus: function (status: number) {
         // return status >= 200 && status < 300; // default
-        return status >= 200 && status < 500; // default
+        return status >= 200 && status < 500 // default
       },
     })
       .then(httpErrorHandler)
-      .then(
-        this.responseDataHandlerAfterHttpErrorHandler((data: any) => !!data?.id)
-      )
-      .catch((err) => ({ isOk: false, data: err }));
+      .then(this.responseDataHandlerAfterHttpErrorHandler((data: any) => !!data?.id))
+      .catch((err) => ({ isOk: false, data: err }))
 
     if (response.isOk) {
-      return Promise.resolve(response.data);
+      return Promise.resolve(response.data)
     }
     if (response.data instanceof HttpError) {
-      return Promise.reject(response.data.resStatus);
+      return Promise.reject(response.data.resStatus)
     }
-    return Promise.reject(this.getErrorMsg(response.data));
+    return Promise.reject(this.getErrorMsg(response.data))
   }
 
   async updateMedia(remontId: string, joblist: any, jwt?: string): Promise<any> {
-    if (!remontId || !joblist) throw new Error('ERR: !remontId || !joblist');
+    if (!remontId || !joblist) throw new Error('ERR: !remontId || !joblist')
     if (!!this.putRemontController) {
-      this.putRemontController.abort();
+      this.putRemontController.abort()
     }
-    this.putRemontController = new FetcherController();
+    this.putRemontController = new FetcherController()
 
     let headers: any = {
       // 'Access-Control-Allow-Origin': '*',
@@ -239,30 +231,28 @@ class HttpClientSingletone {
       // rejected.
       validateStatus: function (status: number) {
         // return status >= 200 && status < 300; // default
-        return status >= 200 && status < 500; // default
+        return status >= 200 && status < 500 // default
       },
     })
       .then(httpErrorHandler)
-      .then(
-        this.responseDataHandlerAfterHttpErrorHandler((data: any) => !!data?.id)
-      )
-      .catch((err) => ({ isOk: false, data: err }));
+      .then(this.responseDataHandlerAfterHttpErrorHandler((data: any) => !!data?.id))
+      .catch((err) => ({ isOk: false, data: err }))
 
     if (response.isOk) {
-      return Promise.resolve(response.data);
+      return Promise.resolve(response.data)
     }
     if (response.data instanceof HttpError) {
-      return Promise.reject(response.data.resStatus);
+      return Promise.reject(response.data.resStatus)
     }
-    return Promise.reject(this.getErrorMsg(response.data));
+    return Promise.reject(this.getErrorMsg(response.data))
   }
 
   async uploadFiles(files: any, jwt?: string): Promise<any> {
-    if (files.length === 0) throw new Error('ERR: !files.length');
+    if (files.length === 0) throw new Error('ERR: !files.length')
     if (!!this.uploadFilesController) {
-      this.uploadFilesController.abort();
+      this.uploadFilesController.abort()
     }
-    this.uploadFilesController = new FetcherController();
+    this.uploadFilesController = new FetcherController()
 
     let headers: any = {
       // 'Access-Control-Allow-Origin': '*',
@@ -270,9 +260,9 @@ class HttpClientSingletone {
     }
     if (!!jwt) headers = { ...headers, Authorization: `Bearer ${jwt}` }
 
-    const body = new FormData();
+    const body = new FormData()
 
-    files.forEach((file: any) => body.append('files', file.file));
+    files.forEach((file: any) => body.append('files', file.file))
 
     const response = await fetch({
       method: 'POST',
@@ -292,18 +282,16 @@ class HttpClientSingletone {
       // },
     })
       .then(httpErrorHandler)
-      .then(
-        this.responseDataHandlerAfterHttpErrorHandler((data: any) => !!data)
-      )
-      .catch((err) => ({ isOk: false, data: err }));
+      .then(this.responseDataHandlerAfterHttpErrorHandler((data: any) => !!data))
+      .catch((err) => ({ isOk: false, data: err }))
 
     if (response.isOk) {
-      return Promise.resolve(response.data);
+      return Promise.resolve(response.data)
     }
     if (response.data instanceof HttpError) {
-      return Promise.reject(response.data.resStatus);
+      return Promise.reject(response.data.resStatus)
     }
-    return Promise.reject(this.getErrorMsg(response.data));
+    return Promise.reject(this.getErrorMsg(response.data))
   }
   async searchFileByHash(hash: string, jwt?: string): Promise<any> {
     if (!hash) throw new Error('ERR: File hash should be provided')
@@ -326,18 +314,16 @@ class HttpClientSingletone {
       headers,
     })
       .then(httpErrorHandler)
-      .then(
-        this.responseDataHandlerAfterHttpErrorHandler((data: TFile[]) => Array.isArray(data) && data.length > 0)
-      )
-      .catch((err) => ({ isOk: false, data: err }));
+      .then(this.responseDataHandlerAfterHttpErrorHandler((data: TFile[]) => Array.isArray(data) && data.length > 0))
+      .catch((err) => ({ isOk: false, data: err }))
 
     if (response.isOk) {
-      return Promise.resolve(response.data);
+      return Promise.resolve(response.data)
     }
     if (response.data instanceof HttpError) {
-      return Promise.reject(response.data.resStatus);
+      return Promise.reject(response.data.resStatus)
     }
-    return Promise.reject(this.getErrorMsg(response.data));
+    return Promise.reject(this.getErrorMsg(response.data))
   }
   async deleteFile(id: string, jwt?: string): Promise<any> {
     if (!id) throw new Error('ERR: File id should be provided')
@@ -368,22 +354,20 @@ class HttpClientSingletone {
       // rejected.
       validateStatus: function (status: number) {
         // return status >= 200 && status < 300; // default
-        return status >= 200 && status < 500; // default
+        return status >= 200 && status < 500 // default
       },
     })
       .then(httpErrorHandler)
-      .then(
-        this.responseDataHandlerAfterHttpErrorHandler((data: TFile) => !!data?._id)
-      )
-      .catch((err) => ({ isOk: false, data: err }));
+      .then(this.responseDataHandlerAfterHttpErrorHandler((data: TFile) => !!data?._id))
+      .catch((err) => ({ isOk: false, data: err }))
 
     if (response.isOk) {
-      return Promise.resolve(response.data);
+      return Promise.resolve(response.data)
     }
     if (response.data instanceof HttpError) {
-      return Promise.reject(response.data.resStatus);
+      return Promise.reject(response.data.resStatus)
     }
-    return Promise.reject(this.getErrorMsg(response.data));
+    return Promise.reject(this.getErrorMsg(response.data))
   }
   async getUploadsReport(): Promise<any> {
     const response = await fetch({
@@ -406,13 +390,13 @@ class HttpClientSingletone {
       .catch((err) => ({ isOk: false, data: err }))
 
     if (response.isOk) {
-      return Promise.resolve(response.data);
+      return Promise.resolve(response.data)
     }
     if (response.data instanceof HttpError) {
-      return Promise.reject(response.data.resStatus);
+      return Promise.reject(response.data.resStatus)
     }
-    return Promise.reject(this.getErrorMsg(response.data));
+    return Promise.reject(this.getErrorMsg(response.data))
   }
 }
 
-export const httpClient = HttpClientSingletone.getInstance();
+export const httpClient = HttpClientSingletone.getInstance()

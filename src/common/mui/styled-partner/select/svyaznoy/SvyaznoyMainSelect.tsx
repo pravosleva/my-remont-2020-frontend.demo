@@ -20,15 +20,15 @@ const useStyles = makeStyles((theme: Theme) =>
       // marginTop: theme.spacing(2),
     },
     dropdownStyle: {
-      border: "2px solid #FFF",
-      borderRadius: "8px",
-      "& ul": {
+      border: '2px solid #FFF',
+      borderRadius: '8px',
+      '& ul': {
         // @ts-ignore
         backgroundColor: theme.palette.svyaznoy.main,
         color: '#FFF',
       },
-      "& li": {
-          fontSize: 13,
+      '& li': {
+        fontSize: 13,
       },
     },
     select: {
@@ -39,9 +39,9 @@ const useStyles = makeStyles((theme: Theme) =>
       '&:focus': {
         borderColor: 'red !important',
       },
-    }
-  }),
-);
+    },
+  })
+)
 
 type TItem = {
   value: any
@@ -57,14 +57,15 @@ type TProps = {
 }
 
 export function SvyaznoyMainSelect({ value, items, onChange, label, id, ...restOriginalProps }: TProps & any) {
-  const classes = useStyles();
+  const classes = useStyles()
   // const [age, setAge] = React.useState('');
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    onChange(event.target.value as string);
-  };
+    onChange(event.target.value as string)
+  }
 
-  return (// @ts-ignore
+  return (
+    // @ts-ignore
     <FormControl variant="outlined" className={classes.formControl} {...restOriginalProps}>
       <InputLabel id={`demo-simple-select-outlined-label-${id}`}>{label}</InputLabel>
       <Select
@@ -77,9 +78,11 @@ export function SvyaznoyMainSelect({ value, items, onChange, label, id, ...restO
         MenuProps={{ classes: { paper: classes.dropdownStyle } }}
       >
         {items.map(({ value, label, id }) => (
-          <MenuItem value={value} key={id}>{label}</MenuItem>
+          <MenuItem value={value} key={id}>
+            {label}
+          </MenuItem>
         ))}
       </Select>
     </FormControl>
-  );
+  )
 }

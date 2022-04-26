@@ -1,12 +1,6 @@
 /* eslint-disable prettier/prettier */
 
-import React, {
-  useCallback,
-  useReducer,
-  useEffect,
-  useRef,
-  useMemo,
-} from 'react'
+import React, { useCallback, useReducer, useEffect, useRef, useMemo, useState } from 'react'
 // import { Container } from '@material-ui/core'
 import { SiteHeader } from './components/SiteHeader'
 import { BreadCrumbs } from './components/BreadCrumbs'
@@ -16,10 +10,7 @@ import { MainContext, IJob } from '~/common/context/MainContext'
 import { getApiUrl } from '~/utils/getApiUrl'
 import { useCookies } from 'react-cookie'
 import { filterReducer } from './reducers/filter'
-import {
-  remontReducer,
-  initialState as remontInitialState,
-} from './reducers/remont'
+import { remontReducer, initialState as remontInitialState } from './reducers/remont'
 // import { useToasts } from 'react-toast-notifications'
 import { useCustomToastContext } from '~/common/hooks'
 import { useStyles } from './styles'
@@ -33,7 +24,7 @@ import Headroom from 'react-headroom'
 import { Footer } from './components/Footer'
 import { FixedScrollTopButton } from './components/FixedScrollTopButton'
 import { httpClient } from '~/utils/httpClient'
-import axiosRetry from 'axios-retry';
+import axiosRetry from 'axios-retry'
 // import { useRouter } from '~/common/hooks'
 // import { getNormalizedUserDataResponse } from '~/utils/strapi/getNormalizedUserDataResponse'
 import { UserAuthContextProvider } from '~/common/context/UserAuthContext'
@@ -42,8 +33,9 @@ import {
   // useBaseStyles,
 } from '~/common/mui/baseStyles'
 import clsx from 'clsx'
+import { RemontLogic } from '~/utils/logic'
 
-axiosRetry(axios, { retries: 5 });
+axiosRetry(axios, { retries: 5 })
 
 const apiUrl = getApiUrl()
 // const isDev = process.env.NODE_ENV === 'development'
@@ -55,9 +47,7 @@ export const SiteLayout = ({ socket, children }: any) => {
     (id: string, fieldName: string, value: number | boolean | string | any) => () => {
       try {
         if (
-          (fieldName === 'realFinishDate' ||
-            fieldName === 'plannedStartDate' ||
-            fieldName === 'plannedFinishDate') &&
+          (fieldName === 'realFinishDate' || fieldName === 'plannedStartDate' || fieldName === 'plannedFinishDate') &&
           !value
         ) {
           return Promise.resolve()
@@ -160,10 +150,7 @@ export const SiteLayout = ({ socket, children }: any) => {
       // params,
       data,
     }) => {
-      if (
-        !!remontState.remontLogic?.id &&
-        result.id === remontState.remontLogic.id
-      ) {
+      if (!!remontState.remontLogic?.id && result.id === remontState.remontLogic.id) {
         // console.log('--- SOCKET: ev.result ---')
         // console.log(result)
         // console.log('--- SOCKET: ev.data ---')
@@ -219,7 +206,8 @@ export const SiteLayout = ({ socket, children }: any) => {
   const socketRef = useRef(socket)
   const onSocketTest = useCallback(() => {
     if (remontState.remontLogic?.id) {
-      httpClient.getRemont(remontState.remontLogic.id, cookies?.jwt)
+      httpClient
+        .getRemont(remontState.remontLogic.id, cookies?.jwt)
         .then((data) => {
           handleSetProjectData(data)
           toast('Remont data received', { appearance: 'success' })
@@ -274,6 +262,23 @@ export const SiteLayout = ({ socket, children }: any) => {
   // ---
   // const baseClasses = useBaseStyles()
 
+  const goStash = useCallback(() => {
+    dispatch({ type: 'STASH' })
+  }, [dispatch])
+  const goStashPop = useCallback(() => {
+    dispatch({ type: 'STASH_POP' })
+  }, [dispatch])
+
+  useEffect(() => {
+    console.log('remontState.stash')
+    console.log(remontState.stash)
+  }, [remontState.stash])
+
+  useEffect(() => {
+    console.log('remontState.remontLogic')
+    console.log(remontState.remontLogic)
+  }, [remontState.remontLogic])
+
   return (
     <UserAuthContextProvider>
       <MainContext.Provider
@@ -303,6 +308,8 @@ export const SiteLayout = ({ socket, children }: any) => {
           onSelectInProgress: handleSelectInProgress,
           // -- Axios:
           axiosRemoteGraphQL: axios.create(memoizedAxiosOpts),
+          goStash,
+          goStashPop,
         }}
       >
         <PromptProvider>

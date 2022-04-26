@@ -49,16 +49,14 @@ export const CreateNewJob = ({
       open={isOpened}
       // onClose={() => {}}
       scroll="paper"
-      aria-labelledby='scroll-dialog-title_NEW_JOB'
+      aria-labelledby="scroll-dialog-title_NEW_JOB"
       fullWidth={width > 767}
       fullScreen={width <= 767}
       maxWidth="md"
       // @ts-ignore
       TransitionComponent={TransitionUp}
     >
-      <DialogTitle id='scroll-dialog-title_NEW_JOB'>
-        {name || 'Новая работа'}
-      </DialogTitle>
+      <DialogTitle id="scroll-dialog-title_NEW_JOB">{name || 'Новая работа'}</DialogTitle>
       <DialogContent dividers={true} className={classes.dialogContent}>
         <Container>
           <Grid container spacing={2}>
@@ -99,13 +97,7 @@ export const CreateNewJob = ({
         </Container>
       </DialogContent>
       <DialogActions>
-        <Button
-          onClick={onClose}
-          size="small"
-          variant="outlined"
-          color="secondary"
-          disabled={isLoading}
-        >
+        <Button onClick={onClose} size="small" variant="outlined" color="secondary" disabled={isLoading}>
           Отмена
         </Button>
         <Button
@@ -116,15 +108,7 @@ export const CreateNewJob = ({
           size="small"
           disabled={isLoading || !name}
           endIcon={
-            isLoading ? (
-              <CircularProgress
-                size={20}
-                color="primary"
-                style={{ marginLeft: 'auto' }}
-              />
-            ) : (
-              <SaveIcon />
-            )
+            isLoading ? <CircularProgress size={20} color="primary" style={{ marginLeft: 'auto' }} /> : <SaveIcon />
           }
         >
           Сохранить

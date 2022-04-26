@@ -1,11 +1,8 @@
 import React, { useState } from 'react'
-import {
-  EPartnerCode,
-  ThemedButton as Button,
-} from '~/common/mui/styled-partner'
+import { EPartnerCode, ThemedButton as Button } from '~/common/mui/styled-partner'
 import { useBaseStyles } from '~/common/mui/baseStyles'
 import { useCustomToastContext } from '~/common/hooks'
-import { SvyaznoyMainTextField } from '~/common/mui/styled-partner';
+import { SvyaznoyMainTextField } from '~/common/mui/styled-partner'
 
 export const ThemingSample = () => {
   const baseClasses = useBaseStyles()
@@ -17,7 +14,9 @@ export const ThemingSample = () => {
   }
   // Btns:
   const handleClick1 = () => {
-    toast(`Hello ThemedButton for ${EPartnerCode.SvyaznoySecondary}; ${textField1 || '<empty>'}`, { appearance: 'info' })
+    toast(`Hello ThemedButton for ${EPartnerCode.SvyaznoySecondary}; ${textField1 || '<empty>'}`, {
+      appearance: 'info',
+    })
   }
   const handleClick2 = () => {
     toast(`Hello ThemedButton for ${EPartnerCode.SvyaznoyYellow}`, { appearance: 'success' })
@@ -26,10 +25,16 @@ export const ThemingSample = () => {
   return (
     <div className={baseClasses.subWrapper}>
       <div className={baseClasses.wrapperAsGrid}>
-        <div className={baseClasses.subWrapper} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <div
+          className={baseClasses.subWrapper}
+          style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+        >
           <b>[ Something in progress... ]</b>
         </div>
-        <div className={baseClasses.subWrapper} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <div
+          className={baseClasses.subWrapper}
+          style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+        >
           <b>[ Something in progress... ]</b>
         </div>
       </div>
@@ -40,24 +45,16 @@ export const ThemingSample = () => {
         value={textField1}
         onChange={handleChange1}
         fullWidth
-        size='small'
+        size="small"
       />
       <div className={baseClasses.wrapperAsGrid}>
         <div className={baseClasses.subWrapper}>
-          <Button
-            partnerCode={EPartnerCode.SvyaznoySecondary}
-            onClick={handleClick1}
-            fullWidth
-          >
+          <Button partnerCode={EPartnerCode.SvyaznoySecondary} onClick={handleClick1} fullWidth>
             Svyaznoy sec
           </Button>
         </div>
         <div className={baseClasses.subWrapper}>
-          <Button
-            partnerCode={EPartnerCode.SvyaznoyYellow}
-            onClick={handleClick2}
-            fullWidth
-          >
+          <Button partnerCode={EPartnerCode.SvyaznoyYellow} onClick={handleClick2} fullWidth>
             Svyaznoy yel
           </Button>
         </div>

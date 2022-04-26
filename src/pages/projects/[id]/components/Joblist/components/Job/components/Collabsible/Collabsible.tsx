@@ -20,12 +20,12 @@ export const Collabsible = ({ title, contentRenderer, isOpenedByDefault }: IProp
   return (
     <div className={classes.wrapper}>
       <div className={clsx(classes.titleBox, { [classes.marginBottomIfOpened]: isOpened })} onClick={handleToggle}>
-      <div>{isOpened ? <Icon path={mdiChevronUp} size={0.7} /> : <Icon path={mdiChevronDown} size={0.7} /> }</div>
-        <div><b>{title}</b></div>
+        <div>{isOpened ? <Icon path={mdiChevronUp} size={0.7} /> : <Icon path={mdiChevronDown} size={0.7} />}</div>
+        <div>
+          <b>{title}</b>
+        </div>
       </div>
-      {
-        isOpened && contentRenderer({})
-      }
+      {isOpened && contentRenderer({})}
     </div>
   )
 }

@@ -1,12 +1,5 @@
 import React, { useCallback, useState, useMemo } from 'react'
-import {
-  Typography,
-  Container,
-  Avatar,
-  TextField,
-  Button,
-  CircularProgress,
-} from '@material-ui/core'
+import { Typography, Container, Avatar, TextField, Button, CircularProgress } from '@material-ui/core'
 import { useStyles } from './styles'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import { getNormalizedInputs } from '~/utils/strapi/getNormalizedInputs'
@@ -17,8 +10,7 @@ import { useRouter } from '~/common/hooks/useRouter'
 import { httpErrorHandler } from '~/utils/errors/http/fetch'
 
 const apiUrl = getApiUrl()
-const REACT_APP_COOKIE_MAXAGE_IN_DAYS = process.env
-  .REACT_APP_COOKIE_MAXAGE_IN_DAYS
+const REACT_APP_COOKIE_MAXAGE_IN_DAYS = process.env.REACT_APP_COOKIE_MAXAGE_IN_DAYS
   ? parseInt(process.env.REACT_APP_COOKIE_MAXAGE_IN_DAYS)
   : 1
 
@@ -54,15 +46,8 @@ export const SignUp = () => {
     }
     return errors
   }
-  const errors = useMemo(() => validate({ email, password, password2 }), [
-    email,
-    password,
-    password2,
-  ])
-  const isCorrect = useMemo(
-    () => !errors.email && !errors.password && !errors.password2,
-    [errors]
-  )
+  const errors = useMemo(() => validate({ email, password, password2 }), [email, password, password2])
+  const isCorrect = useMemo(() => !errors.email && !errors.password && !errors.password2, [errors])
   const handleSubmit = useCallback(() => {
     const normalizedObj = getNormalizedInputs({ email, password })
     // const body = new FormData()
@@ -239,9 +224,7 @@ export const SignUp = () => {
             }}
             error={!!errors.password2}
             helperText={errors.password2 || undefined}
-            disabled={
-              !email || !password || !!errors.email || !!errors.password
-            }
+            disabled={!email || !password || !!errors.email || !!errors.password}
           />
           <Button
             variant="contained"
@@ -249,15 +232,7 @@ export const SignUp = () => {
             fullWidth
             onClick={handleSubmit}
             disabled={!isCorrect || isLoading || isUserDataLoading}
-            endIcon={
-              isLoading && (
-                <CircularProgress
-                  size={20}
-                  color="primary"
-                  style={{ marginLeft: 'auto' }}
-                />
-              )
-            }
+            endIcon={isLoading && <CircularProgress size={20} color="primary" style={{ marginLeft: 'auto' }} />}
           >
             Зарегистрироваться
           </Button>

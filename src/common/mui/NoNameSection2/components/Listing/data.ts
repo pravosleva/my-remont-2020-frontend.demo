@@ -11,4 +11,4 @@ export const data = [
     title: '95',
     description: 'сотрудников\nв компании',
   },
-];
+]

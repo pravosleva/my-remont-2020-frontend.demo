@@ -76,7 +76,7 @@ export const useStyles = makeStyles((theme: Theme) =>
       color: '#rgb(34,87,122)',
     },
     greyText: {
-      color: grey[500]
+      color: grey[500],
     },
     buttonsWrapper: {
       marginLeft: 'auto',

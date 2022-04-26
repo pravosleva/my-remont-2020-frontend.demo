@@ -17,7 +17,6 @@ import './react-notifications-component.css'
 import 'animate.css/animate.min.css'
 // import 'react-lightbox-component/build/css/index.css'
 
-
 const REACT_APP_SOCKET_ENDPOINT = process.env.REACT_APP_SOCKET_ENDPOINT
 
 function App() {
@@ -29,9 +28,9 @@ function App() {
   return (
     <HashRouter>
       <NotifsContextProvider>
-          <SiteLayout socket={socket}>
-            <Routes />
-          </SiteLayout>
+        <SiteLayout socket={socket}>
+          <Routes />
+        </SiteLayout>
       </NotifsContextProvider>
     </HashRouter>
   )

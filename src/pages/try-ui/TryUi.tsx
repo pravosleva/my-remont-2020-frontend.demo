@@ -25,26 +25,22 @@ export const TryUi = () => {
 
   return (
     <>
-      <ResponsiveBlock
-        isLimited
-      >
+      <ResponsiveBlock isLimited>
         <h1>Try UI</h1>
       </ResponsiveBlock>
-      {
-        isUserAdmin && (
-          <ResponsiveBlock
-            isLimited
-            style={{
-              // marginTop: '50px',
-              marginBottom: '50px',
-              // border: '1px dashed red',
-            }}
-          >
-            <h2>Admin tools: Uploads Cleanup</h2>
-            <UploadsCleanup />
-          </ResponsiveBlock>
-        )
-      }
+      {isUserAdmin && (
+        <ResponsiveBlock
+          isLimited
+          style={{
+            // marginTop: '50px',
+            marginBottom: '50px',
+            // border: '1px dashed red',
+          }}
+        >
+          <h2>Admin tools: Uploads Cleanup</h2>
+          <UploadsCleanup />
+        </ResponsiveBlock>
+      )}
 
       <ResponsiveBlock
         isLimited
@@ -56,7 +52,9 @@ export const TryUi = () => {
       >
         <h2>ResponsiveBlock</h2>
         <em>props:</em>
-        <ul><li>isLimited</li></ul>
+        <ul>
+          <li>isLimited</li>
+        </ul>
       </ResponsiveBlock>
       <ResponsiveBlock
         isLimited
@@ -79,7 +77,10 @@ export const TryUi = () => {
           // border: '1px dashed red',
         }}
       >
-        <div className={clsx(baseClasses.desktopFrameInternalBox, baseClasses.isRoundedDesktop)} style={{ background: '#147ec1', color: '#FFF' }}>
+        <div
+          className={clsx(baseClasses.desktopFrameInternalBox, baseClasses.isRoundedDesktop)}
+          style={{ background: '#147ec1', color: '#FFF' }}
+        >
           <h2>ResponsiveBlock</h2>
           <em>props:</em>
           <ul>
@@ -126,7 +127,10 @@ export const TryUi = () => {
           // border: '1px dashed red',
         }}
       >
-        <div className={clsx(baseClasses.desktopFrameInternalBox, baseClasses.isRounded)} style={{ background: '#147ec1', color: '#FFF' }}>
+        <div
+          className={clsx(baseClasses.desktopFrameInternalBox, baseClasses.isRounded)}
+          style={{ background: '#147ec1', color: '#FFF' }}
+        >
           <h2>ResponsiveBlock</h2>
           <em>props:</em>
           <ul>

@@ -37,9 +37,7 @@ interface IValues {
 
 export const SignUp = () => {
   const classes = useStyles()
-  const {
-    toast,
-  } = useCustomToastContext()
+  const { toast } = useCustomToastContext()
   const {
     isUserDataLoading,
     isUserDataLoaded,
@@ -220,17 +218,13 @@ export const SignUp = () => {
                         isUserDataLoading ||
                         isUserDataLoaded
                       }
-                      variant={isSubmitting || isUserDataLoading ? "outlined" : "contained"}
+                      variant={isSubmitting || isUserDataLoading ? 'outlined' : 'contained'}
                       color="primary"
                       onClick={submitForm}
                       fullWidth
                       endIcon={
                         (isSubmitting || isUserDataLoading) && (
-                          <CircularProgress
-                            size={20}
-                            color="inherit"
-                            style={{ marginLeft: 'auto' }}
-                          />
+                          <CircularProgress size={20} color="inherit" style={{ marginLeft: 'auto' }} />
                         )
                       }
                     >

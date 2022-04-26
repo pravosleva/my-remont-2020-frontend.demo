@@ -6,7 +6,7 @@ import InputLabel from '@material-ui/core/InputLabel'
 import clsx from 'clsx'
 import FormControl from '@material-ui/core/FormControl'
 
-const useStyles = makeStyles((theme: Theme & { palette : { svyaznoy: { main: string, contrastText: string } } }) =>
+const useStyles = makeStyles((theme: Theme & { palette: { svyaznoy: { main: string; contrastText: string } } }) =>
   createStyles({
     formControl: {
       // DOES NOT WORKS:
@@ -28,13 +28,13 @@ const useStyles = makeStyles((theme: Theme & { palette : { svyaznoy: { main: str
       // marginTop: theme.spacing(2),
     },
     dropdownStyle: {
-      border: "2px solid #FFF",
-      borderRadius: "8px",
-      "& ul": {
+      border: '2px solid #FFF',
+      borderRadius: '8px',
+      '& ul': {
         backgroundColor: theme.palette.svyaznoy.main,
         color: '#FFF',
       },
-      "& li": {
+      '& li': {
         fontSize: 16,
         fontWeight: 500,
       },
@@ -43,23 +43,25 @@ const useStyles = makeStyles((theme: Theme & { palette : { svyaznoy: { main: str
       '& > div, & > div:focus': {
         backgroundColor: 'inherit',
       },
-    }
-  }),
-);
-
-export const SvyaznoyMainSelect0 = withStyles((theme: Theme & { palette : { svyaznoy: { main: string, contrastText: string } } }) => ({
-  root: {
-    // DOES NOT WORKS:
-    // '& .MuiOutlinedInput-root.Mui-focused.MuiOutlinedInput-notchedOutline': {
-    //   borderColor: `${theme.palette.svyaznoy.main} !important`,
-    // },
-
-    // NOTE: Or this: '& div:nth-child(2)': {
-    '& .MuiInput-underline:after': {
-      borderBottomColor: 'yellow',
     },
-  }
-}))(Select);
+  })
+)
+
+export const SvyaznoyMainSelect0 = withStyles(
+  (theme: Theme & { palette: { svyaznoy: { main: string; contrastText: string } } }) => ({
+    root: {
+      // DOES NOT WORKS:
+      // '& .MuiOutlinedInput-root.Mui-focused.MuiOutlinedInput-notchedOutline': {
+      //   borderColor: `${theme.palette.svyaznoy.main} !important`,
+      // },
+
+      // NOTE: Or this: '& div:nth-child(2)': {
+      '& .MuiInput-underline:after': {
+        borderBottomColor: 'yellow',
+      },
+    },
+  })
+)(Select)
 
 type TItem = {
   value: any
@@ -75,15 +77,19 @@ type TProps = {
 }
 
 export function SvyaznoyMainSelect2({ value, items, onChange, label, id, ...restOriginalProps }: TProps & any) {
-  const classes = useStyles();
+  const classes = useStyles()
   // const [age, setAge] = React.useState('');
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    onChange(event.target.value as string);
-  };
+    onChange(event.target.value as string)
+  }
 
-  return (// @ts-ignore
-    <FormControl variant="outlined" className={classes.formControl} {...restOriginalProps}
+  return (
+    // @ts-ignore
+    <FormControl
+      variant="outlined"
+      className={classes.formControl}
+      {...restOriginalProps}
       // @ts-ignore
       // color='svyaznoy'
     >
@@ -98,9 +104,11 @@ export function SvyaznoyMainSelect2({ value, items, onChange, label, id, ...rest
         MenuProps={{ classes: { paper: classes.dropdownStyle } }}
       >
         {items.map(({ value, label, id }) => (
-          <MenuItem value={value} key={id}>{label}</MenuItem>
+          <MenuItem value={value} key={id}>
+            {label}
+          </MenuItem>
         ))}
       </SvyaznoyMainSelect0>
     </FormControl>
-  );
+  )
 }

@@ -22,10 +22,7 @@ export const HomePage = () => {
         <Grid container spacing={2}>
           <Grid item xs={12} md={6}>
             <List className={classes.root} subheader={<li />}>
-              <ListItem
-                className={classes.listItem}
-                onClick={goToPage('/projects')}
-              >
+              <ListItem className={classes.listItem} onClick={goToPage('/projects')}>
                 <ListItemText primary="Проекты" secondary="Ремонты квартир" />
               </ListItem>
             </List>

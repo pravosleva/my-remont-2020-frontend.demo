@@ -7,10 +7,7 @@ type TAction = {
   payload: TGroup
 }
 
-export function filterReducer(
-  state: TFilterState,
-  action: TAction
-): TFilterState {
+export function filterReducer(state: TFilterState, action: TAction): TFilterState {
   switch (action.type) {
     case 'SELECT_GROUP':
       return { selectedGroup: action.payload }

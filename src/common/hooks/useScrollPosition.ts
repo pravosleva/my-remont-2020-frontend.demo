@@ -1,35 +1,35 @@
-import { useState, useEffect } from 'react';
-import { useDebounce } from '~/common/hooks/useDebounce';
+import { useState, useEffect } from 'react'
+import { useDebounce } from '~/common/hooks/useDebounce'
 
 export interface IWindowDims {
-  pageYOffset: number;
+  pageYOffset: number
 }
 
 function isItMoreThan2Screens(): boolean {
-  const { innerHeight, pageYOffset } = window;
-  return innerHeight * 2 - pageYOffset < 0;
+  const { innerHeight, pageYOffset } = window
+  return innerHeight * 2 - pageYOffset < 0
 }
 
 export const useScrollPosition = (): [IWindowDims, boolean] => {
   const [scrollPosition, setScrollPosition] = useState<IWindowDims>({
     pageYOffset: 0,
-  });
-  const [isMoreThan2Screens, setIsMoreThan2Screens] = useState<boolean>(false);
+  })
+  const [isMoreThan2Screens, setIsMoreThan2Screens] = useState<boolean>(false)
 
-  const debouncedCurrentHeight = useDebounce(scrollPosition?.pageYOffset, 150);
+  const debouncedCurrentHeight = useDebounce(scrollPosition?.pageYOffset, 150)
 
   useEffect(() => {
     function handleScroll() {
-      setScrollPosition({ pageYOffset: !!window ? window.pageYOffset : 0 });
+      setScrollPosition({ pageYOffset: !!window ? window.pageYOffset : 0 })
     }
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
 
   useEffect(() => {
-    setIsMoreThan2Screens(isItMoreThan2Screens());
-  }, [debouncedCurrentHeight, setIsMoreThan2Screens]);
+    setIsMoreThan2Screens(isItMoreThan2Screens())
+  }, [debouncedCurrentHeight, setIsMoreThan2Screens])
 
-  return [scrollPosition, isMoreThan2Screens];
-};
+  return [scrollPosition, isMoreThan2Screens]
+}

@@ -2,9 +2,7 @@
 import { IJob } from '~/common/context/MainContext'
 
 export const getDifference = (data: IJob) => {
-  return (
-    data.payed - (data.priceMaterials + data.priceJobs + data.priceDelivery)
-  )
+  return data.payed - (data.priceMaterials + data.priceJobs + data.priceDelivery)
 }
 
 export const getTotalPayed = (joblist: IJob[]): number => {
@@ -58,7 +56,5 @@ export const getTotalDifference = (joblist: IJob[]) => {
   const totalPriceDelivery = getTotalPriceDelivery(joblist)
   const totalPayed = getTotalPayed(joblist)
 
-  return (
-    totalPayed - (totalPriceJobs + totalPriceMaterials + totalPriceDelivery)
-  )
+  return totalPayed - (totalPriceJobs + totalPriceMaterials + totalPriceDelivery)
 }

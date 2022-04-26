@@ -29,15 +29,7 @@ export const AssignBtn = ({ click, isLoading }: IProps) => {
         onClick={click}
         disabled={isLoading}
         endIcon={
-          isLoading ? (
-            <CircularProgress
-              size={20}
-              color="inherit"
-              style={{ marginLeft: 'auto' }}
-            />
-          ) : (
-            <SaveIcon />
-          )
+          isLoading ? <CircularProgress size={20} color="inherit" style={{ marginLeft: 'auto' }} /> : <SaveIcon />
         }
       >
         Assign files

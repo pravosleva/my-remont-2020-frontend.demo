@@ -28,7 +28,7 @@ export class RemontLogic extends Object {
     return this.remont?.joblist.filter(({ isStarted, isDone }: IJob) => isStarted && isDone).length || 0
   }
   get inProgressCounter(): boolean {
-    return this.remont?.joblist.filter(({ isStarted , isDone}: IJob) => isStarted && !isDone).length || 0
+    return this.remont?.joblist.filter(({ isStarted, isDone }: IJob) => isStarted && !isDone).length || 0
   }
   get allCounter(): boolean {
     return this.remont?.joblist.length || 0

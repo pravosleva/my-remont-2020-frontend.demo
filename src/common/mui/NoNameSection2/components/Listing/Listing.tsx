@@ -1,9 +1,9 @@
 import React from 'react'
-import { data } from './data';
-import { useStyles } from './styles';
+import { data } from './data'
+import { useStyles } from './styles'
 
 export const Listing = () => {
-  const classes = useStyles();
+  const classes = useStyles()
 
   return (
     <div className={classes.wrapper}>
@@ -17,5 +17,5 @@ export const Listing = () => {
         </div>
       ))}
     </div>
-  );
-};
+  )
+}

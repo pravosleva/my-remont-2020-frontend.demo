@@ -19,4 +19,3 @@ mv -v ${EXTERNAL_DIR}/frontend.demo/build/* "${EXTERNAL_DIR}/backend/public/demo
 
 echo '3/3 Remove frontend.demo/build directory.'
 rm -rf ./build
-# Done

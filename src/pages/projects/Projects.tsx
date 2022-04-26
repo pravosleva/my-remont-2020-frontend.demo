@@ -1,24 +1,10 @@
-import React, {
-  useCallback,
-  useState,
-  useEffect,
-  useMemo,
-} from 'react'
+import React, { useCallback, useState, useEffect, useMemo } from 'react'
 import { getApiUrl } from '~/utils/getApiUrl'
 import { useCustomToastContext, useMainContext, useUserAuthContext } from '~/common/hooks'
 import { useRouter } from '~/common/hooks/useRouter'
 import { httpErrorHandler } from '~/utils/errors/http/axios'
 import { HttpError } from '~/utils/errors/http'
-import {
-  Avatar,
-  Button,
-  CircularProgress,
-  Chip,
-  Grid,
-  List,
-  ListItem,
-  ListItemText,
-} from '@material-ui/core'
+import { Avatar, Button, CircularProgress, Chip, Grid, List, ListItem, ListItemText } from '@material-ui/core'
 import AddIcon from '@material-ui/icons/Add'
 import { usePrompt } from '~/common/hooks/usePrompt'
 import { useStyles } from './styles'
@@ -66,7 +52,7 @@ const CREATE_REMONT = ({ ownerId, projectName }) => `
 `;
 */
 
-interface IProject {
+interface IProjectMinimalData {
   id: string
   name: string
   owners: any[]
@@ -88,9 +74,7 @@ const responseDataValidator = (data: any) => {
     return data.remonts
   }
 
-  throw new Error(
-    `data.remonts is ${String(data?.remonts)}; Errors not received`
-  )
+  throw new Error(`data.remonts is ${String(data?.remonts)}; Errors not received`)
 }
 
 export const Projects = () => {
@@ -199,8 +183,7 @@ export const Projects = () => {
               })
             }
           } else {
-            if (!!onFail)
-              onFail(typeof err === 'string' ? err : err?.message || 'Errored')
+            if (!!onFail) onFail(typeof err === 'string' ? err : err?.message || 'Errored')
           }
         })
     },
@@ -208,12 +191,13 @@ export const Projects = () => {
   )
 
   // const count = useRef<number>(0)
-  useEffect(() => {
-    // V2:
-    // TODO: Убрать костыль co счетчиком!
-    // - (hook for axiosRemoteGraphQL)
-    // - Давать действия со списком в соответствии с результатами
-    // if (count.current === 0) {}
+  useEffect(
+    () => {
+      // V2:
+      // TODO: Убрать костыль co счетчиком!
+      // - (hook for axiosRemoteGraphQL)
+      // - Давать действия со списком в соответствии с результатами
+      // if (count.current === 0) {}
       fetch({
         userId: null,
         forType: null,
@@ -225,10 +209,12 @@ export const Projects = () => {
           toast(msg, { appearance: 'error' })
         },
       })
-  }, [
-    // userData,
-    // setProjects,
-  ])
+    },
+    [
+      // userData,
+      // setProjects,
+    ]
+  )
 
   // V1:
   // const [projects, isLoaded, isLoading]: TAns = useRemoteDataByFetch({
@@ -338,11 +324,7 @@ export const Projects = () => {
         })
         .catch((err) => {
           setIsLoading(false)
-          throw new Error(
-            typeof err === 'string'
-              ? err
-              : err?.message || 'window.fetch: Errored'
-          )
+          throw new Error(typeof err === 'string' ? err : err?.message || 'window.fetch: Errored')
         })
 
       return res
@@ -371,14 +353,9 @@ export const Projects = () => {
           // NOTE: Могли бы сразу же занести в стейт, но вместо этого ждем ремонт по сокету:
           // .then((remont: any) => { addProject(remont) })
           .catch((err) => {
-            toast(
-              typeof err === 'string'
-                ? err
-                : err?.message || 'createRemontPromise2: Errored',
-              {
-                appearance: 'error',
-              }
-            )
+            toast(typeof err === 'string' ? err : err?.message || 'createRemontPromise2: Errored', {
+              appearance: 'error',
+            })
           })
       })
       .catch((err: any) => {
@@ -391,37 +368,28 @@ export const Projects = () => {
   const MemoizedListing = useMemo(
     () => (
       <>
-        {projects.map(
-          ({ id, name, owners, executors, updatedAt }: IProject) => {
-            const isOwner = owners.some(({ id }) => myUserId === id)
+        {projects.map(({ id, name, owners, executors, updatedAt }: IProjectMinimalData) => {
+          const isOwner = owners.some(({ id }) => myUserId === id)
 
-            return (
-              <ListItem
-                key={id}
-                className={classes.listItem}
-                onClick={goToPage(`/projects/${id}`)}
-                title={id}
-              >
-                <ListItemText
-                  key={`${id}--subheader`}
-                  primary={name}
-                  secondary={`Обновлено ${formatDateBySeconds2(updatedAt)}`}
+          return (
+            <ListItem key={id} className={classes.listItem} onClick={goToPage(`/projects/${id}`)} title={id}>
+              <ListItemText
+                key={`${id}--subheader`}
+                primary={name}
+                secondary={`Обновлено ${formatDateBySeconds2(updatedAt)}`}
+              />
+              {isOwner && (
+                <Chip
+                  className={classes.chip}
+                  variant="outlined"
+                  // size="small"
+                  avatar={<Avatar>{myUserName.slice(0, 1).toUpperCase()}</Avatar>}
+                  label="Ваш проект"
                 />
-                {isOwner && (
-                  <Chip
-                    className={classes.chip}
-                    variant="outlined"
-                    // size="small"
-                    avatar={
-                      <Avatar>{myUserName.slice(0, 1).toUpperCase()}</Avatar>
-                    }
-                    label="Ваш проект"
-                  />
-                )}
-              </ListItem>
-            )
-          }
-        )}
+              )}
+            </ListItem>
+          )
+        })}
       </>
     ),
     [projects, myUserId]
@@ -429,7 +397,7 @@ export const Projects = () => {
 
   return (
     <ResponsiveBlock isLimited>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems:'center' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <h1 style={{ display: 'inline' }}>Проекты</h1>
         {!!userData?.id && (
           <div>

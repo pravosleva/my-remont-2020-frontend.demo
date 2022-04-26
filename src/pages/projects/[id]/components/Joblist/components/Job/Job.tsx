@@ -18,17 +18,17 @@ import {
 import DateFnsAdapter from '@material-ui/pickers/adapter/date-fns'
 import ruLocale from 'date-fns/locale/ru'
 import SaveIcon from '@material-ui/icons/Save'
-import {useCustomToastContext, useMainContext, useUserAuthContext } from '~/common/hooks'
+import { useCustomToastContext, useMainContext, useUserAuthContext } from '~/common/hooks'
 import { Collabsible } from './components/Collabsible'
 import { httpClient } from '~/utils/httpClient'
-import { DropzoneAreaBase } from 'material-ui-dropzone';
+import { DropzoneAreaBase } from 'material-ui-dropzone'
 import { useCookies } from 'react-cookie'
 // import ImageGallery from 'react-image-gallery';
 // import Lightbox from 'react-lightbox-component'
 import { getApiUrl } from '~/utils/getApiUrl'
-import SimpleReactLightbox, { SRLWrapper } from "simple-react-lightbox"
+import SimpleReactLightbox, { SRLWrapper } from 'simple-react-lightbox'
 import slugify from 'slugify'
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import CloudUploadIcon from '@material-ui/icons/CloudUpload'
 import { useBaseStyles } from '~/common/mui/baseStyles'
 // import Icon from '@mdi/react'
 // import { mdiDelete } from '@mdi/js';
@@ -42,12 +42,7 @@ const apiUrl = getApiUrl()
 
 interface IProps {
   data: IJob
-  onSetDates: (
-    id: string,
-    psd: string,
-    pfd: string,
-    realFinishDate: string
-  ) => () => void
+  onSetDates: (id: string, psd: string, pfd: string, realFinishDate: string) => () => void
   isLoading: boolean
   setIsLoading: (val: boolean) => void
   remontId: string
@@ -58,27 +53,20 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
   const { remontLogic, changeJobFieldPromise, jobsLogic } = useMainContext()
   const { toast } = useCustomToastContext()
   const { userData } = useUserAuthContext()
-  const isOwner: boolean = useMemo(() => remontLogic?.isOwner(userData?.id), [
-    remontLogic,
-    userData,
-  ])
+  const isOwner: boolean = useMemo(() => remontLogic?.isOwner(userData?.id), [remontLogic, userData])
   const classes = useStyles()
   const diff = useMemo(() => getDifference(data), [data])
 
   // Links should be opened in new tab:
   useEffect(() => {
-    const jobDescriptionMarkdown = document.querySelector(
-      '.job-description-markdown'
-    )
+    const jobDescriptionMarkdown = document.querySelector('.job-description-markdown')
 
     if (typeof window !== 'undefined') {
-      if (!!jobDescriptionMarkdown)
-        jobDescriptionMarkdown?.addEventListener('click', openLinkInNewTab)
+      if (!!jobDescriptionMarkdown) jobDescriptionMarkdown?.addEventListener('click', openLinkInNewTab)
     }
     return () => {
       if (typeof window !== 'undefined') {
-        if (!!jobDescriptionMarkdown)
-          jobDescriptionMarkdown?.removeEventListener('click', openLinkInNewTab)
+        if (!!jobDescriptionMarkdown) jobDescriptionMarkdown?.removeEventListener('click', openLinkInNewTab)
       }
     }
   }, [])
@@ -87,9 +75,7 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
     data.plannedStartDate ? new Date(data.plannedStartDate) : null,
     data.plannedFinishDate ? new Date(data.plannedFinishDate) : null,
   ])
-  const [realFinishDate, setRealFinishDate] = useState<Date>(
-    data.realFinishDate ? new Date(data.realFinishDate) : null
-  )
+  const [realFinishDate, setRealFinishDate] = useState<Date>(data.realFinishDate ? new Date(data.realFinishDate) : null)
   const handleSubmit = () => {
     // console.log(dates)
     // console.log(dates[0].toISOString())
@@ -104,65 +90,62 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
   const isSubmitDisabled = useMemo(
     () =>
       !dates[0] ||
-      (new Date(data.plannedStartDate).getTime() ===
-        new Date(dates[0]).getTime() &&
-        new Date(data.plannedFinishDate).getTime() ===
-          new Date(dates[1]).getTime() &&
-        new Date(data.realFinishDate).getTime() ===
-          new Date(realFinishDate).getTime()),
-    [
-      dates,
-      data.plannedStartDate,
-      data.plannedFinishDate,
-      data.realFinishDate,
-      realFinishDate,
-    ]
+      (new Date(data.plannedStartDate).getTime() === new Date(dates[0]).getTime() &&
+        new Date(data.plannedFinishDate).getTime() === new Date(dates[1]).getTime() &&
+        new Date(data.realFinishDate).getTime() === new Date(realFinishDate).getTime()),
+    [dates, data.plannedStartDate, data.plannedFinishDate, data.realFinishDate, realFinishDate]
   )
 
   const [files, setFiles] = useState<any[]>([])
   const [fileUrls, setFileUrls] = useState<any>(null)
 
   const addFile = (fs: any) => {
-    setFiles((s) => [...s, ...fs]);
-  };
+    setFiles((s) => [...s, ...fs])
+  }
   const handleAddFile = (arr: any[]) => {
     addFile(arr)
   }
   const removeFile = (testedPath: string) => {
     // console.log(testedPath)
-    setFiles((fs) => fs.filter(({ file }) => file.path !== testedPath));
-  };
+    setFiles((fs) => fs.filter(({ file }) => file.path !== testedPath))
+  }
   const handleDeleteFile = (arg: any) => {
     const {
       file: { path },
-    } = arg;
-    removeFile(path);
+    } = arg
+    removeFile(path)
   }
   // --- ASSING FILES
   const [cookies] = useCookies(['jwt'])
   const joblist = useMemo(() => jobsLogic?.jobs || [], [jobsLogic])
-  const handleAssignFiles = useCallback((formats) => {
-    // console.log('TODO: assign ids')
-    // console.log(fileUrls)
+  const handleAssignFiles = useCallback(
+    (formats) => {
+      // console.log('TODO: assign ids')
+      // console.log(fileUrls)
 
-    return changeJobFieldPromise(data._id, 'add@imagesUrls', formats)()
-  }, [
-    // fileUrls, setFileUrls,
-    JSON.stringify(data),
-    setIsLoading,
-  ])
+      return changeJobFieldPromise(data._id, 'add@imagesUrls', formats)()
+    },
+    [
+      // fileUrls, setFileUrls,
+      JSON.stringify(data),
+      setIsLoading,
+    ]
+  )
   // ---
   const handleUploadFiles = useCallback(async () => {
     // if (files.length === 0) { console.log('No files'); return; }
     setIsLoading(true)
 
-    const res = await httpClient.uploadFiles(files, cookies?.jwt)
+    const res = await httpClient
+      .uploadFiles(files, cookies?.jwt)
       .then((d) => {
         console.log(d)
         // NOTE: Toast msg if necessary:
         // toast(`Не забудьте прикрепить загруженные файлы (${files.length} шт)!`, { appearance: 'success' })
-        toast(`Файл${files.length > 1 ? 'ы' : ''} залит${files.length > 1 ? 'ы' : ''} (${files.length} шт)!`, { appearance: 'success' })
-        return d;
+        toast(`Файл${files.length > 1 ? 'ы' : ''} залит${files.length > 1 ? 'ы' : ''} (${files.length} шт)!`, {
+          appearance: 'success',
+        })
+        return d
       })
       .catch((err) => {
         toast(typeof err === 'string' ? err : err?.message || 'Sorry', { appearance: 'error' })
@@ -210,23 +193,23 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
     cookies?.jwt,
   ])
   // const { isDesktop } = useWindowSize()
-  const getFirst = (files) => files.length > 0 ? files[0] : null
+  const getFirst = (files) => (files.length > 0 ? files[0] : null)
 
-  const [isFileSearching, setIsFileSearching] = useState<{[key: string]: boolean}>({})
+  const [isFileSearching, setIsFileSearching] = useState<{ [key: string]: boolean }>({})
   const handleChangeSearchingState = (thumbnailSrc: string, value: boolean) => {
     setIsFileSearching((prevState) => ({
       ...prevState,
       [thumbnailSrc]: value,
     }))
   }
-  const [isFileDeleting, setIsFileDeleting] = useState<{[key: string]: boolean}>({})
+  const [isFileDeleting, setIsFileDeleting] = useState<{ [key: string]: boolean }>({})
   const handleChangeDeletingState = (thumbnailSrc: string, value: boolean) => {
     setIsFileDeleting((prevState) => ({
       ...prevState,
       [thumbnailSrc]: value,
     }))
   }
-  const [isJoblistUpdating, setIsJoblistUpdating] = useState<{[key: string]: boolean}>({})
+  const [isJoblistUpdating, setIsJoblistUpdating] = useState<{ [key: string]: boolean }>({})
   const handleChangeJoblistUpdatingState = (thumbnailSrc: string, value: boolean) => {
     setIsJoblistUpdating((prevState) => ({
       ...prevState,
@@ -234,7 +217,9 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
     }))
   }
   const handleDeleteImage = (arg: TFormatsData): void => {
-    const { thumbnail: { hash: strapiHash, url } } = arg
+    const {
+      thumbnail: { hash: strapiHash, url },
+    } = arg
     const hash = getHash(arg)
     // TODO:
     // 1) Confirmation dialog;
@@ -244,7 +229,8 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
     // 5) PUT: httpClient.updateMedia (State will be updated by socket);
 
     handleChangeSearchingState(`${apiUrl}${url}`, true)
-    httpClient.searchFileByHash(hash, cookies?.jwt)
+    httpClient
+      .searchFileByHash(hash, cookies?.jwt)
       .then((res) => {
         handleChangeSearchingState(`${apiUrl}${url}`, false)
         toast(`${pluralize('file', res.length, true)} found: Deleting...`, { appearance: 'info' })
@@ -259,18 +245,22 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
       .then(async (fileId) => {
         // 4. DEL
         handleChangeDeletingState(`${apiUrl}${url}`, true)
-        await httpClient.deleteFile(fileId, cookies?.jwt)
+        await httpClient
+          .deleteFile(fileId, cookies?.jwt)
           .then((_file) => {
             handleChangeDeletingState(`${apiUrl}${url}`, false)
             const jobId = data._id
-            const newImagesUrls = data.imagesUrls.filter(({ thumbnail: { hash: strapiHashOld } }: TFormatsData) => strapiHashOld !== strapiHash)
+            const newImagesUrls = data.imagesUrls.filter(
+              ({ thumbnail: { hash: strapiHashOld } }: TFormatsData) => strapiHashOld !== strapiHash
+            )
             const thisJobIndex = joblist.findIndex((job: IJob) => job._id === jobId)
             const newJobList = [...joblist]
 
             // 5. PUT new state
             newJobList[thisJobIndex].imagesUrls = newImagesUrls
             handleChangeJoblistUpdatingState(`${apiUrl}${url}`, true)
-            httpClient.updateMedia(remontId, newJobList, cookies?.jwt)
+            httpClient
+              .updateMedia(remontId, newJobList, cookies?.jwt)
               .then((res) => {
                 handleChangeJoblistUpdatingState(`${apiUrl}${url}`, false)
                 console.log(res)
@@ -309,17 +299,16 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
     <LocalizationProvider dateAdapter={DateFnsAdapter} locale={ruLocale}>
       <div className={classes.paper}>
         <>
-          {
-            !!data.imagesUrls && data.imagesUrls.length > 0 && (
-              <div className={classes.galleryWrapper}>
-                {/* <div className={classes.title}><b>Фото ({data.imagesUrls.length})</b></div> */}
-                {/* <ImageGallery
+          {!!data.imagesUrls && data.imagesUrls.length > 0 && (
+            <div className={classes.galleryWrapper}>
+              {/* <div className={classes.title}><b>Фото ({data.imagesUrls.length})</b></div> */}
+              {/* <ImageGallery
                   items={data.imagesUrls.map(({ large, medium, thumbnail, small }: any) => ({
                     original: !!large ? `${apiUrl}${large.url}` : medium ? `${apiUrl}${medium.url}` : `${apiUrl}${small.url}`,
                     thumbnail: `${apiUrl}${thumbnail.url}`
                   }))}
                 /> */}
-                {/* <div className={classes.lightboxWrapper}>
+              {/* <div className={classes.lightboxWrapper}>
                   <Lightbox
                     // images={[
                     //   { src: 'some image url', title: 'image title', description: 'image description' }
@@ -333,193 +322,191 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
                     }))}
                   />
                 </div> */}
-                <SimpleReactLightbox>
-                  <div className={classes.srLWrapperLayout}>
-                    <SRLWrapper
-                      options={{
-                        settings: {
-                          // overlayColor: "rgb(25, 136, 124)",
-                        },
-                        caption: {
-                          captionAlignment: 'start',
-                          captionColor: '#FFFFFF',
-                          captionContainerPadding: '20px 0 30px 0',
-                          captionFontFamily: 'inherit',
-                          captionFontSize: 'inherit',
-                          captionFontStyle: 'inherit',
-                          captionFontWeight: 'inherit',
-                          captionTextTransform: 'inherit',
-                          showCaption: true
-                        },
-                        buttons: {
-                          showDownloadButton: false,
-                          showAutoplayButton: false,
-                          // backgroundColor: 'rgba(30,30,36,0.8)',
-                          // backgroundColor: 'rgb(25, 136, 124)',
-                          // backgroundColor: '#22577a',
-                          backgroundColor: '#f44336',
-                          iconColor: 'rgba(255, 255, 255, 1)',
-                          iconPadding: '10px',
-                        },
-                        thumbnails: {
-                          showThumbnails: true,
-                          thumbnailsAlignment: 'center',
-                          thumbnailsContainerBackgroundColor: 'transparent',
-                          thumbnailsContainerPadding: '0',
-                          thumbnailsGap: '0 1px',
-                          thumbnailsIconColor: '#ffffff',
-                          thumbnailsOpacity: 0.4,
-                          thumbnailsPosition: 'bottom',
-                          thumbnailsSize: ['100px', '80px']
-                        },
-                        progressBar:{
-                          backgroundColor: '#f2f2f2',
-                          fillColor: '#000000',
-                          height: '3px',
-                          showProgressBar: true
-                        },
-                        translations: {}, // PRO ONLY
-                        icons: {} // PRO ONLY
-                      }}
-                    >
-                      {
-                        data.imagesUrls.map((photoData: any) => {
-                          const { large, medium, thumbnail, small } = photoData
-                          const src = !!large ? `${apiUrl}${large.url}` : medium ? `${apiUrl}${medium.url}` : !!small ? `${apiUrl}${small.url}` : `${apiUrl}${thumbnail.url}`
-                          const thumbnailSrc = !!thumbnail ? `${apiUrl}${thumbnail.url}` : src
-                          return (
-                            <div className='grid-item' key={`${src}_${slugify(data.comment || 'no-comment')}`}>
-                              <a href={src} className={clsx({ ['editable']: isOwner })}>
-                                <img src={thumbnailSrc} alt={data.comment || 'No comment'} />
-                              </a>
-                              {isOwner && <div className='del-btn' onClick={() => {
+              <SimpleReactLightbox>
+                <div className={classes.srLWrapperLayout}>
+                  <SRLWrapper
+                    options={{
+                      settings: {
+                        // overlayColor: "rgb(25, 136, 124)",
+                      },
+                      caption: {
+                        captionAlignment: 'start',
+                        captionColor: '#FFFFFF',
+                        captionContainerPadding: '20px 0 30px 0',
+                        captionFontFamily: 'inherit',
+                        captionFontSize: 'inherit',
+                        captionFontStyle: 'inherit',
+                        captionFontWeight: 'inherit',
+                        captionTextTransform: 'inherit',
+                        showCaption: true,
+                      },
+                      buttons: {
+                        showDownloadButton: false,
+                        showAutoplayButton: false,
+                        // backgroundColor: 'rgba(30,30,36,0.8)',
+                        // backgroundColor: 'rgb(25, 136, 124)',
+                        // backgroundColor: '#22577a',
+                        backgroundColor: '#f44336',
+                        iconColor: 'rgba(255, 255, 255, 1)',
+                        iconPadding: '10px',
+                      },
+                      thumbnails: {
+                        showThumbnails: true,
+                        thumbnailsAlignment: 'center',
+                        thumbnailsContainerBackgroundColor: 'transparent',
+                        thumbnailsContainerPadding: '0',
+                        thumbnailsGap: '0 1px',
+                        thumbnailsIconColor: '#ffffff',
+                        thumbnailsOpacity: 0.4,
+                        thumbnailsPosition: 'bottom',
+                        thumbnailsSize: ['100px', '80px'],
+                      },
+                      progressBar: {
+                        backgroundColor: '#f2f2f2',
+                        fillColor: '#000000',
+                        height: '3px',
+                        showProgressBar: true,
+                      },
+                      translations: {}, // PRO ONLY
+                      icons: {}, // PRO ONLY
+                    }}
+                  >
+                    {data.imagesUrls.map((photoData: any) => {
+                      const { large, medium, thumbnail, small } = photoData
+                      const src = !!large
+                        ? `${apiUrl}${large.url}`
+                        : medium
+                        ? `${apiUrl}${medium.url}`
+                        : !!small
+                        ? `${apiUrl}${small.url}`
+                        : `${apiUrl}${thumbnail.url}`
+                      const thumbnailSrc = !!thumbnail ? `${apiUrl}${thumbnail.url}` : src
+                      return (
+                        <div className="grid-item" key={`${src}_${slugify(data.comment || 'no-comment')}`}>
+                          <a href={src} className={clsx({ ['editable']: isOwner })}>
+                            <img src={thumbnailSrc} alt={data.comment || 'No comment'} />
+                          </a>
+                          {isOwner && (
+                            <div
+                              className="del-btn"
+                              onClick={() => {
                                 confirmThenDelete(photoData)
-                              }}>
-                                {
-                                  (isFileSearching[thumbnailSrc] || isFileDeleting[thumbnailSrc] || isJoblistUpdating[thumbnailSrc])
-                                    ? (
-                                      isFileSearching[thumbnailSrc]
-                                      ? '❚__'
-                                      : isFileDeleting[thumbnailSrc]
-                                      ? '_❚_'
-                                      : '__❚'
-                                    )
-                                    : 'DEL'
-                                }
-                              </div>}
+                              }}
+                            >
+                              {isFileSearching[thumbnailSrc] ||
+                              isFileDeleting[thumbnailSrc] ||
+                              isJoblistUpdating[thumbnailSrc]
+                                ? isFileSearching[thumbnailSrc]
+                                  ? '❚__'
+                                  : isFileDeleting[thumbnailSrc]
+                                  ? '_❚_'
+                                  : '__❚'
+                                : 'DEL'}
                             </div>
-                          )
-                        })
-                      }
-                    </SRLWrapper>
+                          )}
+                        </div>
+                      )
+                    })}
+                  </SRLWrapper>
+                </div>
+              </SimpleReactLightbox>
+            </div>
+          )}
+          {isOwner && !(!!fileUrls && fileUrls?.length > 0) && (
+            <div className={baseClasses.standardJobInternalBox}>
+              <Collabsible
+                title="Загрузка файлов"
+                contentRenderer={() => (
+                  <div className={classes.dropZoneWrapper}>
+                    <DropzoneAreaBase
+                      // Icon={BackupIcon}
+                      filesLimit={5}
+                      maxFileSize={50 * 1024 * 1024}
+                      onAdd={handleAddFile}
+                      // onDrop={handleAdd}
+                      onDelete={handleDeleteFile}
+                      showPreviewsInDropzone={true}
+                      showAlerts={false}
+                      // onAlert={this.onDropzoneAlert}
+                      fileObjects={files}
+                      dropzoneText="Загрузите или перетащите файл в выделенную область в формате .jpg или .png"
+                      dropzoneClass="smartprice-dropzone"
+                      acceptedFiles={[
+                        // 'application/msword',
+                        'image/jpeg',
+                        'image/png',
+                        // 'image/bmp',
+                      ]}
+                    />
                   </div>
-                </SimpleReactLightbox>
-              </div>
-            )
-          }
-          {
-            isOwner && !(!!fileUrls && fileUrls?.length > 0) && (
-              <div className={baseClasses.standardJobInternalBox}>
-                <Collabsible
-                  title='Загрузка файлов'
-                  contentRenderer={() => (
-                    <div className={classes.dropZoneWrapper}>
-                      <DropzoneAreaBase
-                        // Icon={BackupIcon}
-                        filesLimit={5}
-                        maxFileSize={50 * 1024 * 1024}
-                        onAdd={handleAddFile}
-                        // onDrop={handleAdd}
-                        onDelete={handleDeleteFile}
-                        showPreviewsInDropzone={true}
-                        showAlerts={false}
-                        // onAlert={this.onDropzoneAlert}
-                        fileObjects={files}
-                        dropzoneText="Загрузите или перетащите файл в выделенную область в формате .jpg или .png"
-                        dropzoneClass="smartprice-dropzone"
-                        acceptedFiles={[
-                          // 'application/msword',
-                          'image/jpeg',
-                          'image/png',
-                          // 'image/bmp',
-                        ]}
-                      />
-                    </div>
-                  )}
-                />
-                {
-                  files.length > 0 && (
-                    <div style={{ marginTop: '16px' }}>
-                      <Button
-                        fullWidth
-                        variant="contained"
-                        color="primary"
-                        onClick={() => {
-                          handleUploadFiles()
-                            .then(res => {
-                              // console.log(res)
-                              if (Array.isArray(res)) {
-                                const formats = res.map(({ formats }) => formats)
+                )}
+              />
+              {files.length > 0 && (
+                <div style={{ marginTop: '16px' }}>
+                  <Button
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                    onClick={() => {
+                      handleUploadFiles()
+                        .then((res) => {
+                          // console.log(res)
+                          if (Array.isArray(res)) {
+                            const formats = res.map(({ formats }) => formats)
 
-                                setFiles([])
-                                handleAssignFiles(formats)
-                              }
-                            })
-                            .catch(err => {
-                              toast(err?.message || '#2 Что-то пошло не так', { appearance: 'error' })
-                            })
-                        }}
-                        disabled={isLoading}
-                        endIcon={
-                          isLoading ? (
-                            <CircularProgress
-                              size={20}
-                              color="inherit"
-                              style={{ marginLeft: 'auto' }}
-                            />
-                          ) : (
-                            <CloudUploadIcon />
-                          )
-                        }
-                      >
-                        Upload files
-                      </Button>
-                    </div>
-                  )
-                }
-              </div>
-            )
-          }
-          {
-            !!fileUrls && fileUrls?.length > 0 && (
-              <div>
-                <AssignBtn
-                  click={() => {
-                    // console.log(data)
-                    try {
-                      if (!!data.imagesUrls) {
-                        setIsLoading(true)
-                        httpClient.updateMedia(remontId, joblist, cookies?.jwt)
-                          .then(() => {
-                            setFileUrls(null)
-                            // toast('Данные сохранены', { appearance: 'success' })
-                          })
-                          .catch((err) => {
-                            console.log(err)
-                            toast('ERR', { appearance: 'error' })
-                          })
-                          .finally(() => {
-                            setIsLoading(false)
-                          })
-                      }
-                    } catch (err) {
-                      console.log(err)
-                      toast(err?.message || '#1 Что-то пошло не так', { appearance: 'error' })
+                            setFiles([])
+                            handleAssignFiles(formats)
+                          }
+                        })
+                        .catch((err) => {
+                          toast(err?.message || '#2 Что-то пошло не так', { appearance: 'error' })
+                        })
+                    }}
+                    disabled={isLoading}
+                    endIcon={
+                      isLoading ? (
+                        <CircularProgress size={20} color="inherit" style={{ marginLeft: 'auto' }} />
+                      ) : (
+                        <CloudUploadIcon />
+                      )
                     }
-                  }}
-                  isLoading={isLoading}
-                />
-                {/* <Button
+                  >
+                    Upload files
+                  </Button>
+                </div>
+              )}
+            </div>
+          )}
+          {!!fileUrls && fileUrls?.length > 0 && (
+            <div>
+              <AssignBtn
+                click={() => {
+                  // console.log(data)
+                  try {
+                    if (!!data.imagesUrls) {
+                      setIsLoading(true)
+                      httpClient
+                        .updateMedia(remontId, joblist, cookies?.jwt)
+                        .then(() => {
+                          setFileUrls(null)
+                          // toast('Данные сохранены', { appearance: 'success' })
+                        })
+                        .catch((err) => {
+                          console.log(err)
+                          toast('ERR', { appearance: 'error' })
+                        })
+                        .finally(() => {
+                          setIsLoading(false)
+                        })
+                    }
+                  } catch (err) {
+                    console.log(err)
+                    toast(err?.message || '#1 Что-то пошло не так', { appearance: 'error' })
+                  }
+                }}
+                isLoading={isLoading}
+              />
+              {/* <Button
                   fullWidth
                   variant="contained"
                   color="primary"
@@ -556,9 +543,8 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
                 >
                   Assign files
                 </Button> */}
-              </div>
-            )
-          }
+            </div>
+          )}
           {!!data.comment && (
             <div className={baseClasses.standardJobInternalBox}>
               {/* <Collabsible
@@ -576,11 +562,7 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
                   </div>
                 )}
               /> */}
-              <Typography
-                variant="body2"
-                color="textSecondary"
-                style={{ whiteSpace: 'pre-wrap' }}
-              >
+              <Typography variant="body2" color="textSecondary" style={{ whiteSpace: 'pre-wrap' }}>
                 {data.comment}
               </Typography>
             </div>
@@ -604,7 +586,7 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
 
           <div className={baseClasses.standardJobInternalBox}>
             <Collabsible
-              title='Итог'
+              title="Итог"
               contentRenderer={() => (
                 <>
                   <Typography gutterBottom variant="body2" color="textSecondary">
@@ -623,7 +605,7 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
 
           <div className={baseClasses.standardJobInternalBox}>
             <Collabsible
-              title='План'
+              title="План"
               contentRenderer={() => (
                 <>
                   <div style={{ marginBottom: '20px' }}>
@@ -666,14 +648,7 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
                       toolbarPlaceholder="Финиш"
                       value={realFinishDate}
                       onChange={(newValue) => setRealFinishDate(newValue)}
-                      renderInput={(props) => (
-                        <TextField
-                          size="small"
-                          {...props}
-                          variant="outlined"
-                          fullWidth
-                        />
-                      )}
+                      renderInput={(props) => <TextField size="small" {...props} variant="outlined" fullWidth />}
                       disabled={!isOwner}
                     />
                   </div>
@@ -687,11 +662,7 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
                         disabled={isSubmitDisabled}
                         endIcon={
                           isLoading ? (
-                            <CircularProgress
-                              size={20}
-                              color="primary"
-                              style={{ marginLeft: 'auto' }}
-                            />
+                            <CircularProgress size={20} color="primary" style={{ marginLeft: 'auto' }} />
                           ) : (
                             <SaveIcon />
                           )
@@ -706,15 +677,10 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
             />
           </div>
           {!!data.description && (
-            <div className={clsx(baseClasses.standardJobInternalBox, "job-description-markdown")}>
+            <div className={clsx(baseClasses.standardJobInternalBox, 'job-description-markdown')}>
               <Collabsible
-                title='Описание'
-                contentRenderer={() => (
-                  <Markdown
-                    source={data.description}
-                    className={classes.description}
-                  />
-                )}
+                title="Описание"
+                contentRenderer={() => <Markdown source={data.description} className={classes.description} />}
               />
             </div>
           )}

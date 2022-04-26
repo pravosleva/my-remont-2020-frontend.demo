@@ -10,22 +10,12 @@ import CountUp from 'react-countup'
 export const TotalInfo = () => {
   const { jobsLogic } = useContext(MainContext)
   const classes = useStyles()
-  const totalPriceJobs = useMemo(() => jobsLogic?.totalPriceJobs || 0, [
-    jobsLogic,
-  ])
+  const totalPriceJobs = useMemo(() => jobsLogic?.totalPriceJobs || 0, [jobsLogic])
   const totalPayed = useMemo(() => jobsLogic?.totalPayed || 0, [jobsLogic])
-  const totalMaterials = useMemo(() => jobsLogic?.totalPriceMaterials || 0, [
-    jobsLogic,
-  ])
-  const totalDelivery = useMemo(() => jobsLogic?.totalPriceDelivery || 0, [
-    jobsLogic,
-  ])
-  const totalDifferecne = useMemo(() => jobsLogic?.totalDifference || 0, [
-    jobsLogic,
-  ])
-  const comletedJobsCount = useMemo(() => jobsLogic?.comletedJobsCount, [
-    jobsLogic,
-  ])
+  const totalMaterials = useMemo(() => jobsLogic?.totalPriceMaterials || 0, [jobsLogic])
+  const totalDelivery = useMemo(() => jobsLogic?.totalPriceDelivery || 0, [jobsLogic])
+  const totalDifferecne = useMemo(() => jobsLogic?.totalDifference || 0, [jobsLogic])
+  const comletedJobsCount = useMemo(() => jobsLogic?.comletedJobsCount, [jobsLogic])
   const totalJobsCount = useMemo(() => jobsLogic?.totalJobsCount, [jobsLogic])
 
   return (
@@ -40,35 +30,17 @@ export const TotalInfo = () => {
 
         {(!!totalPriceJobs || !!totalMaterials || !!totalDelivery) && (
           <Grid className={classes.secondaryText} item>
-            {!!totalPriceJobs && (
-              <Typography>
-                Ценник за работу: {getPrettyPrice(totalPriceJobs)}
-              </Typography>
-            )}
-            {!!totalMaterials && (
-              <Typography>
-                Ценник за материалы: {getPrettyPrice(totalMaterials)}
-              </Typography>
-            )}
-            {!!totalDelivery && (
-              <Typography>
-                Ценник за доставку: {getPrettyPrice(totalDelivery)}
-              </Typography>
-            )}
+            {!!totalPriceJobs && <Typography>Ценник за работу: {getPrettyPrice(totalPriceJobs)}</Typography>}
+            {!!totalMaterials && <Typography>Ценник за материалы: {getPrettyPrice(totalMaterials)}</Typography>}
+            {!!totalDelivery && <Typography>Ценник за доставку: {getPrettyPrice(totalDelivery)}</Typography>}
           </Grid>
         )}
 
         <Grid item>
           <Typography variant="h5">
-            ИТОГО затраты: <CountUp
-              end={totalPayed}
-              duration={2}
-              separator=" "
-              redraw
-            >
-              {({ countUpRef }) => (
-                <span ref={countUpRef} />
-              )}
+            ИТОГО затраты:{' '}
+            <CountUp end={totalPayed} duration={2} separator=" " redraw>
+              {({ countUpRef }) => <span ref={countUpRef} />}
             </CountUp>
           </Typography>
         </Grid>

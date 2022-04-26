@@ -1,9 +1,4 @@
-import React, {
-  useCallback,
-  useState,
-  useEffect,
-  useMemo,
-} from 'react'
+import React, { useCallback, useState, useEffect, useMemo } from 'react'
 import { Job } from './components/Job'
 import { IJob } from '~/common/context/MainContext'
 import { IProps } from './interfaces'
@@ -102,12 +97,14 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
     filterState,
     // removeJobPromise,
     onSelectAll,
+    goStash,
+    goStashPop,
   } = useMainContext()
   const { toast } = useCustomToastContext()
   const { userData } = useUserAuthContext()
   // --
   const [expanded, setExpanded] = React.useState<string | false>(false)
-  const [getRef, setRef] =  useDynamicRefs();
+  const [getRef, setRef] = useDynamicRefs()
   const [isAbsolutePreloaderActive, setIsAbsolutePreloaderActive] = useState<boolean>(false)
   const handleChangeAccoddionItem = (panelName: string, id: string) => (
     _event: React.ChangeEvent<{}>,
@@ -116,34 +113,39 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
     // setIsAbsolutePreloaderActive(true)
     setExpanded(isExpanded ? panelName : false)
     // console.log(panelName, id)
-    if (!!id) setTimeout(() => {
-      scrollTo(getRef(id), true)
-      // setIsAbsolutePreloaderActive(false)
-    }, 100)
+    if (!!id)
+      setTimeout(() => {
+        scrollTo(getRef(id), true)
+        // setIsAbsolutePreloaderActive(false)
+      }, 100)
   }
   // --
-  const isOwner: boolean = useMemo(() => remontLogic?.isOwner(userData?.id), [
-    remontLogic,
-    userData,
-  ])
+  const isOwner: boolean = useMemo(() => remontLogic?.isOwner(userData?.id), [remontLogic, userData])
   // useEffect(() => {
   //   console.log(remontLogic?.joblist)
   // }, [JSON.stringify(remontLogic?.joblist)])
-  const joblist = useMemo(() => remontLogic?.jobsLogic?.joblist || [], [JSON.stringify(remontLogic?.jobsLogic)])
+  const joblist = useMemo(() => remontLogic?.jobsLogic?.joblist || [], [
+    JSON.stringify(remontLogic?.jobsLogic?.joblist),
+  ])
   const [openedEditorId, setOpenedEditorId] = useState<string | null>(null)
   const handleOpenEditor = useCallback(
     (id: string) => () => {
+      // NOTE: Get remont from state -> Put to state
+      goStash()
       setOpenedEditorId(id)
       setOpenedMarkdownEditorId(null)
     },
-    [setOpenedEditorId]
+    [setOpenedEditorId, goStash]
   )
   const handleCloseEditor = useCallback(() => {
     setOpenedEditorId(null)
   }, [setOpenedEditorId])
-  const [openedMarkdownEditorId, setOpenedMarkdownEditorId] = useState<
-    string | null
-  >(null)
+  const handleCancelEditor = useCallback(() => {
+    // NOTE: Get remont from stash -> Put to state
+    goStashPop()
+    setOpenedEditorId(null)
+  }, [setOpenedEditorId, goStashPop])
+  const [openedMarkdownEditorId, setOpenedMarkdownEditorId] = useState<string | null>(null)
   const handleOpenMarkdownEditor = useCallback(
     (id: string) => () => {
       setOpenedEditorId(null)
@@ -163,13 +165,10 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
     const targetJob = joblist.find(({ _id }) => _id === openedMarkdownEditorId)
     if (!!targetJob) setLocalMD(targetJob.description)
   }, [openedMarkdownEditorId, joblist])
-  const debouncedUpdateJoblist = useDebouncedCallback(
-    (openedMarkdownEditorId, text, changeJobFieldPromise) => {
-      // localMD -> joblist
-      changeJobFieldPromise(openedMarkdownEditorId, 'description', text)()
-    },
-    500
-  )
+  const debouncedUpdateJoblist = useDebouncedCallback((openedMarkdownEditorId, text, changeJobFieldPromise) => {
+    // localMD -> joblist
+    changeJobFieldPromise(openedMarkdownEditorId, 'description', text)()
+  }, 500)
   const router = useRouter()
   const handleSubmit = useCallback(() => {
     setIsLoading(true)
@@ -273,8 +272,8 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
       })
         .then((value: number) => {
           changeJobFieldPromise(id, 'priceJobs', initPrice + value)()
-            // .then(handleSubmit)
-            // .catch((msg) => { throw new Error(msg) })
+          // .then(handleSubmit)
+          // .catch((msg) => { throw new Error(msg) })
         })
         .catch((err) => {
           toast(err?.message || 'handleAddPriceJobs: Declined', {
@@ -293,8 +292,8 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
       })
         .then((value: number) => {
           changeJobFieldPromise(id, 'priceJobs', initPrice - value)()
-            // .then(handleSubmit)
-            // .catch((msg) => { throw new Error(msg) })
+          // .then(handleSubmit)
+          // .catch((msg) => { throw new Error(msg) })
         })
         .catch((err) => {
           toast(err?.message || 'handleRemovePriceJobs: Declined', {
@@ -314,8 +313,8 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
       })
         .then((value: number) => {
           changeJobFieldPromise(id, 'priceMaterials', initPrice + value)()
-            // .then(handleSubmit)
-            // .catch((msg) => { throw new Error(msg) })
+          // .then(handleSubmit)
+          // .catch((msg) => { throw new Error(msg) })
         })
         .catch((err) => {
           toast(err?.message || 'handleAddPriceMaterials: Declined', {
@@ -334,8 +333,8 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
       })
         .then((value: number) => {
           changeJobFieldPromise(id, 'priceMaterials', initPrice - value)()
-            // .then(handleSubmit)
-            // .catch((msg) => { throw new Error(msg) })
+          // .then(handleSubmit)
+          // .catch((msg) => { throw new Error(msg) })
         })
         .catch((err) => {
           toast(err?.message || 'handleRemovePriceMaterials: Declined', {
@@ -355,8 +354,8 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
       })
         .then((value: number) => {
           changeJobFieldPromise(id, 'priceDelivery', initPrice + value)()
-            // .then(handleSubmit)
-            // .catch((msg) => { throw new Error(msg) })
+          // .then(handleSubmit)
+          // .catch((msg) => { throw new Error(msg) })
         })
         .catch((err) => {
           toast(err?.message || 'handleAddPriceDelivery: Declined', {
@@ -375,8 +374,8 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
       })
         .then((value: number) => {
           changeJobFieldPromise(id, 'priceDelivery', initPrice - value)()
-            // .then(handleSubmit)
-            // .catch((msg) => { throw new Error(msg) })
+          // .then(handleSubmit)
+          // .catch((msg) => { throw new Error(msg) })
         })
         .catch((err) => {
           toast(err?.message || 'handleRemovePriceDelivery: Declined', {
@@ -396,8 +395,8 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
       })
         .then((value: number) => {
           changeJobFieldPromise(id, 'payed', initPrice + value)()
-            // .then(handleSubmit)
-            // .catch((msg) => { throw new Error(msg) })
+          // .then(handleSubmit)
+          // .catch((msg) => { throw new Error(msg) })
         })
         .catch((err) => {
           toast(err?.message || 'handleAddPayed: Declined', {
@@ -416,8 +415,8 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
       })
         .then((value: number) => {
           changeJobFieldPromise(id, 'payed', initPrice - value)()
-            // .then(handleSubmit)
-            // .catch((msg) => { throw new Error(msg) })
+          // .then(handleSubmit)
+          // .catch((msg) => { throw new Error(msg) })
         })
         .catch((err) => {
           toast(err?.message || 'handleRemovePayed: Declined', {
@@ -462,7 +461,10 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
   const handleDeleteJob = useCallback(
     (data: IJob) => {
       if (!!data.imagesUrls && data.imagesUrls?.length > 0) {
-        toast(`Сначала нужно удалить все изображения (${data.imagesUrls?.length} шт.), прикрепленные к данной работе (TODO: dev roadmap)`, { appearance: 'info' })
+        toast(
+          `Сначала нужно удалить все изображения (${data.imagesUrls?.length} шт.), прикрепленные к данной работе (TODO: dev roadmap)`,
+          { appearance: 'info' }
+        )
       } else {
         confirm({
           title: <span style={{ color: '#f44336' }}>Работа будет удалена</span>,
@@ -487,10 +489,7 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
         <>
           {isAbsolutePreloaderActive && (
             <div className={baseClasses.fixedPreloader}>
-              <CircularProgress
-                size={20}
-                color="primary"
-              />
+              <CircularProgress size={20} color="primary" />
             </div>
           )}
           {displayedJoblist.map((data, i) => (
@@ -505,7 +504,7 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                 // @ts-ignore
                 ref={setRef(data._id)}
                 TransitionProps={{
-                  timeout: 0
+                  timeout: 0,
                 }}
               >
                 <AccordionSummary
@@ -517,15 +516,20 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                     <Typography
                       className={clsx({
                         [classes.greyText]: !data.isStarted,
-                        [classes.dangerText]:
-                          data.isStarted && data.payed - (data.priceMaterials + data.priceJobs) <
-                          0,
+                        [classes.dangerText]: data.isStarted && data.payed - (data.priceMaterials + data.priceJobs) < 0,
                         [classes.successText]:
-                          data.isStarted && data.payed - (data.priceMaterials + data.priceJobs) >=
-                          0,
+                          data.isStarted && data.payed - (data.priceMaterials + data.priceJobs) >= 0,
                       })}
                     >
-                      {isOwner && <><span style={{ marginRight: '8px' }}>⚙️</span>{(data.isStarted && !data.isDone) && <span className='price'>({getPrettyPrice(getDifference(data))})</span>}</>} {data.name}
+                      {isOwner && (
+                        <>
+                          <span style={{ marginRight: '8px' }}>⚙️</span>
+                          {data.isStarted && !data.isDone && (
+                            <span className="price">({getPrettyPrice(getDifference(data))})</span>
+                          )}
+                        </>
+                      )}{' '}
+                      {data.name}
                     </Typography>
                   }
                 </AccordionSummary>
@@ -586,13 +590,8 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                   // @ts-ignore
                   TransitionComponent={TransitionUp}
                 >
-                  <DialogTitle id={`scroll-dialog-md-title_${data._id}`}>
-                    {data.name}
-                  </DialogTitle>
-                  <DialogContent
-                    dividers={true}
-                    className={classes.dialogMDContent}
-                  >
+                  <DialogTitle id={`scroll-dialog-md-title_${data._id}`}>{data.name}</DialogTitle>
+                  <DialogContent dividers={true} className={classes.dialogMDContent}>
                     <MDEditor
                       value={localMD}
                       style={{ minHeight: width > 767 ? '450px' : '300px' }}
@@ -600,11 +599,7 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                       onChange={({ text }) => {
                         // if (!!text) changeJobFieldPromise(data._id, 'description', text)()
                         setLocalMD(text)
-                        debouncedUpdateJoblist(
-                          data._id,
-                          text,
-                          changeJobFieldPromise
-                        )
+                        debouncedUpdateJoblist(data._id, text, changeJobFieldPromise)
                       }}
                       config={{
                         view: { menu: false, md: true, html: width > 767 },
@@ -637,11 +632,7 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                       disabled={isLoading}
                       endIcon={
                         isLoading ? (
-                          <CircularProgress
-                            size={20}
-                            color="primary"
-                            style={{ marginLeft: 'auto' }}
-                          />
+                          <CircularProgress size={20} color="primary" style={{ marginLeft: 'auto' }} />
                         ) : (
                           <SaveIcon />
                         )
@@ -684,12 +675,7 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                         "id": "5f7901e014e0008700d02545"
                       }
                     */}
-                    <Grid
-                      container
-                      direction="column"
-                      spacing={0}
-                      className={classes.inputsBox}
-                    >
+                    <Grid container direction="column" spacing={0} className={classes.inputsBox}>
                       <Grid item xs={12}>
                         <TextField
                           id={`name_${data._id}`}
@@ -698,14 +684,8 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                           variant="outlined"
                           value={data.name}
                           size="small"
-                          onChange={(
-                            e: React.ChangeEvent<HTMLInputElement>
-                          ) => {
-                            changeJobFieldPromise(
-                              data._id,
-                              'name',
-                              e.target.value
-                            )()
+                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                            changeJobFieldPromise(data._id, 'name', e.target.value)()
                           }}
                           fullWidth
                           disabled={isLoading}
@@ -721,14 +701,8 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                           rows={4}
                           value={data.comment}
                           size="small"
-                          onChange={(
-                            e: React.ChangeEvent<HTMLInputElement>
-                          ) => {
-                            changeJobFieldPromise(
-                              data._id,
-                              'comment',
-                              e.target.value
-                            )()
+                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                            changeJobFieldPromise(data._id, 'comment', e.target.value)()
                           }}
                           fullWidth
                           disabled={isLoading}
@@ -742,14 +716,8 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                           // variant="outlined"
                           value={data.priceJobs}
                           size="small"
-                          onChange={(
-                            e: React.ChangeEvent<HTMLInputElement>
-                          ) => {
-                            changeJobFieldPromise(
-                              data._id,
-                              'priceJobs',
-                              Number(e.target.value)
-                            )()
+                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                            changeJobFieldPromise(data._id, 'priceJobs', Number(e.target.value))()
                           }}
                           fullWidth
                           // disabled={true}
@@ -769,10 +737,7 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                         <Button
                           size="small"
                           variant="outlined"
-                          onClick={handleRemovePriceJobs(
-                            data._id,
-                            data.priceJobs
-                          )}
+                          onClick={handleRemovePriceJobs(data._id, data.priceJobs)}
                           // endIcon={<EditIcon />}
                           disabled={isLoading}
                         >
@@ -787,14 +752,8 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                           // variant="outlined"
                           value={data.priceMaterials}
                           size="small"
-                          onChange={(
-                            e: React.ChangeEvent<HTMLInputElement>
-                          ) => {
-                            changeJobFieldPromise(
-                              data._id,
-                              'priceMaterials',
-                              Number(e.target.value)
-                            )()
+                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                            changeJobFieldPromise(data._id, 'priceMaterials', Number(e.target.value))()
                           }}
                           fullWidth
                           disabled={isLoading}
@@ -804,10 +763,7 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                         <Button
                           size="small"
                           variant="outlined"
-                          onClick={handleAddPriceMaterials(
-                            data._id,
-                            data.priceMaterials
-                          )}
+                          onClick={handleAddPriceMaterials(data._id, data.priceMaterials)}
                           // endIcon={<EditIcon />}
                           disabled={isLoading}
                         >
@@ -816,10 +772,7 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                         <Button
                           size="small"
                           variant="outlined"
-                          onClick={handleRemovePriceMaterials(
-                            data._id,
-                            data.priceMaterials
-                          )}
+                          onClick={handleRemovePriceMaterials(data._id, data.priceMaterials)}
                           // endIcon={<EditIcon />}
                           disabled={isLoading}
                         >
@@ -834,14 +787,8 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                           // variant="outlined"
                           value={data.priceDelivery}
                           size="small"
-                          onChange={(
-                            e: React.ChangeEvent<HTMLInputElement>
-                          ) => {
-                            changeJobFieldPromise(
-                              data._id,
-                              'priceDelivery',
-                              Number(e.target.value)
-                            )()
+                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                            changeJobFieldPromise(data._id, 'priceDelivery', Number(e.target.value))()
                           }}
                           fullWidth
                           disabled={isLoading}
@@ -851,10 +798,7 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                         <Button
                           size="small"
                           variant="outlined"
-                          onClick={handleAddPriceDelivery(
-                            data._id,
-                            data.priceDelivery
-                          )}
+                          onClick={handleAddPriceDelivery(data._id, data.priceDelivery)}
                           // endIcon={<EditIcon />}
                           disabled={isLoading}
                         >
@@ -863,10 +807,7 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                         <Button
                           size="small"
                           variant="outlined"
-                          onClick={handleRemovePriceDelivery(
-                            data._id,
-                            data.priceDelivery
-                          )}
+                          onClick={handleRemovePriceDelivery(data._id, data.priceDelivery)}
                           // endIcon={<EditIcon />}
                           disabled={isLoading}
                         >
@@ -881,14 +822,8 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                           variant="outlined"
                           value={data.payed}
                           size="small"
-                          onChange={(
-                            e: React.ChangeEvent<HTMLInputElement>
-                          ) => {
-                            changeJobFieldPromise(
-                              data._id,
-                              'payed',
-                              Number(e.target.value)
-                            )()
+                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                            changeJobFieldPromise(data._id, 'payed', Number(e.target.value))()
                           }}
                           fullWidth
                           disabled={isLoading}
@@ -915,15 +850,9 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                         </Button>
                       </Grid>
                       <div className={classes.checkboxWrapper}>
-                        <FormControl
-                          component="fieldset"
-                          className={classes.formControl}
-                        >
+                        <FormControl component="fieldset" className={classes.formControl}>
                           <FormGroup>
-                            <FormControl
-                              component="fieldset"
-                              className={classes.formControl}
-                            >
+                            <FormControl component="fieldset" className={classes.formControl}>
                               <FormGroup>
                                 <FormControlLabel
                                   control={
@@ -931,14 +860,8 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                                       disabled={isLoading}
                                       color="primary"
                                       checked={data.isStarted}
-                                      onChange={(
-                                        e: React.ChangeEvent<HTMLInputElement>
-                                      ) => {
-                                        changeJobFieldPromise(
-                                          data._id,
-                                          'isStarted',
-                                          e.target.checked
-                                        )()
+                                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                        changeJobFieldPromise(data._id, 'isStarted', e.target.checked)()
                                           .then(() => {
                                             onSelectAll()
                                           })
@@ -959,14 +882,8 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                                   disabled={isLoading}
                                   color="primary"
                                   checked={data.isDone}
-                                  onChange={(
-                                    e: React.ChangeEvent<HTMLInputElement>
-                                  ) => {
-                                    changeJobFieldPromise(
-                                      data._id,
-                                      'isDone',
-                                      e.target.checked
-                                    )()
+                                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                    changeJobFieldPromise(data._id, 'isDone', e.target.checked)()
                                       .then(() => {
                                         onSelectAll()
                                       })
@@ -984,26 +901,17 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                       </div>
                       <h3
                         className={clsx({
-                          [classes.dangerText]:
-                            data.payed -
-                              (data.priceMaterials + data.priceJobs) <
-                            0,
-                          [classes.successText]:
-                            data.payed -
-                              (data.priceMaterials + data.priceJobs) >=
-                            0,
+                          [classes.dangerText]: data.payed - (data.priceMaterials + data.priceJobs) < 0,
+                          [classes.successText]: data.payed - (data.priceMaterials + data.priceJobs) >= 0,
                         })}
                       >
-                        Остаток:{' '}
-                        {getPrettyPrice(
-                          data.payed - (data.priceMaterials + data.priceJobs)
-                        )}
+                        Остаток: {getPrettyPrice(data.payed - (data.priceMaterials + data.priceJobs))}
                       </h3>
                     </Grid>
                   </DialogContent>
                   <DialogActions>
                     <Button
-                      onClick={handleCloseEditor}
+                      onClick={handleCancelEditor}
                       size="small"
                       variant="outlined"
                       color="secondary"
@@ -1020,11 +928,7 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                       disabled={isLoading}
                       endIcon={
                         isLoading ? (
-                          <CircularProgress
-                            size={20}
-                            color="primary"
-                            style={{ marginLeft: 'auto' }}
-                          />
+                          <CircularProgress size={20} color="primary" style={{ marginLeft: 'auto' }} />
                         ) : (
                           <SaveIcon />
                         )

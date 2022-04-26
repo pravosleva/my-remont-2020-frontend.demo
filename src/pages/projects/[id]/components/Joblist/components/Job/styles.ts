@@ -6,7 +6,7 @@ export const useStyles = makeStyles((theme) => ({
   // Gallery 1: Lightbox
   lightboxWrapper: {
     marginTop: '10px',
-    "& > .lightbox-container > img": {
+    '& > .lightbox-container > img': {
       margin: '0 0 8px 0',
       objectFit: 'cover',
     },

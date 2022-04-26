@@ -59,7 +59,7 @@ export const UserAuthConxtext = createContext<TUserAuthContext>({
   isUserDataLoading: false,
   isUserDataLoaded: false,
   isUserLogged: false,
-  isUserAdmin: false
+  isUserAdmin: false,
 })
 
 export const UserAuthContextProvider: React.FC<any> = ({ children }: any) => {
@@ -95,7 +95,8 @@ export const UserAuthContextProvider: React.FC<any> = ({ children }: any) => {
     if (pathname !== '/auth/login') {
       setIsUserDataLoading(true)
       setIsUserDataLoaded(false)
-      httpClient.getMe(jwt, { on401: handleLogout })
+      httpClient
+        .getMe(jwt, { on401: handleLogout })
         .then((originalUserData: any) => {
           handleSetUserData(originalUserData)
         })

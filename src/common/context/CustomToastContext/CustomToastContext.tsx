@@ -11,15 +11,11 @@ import {
 import ReactNotification from 'react-notifications-component'
 import { useWindowSize } from '~/common/hooks'
 
-
 type TOpts = {
   appearance: 'success' | 'error' | 'info' | 'warning'
 }
 type TCustomToastContext = {
-  toast: (
-    msg: string,
-    opts: TOpts
-  ) => void
+  toast: (msg: string, opts: TOpts) => void
 }
 
 // const CustomToastContext = createContext<TCustomToastContext>({
@@ -72,16 +68,14 @@ export const NotifsContextProvider = ({ children }: any) => {
 
     addDefaultNotif({
       // title,
-      type: opts.appearance === 'error' ? 'danger'  : opts.appearance,
+      type: opts.appearance === 'error' ? 'danger' : opts.appearance,
       message: msg,
       // dismiss: { duration: 10000 },
     })
   }
 
   return (
-    <NotifsContext.Provider
-      value={{ toast }}
-    >
+    <NotifsContext.Provider value={{ toast }}>
       <>
         <ReactNotification isMobile={isMobile} />
         {children}

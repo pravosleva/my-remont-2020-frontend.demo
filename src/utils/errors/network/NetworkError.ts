@@ -10,8 +10,6 @@ export class NetworkError extends UniversalError {
   }
 
   getErrorMsg(): string {
-    return `${this.getReadableCamelCase(this.name)}${
-      !!this.message ? `: ${this.message}` : ''
-    }`
+    return `${this.getReadableCamelCase(this.name)}${!!this.message ? `: ${this.message}` : ''}`
   }
 }

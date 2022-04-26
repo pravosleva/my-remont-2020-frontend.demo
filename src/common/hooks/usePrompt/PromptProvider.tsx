@@ -1,12 +1,6 @@
 /* eslint-disable */
 
-import React, {
-  useState,
-  useCallback,
-  Fragment,
-  useMemo,
-  useEffect,
-} from 'react'
+import React, { useState, useCallback, Fragment, useMemo, useEffect } from 'react'
 import { PromptContext } from './PromptContext'
 import { PromptDialog } from './PromptDialog'
 
@@ -27,13 +21,11 @@ const buildOptions = (defaultOptions, options) => {
     ...(options.dialogProps || {}),
   }
   const confirmationButtonProps = {
-    ...(defaultOptions.confirmationButtonProps ||
-      DEFAULT_OPTIONS.confirmationButtonProps),
+    ...(defaultOptions.confirmationButtonProps || DEFAULT_OPTIONS.confirmationButtonProps),
     ...(options.confirmationButtonProps || {}),
   }
   const cancellationButtonProps = {
-    ...(defaultOptions.cancellationButtonProps ||
-      DEFAULT_OPTIONS.cancellationButtonProps),
+    ...(defaultOptions.cancellationButtonProps || DEFAULT_OPTIONS.cancellationButtonProps),
     ...(options.cancellationButtonProps || {}),
   }
 
@@ -63,19 +55,10 @@ export const PromptProvider: React.FC<any> = ({ children, defaultOptions = {} })
         setResolveReject([resolve, reject])
       })
     },
-    [
-      setResolveReject,
-      resolve,
-      reject,
-      setOptions,
-      buildOptions,
-      defaultOptions,
-    ]
+    [setResolveReject, resolve, reject, setOptions, buildOptions, defaultOptions]
   )
 
-  const defaultValue = useMemo(() => (options.type === 'number' ? '': ''), [
-    options.type,
-  ])
+  const defaultValue = useMemo(() => (options.type === 'number' ? '' : ''), [options.type])
   const [value, setValue] = useState<string | number>(defaultValue)
   // --- Derty hack
   useEffect(() => {

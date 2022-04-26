@@ -1,8 +1,5 @@
 import red from '@material-ui/core/colors/red'
-import {
-  createMuiTheme,
-  withStyles,
-} from '@material-ui/core/styles'
+import { createMuiTheme, withStyles } from '@material-ui/core/styles'
 // import { Breakpoint } from '@material-ui/core/styles/createBreakpoints'
 // See also: https://material-ui.com/guides/typescript/#customization-of-theme
 
@@ -49,7 +46,11 @@ export const defaultTheme = {
   },
 }
 
-export const { breakpoints: { values: { md } } } = defaultTheme
+export const {
+  breakpoints: {
+    values: { md },
+  },
+} = defaultTheme
 
 export const GlobalCss = withStyles((theme) => ({
   // @global is handled by jss-plugin-global.

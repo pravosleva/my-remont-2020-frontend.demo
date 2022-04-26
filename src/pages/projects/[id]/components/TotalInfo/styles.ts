@@ -21,7 +21,7 @@ export const useStyles = makeStyles((theme) => ({
   },
   infoText: {
     // color: indigo[500],
-    color: theme.palette.primary.main
+    color: theme.palette.primary.main,
   },
   secondaryText: {
     color: grey[500],

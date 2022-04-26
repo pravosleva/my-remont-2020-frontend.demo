@@ -1,8 +1,7 @@
 process.env.NODE_ENV = 'production'
 
 const webpack = require('webpack')
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
-  .BundleAnalyzerPlugin
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 const webpackConfigProd = require('../config/webpack.config')('production')
 
 // this one is optional, just for better feedback on build
@@ -27,9 +26,7 @@ webpackConfigProd.plugins.push(
 // and decide that compilation is kind of hang up on you; progress bar shows nice progression of webpack compilation
 webpackConfigProd.plugins.push(
   new ProgressBarPlugin({
-    format: `${green('analyzing...')} ${green('[:bar]')}${green(
-      '[:percent]'
-    )}${green('[:elapsed seconds]')} - :msg`,
+    format: `${green('analyzing...')} ${green('[:bar]')}${green('[:percent]')}${green('[:elapsed seconds]')} - :msg`,
   })
 )
 

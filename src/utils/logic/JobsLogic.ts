@@ -1,8 +1,8 @@
 import { IJob } from '~/common/context/MainContext'
 
 export class JobsLogic extends Object {
-  joblist: any
-  constructor(joblist) {
+  joblist: IJob[]
+  constructor(joblist: IJob[]) {
     super()
     this.joblist = joblist
 
@@ -67,15 +67,11 @@ export class JobsLogic extends Object {
     const totalPriceDelivery = this.totalPriceDelivery
     const totalPayed = this.totalPayed
 
-    return (
-      totalPayed - (totalPriceJobs + totalPriceMaterials + totalPriceDelivery)
-    )
+    return totalPayed - (totalPriceJobs + totalPriceMaterials + totalPriceDelivery)
   }
 
   getDifference(data: IJob): number {
-    return (
-      data.payed - (data.priceMaterials + data.priceJobs + data.priceDelivery)
-    )
+    return data.payed - (data.priceMaterials + data.priceJobs + data.priceDelivery)
   }
 
   get comletedJobsCount(): number {

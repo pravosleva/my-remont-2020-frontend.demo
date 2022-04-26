@@ -1,27 +1,25 @@
 import React from 'react'
-import { withStyles, WithStyles } from '@material-ui/core/styles';
-import { Styles } from '@material-ui/core/styles/withStyles';
-import Button from '@material-ui/core/Button';
-import { EPartnerCode } from '~/common/mui/styled-partner/interfaces';
+import { withStyles, WithStyles } from '@material-ui/core/styles'
+import { Styles } from '@material-ui/core/styles/withStyles'
+import Button from '@material-ui/core/Button'
+import { EPartnerCode } from '~/common/mui/styled-partner/interfaces'
 
 interface IStyles {
-  partnerCode: EPartnerCode;
-  children: React.ReactNode;
-  [key: string]: any;
+  partnerCode: EPartnerCode
+  children: React.ReactNode
+  [key: string]: any
 }
 interface IColorsMapping {
-  default: string | number;
-  red: string | number;
-  [key: string]: any;
+  default: string | number
+  red: string | number
+  [key: string]: any
 }
 interface IButtonStyles extends WithStyles<Styles<any, any, any>> {
-  partnerCode: EPartnerCode;
+  partnerCode: EPartnerCode
 }
 
 // Like https://github.com/brunobertolini/styled-by
-const styledBy = (property: string, mapping: IColorsMapping) => (
-  props: IStyles
-) => mapping[props[property]];
+const styledBy = (property: string, mapping: IColorsMapping) => (props: IStyles) => mapping[props[property]]
 
 const styles = {
   root: {
@@ -182,11 +180,8 @@ const styles = {
       }),
     },
   },
-};
+}
 
-
-export const ThemedButton = withStyles(
-  styles
-)(({ classes, partnerCode, ...other }: IButtonStyles) => (
+export const ThemedButton = withStyles(styles)(({ classes, partnerCode, ...other }: IButtonStyles) => (
   <Button className={classes.root} {...other} />
-));
+))

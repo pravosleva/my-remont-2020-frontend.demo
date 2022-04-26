@@ -7,13 +7,7 @@ import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import TextField from '@material-ui/core/TextField'
 
-export const PromptDialog = ({
-  open,
-  options,
-  onCancel,
-  onConfirm,
-  onClose,
-}) => {
+export const PromptDialog = ({ open, options, onCancel, onConfirm, onClose }) => {
   const {
     title,
     description,
@@ -44,18 +38,10 @@ export const PromptDialog = ({
         />
       </DialogContent>
       <DialogActions>
-        <Button
-          {...cancellationButtonProps}
-          onClick={onCancel}
-          color="secondary"
-        >
+        <Button {...cancellationButtonProps} onClick={onCancel} color="secondary">
           {cancellationText}
         </Button>
-        <Button
-          color="primary"
-          {...confirmationButtonProps}
-          onClick={onConfirm}
-        >
+        <Button color="primary" {...confirmationButtonProps} onClick={onConfirm}>
           {confirmationText}
         </Button>
       </DialogActions>

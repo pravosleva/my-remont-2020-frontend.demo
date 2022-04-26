@@ -13,7 +13,8 @@ export const UploadsCleanup = () => {
   useEffect(() => {
     setLoading(true)
 
-    httpClient.getUploadsReport()
+    httpClient
+      .getUploadsReport()
       .then((data) => {
         setLoaded(true)
         setData(data)
@@ -27,26 +28,31 @@ export const UploadsCleanup = () => {
       })
   }, [])
 
-  const MemoizedContent = useMemo(() => (
-    <>
-      {
-        !!data && Object.keys(data).map((key) => {
-          const { title, description, ...rest } = data[key]
+  const MemoizedContent = useMemo(
+    () => (
+      <>
+        {!!data &&
+          Object.keys(data).map((key) => {
+            const { title, description, ...rest } = data[key]
 
-          return (
-            <div key={key}>
-              <h3>{title}</h3>
-              <blockquote>{description}</blockquote>
-              <ReactJson src={{ ...rest }} collapsed />
-            </div>
-          )
-        })
-      }
-    </>
-  ), [data])
+            return (
+              <div key={key}>
+                <h3>{title}</h3>
+                <blockquote>{description}</blockquote>
+                <ReactJson src={{ ...rest }} collapsed />
+              </div>
+            )
+          })}
+      </>
+    ),
+    [data]
+  )
 
   if (loading) return <div>Lodaing...</div>
-  if (!!err) return <div>ERR: {typeof err === 'string' ? err : err.message || `Cant get error.message, error is ${typeof err}`}</div>
+  if (!!err)
+    return (
+      <div>ERR: {typeof err === 'string' ? err : err.message || `Cant get error.message, error is ${typeof err}`}</div>
+    )
 
   return MemoizedContent
 }

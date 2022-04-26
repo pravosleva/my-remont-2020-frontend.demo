@@ -24,8 +24,7 @@ import { validShape } from './yup'
 import { ResponsiveBlock } from '~/common/mui/ResponsiveBlock'
 
 const apiUrl = getApiUrl()
-const REACT_APP_COOKIE_MAXAGE_IN_DAYS = process.env
-  .REACT_APP_COOKIE_MAXAGE_IN_DAYS
+const REACT_APP_COOKIE_MAXAGE_IN_DAYS = process.env.REACT_APP_COOKIE_MAXAGE_IN_DAYS
   ? parseInt(process.env.REACT_APP_COOKIE_MAXAGE_IN_DAYS)
   : 1
 
@@ -40,44 +39,47 @@ export const Login = () => {
   const [, setCookie] = useCookies(['jwt'])
   const { toast } = useCustomToastContext()
   const { isUserDataLoading, setUserData } = useUserAuthContext()
-  const handleSubmit = useCallback(({ email, password }: IValues) => {
-    const normalizedObj = getNormalizedInputs({ email, password })
-    // const body = new FormData()
+  const handleSubmit = useCallback(
+    ({ email, password }: IValues) => {
+      const normalizedObj = getNormalizedInputs({ email, password })
+      // const body = new FormData()
 
-    // // @ts-ignore
-    // body.append('identifier', normalizedObj.identifier)
-    // // @ts-ignore
-    // body.append('password', normalizedObj.password)
+      // // @ts-ignore
+      // body.append('identifier', normalizedObj.identifier)
+      // // @ts-ignore
+      // body.append('password', normalizedObj.password)
 
-    return window
-      .fetch(`${apiUrl}/auth/local`, {
-        method: 'POST',
-        mode: 'cors',
-        headers: {
-          // 'Access-Control-Allow-Origin': '*',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(normalizedObj),
-      })
-      .then(httpErrorHandler) // res -> res.json()
-      .then((data) => {
-        console.log(data)
-        if (!!data.jwt && !!data.user) {
-          setCookie('jwt', data.jwt, {
-            maxAge: REACT_APP_COOKIE_MAXAGE_IN_DAYS * 24 * 60 * 60,
-          })
-          setUserData(data.user)
+      return window
+        .fetch(`${apiUrl}/auth/local`, {
+          method: 'POST',
+          mode: 'cors',
+          headers: {
+            // 'Access-Control-Allow-Origin': '*',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(normalizedObj),
+        })
+        .then(httpErrorHandler) // res -> res.json()
+        .then((data) => {
+          console.log(data)
+          if (!!data.jwt && !!data.user) {
+            setCookie('jwt', data.jwt, {
+              maxAge: REACT_APP_COOKIE_MAXAGE_IN_DAYS * 24 * 60 * 60,
+            })
+            setUserData(data.user)
 
-          return Promise.resolve(data.user.username)
-        }
-        throw new Error('Fuckup')
-      })
+            return Promise.resolve(data.user.username)
+          }
+          throw new Error('Fuckup')
+        })
 
-      .catch((err) => {
-        console.log(err.message)
-        return Promise.reject(err.message || 'Errored')
-      })
-  }, [setUserData])
+        .catch((err) => {
+          console.log(err.message)
+          return Promise.reject(err.message || 'Errored')
+        })
+    },
+    [setUserData]
+  )
 
   return (
     <ResponsiveBlock isLimited>
@@ -158,28 +160,25 @@ export const Login = () => {
                     onKeyDown={(e: any) => {
                       if (e.keyCode === 13) {
                         // Enter pressed!
-                        e.preventDefault();
-                        if (!(!isValid ||
-                          isSubmitting ||
-                          Object.keys(touched).length === 0 ||
-                          isUserDataLoading)) {
-                            handleSubmit(values)
-                              .then((msg: string) => {
-                                setSubmitting(false)
-                                toast(`Hello, ${msg}`, { appearance: 'success' })
+                        e.preventDefault()
+                        if (!(!isValid || isSubmitting || Object.keys(touched).length === 0 || isUserDataLoading)) {
+                          handleSubmit(values)
+                            .then((msg: string) => {
+                              setSubmitting(false)
+                              toast(`Hello, ${msg}`, { appearance: 'success' })
+                              // @ts-ignore
+                              if (!!router.query?.from) {
                                 // @ts-ignore
-                                if (!!router.query?.from) {
-                                  // @ts-ignore
-                                  router.history.push(decodeURIComponent(router.query?.from))
-                                } else {
-                                  router.history.push('/projects')
-                                }
-                              })
-                              .catch((msg: string) => {
-                                setSubmitting(false)
-                                toast(msg || 'Errored', { appearance: 'error' })
-                              })
-                          }
+                                router.history.push(decodeURIComponent(router.query?.from))
+                              } else {
+                                router.history.push('/projects')
+                              }
+                            })
+                            .catch((msg: string) => {
+                              setSubmitting(false)
+                              toast(msg || 'Errored', { appearance: 'error' })
+                            })
+                        }
                       }
                     }}
                   />
@@ -188,23 +187,14 @@ export const Login = () => {
                   ) */}
                   <div>
                     <Button
-                      disabled={
-                        !isValid ||
-                        isSubmitting ||
-                        Object.keys(touched).length === 0 ||
-                        isUserDataLoading
-                      }
-                      variant={isSubmitting || isUserDataLoading ? "outlined" : "contained"}
+                      disabled={!isValid || isSubmitting || Object.keys(touched).length === 0 || isUserDataLoading}
+                      variant={isSubmitting || isUserDataLoading ? 'outlined' : 'contained'}
                       color="primary"
                       onClick={submitForm}
                       fullWidth
                       endIcon={
                         (isSubmitting || isUserDataLoading) && (
-                          <CircularProgress
-                            size={20}
-                            color="inherit"
-                            style={{ marginLeft: 'auto' }}
-                          />
+                          <CircularProgress size={20} color="inherit" style={{ marginLeft: 'auto' }} />
                         )
                       }
                     >

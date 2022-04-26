@@ -18,13 +18,15 @@ export const BreadCrumbs = () => {
   } = router
 
   return (
-    <Container maxWidth='md'>
+    <Container maxWidth="md">
       <div className={classes.wrapper}>
         {/* RIGHT SIDE */}
 
         {pathname === '/' && (
           <div className={classes.rightSide}>
-            <Link to="/" className={classes.muted}>Главная</Link>
+            <Link to="/" className={classes.muted}>
+              Главная
+            </Link>
           </div>
         )}
         {(pathname === '/projects' || pathname === '/projects/') && (
@@ -40,9 +42,7 @@ export const BreadCrumbs = () => {
             <span className={classes.muted}>/</span>
             <Link to="/projects">Проекты</Link>
             <span className={classes.muted}>/</span>
-            {!remontLogic?.name && (
-              <span className={classes.muted}>Please wait...</span>
-            )}
+            {!remontLogic?.name && <span className={classes.muted}>Please wait...</span>}
             {!!remontLogic?.name && (
               <span style={{ whiteSpace: 'nowrap' }} className={classes.muted}>
                 {remontLogic.name.length <= 35 ? remontLogic.name : `${remontLogic.name.slice(0, 34)}...`}

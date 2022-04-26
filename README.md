@@ -106,7 +106,7 @@ REACT_APP_COOKIE_MAXAGE_IN_DAYS=5
 
 > NOTE: Check `./.env.production.local`!
 
-### `deploy-app init`
+### WAY 1: `deploy-app init`
 
 ```json
 {

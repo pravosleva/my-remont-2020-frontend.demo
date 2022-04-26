@@ -41,11 +41,7 @@ interface IMainContext {
   // isUserDataLoading: boolean
   // isUserDataLoaded: boolean
   // setUserData: (uData: IUserData | null, jwt?: string) => void
-  changeJobFieldPromise: (
-    id: string,
-    fieldName: string,
-    value: number | boolean | string | any[]
-  ) => () => Promise<any>
+  changeJobFieldPromise: (id: string, fieldName: string, value: number | boolean | string | any[]) => () => Promise<any>
   // updateJoblist: (joblist: IJob[]) => void
   jobsLogic: JobsLogic | null
   remontLogic: RemontLogic | null
@@ -61,6 +57,8 @@ interface IMainContext {
   onSelectInProgress: () => void
   axiosRemoteGraphQL: any | null
   removeJobPromise: (id: string) => Promise<any>
+  goStash: () => void
+  goStashPop: () => void
 }
 
 export const MainContext = createContext<IMainContext>({
@@ -105,8 +103,14 @@ export const MainContext = createContext<IMainContext>({
     throw new Error('onSelectInProgress method should be implemented')
   },
   axiosRemoteGraphQL: null,
-  removeJobPromise: (id: string) => {
+  removeJobPromise: (_id: string) => {
     throw new Error('removeJobPromise method should be implemented')
+  },
+  goStash: () => {
+    throw new Error('goStash method should be implemented')
+  },
+  goStashPop: () => {
+    throw new Error('goStashPop method should be implemented')
   },
 })
 
