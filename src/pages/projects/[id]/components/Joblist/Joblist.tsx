@@ -22,6 +22,7 @@ import {
   withStyles,
   Typography,
   Grid,
+  Chip,
 } from '@material-ui/core'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { useStyles } from './styles'
@@ -49,6 +50,8 @@ import { getDifference } from '~/utils/getDifference'
 import Icon from '@mdi/react'
 import { mdiDelete } from '@mdi/js'
 import { useBaseStyles } from '~/common/mui/baseStyles'
+import { mdiPlus, mdiMinus } from '@mdi/js'
+import { green } from '@material-ui/core/colors'
 
 // NOTE: See also: Настраиваемый аккордеон
 // https://material-ui.com/ru/components/accordion/#customized-accordions
@@ -517,18 +520,25 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                       className={clsx({
                         [classes.greyText]: !data.isStarted,
                         [classes.dangerText]: data.isStarted && data.payed - (data.priceMaterials + data.priceJobs) < 0,
-                        [classes.successText]:
+                        [classes.defaultText]:
                           data.isStarted && data.payed - (data.priceMaterials + data.priceJobs) >= 0,
                       })}
                     >
-                      {isOwner && (
+                      {isOwner && data.payed - (data.priceMaterials + data.priceJobs) !== 0 && (
                         <>
-                          <span style={{ marginRight: '8px' }}>⚙️</span>
+                          {/* <span style={{ marginRight: '8px' }}>⚙️</span> */}
+                          {/* <span className="price">({getPrettyPrice(getDifference(data))})</span> */}
                           {data.isStarted && !data.isDone && (
-                            <span className="price">({getPrettyPrice(getDifference(data))})</span>
+                            <Chip
+                              size='small'
+                              label={`${data.payed - (data.priceMaterials + data.priceJobs) > 0 ? '+' : ''}${getPrettyPrice(getDifference(data))}`}
+                              color={data.payed - (data.priceMaterials + data.priceJobs) >= 0 ? 'default' : 'secondary'}
+                              className='price'
+                            />
                           )}
+                          &nbsp;&nbsp;
                         </>
-                      )}{' '}
+                      )}
                       {data.name}
                     </Typography>
                   }
@@ -565,7 +575,7 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                         onClick={handleOpenMarkdownEditor(data._id)}
                         endIcon={<EditIcon />}
                       >
-                        Edit md
+                        Описание
                       </Button>
                       <Button
                         size="small"
@@ -573,7 +583,7 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                         onClick={handleOpenEditor(data._id)}
                         endIcon={<EditIcon />}
                       >
-                        Edit values
+                        Бабки
                       </Button>
                     </AccordionActions>
                   </>
@@ -675,7 +685,7 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                         "id": "5f7901e014e0008700d02545"
                       }
                     */}
-                    <Grid container direction="column" spacing={0} className={classes.inputsBox}>
+                    <Grid container direction="column" spacing={2} className={classes.inputsBox}>
                       <Grid item xs={12}>
                         <TextField
                           id={`name_${data._id}`}
@@ -693,23 +703,6 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                       </Grid>
                       <Grid item xs={12}>
                         <TextField
-                          id={`comment_${data._id}`}
-                          label="Комментарий"
-                          type="text"
-                          variant="outlined"
-                          multiline
-                          rows={4}
-                          value={data.comment}
-                          size="small"
-                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                            changeJobFieldPromise(data._id, 'comment', e.target.value)()
-                          }}
-                          fullWidth
-                          disabled={isLoading}
-                        />
-                      </Grid>
-                      <Grid item xs={12} style={{ marginBottom: '10px' }}>
-                        <TextField
                           id={`priceJobs_${data._id}`}
                           label="Ценник за работу"
                           type="number"
@@ -720,8 +713,8 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                             changeJobFieldPromise(data._id, 'priceJobs', Number(e.target.value))()
                           }}
                           fullWidth
-                          // disabled={true}
-                          disabled={isLoading}
+                          disabled={true}
+                          // disabled={isLoading}
                         />
                       </Grid>
                       <Grid item className={classes.buttonsWrapper}>
@@ -732,7 +725,7 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                           // endIcon={<EditIcon />}
                           disabled={isLoading}
                         >
-                          Добавить сумму
+                          <Icon path={mdiPlus} size={0.8} />
                         </Button>
                         <Button
                           size="small"
@@ -741,10 +734,10 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                           // endIcon={<EditIcon />}
                           disabled={isLoading}
                         >
-                          Вычесть сумму
+                          <Icon path={mdiMinus} size={0.8} />
                         </Button>
                       </Grid>
-                      <Grid item xs={12} style={{ marginBottom: '10px' }}>
+                      <Grid item xs={12}>
                         <TextField
                           id={`priceMaterials_${data._id}`}
                           label="Ценник за материалы"
@@ -756,7 +749,8 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                             changeJobFieldPromise(data._id, 'priceMaterials', Number(e.target.value))()
                           }}
                           fullWidth
-                          disabled={isLoading}
+                          disabled={true}
+                          // disabled={isLoading}
                         />
                       </Grid>
                       <Grid item className={classes.buttonsWrapper}>
@@ -767,7 +761,7 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                           // endIcon={<EditIcon />}
                           disabled={isLoading}
                         >
-                          Добавить сумму
+                          <Icon path={mdiPlus} size={0.8} />
                         </Button>
                         <Button
                           size="small"
@@ -776,10 +770,10 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                           // endIcon={<EditIcon />}
                           disabled={isLoading}
                         >
-                          Вычесть сумму
+                          <Icon path={mdiMinus} size={0.8} />
                         </Button>
                       </Grid>
-                      <Grid item xs={12} style={{ marginBottom: '10px' }}>
+                      <Grid item xs={12}>
                         <TextField
                           id={`priceDelivery_${data._id}`}
                           label="Ценник за доставку"
@@ -791,7 +785,8 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                             changeJobFieldPromise(data._id, 'priceDelivery', Number(e.target.value))()
                           }}
                           fullWidth
-                          disabled={isLoading}
+                          disabled={true}
+                          // disabled={isLoading}
                         />
                       </Grid>
                       <Grid item className={classes.buttonsWrapper}>
@@ -802,7 +797,7 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                           // endIcon={<EditIcon />}
                           disabled={isLoading}
                         >
-                          Добавить сумму
+                          <Icon path={mdiPlus} size={0.8} />
                         </Button>
                         <Button
                           size="small"
@@ -811,22 +806,23 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                           // endIcon={<EditIcon />}
                           disabled={isLoading}
                         >
-                          Вычесть сумму
+                          <Icon path={mdiMinus} size={0.8} />
                         </Button>
                       </Grid>
-                      <Grid item xs={12} style={{ marginBottom: '10px' }}>
+                      <Grid item>
                         <TextField
                           id={`payed_${data._id}`}
                           label="Оплачено"
                           type="number"
-                          variant="outlined"
+                          // variant="outlined"
                           value={data.payed}
                           size="small"
                           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                             changeJobFieldPromise(data._id, 'payed', Number(e.target.value))()
                           }}
                           fullWidth
-                          disabled={isLoading}
+                          disabled={true}
+                          // disabled={isLoading}
                         />
                       </Grid>
                       <Grid item className={classes.buttonsWrapper}>
@@ -837,7 +833,7 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                           onClick={handleAddPayed(data._id, data.payed)}
                           // endIcon={<EditIcon />}
                         >
-                          Добавить сумму
+                          <Icon path={mdiPlus} size={0.8} />
                         </Button>
                         <Button
                           disabled={isLoading}
@@ -846,7 +842,7 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                           onClick={handleRemovePayed(data._id, data.payed)}
                           // endIcon={<EditIcon />}
                         >
-                          Вычесть сумму
+                          <Icon path={mdiMinus} size={0.8} />
                         </Button>
                       </Grid>
                       <div className={classes.checkboxWrapper}>
@@ -899,17 +895,40 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                           </FormGroup>
                         </FormControl>
                       </div>
-                      <h3
-                        className={clsx({
-                          [classes.dangerText]: data.payed - (data.priceMaterials + data.priceJobs) < 0,
-                          [classes.successText]: data.payed - (data.priceMaterials + data.priceJobs) >= 0,
-                        })}
-                      >
-                        Остаток: {getPrettyPrice(data.payed - (data.priceMaterials + data.priceJobs))}
-                      </h3>
+
+                      <Grid item xs={12}>
+                        <TextField
+                          id={`comment_${data._id}`}
+                          label="Комментарий"
+                          type="text"
+                          variant="outlined"
+                          multiline
+                          rows={4}
+                          value={data.comment}
+                          size="small"
+                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                            changeJobFieldPromise(data._id, 'comment', e.target.value)()
+                          }}
+                          fullWidth
+                          disabled={isLoading}
+                        />
+                      </Grid>
                     </Grid>
                   </DialogContent>
-                  <DialogActions>
+                  <DialogActions
+                    className={classes.dialogActionsWrapper}
+                  >
+                    <h4
+                      style={{
+                        marginRight: 'auto',
+                      }}
+                      className={clsx({
+                        [classes.dangerText]: data.payed - (data.priceMaterials + data.priceJobs) < 0,
+                        [classes.successText]: data.payed - (data.priceMaterials + data.priceJobs) >= 0,
+                      })}
+                    >
+                      {getPrettyPrice(data.payed - (data.priceMaterials + data.priceJobs))}
+                    </h4>
                     <Button
                       onClick={handleCancelEditor}
                       size="small"

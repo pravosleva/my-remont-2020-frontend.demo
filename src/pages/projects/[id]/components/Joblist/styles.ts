@@ -27,6 +27,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     checkbox: {
       '& .price': {
         whiteSpace: 'nowrap',
+        // marginRight: theme.spacing(3),
       },
     },
     // jobTitle: { margin: theme.spacing(0) },
@@ -48,18 +49,21 @@ export const useStyles = makeStyles((theme: Theme) =>
       opacity: '0.4',
     },
     inputsBox: {
-      display: 'flex',
-      flexDirection: 'column',
-      '& > div:not(:last-child)': {
-        marginBottom: theme.spacing(2),
-      },
+      // display: 'flex',
+      // flexDirection: 'column',
+      // '& > div:not(:last-child)': {
+      //   marginBottom: theme.spacing(2),
+      // },
     },
     // Checkbox:
     checkboxWrapper: {
-      marginTop: theme.spacing(1),
+      paddingTop: theme.spacing(1),
+      paddingLeft: theme.spacing(1),
+      paddingRight: theme.spacing(1),
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'center',
+      marginBottom: '20px',
     },
     formControl: {
       // marginTop: theme.spacing(1),
@@ -72,20 +76,26 @@ export const useStyles = makeStyles((theme: Theme) =>
       color: red[500],
     },
     successText: {
-      // color: green[500],
+      color: green[500],
+      // color: '#rgb(34,87,122)',
+    },
+    defaultText: {
       color: '#rgb(34,87,122)',
     },
     greyText: {
       color: grey[500],
     },
     buttonsWrapper: {
+      // border: '1px dashed red',
       marginLeft: 'auto',
-      '& > *': {
-        marginBottom: theme.spacing(1),
-      },
+      '& > *': { marginBottom: theme.spacing(1), },
       '& > *:not(:last-child)': {
         marginRight: theme.spacing(1),
       },
+    },
+    dialogActionsWrapper: {
+      marginLeft: theme.spacing(2),
+      marginRight: theme.spacing(2),
     },
   })
 )

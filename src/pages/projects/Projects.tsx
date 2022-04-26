@@ -382,7 +382,7 @@ export const Projects = () => {
                 <Chip
                   className={classes.chip}
                   variant="outlined"
-                  // size="small"
+                  size="small"
                   avatar={<Avatar>{myUserName.slice(0, 1).toUpperCase()}</Avatar>}
                   label="Ваш проект"
                 />
