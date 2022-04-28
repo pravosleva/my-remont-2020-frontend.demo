@@ -495,471 +495,474 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
               <CircularProgress size={20} color="primary" />
             </div>
           )}
-          {displayedJoblist.map((data, i) => (
-            <React.Fragment key={data._id}>
-              <Accordion
-                className={clsx({
-                  [classes.disabled]: data.isDone && !isItemExpanded(data._id),
-                })}
-                key={data._id}
-                expanded={expanded === `panel${data._id}`}
-                onChange={handleChangeAccoddionItem(`panel${data._id}`, data._id)}
-                // @ts-ignore
-                ref={setRef(data._id)}
-                TransitionProps={{
-                  timeout: 0,
-                }}
-              >
-                <AccordionSummary
-                  expandIcon={<ExpandMoreIcon />}
-                  aria-controls={`panel${data._id}bh-content`}
-                  id={`panel${data._id}bh-header`}
+          {displayedJoblist.map((data, i) => {
+            const isGood = data.payed - (data.priceMaterials + data.priceJobs) > 0
+            return (
+              <React.Fragment key={data._id}>
+                <Accordion
+                  className={clsx({
+                    [classes.disabled]: data.isDone && !isItemExpanded(data._id),
+                  })}
+                  key={data._id}
+                  expanded={expanded === `panel${data._id}`}
+                  onChange={handleChangeAccoddionItem(`panel${data._id}`, data._id)}
+                  // @ts-ignore
+                  ref={setRef(data._id)}
+                  TransitionProps={{
+                    timeout: 0,
+                  }}
                 >
-                  {
-                    <Typography
-                      className={clsx({
-                        [classes.greyText]: !data.isStarted,
-                        [classes.dangerText]: data.isStarted && data.payed - (data.priceMaterials + data.priceJobs) < 0,
-                        [classes.defaultText]:
-                          data.isStarted && data.payed - (data.priceMaterials + data.priceJobs) >= 0,
-                      })}
-                    >
-                      {isOwner && data.payed - (data.priceMaterials + data.priceJobs) !== 0 && (
-                        <>
-                          {/* <span style={{ marginRight: '8px' }}>⚙️</span> */}
-                          {/* <span className="price">({getPrettyPrice(getDifference(data))})</span> */}
-                          {data.isStarted && !data.isDone && (
-                            <Chip
-                              size='small'
-                              label={`${data.payed - (data.priceMaterials + data.priceJobs) > 0 ? '+' : ''}${getPrettyPrice(getDifference(data))}`}
-                              color={data.payed - (data.priceMaterials + data.priceJobs) >= 0 ? 'default' : 'secondary'}
-                              className='price'
-                            />
-                          )}
-                          &nbsp;&nbsp;
-                        </>
-                      )}
-                      {data.name}
-                    </Typography>
-                  }
-                </AccordionSummary>
-                <Divider />
-                <AccordionDetails className={classes.details}>
-                  <Job
-                    data={data}
-                    key={getUniqueKey(data)}
-                    onSetDates={handleSetDates}
-                    isLoading={isLoading}
-                    setIsLoading={setIsLoading}
-                    remontId={remontId}
-                  />
-                </AccordionDetails>
-                {isOwner && (
-                  <>
-                    <Divider />
-                    <AccordionActions>
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls={`panel${data._id}bh-content`}
+                    id={`panel${data._id}bh-header`}
+                  >
+                    {
+                      <Typography
+                        className={clsx({
+                          [classes.greyText]: !data.isStarted,
+                          [classes.dangerText]: data.isStarted && data.payed - (data.priceMaterials + data.priceJobs) < 0,
+                          [classes.defaultText]:
+                            data.isStarted && data.payed - (data.priceMaterials + data.priceJobs) >= 0,
+                        })}
+                      >
+                        {isOwner && data.payed - (data.priceMaterials + data.priceJobs) !== 0 && (
+                          <>
+                            {/* <span style={{ marginRight: '8px' }}>⚙️</span> */}
+                            {/* <span className="price">({getPrettyPrice(getDifference(data))})</span> */}
+                            {data.isStarted && !data.isDone && (
+                              <Chip
+                                size='small'
+                                label={`${isGood ? '+' : ''}${getPrettyPrice(getDifference(data))}`}
+                                color={isGood ? 'default' : 'secondary'}
+                                className={clsx(classes.price, { [classes.redChip]: !isGood })}
+                              />
+                            )}
+                            &nbsp;&nbsp;
+                          </>
+                        )}
+                        {data.name}
+                      </Typography>
+                    }
+                  </AccordionSummary>
+                  <Divider />
+                  <AccordionDetails className={classes.details}>
+                    <Job
+                      data={data}
+                      key={getUniqueKey(data)}
+                      onSetDates={handleSetDates}
+                      isLoading={isLoading}
+                      setIsLoading={setIsLoading}
+                      remontId={remontId}
+                    />
+                  </AccordionDetails>
+                  {isOwner && (
+                    <>
+                      <Divider />
+                      <AccordionActions>
+                        <Button
+                          onClick={() => handleDeleteJob(data)}
+                          size="small"
+                          variant="outlined"
+                          color="secondary"
+                          disabled={isLoading}
+                          endIcon={<Icon path={mdiDelete} size={0.8} />}
+                          style={{ marginRight: 'auto' }}
+                        >
+                          DEL
+                        </Button>
+                        <Button
+                          size="small"
+                          variant="outlined"
+                          onClick={handleOpenMarkdownEditor(data._id)}
+                          endIcon={<EditIcon />}
+                        >
+                          Описание
+                        </Button>
+                        <Button
+                          size="small"
+                          variant="outlined"
+                          onClick={handleOpenEditor(data._id)}
+                          endIcon={<EditIcon />}
+                        >
+                          Бабки
+                        </Button>
+                      </AccordionActions>
+                    </>
+                  )}
+                  {/* DIALOG FOR MARKDOWN */}
+                  <Dialog
+                    open={openedMarkdownEditorId === data._id}
+                    onClose={handleCloseEditor}
+                    scroll="paper"
+                    aria-labelledby={`scroll-dialog-md-title_${data._id}`}
+                    fullWidth={width > 767}
+                    fullScreen={width <= 767}
+                    maxWidth="lg"
+                    // @ts-ignore
+                    TransitionComponent={TransitionUp}
+                  >
+                    <DialogTitle id={`scroll-dialog-md-title_${data._id}`}>{data.name}</DialogTitle>
+                    <DialogContent dividers={true} className={classes.dialogMDContent}>
+                      <MDEditor
+                        value={localMD}
+                        style={{ minHeight: width > 767 ? '450px' : '300px' }}
+                        renderHTML={(text) => mdParser.render(text)}
+                        onChange={({ text }) => {
+                          // if (!!text) changeJobFieldPromise(data._id, 'description', text)()
+                          setLocalMD(text)
+                          debouncedUpdateJoblist(data._id, text, changeJobFieldPromise)
+                        }}
+                        config={{
+                          view: { menu: false, md: true, html: width > 767 },
+                          canView: {
+                            menu: false,
+                            md: true,
+                            html: width > 767,
+                            fullScreen: true,
+                            hideMenu: true,
+                          },
+                        }}
+                      />
+                    </DialogContent>
+                    <DialogActions>
                       <Button
-                        onClick={() => handleDeleteJob(data)}
+                        onClick={handleCloseMarkdownEditor}
                         size="small"
                         variant="outlined"
                         color="secondary"
                         disabled={isLoading}
-                        endIcon={<Icon path={mdiDelete} size={0.8} />}
-                        style={{ marginRight: 'auto' }}
                       >
-                        DEL
+                        Отмена
                       </Button>
                       <Button
-                        size="small"
+                        onClick={handleSubmit}
+                        // variant="contained"
                         variant="outlined"
-                        onClick={handleOpenMarkdownEditor(data._id)}
-                        endIcon={<EditIcon />}
-                      >
-                        Описание
-                      </Button>
-                      <Button
+                        color="primary"
                         size="small"
-                        variant="outlined"
-                        onClick={handleOpenEditor(data._id)}
-                        endIcon={<EditIcon />}
+                        disabled={isLoading}
+                        endIcon={
+                          isLoading ? (
+                            <CircularProgress size={20} color="primary" style={{ marginLeft: 'auto' }} />
+                          ) : (
+                            <SaveIcon />
+                          )
+                        }
                       >
-                        Бабки
+                        Сохранить
                       </Button>
-                    </AccordionActions>
-                  </>
-                )}
-                {/* DIALOG FOR MARKDOWN */}
-                <Dialog
-                  open={openedMarkdownEditorId === data._id}
-                  onClose={handleCloseEditor}
-                  scroll="paper"
-                  aria-labelledby={`scroll-dialog-md-title_${data._id}`}
-                  fullWidth={width > 767}
-                  fullScreen={width <= 767}
-                  maxWidth="lg"
-                  // @ts-ignore
-                  TransitionComponent={TransitionUp}
-                >
-                  <DialogTitle id={`scroll-dialog-md-title_${data._id}`}>{data.name}</DialogTitle>
-                  <DialogContent dividers={true} className={classes.dialogMDContent}>
-                    <MDEditor
-                      value={localMD}
-                      style={{ minHeight: width > 767 ? '450px' : '300px' }}
-                      renderHTML={(text) => mdParser.render(text)}
-                      onChange={({ text }) => {
-                        // if (!!text) changeJobFieldPromise(data._id, 'description', text)()
-                        setLocalMD(text)
-                        debouncedUpdateJoblist(data._id, text, changeJobFieldPromise)
-                      }}
-                      config={{
-                        view: { menu: false, md: true, html: width > 767 },
-                        canView: {
-                          menu: false,
-                          md: true,
-                          html: width > 767,
-                          fullScreen: true,
-                          hideMenu: true,
-                        },
-                      }}
-                    />
-                  </DialogContent>
-                  <DialogActions>
-                    <Button
-                      onClick={handleCloseMarkdownEditor}
-                      size="small"
-                      variant="outlined"
-                      color="secondary"
-                      disabled={isLoading}
-                    >
-                      Отмена
-                    </Button>
-                    <Button
-                      onClick={handleSubmit}
-                      // variant="contained"
-                      variant="outlined"
-                      color="primary"
-                      size="small"
-                      disabled={isLoading}
-                      endIcon={
-                        isLoading ? (
-                          <CircularProgress size={20} color="primary" style={{ marginLeft: 'auto' }} />
-                        ) : (
-                          <SaveIcon />
-                        )
-                      }
-                    >
-                      Сохранить
-                    </Button>
-                  </DialogActions>
-                </Dialog>
-                {/* DIALOG FOR VALUES */}
-                <Dialog
-                  fullWidth={width > 767}
-                  fullScreen={width <= 767}
-                  open={openedEditorId === data._id}
-                  onClose={handleCloseEditor}
-                  scroll="paper"
-                  aria-labelledby={`scroll-dialog-values-title_${data._id}`}
-                >
-                  <DialogTitle id={`scroll-dialog-values-title_${data._id}`} className={classes.truncate}>
-                    {data.name || 'Title'}
-                  </DialogTitle>
-                  <DialogContent dividers={true}>
-                    {/*
-                      {
-                        "__component": "job.job",
-                        "isDone": false,
-                        "isStarted": false,
-                        "payed": 25000,
-                        "priceJobs": 10000,
-                        "priceMaterials": 12332,
-                        "priceDelivery": 0,
-                        "_id": "5f7901e014e0008700d02545",
-                        "price": 0,
-                        "name": "Замена батарей",
-                        "createdAt": "2020-10-03T22:57:36.559Z",
-                        "updatedAt": "2020-10-05T21:53:21.693Z",
-                        "__v": 0,
-                        "comment": "Пока ждем информацию по ценам от ЖЭК",
-                        "description": "- 5.10 - Озвучена цена за работу: 5000 за одну батарею (**=10 000 Р** за две)\n- 5.10 - Съездили в магазин с Кудратом, ценник за материалы: **=12 332 Р** за батареи с комплектацией (8 секц. + 4 секц.)",
-                        "id": "5f7901e014e0008700d02545"
-                      }
-                    */}
-                    <Grid container direction="column" spacing={2} className={classes.inputsBox}>
-                      <Grid item xs={12}>
-                        <TextField
-                          id={`name_${data._id}`}
-                          label="Название"
-                          type="text"
-                          variant="outlined"
-                          value={data.name}
-                          size="small"
-                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                            changeJobFieldPromise(data._id, 'name', e.target.value)()
-                          }}
-                          fullWidth
-                          disabled={isLoading}
-                        />
-                      </Grid>
-                      <Grid item xs={12}>
-                        <TextField
-                          id={`priceJobs_${data._id}`}
-                          label="Ценник за работу"
-                          type="number"
-                          // variant="outlined"
-                          value={data.priceJobs}
-                          size="small"
-                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                            changeJobFieldPromise(data._id, 'priceJobs', Number(e.target.value))()
-                          }}
-                          fullWidth
-                          disabled={true}
-                          // disabled={isLoading}
-                        />
-                      </Grid>
-                      <Grid item className={classes.buttonsWrapper}>
-                        <Button
-                          size="small"
-                          variant="outlined"
-                          onClick={handleAddPriceJobs(data._id, data.priceJobs)}
-                          // endIcon={<EditIcon />}
-                          disabled={isLoading}
-                        >
-                          <Icon path={mdiPlus} size={0.8} />
-                        </Button>
-                        <Button
-                          size="small"
-                          variant="outlined"
-                          onClick={handleRemovePriceJobs(data._id, data.priceJobs)}
-                          // endIcon={<EditIcon />}
-                          disabled={isLoading}
-                        >
-                          <Icon path={mdiMinus} size={0.8} />
-                        </Button>
-                      </Grid>
-                      <Grid item xs={12}>
-                        <TextField
-                          id={`priceMaterials_${data._id}`}
-                          label="Ценник за материалы"
-                          type="number"
-                          // variant="outlined"
-                          value={data.priceMaterials}
-                          size="small"
-                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                            changeJobFieldPromise(data._id, 'priceMaterials', Number(e.target.value))()
-                          }}
-                          fullWidth
-                          disabled={true}
-                          // disabled={isLoading}
-                        />
-                      </Grid>
-                      <Grid item className={classes.buttonsWrapper}>
-                        <Button
-                          size="small"
-                          variant="outlined"
-                          onClick={handleAddPriceMaterials(data._id, data.priceMaterials)}
-                          // endIcon={<EditIcon />}
-                          disabled={isLoading}
-                        >
-                          <Icon path={mdiPlus} size={0.8} />
-                        </Button>
-                        <Button
-                          size="small"
-                          variant="outlined"
-                          onClick={handleRemovePriceMaterials(data._id, data.priceMaterials)}
-                          // endIcon={<EditIcon />}
-                          disabled={isLoading}
-                        >
-                          <Icon path={mdiMinus} size={0.8} />
-                        </Button>
-                      </Grid>
-                      <Grid item xs={12}>
-                        <TextField
-                          id={`priceDelivery_${data._id}`}
-                          label="Ценник за доставку"
-                          type="number"
-                          // variant="outlined"
-                          value={data.priceDelivery}
-                          size="small"
-                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                            changeJobFieldPromise(data._id, 'priceDelivery', Number(e.target.value))()
-                          }}
-                          fullWidth
-                          disabled={true}
-                          // disabled={isLoading}
-                        />
-                      </Grid>
-                      <Grid item className={classes.buttonsWrapper}>
-                        <Button
-                          size="small"
-                          variant="outlined"
-                          onClick={handleAddPriceDelivery(data._id, data.priceDelivery)}
-                          // endIcon={<EditIcon />}
-                          disabled={isLoading}
-                        >
-                          <Icon path={mdiPlus} size={0.8} />
-                        </Button>
-                        <Button
-                          size="small"
-                          variant="outlined"
-                          onClick={handleRemovePriceDelivery(data._id, data.priceDelivery)}
-                          // endIcon={<EditIcon />}
-                          disabled={isLoading}
-                        >
-                          <Icon path={mdiMinus} size={0.8} />
-                        </Button>
-                      </Grid>
-                      <Grid item>
-                        <TextField
-                          id={`payed_${data._id}`}
-                          label="Оплачено"
-                          type="number"
-                          // variant="outlined"
-                          value={data.payed}
-                          size="small"
-                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                            changeJobFieldPromise(data._id, 'payed', Number(e.target.value))()
-                          }}
-                          fullWidth
-                          disabled={true}
-                          // disabled={isLoading}
-                        />
-                      </Grid>
-                      <Grid item className={classes.buttonsWrapper}>
-                        <Button
-                          disabled={isLoading}
-                          size="small"
-                          variant="outlined"
-                          onClick={handleAddPayed(data._id, data.payed)}
-                          // endIcon={<EditIcon />}
-                        >
-                          <Icon path={mdiPlus} size={0.8} />
-                        </Button>
-                        <Button
-                          disabled={isLoading}
-                          size="small"
-                          variant="outlined"
-                          onClick={handleRemovePayed(data._id, data.payed)}
-                          // endIcon={<EditIcon />}
-                        >
-                          <Icon path={mdiMinus} size={0.8} />
-                        </Button>
-                      </Grid>
-                      <div className={classes.checkboxWrapper}>
-                        <FormControl component="fieldset" className={classes.formControl}>
-                          <FormGroup>
-                            <FormControl component="fieldset" className={classes.formControl}>
-                              <FormGroup>
-                                <FormControlLabel
-                                  control={
-                                    <Checkbox
-                                      disabled={isLoading}
-                                      color="primary"
-                                      checked={data.isStarted}
-                                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                        changeJobFieldPromise(data._id, 'isStarted', e.target.checked)()
-                                          .then(() => {
-                                            onSelectAll()
-                                          })
-                                          .catch((err) => {
-                                            console.log(err)
-                                          })
-                                      }}
-                                      name="isStarted"
-                                    />
-                                  }
-                                  label="Работы были начаты"
-                                />
-                              </FormGroup>
-                            </FormControl>
-                            <FormControlLabel
-                              control={
-                                <Checkbox
-                                  disabled={isLoading}
-                                  color="primary"
-                                  checked={data.isDone}
-                                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                    changeJobFieldPromise(data._id, 'isDone', e.target.checked)()
-                                      .then(() => {
-                                        onSelectAll()
-                                      })
-                                      .catch((err) => {
-                                        console.log(err)
-                                      })
-                                  }}
-                                  name="isDone"
-                                />
-                              }
-                              label="Работы завершены"
-                            />
-                          </FormGroup>
-                        </FormControl>
-                      </div>
-
-                      <Grid item xs={12}>
-                        <TextField
-                          id={`comment_${data._id}`}
-                          label="Комментарий"
-                          type="text"
-                          variant="outlined"
-                          multiline
-                          rows={4}
-                          value={data.comment}
-                          size="small"
-                          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                            changeJobFieldPromise(data._id, 'comment', e.target.value)()
-                          }}
-                          fullWidth
-                          disabled={isLoading}
-                        />
-                      </Grid>
-                    </Grid>
-                  </DialogContent>
-                  <DialogActions
-                    className={classes.dialogActionsWrapper}
+                    </DialogActions>
+                  </Dialog>
+                  {/* DIALOG FOR VALUES */}
+                  <Dialog
+                    fullWidth={width > 767}
+                    fullScreen={width <= 767}
+                    open={openedEditorId === data._id}
+                    onClose={handleCloseEditor}
+                    scroll="paper"
+                    aria-labelledby={`scroll-dialog-values-title_${data._id}`}
                   >
-                    <h4
-                      style={{
-                        marginRight: 'auto',
-                      }}
-                      className={clsx({
-                        [classes.dangerText]: data.payed - (data.priceMaterials + data.priceJobs) < 0,
-                        [classes.successText]: data.payed - (data.priceMaterials + data.priceJobs) >= 0,
-                      })}
+                    <DialogTitle id={`scroll-dialog-values-title_${data._id}`} className={classes.truncate}>
+                      {data.name || 'Title'}
+                    </DialogTitle>
+                    <DialogContent dividers={true}>
+                      {/*
+                        {
+                          "__component": "job.job",
+                          "isDone": false,
+                          "isStarted": false,
+                          "payed": 25000,
+                          "priceJobs": 10000,
+                          "priceMaterials": 12332,
+                          "priceDelivery": 0,
+                          "_id": "5f7901e014e0008700d02545",
+                          "price": 0,
+                          "name": "Замена батарей",
+                          "createdAt": "2020-10-03T22:57:36.559Z",
+                          "updatedAt": "2020-10-05T21:53:21.693Z",
+                          "__v": 0,
+                          "comment": "Пока ждем информацию по ценам от ЖЭК",
+                          "description": "- 5.10 - Озвучена цена за работу: 5000 за одну батарею (**=10 000 Р** за две)\n- 5.10 - Съездили в магазин с Кудратом, ценник за материалы: **=12 332 Р** за батареи с комплектацией (8 секц. + 4 секц.)",
+                          "id": "5f7901e014e0008700d02545"
+                        }
+                      */}
+                      <Grid container direction="column" spacing={2} className={classes.inputsBox}>
+                        <Grid item xs={12}>
+                          <TextField
+                            id={`name_${data._id}`}
+                            label="Название"
+                            type="text"
+                            variant="outlined"
+                            value={data.name}
+                            size="small"
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                              changeJobFieldPromise(data._id, 'name', e.target.value)()
+                            }}
+                            fullWidth
+                            disabled={isLoading}
+                          />
+                        </Grid>
+                        <Grid item xs={12}>
+                          <TextField
+                            id={`priceJobs_${data._id}`}
+                            label="Ценник за работу"
+                            type="number"
+                            // variant="outlined"
+                            value={data.priceJobs}
+                            size="small"
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                              changeJobFieldPromise(data._id, 'priceJobs', Number(e.target.value))()
+                            }}
+                            fullWidth
+                            disabled={true}
+                            // disabled={isLoading}
+                          />
+                        </Grid>
+                        <Grid item className={classes.buttonsWrapper}>
+                          <Button
+                            size="small"
+                            variant="outlined"
+                            onClick={handleAddPriceJobs(data._id, data.priceJobs)}
+                            // endIcon={<EditIcon />}
+                            disabled={isLoading}
+                          >
+                            <Icon path={mdiPlus} size={0.8} />
+                          </Button>
+                          <Button
+                            size="small"
+                            variant="outlined"
+                            onClick={handleRemovePriceJobs(data._id, data.priceJobs)}
+                            // endIcon={<EditIcon />}
+                            disabled={isLoading}
+                          >
+                            <Icon path={mdiMinus} size={0.8} />
+                          </Button>
+                        </Grid>
+                        <Grid item xs={12}>
+                          <TextField
+                            id={`priceMaterials_${data._id}`}
+                            label="Ценник за материалы"
+                            type="number"
+                            // variant="outlined"
+                            value={data.priceMaterials}
+                            size="small"
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                              changeJobFieldPromise(data._id, 'priceMaterials', Number(e.target.value))()
+                            }}
+                            fullWidth
+                            disabled={true}
+                            // disabled={isLoading}
+                          />
+                        </Grid>
+                        <Grid item className={classes.buttonsWrapper}>
+                          <Button
+                            size="small"
+                            variant="outlined"
+                            onClick={handleAddPriceMaterials(data._id, data.priceMaterials)}
+                            // endIcon={<EditIcon />}
+                            disabled={isLoading}
+                          >
+                            <Icon path={mdiPlus} size={0.8} />
+                          </Button>
+                          <Button
+                            size="small"
+                            variant="outlined"
+                            onClick={handleRemovePriceMaterials(data._id, data.priceMaterials)}
+                            // endIcon={<EditIcon />}
+                            disabled={isLoading}
+                          >
+                            <Icon path={mdiMinus} size={0.8} />
+                          </Button>
+                        </Grid>
+                        <Grid item xs={12}>
+                          <TextField
+                            id={`priceDelivery_${data._id}`}
+                            label="Ценник за доставку"
+                            type="number"
+                            // variant="outlined"
+                            value={data.priceDelivery}
+                            size="small"
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                              changeJobFieldPromise(data._id, 'priceDelivery', Number(e.target.value))()
+                            }}
+                            fullWidth
+                            disabled={true}
+                            // disabled={isLoading}
+                          />
+                        </Grid>
+                        <Grid item className={classes.buttonsWrapper}>
+                          <Button
+                            size="small"
+                            variant="outlined"
+                            onClick={handleAddPriceDelivery(data._id, data.priceDelivery)}
+                            // endIcon={<EditIcon />}
+                            disabled={isLoading}
+                          >
+                            <Icon path={mdiPlus} size={0.8} />
+                          </Button>
+                          <Button
+                            size="small"
+                            variant="outlined"
+                            onClick={handleRemovePriceDelivery(data._id, data.priceDelivery)}
+                            // endIcon={<EditIcon />}
+                            disabled={isLoading}
+                          >
+                            <Icon path={mdiMinus} size={0.8} />
+                          </Button>
+                        </Grid>
+                        <Grid item>
+                          <TextField
+                            id={`payed_${data._id}`}
+                            label="Оплачено"
+                            type="number"
+                            // variant="outlined"
+                            value={data.payed}
+                            size="small"
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                              changeJobFieldPromise(data._id, 'payed', Number(e.target.value))()
+                            }}
+                            fullWidth
+                            disabled={true}
+                            // disabled={isLoading}
+                          />
+                        </Grid>
+                        <Grid item className={classes.buttonsWrapper}>
+                          <Button
+                            disabled={isLoading}
+                            size="small"
+                            variant="outlined"
+                            onClick={handleAddPayed(data._id, data.payed)}
+                            // endIcon={<EditIcon />}
+                          >
+                            <Icon path={mdiPlus} size={0.8} />
+                          </Button>
+                          <Button
+                            disabled={isLoading}
+                            size="small"
+                            variant="outlined"
+                            onClick={handleRemovePayed(data._id, data.payed)}
+                            // endIcon={<EditIcon />}
+                          >
+                            <Icon path={mdiMinus} size={0.8} />
+                          </Button>
+                        </Grid>
+                        <div className={classes.checkboxWrapper}>
+                          <FormControl component="fieldset" className={classes.formControl}>
+                            <FormGroup>
+                              <FormControl component="fieldset" className={classes.formControl}>
+                                <FormGroup>
+                                  <FormControlLabel
+                                    control={
+                                      <Checkbox
+                                        disabled={isLoading}
+                                        color="primary"
+                                        checked={data.isStarted}
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                          changeJobFieldPromise(data._id, 'isStarted', e.target.checked)()
+                                            .then(() => {
+                                              onSelectAll()
+                                            })
+                                            .catch((err) => {
+                                              console.log(err)
+                                            })
+                                        }}
+                                        name="isStarted"
+                                      />
+                                    }
+                                    label="Работы были начаты"
+                                  />
+                                </FormGroup>
+                              </FormControl>
+                              <FormControlLabel
+                                control={
+                                  <Checkbox
+                                    disabled={isLoading}
+                                    color="primary"
+                                    checked={data.isDone}
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                      changeJobFieldPromise(data._id, 'isDone', e.target.checked)()
+                                        .then(() => {
+                                          onSelectAll()
+                                        })
+                                        .catch((err) => {
+                                          console.log(err)
+                                        })
+                                    }}
+                                    name="isDone"
+                                  />
+                                }
+                                label="Работы завершены"
+                              />
+                            </FormGroup>
+                          </FormControl>
+                        </div>
+
+                        <Grid item xs={12}>
+                          <TextField
+                            id={`comment_${data._id}`}
+                            label="Комментарий"
+                            type="text"
+                            variant="outlined"
+                            multiline
+                            rows={4}
+                            value={data.comment}
+                            size="small"
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                              changeJobFieldPromise(data._id, 'comment', e.target.value)()
+                            }}
+                            fullWidth
+                            disabled={isLoading}
+                          />
+                        </Grid>
+                      </Grid>
+                    </DialogContent>
+                    <DialogActions
+                      className={classes.dialogActionsWrapper}
                     >
-                      {getPrettyPrice(data.payed - (data.priceMaterials + data.priceJobs))}
-                    </h4>
-                    <Button
-                      onClick={handleCancelEditor}
-                      size="small"
-                      variant="outlined"
-                      color="secondary"
-                      disabled={isLoading}
-                    >
-                      Отмена
-                    </Button>
-                    <Button
-                      onClick={handleSubmit}
-                      // variant="contained"
-                      variant="outlined"
-                      color="primary"
-                      size="small"
-                      disabled={isLoading}
-                      endIcon={
-                        isLoading ? (
-                          <CircularProgress size={20} color="primary" style={{ marginLeft: 'auto' }} />
-                        ) : (
-                          <SaveIcon />
-                        )
-                      }
-                    >
-                      Сохранить
-                    </Button>
-                  </DialogActions>
-                </Dialog>
-              </Accordion>
-            </React.Fragment>
-          ))}
+                      <h4
+                        style={{
+                          marginRight: 'auto',
+                        }}
+                        className={clsx({
+                          [classes.dangerText]: data.payed - (data.priceMaterials + data.priceJobs) < 0,
+                          [classes.successText]: data.payed - (data.priceMaterials + data.priceJobs) >= 0,
+                        })}
+                      >
+                        {getPrettyPrice(data.payed - (data.priceMaterials + data.priceJobs))}
+                      </h4>
+                      <Button
+                        onClick={handleCancelEditor}
+                        size="small"
+                        variant="outlined"
+                        color="secondary"
+                        disabled={isLoading}
+                      >
+                        Отмена
+                      </Button>
+                      <Button
+                        onClick={handleSubmit}
+                        // variant="contained"
+                        variant="outlined"
+                        color="primary"
+                        size="small"
+                        disabled={isLoading}
+                        endIcon={
+                          isLoading ? (
+                            <CircularProgress size={20} color="primary" style={{ marginLeft: 'auto' }} />
+                          ) : (
+                            <SaveIcon />
+                          )
+                        }
+                      >
+                        Сохранить
+                      </Button>
+                    </DialogActions>
+                  </Dialog>
+                </Accordion>
+              </React.Fragment>
+            )
+          })}
         </>
       )}
     </>

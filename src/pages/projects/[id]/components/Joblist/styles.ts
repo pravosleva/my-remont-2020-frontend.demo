@@ -97,5 +97,11 @@ export const useStyles = makeStyles((theme: Theme) =>
       marginLeft: theme.spacing(2),
       marginRight: theme.spacing(2),
     },
+    redChip: {
+      color: '#FFF'
+    },
+    price: {
+      whiteSpace: 'nowrap',
+    },
   })
 )
