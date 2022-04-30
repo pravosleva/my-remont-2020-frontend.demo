@@ -90,12 +90,16 @@ export const useStyles = makeStyles((theme) => ({
     },
     '& > div > div.grid-item > a:not(.editable):hover': {
       [theme.breakpoints.up('md')]: {
-        transform: 'translateY(-2px)',
+        // transform: 'translateY(-2px)',
       },
     },
+    '& > div > div.grid-item > a:not(.editable) > img': {
+      border: '2px solid #FFF',
+    },
     '& > div > div.grid-item > a:not(.editable):hover > img': {
-      boxShadow: '0px 5px 8px rgba(144, 164, 183, 0.5)',
-      // border: '2px solid #FFF',
+      // boxShadow: '0px 2px 8px rgba(144, 164, 183, 0.85)',
+      boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.35)',
+      border: '2px solid #FFF',
       // border: '2px solid #556cd6',
       // scale: 1.1,
     },
