@@ -526,7 +526,7 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                             data.isStarted && data.payed - (data.priceMaterials + data.priceJobs) >= 0,
                         })}
                       >
-                        {isOwner && data.payed - (data.priceMaterials + data.priceJobs) !== 0 && (
+                        {data.payed - (data.priceMaterials + data.priceJobs) !== 0 && (
                           <>
                             {/* <span style={{ marginRight: '8px' }}>⚙️</span> */}
                             {/* <span className="price">({getPrettyPrice(getDifference(data))})</span> */}
