@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useMemo } from 'react'
 // import { NavLink } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import { MainContext } from '~/common/context/MainContext'
@@ -6,6 +6,8 @@ import { MainContext } from '~/common/context/MainContext'
 import { useRouter } from '~/common/hooks/useRouter'
 import { Container } from '@material-ui/core'
 import { useStyles } from './styles'
+// import clsx from 'clsx'
+import { useWindowSize } from '~/common/hooks'
 
 export const BreadCrumbs = () => {
   const classes = useStyles()
@@ -16,6 +18,13 @@ export const BreadCrumbs = () => {
   const {
     location: { pathname },
   } = router
+  const { isDesktop } = useWindowSize()
+  const displayedName = useMemo(() => {
+    if (!remontLogic?.name) return null
+    if (isDesktop) return remontLogic.name
+
+    return remontLogic.name.length <= 15 ? remontLogic.name : `${remontLogic.name.slice(0, 15)}...`
+  }, [remontLogic?.name, isDesktop])
 
   return (
     <Container maxWidth="md">
@@ -43,9 +52,9 @@ export const BreadCrumbs = () => {
             <Link to="/projects">Проекты</Link>
             <span className={classes.muted}>/</span>
             {!remontLogic?.name && <span className={classes.muted}>Please wait...</span>}
-            {!!remontLogic?.name && (
+            {!!displayedName && (
               <span style={{ whiteSpace: 'nowrap' }} className={classes.muted}>
-                {remontLogic.name.length <= 35 ? remontLogic.name : `${remontLogic.name.slice(0, 34)}...`}
+                {displayedName}
               </span>
             )}
           </div>

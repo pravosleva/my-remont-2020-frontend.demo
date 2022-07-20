@@ -1,5 +1,6 @@
 import red from '@material-ui/core/colors/red'
 import { createMuiTheme, withStyles } from '@material-ui/core/styles'
+import green from '@material-ui/core/colors/green'
 // import { Breakpoint } from '@material-ui/core/styles/createBreakpoints'
 // See also: https://material-ui.com/guides/typescript/#customization-of-theme
 
@@ -10,7 +11,7 @@ export const defaultTheme = {
     primary: {
       light: '#757ce8',
       main: '#22577a',
-      dark: '#002884',
+      // dark: '#002884',
       contrastText: '#fff',
     },
     secondary: {
@@ -59,6 +60,22 @@ export const GlobalCss = withStyles((theme) => ({
     '.MuiButton-root': {
       outline: 'none !important',
       userSelect: 'none !important',
+
+      // NOTE: Rounded buttons
+      borderRadius: `${theme.spacing(3)} !important`,
+    },
+
+    // NOTE: Rounded outlined textfield
+    '.MuiOutlinedInput-root': {
+      borderRadius: `${theme.spacing(3)} !important`,
+    },
+
+    '.MuiButton-containedSecondary': {
+      color: '#FFF !important',
+    },
+    '.MuiChip-root.custom-success': {
+      backgroundColor: `${green[500]} !important`,
+      color: '#FFF !important',
     },
     // See also: https://material-ui.com/ru/customization/components/
     code: {

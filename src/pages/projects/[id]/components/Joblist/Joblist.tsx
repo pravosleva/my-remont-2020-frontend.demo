@@ -45,13 +45,13 @@ import { useRouter } from '~/common/hooks/useRouter'
 import buildUrl from 'build-url'
 import { httpErrorHandler } from '~/utils/errors/http/fetch'
 import useDynamicRefs from 'use-dynamic-refs'
-import { scrollTo } from '~/utils/scrollTo'
+// import { scrollTo } from '~/utils/scrollTo'
 import { getDifference } from '~/utils/getDifference'
 import Icon from '@mdi/react'
 import { mdiDelete } from '@mdi/js'
 import { useBaseStyles } from '~/common/mui/baseStyles'
 import { mdiPlus, mdiMinus } from '@mdi/js'
-import { green } from '@material-ui/core/colors'
+// import { green } from '@material-ui/core/colors'
 
 // NOTE: See also: Настраиваемый аккордеон
 // https://material-ui.com/ru/components/accordion/#customized-accordions
@@ -116,11 +116,11 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
     // setIsAbsolutePreloaderActive(true)
     setExpanded(isExpanded ? panelName : false)
     // console.log(panelName, id)
-    if (!!id)
-      setTimeout(() => {
-        scrollTo(getRef(id), true)
-        // setIsAbsolutePreloaderActive(false)
-      }, 100)
+    // if (!!id)
+    //   setTimeout(() => {
+    //     scrollTo(getRef(id), true)
+    //     // setIsAbsolutePreloaderActive(false)
+    //   }, 100)
   }
   // --
   const isOwner: boolean = useMemo(() => remontLogic?.isOwner(userData?.id), [remontLogic, userData])
@@ -504,12 +504,12 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                     [classes.disabled]: data.isDone && !isItemExpanded(data._id),
                   })}
                   key={data._id}
-                  expanded={expanded === `panel${data._id}`}
+                  // expanded={expanded === `panel${data._id}`}
                   onChange={handleChangeAccoddionItem(`panel${data._id}`, data._id)}
                   // @ts-ignore
                   ref={setRef(data._id)}
                   TransitionProps={{
-                    timeout: 0,
+                    timeout: 200,
                   }}
                 >
                   <AccordionSummary
@@ -518,7 +518,7 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                     id={`panel${data._id}bh-header`}
                   >
                     {
-                      <Typography
+                      <div
                         className={clsx({
                           [classes.greyText]: !data.isStarted,
                           [classes.dangerText]: data.isStarted && data.payed - (data.priceMaterials + data.priceJobs) < 0,
@@ -535,14 +535,14 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                                 size='small'
                                 label={`${isGood ? '+' : ''}${getPrettyPrice(getDifference(data))}`}
                                 color={isGood ? 'default' : 'secondary'}
-                                className={clsx(classes.price, { [classes.redChip]: !isGood })}
+                                className={clsx(classes.price, { [classes.redChip]: !isGood, 'custom-success': isGood })}
                               />
                             )}
                             &nbsp;&nbsp;
                           </>
                         )}
                         {data.name}
-                      </Typography>
+                      </div>
                     }
                   </AccordionSummary>
                   <Divider />
@@ -708,7 +708,7 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                             id={`priceJobs_${data._id}`}
                             label="Ценник за работу"
                             type="number"
-                            // variant="outlined"
+                            variant="outlined"
                             value={data.priceJobs}
                             size="small"
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -726,6 +726,7 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                             onClick={handleAddPriceJobs(data._id, data.priceJobs)}
                             // endIcon={<EditIcon />}
                             disabled={isLoading}
+                            className='rounded-3'
                           >
                             <Icon path={mdiPlus} size={0.8} />
                           </Button>
@@ -735,6 +736,8 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                             onClick={handleRemovePriceJobs(data._id, data.priceJobs)}
                             // endIcon={<EditIcon />}
                             disabled={isLoading}
+                            className='rounded-3'
+                            color='secondary'
                           >
                             <Icon path={mdiMinus} size={0.8} />
                           </Button>
@@ -744,7 +747,7 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                             id={`priceMaterials_${data._id}`}
                             label="Ценник за материалы"
                             type="number"
-                            // variant="outlined"
+                            variant="outlined"
                             value={data.priceMaterials}
                             size="small"
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -762,6 +765,7 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                             onClick={handleAddPriceMaterials(data._id, data.priceMaterials)}
                             // endIcon={<EditIcon />}
                             disabled={isLoading}
+                            className='rounded-3'
                           >
                             <Icon path={mdiPlus} size={0.8} />
                           </Button>
@@ -771,6 +775,8 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                             onClick={handleRemovePriceMaterials(data._id, data.priceMaterials)}
                             // endIcon={<EditIcon />}
                             disabled={isLoading}
+                            className='rounded-3'
+                            color='secondary'
                           >
                             <Icon path={mdiMinus} size={0.8} />
                           </Button>
@@ -780,7 +786,7 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                             id={`priceDelivery_${data._id}`}
                             label="Ценник за доставку"
                             type="number"
-                            // variant="outlined"
+                            variant="outlined"
                             value={data.priceDelivery}
                             size="small"
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -798,6 +804,7 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                             onClick={handleAddPriceDelivery(data._id, data.priceDelivery)}
                             // endIcon={<EditIcon />}
                             disabled={isLoading}
+                            className='rounded-3'
                           >
                             <Icon path={mdiPlus} size={0.8} />
                           </Button>
@@ -807,6 +814,8 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                             onClick={handleRemovePriceDelivery(data._id, data.priceDelivery)}
                             // endIcon={<EditIcon />}
                             disabled={isLoading}
+                            className='rounded-3'
+                            color='secondary'
                           >
                             <Icon path={mdiMinus} size={0.8} />
                           </Button>
@@ -816,7 +825,7 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                             id={`payed_${data._id}`}
                             label="Оплачено"
                             type="number"
-                            // variant="outlined"
+                            variant="outlined"
                             value={data.payed}
                             size="small"
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -834,6 +843,7 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                             variant="outlined"
                             onClick={handleAddPayed(data._id, data.payed)}
                             // endIcon={<EditIcon />}
+                            className='rounded-3'
                           >
                             <Icon path={mdiPlus} size={0.8} />
                           </Button>
@@ -843,6 +853,8 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                             variant="outlined"
                             onClick={handleRemovePayed(data._id, data.payed)}
                             // endIcon={<EditIcon />}
+                            className='rounded-3'
+                            color='secondary'
                           >
                             <Icon path={mdiMinus} size={0.8} />
                           </Button>
@@ -925,16 +937,16 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                           marginRight: 'auto',
                         }}
                         className={clsx({
-                          [classes.dangerText]: data.payed - (data.priceMaterials + data.priceJobs) < 0,
-                          [classes.successText]: data.payed - (data.priceMaterials + data.priceJobs) >= 0,
+                          [classes.dangerText]: data.payed - (data.priceMaterials + data.priceJobs + data.priceDelivery) < 0,
+                          [classes.successText]: data.payed - (data.priceMaterials + data.priceJobs + data.priceDelivery) >= 0,
                         })}
                       >
-                        {getPrettyPrice(data.payed - (data.priceMaterials + data.priceJobs))}
+                        {getPrettyPrice(data.payed - (data.priceMaterials + data.priceJobs + data.priceDelivery))}
                       </h4>
                       <Button
                         onClick={handleCancelEditor}
                         size="small"
-                        variant="outlined"
+                        variant="contained"
                         color="secondary"
                         disabled={isLoading}
                       >
@@ -943,7 +955,7 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                       <Button
                         onClick={handleSubmit}
                         // variant="contained"
-                        variant="outlined"
+                        variant="contained"
                         color="primary"
                         size="small"
                         disabled={isLoading}

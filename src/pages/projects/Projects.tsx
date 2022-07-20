@@ -10,7 +10,7 @@ import { usePrompt } from '~/common/hooks/usePrompt'
 import { useStyles } from './styles'
 import { useCookies } from 'react-cookie'
 import { eventlist as ev } from '~/common/socket'
-import { formatDateBySeconds2 } from '~/utils/time/timeConverter'
+import { formatDateBySeconds3 } from '~/utils/time/timeConverter'
 import { ResponsiveBlock } from '~/common/mui/ResponsiveBlock'
 
 const apiUrl = getApiUrl()
@@ -376,7 +376,7 @@ export const Projects = () => {
               <ListItemText
                 key={`${id}--subheader`}
                 primary={name}
-                secondary={`Обновлено ${formatDateBySeconds2(updatedAt)}`}
+                secondary={`Updated ${formatDateBySeconds3(updatedAt)}`}
               />
               {isOwner && (
                 <Chip
@@ -384,7 +384,7 @@ export const Projects = () => {
                   variant="outlined"
                   size="small"
                   avatar={<Avatar>{myUserName.slice(0, 1).toUpperCase()}</Avatar>}
-                  label="Ваш проект"
+                  label="Owner"
                 />
               )}
             </ListItem>

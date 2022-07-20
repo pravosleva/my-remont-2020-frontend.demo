@@ -38,13 +38,17 @@ export const useStyles = makeStyles((theme: Theme) =>
       [theme.breakpoints.down('sm')]: {
         width: `${widgetWidthMobile}px`,
       },
-      borderRadius: '0 0 0 4px',
+      // borderRadius: '0 0 0 4px',
+      borderTopLeftRadius: 0,
+      borderTopRightRadius: 0,
+      borderBottomLeftRadius: theme.spacing(2),
+      borderBottomRightRadius: 0,
 
       position: 'relative',
     },
     fixedDesktopWidget: {
       position: 'fixed',
-      top: '80px',
+      top: '87px',
       right: '0px',
       transition: 'transform 0.2s linear',
       zIndex: 6,
@@ -89,8 +93,8 @@ export const useStyles = makeStyles((theme: Theme) =>
       right: '0px',
       boxShadow: 'none',
 
-      borderTopRightRadius: '0px',
-      borderBottomRightRadius: '0px',
+      borderTopRightRadius: '0px !important',
+      borderBottomRightRadius: '0px !important',
       [theme.breakpoints.up('md')]: {
         // width: `${widgetTogglerWidthDesktop}px`,
         // left: `-${widgetTogglerWidthDesktop}px`,

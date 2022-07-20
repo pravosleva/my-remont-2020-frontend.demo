@@ -23,7 +23,7 @@ export const HomePage = () => {
           <Grid item xs={12} md={6}>
             <List className={classes.root} subheader={<li />}>
               <ListItem className={classes.listItem} onClick={goToPage('/projects')}>
-                <ListItemText primary="Проекты" secondary="Ремонты квартир" />
+                <ListItemText primary="Проекты" secondary="Ремонты чего-либо" />
               </ListItem>
             </List>
           </Grid>

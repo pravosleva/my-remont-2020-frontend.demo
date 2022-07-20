@@ -97,13 +97,13 @@ export const CreateNewJob = ({
         </Container>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} size="small" variant="outlined" color="secondary" disabled={isLoading}>
+        <Button onClick={onClose} size="small" variant="contained" color="secondary" disabled={isLoading}>
           Отмена
         </Button>
         <Button
           onClick={onSave}
           // variant="contained"
-          variant="outlined"
+          variant="contained"
           color="primary"
           size="small"
           disabled={isLoading || !name}

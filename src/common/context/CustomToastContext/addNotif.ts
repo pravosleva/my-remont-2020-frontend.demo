@@ -7,7 +7,7 @@ const baseNotif: Partial<IReactNotificationOptions> = {
   animationIn: ['animate__animated', 'animate__fadeIn'],
   animationOut: ['animate__animated', 'animate__fadeOut'],
   dismiss: {
-    duration: 30000,
+    duration: 5000,
     onScreen: true,
   },
 }

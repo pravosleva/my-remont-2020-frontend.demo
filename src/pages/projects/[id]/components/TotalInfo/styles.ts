@@ -15,9 +15,9 @@ export const useStyles = makeStyles((theme) => ({
     color: red[500],
   },
   successText: {
-    // color: green[500],
+    color: green[500],
     // color: theme.palette.primary.main,
-    color: 'rgb(34,87,122)',
+    // color: 'rgb(34,87,122)',
   },
   infoText: {
     // color: indigo[500],

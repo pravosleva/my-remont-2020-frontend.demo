@@ -68,7 +68,7 @@ export function remontReducer(state: TRemontState, action: TRemontAction): TRemo
         jobsLogic,
         jobs: remontLogic.joblist,
         stash: null,
-        _remont: state.stash._remont,
+        _remont: state.stash?._remont || null,
       }
     }
     case 'UPDATE_JOB_FIELD':
@@ -105,11 +105,12 @@ export function remontReducer(state: TRemontState, action: TRemontAction): TRemo
     // case 'UPDATE_JOBLIST':
     //   // @ts-ignore
     //   return { ...state, jobs: payload, jobsLogic: new JobsLogic(payload) }
-    case 'UPDATE_REMONT':
+    case 'UPDATE_REMONT': {
       const remontLogic = new RemontLogic(payload)
       const jobsLogic = new JobsLogic(remontLogic.joblist)
       // @ts-ignore
       return { ...state, remontLogic, jobsLogic, jobs: remontLogic.joblist, _remont: Object.assign({}, payload) }
+    }
     case 'DELETE_JOB':
       newState = [...state.jobs].filter(({ _id }) => _id !== payload)
       // console.log(newState)

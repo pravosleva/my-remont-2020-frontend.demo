@@ -1,4 +1,4 @@
-import red from '@material-ui/core/colors/red'
+import { red, blue } from '@material-ui/core/colors'
 import green from '@material-ui/core/colors/green'
 import { makeStyles } from '@material-ui/core/styles'
 
@@ -99,8 +99,6 @@ export const useStyles = makeStyles((theme) => ({
     '& > div > div.grid-item > a:not(.editable):hover > img': {
       // boxShadow: '0px 2px 8px rgba(144, 164, 183, 0.85)',
       boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.35)',
-      border: '2px solid #FFF',
-      // border: '2px solid #556cd6',
       // scale: 1.1,
     },
   },
