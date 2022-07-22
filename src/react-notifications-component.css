@@ -21,17 +21,24 @@
 
 .notification__item--info {
   background: #556CD6;
-  background: linear-gradient(90deg, rgba(85,108,214,1) 0%, rgba(255,170,80,1) 100%);
-  border-left: 8px solid #1C2F8B !important;
+  /*
+    background: linear-gradient(90deg, rgba(85,108,214,1) 0%, rgba(255,170,80,1) 100%);
+    border-left: 8px solid #1C2F8B !important;
+  */
+  background: linear-gradient(to right top, #00bbff, #00b0ff, #00a5ff, #0099ff, #008cff);
+  border-left: 8px solid #008cff !important;
   /* light: 69A8E2 */
 }
 
 .notification__item--success {
   /* background-color: #57cc99 !important; */
   background: rgb(56,163,165);
+  /*
   background: linear-gradient(90deg, rgba(56,163,165,1) 0%, rgba(34,87,122,1) 100%);
   border-left: 8px solid rgba(34,87,122,1) !important;
-  /* light: 9BDEAA */
+  */
+  background-image: linear-gradient(to right top, #71faca, #59e5ae, #42d092, #28bb76, #00a65a);
+  border-left: 8px solid #00a65a !important;
 }
 
 .notification__item--warning {

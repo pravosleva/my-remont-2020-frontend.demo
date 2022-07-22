@@ -9,8 +9,8 @@ import green from '@material-ui/core/colors/green'
 export const defaultTheme = {
   palette: {
     primary: {
-      light: '#757ce8',
-      main: '#22577a',
+      // light: '#757ce8',
+      main: '#008cff',
       // dark: '#002884',
       contrastText: '#fff',
     },

@@ -17,6 +17,7 @@ import clsx from 'clsx'
 import CloseIcon from '@material-ui/icons/Close'
 import { httpClient } from '~/utils/httpClient'
 import { ResponsiveBlock } from '~/common/mui/ResponsiveBlock'
+import Alert from '@material-ui/lab/Alert'
 
 // const apiUrl = getApiUrl()
 // const isDev = process.env.NODE_ENV === 'development'
@@ -376,7 +377,10 @@ export const TheProject = () => {
               </Grid>
             )}
             {!!isOwner && (
-              <Grid item xs={12}>
+              <Grid item xs={12} style={{
+                display: 'flex',
+                justifyContent: 'center',
+              }}>
                 <Button
                   onClick={handleCreateJob}
                   size="small"
@@ -396,6 +400,15 @@ export const TheProject = () => {
                 />
               </Grid>
             )}
+            <Grid item xs={12}>
+              <Alert
+                color='info'
+                variant='filled'
+                severity='info'
+              >
+                Здесь могла быть Ваша реклама
+              </Alert>
+            </Grid>
           </Grid>
         </Grid>
         <Grid item xs={12} md={6}>

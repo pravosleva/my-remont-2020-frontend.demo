@@ -585,7 +585,7 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                           onClick={handleOpenEditor(data._id)}
                           endIcon={<EditIcon />}
                         >
-                          Бабки
+                          Расходы
                         </Button>
                       </AccordionActions>
                     </>
@@ -625,11 +625,11 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                         }}
                       />
                     </DialogContent>
-                    <DialogActions>
+                    <DialogActions className={classes.dialogActionsWrapper}>
                       <Button
                         onClick={handleCloseMarkdownEditor}
                         size="small"
-                        variant="outlined"
+                        variant="contained"
                         color="secondary"
                         disabled={isLoading}
                       >
@@ -638,7 +638,7 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                       <Button
                         onClick={handleSubmit}
                         // variant="contained"
-                        variant="outlined"
+                        variant="contained"
                         color="primary"
                         size="small"
                         disabled={isLoading}
@@ -687,7 +687,7 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                           "id": "5f7901e014e0008700d02545"
                         }
                       */}
-                      <Grid container direction="column" spacing={2} className={classes.inputsBox}>
+                      <Grid container direction="row" spacing={2} className={classes.inputsBox}>
                         <Grid item xs={12}>
                           <TextField
                             id={`name_${data._id}`}
@@ -703,10 +703,10 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                             disabled={isLoading}
                           />
                         </Grid>
-                        <Grid item xs={12}>
+                        <Grid item xs={6} sm={8}>
                           <TextField
                             id={`priceJobs_${data._id}`}
-                            label="Ценник за работу"
+                            label="Работа"
                             type="number"
                             variant="outlined"
                             value={data.priceJobs}
@@ -719,33 +719,36 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                             // disabled={isLoading}
                           />
                         </Grid>
-                        <Grid item className={classes.buttonsWrapper}>
+                        <Grid item xs={3} sm={2} className={classes.buttonsWrapper}>
                           <Button
+                            fullWidth
                             size="small"
                             variant="outlined"
                             onClick={handleAddPriceJobs(data._id, data.priceJobs)}
                             // endIcon={<EditIcon />}
                             disabled={isLoading}
-                            className='rounded-3'
                           >
                             <Icon path={mdiPlus} size={0.8} />
                           </Button>
+                        </Grid>
+                        <Grid item xs={3} sm={2} className={classes.buttonsWrapper}>
                           <Button
+                            fullWidth
                             size="small"
                             variant="outlined"
                             onClick={handleRemovePriceJobs(data._id, data.priceJobs)}
                             // endIcon={<EditIcon />}
                             disabled={isLoading}
-                            className='rounded-3'
                             color='secondary'
                           >
                             <Icon path={mdiMinus} size={0.8} />
                           </Button>
                         </Grid>
-                        <Grid item xs={12}>
+
+                        <Grid item xs={6} sm={8}>
                           <TextField
                             id={`priceMaterials_${data._id}`}
-                            label="Ценник за материалы"
+                            label="Материалы"
                             type="number"
                             variant="outlined"
                             value={data.priceMaterials}
@@ -758,8 +761,9 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                             // disabled={isLoading}
                           />
                         </Grid>
-                        <Grid item className={classes.buttonsWrapper}>
+                        <Grid item xs={3} sm={2} className={classes.buttonsWrapper}>
                           <Button
+                            fullWidth
                             size="small"
                             variant="outlined"
                             onClick={handleAddPriceMaterials(data._id, data.priceMaterials)}
@@ -769,7 +773,10 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                           >
                             <Icon path={mdiPlus} size={0.8} />
                           </Button>
+                        </Grid>
+                        <Grid item xs={3} sm={2} className={classes.buttonsWrapper}>
                           <Button
+                            fullWidth
                             size="small"
                             variant="outlined"
                             onClick={handleRemovePriceMaterials(data._id, data.priceMaterials)}
@@ -781,10 +788,11 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                             <Icon path={mdiMinus} size={0.8} />
                           </Button>
                         </Grid>
-                        <Grid item xs={12}>
+
+                        <Grid item xs={6} sm={8}>
                           <TextField
                             id={`priceDelivery_${data._id}`}
-                            label="Ценник за доставку"
+                            label="Доставка"
                             type="number"
                             variant="outlined"
                             value={data.priceDelivery}
@@ -797,8 +805,9 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                             // disabled={isLoading}
                           />
                         </Grid>
-                        <Grid item className={classes.buttonsWrapper}>
+                        <Grid item xs={3} sm={2} className={classes.buttonsWrapper}>
                           <Button
+                            fullWidth
                             size="small"
                             variant="outlined"
                             onClick={handleAddPriceDelivery(data._id, data.priceDelivery)}
@@ -808,7 +817,10 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                           >
                             <Icon path={mdiPlus} size={0.8} />
                           </Button>
+                        </Grid>
+                        <Grid item xs={3} sm={2} className={classes.buttonsWrapper}>
                           <Button
+                            fullWidth
                             size="small"
                             variant="outlined"
                             onClick={handleRemovePriceDelivery(data._id, data.priceDelivery)}
@@ -820,7 +832,8 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                             <Icon path={mdiMinus} size={0.8} />
                           </Button>
                         </Grid>
-                        <Grid item>
+
+                        <Grid item xs={6} sm={8}>
                           <TextField
                             id={`payed_${data._id}`}
                             label="Оплачено"
@@ -836,8 +849,9 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                             // disabled={isLoading}
                           />
                         </Grid>
-                        <Grid item className={classes.buttonsWrapper}>
+                        <Grid item xs={3} sm={2} className={classes.buttonsWrapper}>
                           <Button
+                            fullWidth
                             disabled={isLoading}
                             size="small"
                             variant="outlined"
@@ -847,7 +861,10 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                           >
                             <Icon path={mdiPlus} size={0.8} />
                           </Button>
+                        </Grid>
+                        <Grid item xs={3} sm={2} className={classes.buttonsWrapper}>
                           <Button
+                            fullWidth
                             disabled={isLoading}
                             size="small"
                             variant="outlined"
@@ -859,6 +876,7 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                             <Icon path={mdiMinus} size={0.8} />
                           </Button>
                         </Grid>
+
                         <div className={classes.checkboxWrapper}>
                           <FormControl component="fieldset" className={classes.formControl}>
                             <FormGroup>
@@ -935,6 +953,8 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                       <h4
                         style={{
                           marginRight: 'auto',
+                          marginTop: 0,
+                          marginBottom: 0,
                         }}
                         className={clsx({
                           [classes.dangerText]: data.payed - (data.priceMaterials + data.priceJobs + data.priceDelivery) < 0,

@@ -87,11 +87,14 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     buttonsWrapper: {
       // border: '1px dashed red',
-      marginLeft: 'auto',
-      '& > *': { marginBottom: theme.spacing(1), },
+      // marginLeft: 'auto',
+      '& > *': { marginBottom: 0, },
       '& > *:not(:last-child)': {
         marginRight: theme.spacing(1),
       },
+
+      display: 'flex',
+      alignItems: 'center',
     },
     dialogActionsWrapper: {
       marginLeft: theme.spacing(2),

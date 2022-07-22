@@ -67,6 +67,7 @@ export const useBaseStyles = makeStyles((theme) => ({
 
   standardJobInternalBox: {
     // Etc.
+    // border: '1px solid red',
   },
   fixedPreloader: {
     zIndex: 2,

@@ -15,6 +15,7 @@ import { useStyles } from './styles'
 import SaveIcon from '@material-ui/icons/Save'
 import Slide from '@material-ui/core/Slide'
 import { useWindowSize } from 'react-use'
+import { useStyles as useSpecialClasses } from '~/pages/projects/[id]/components/Joblist/styles'
 
 const TransitionUp = React.forwardRef(function Transition(props, ref) {
   // @ts-ignore
@@ -43,6 +44,7 @@ export const CreateNewJob = ({
 }) => {
   const classes = useStyles()
   const { width } = useWindowSize()
+  const specialСlasses = useSpecialClasses()
 
   return (
     <Dialog
@@ -96,7 +98,7 @@ export const CreateNewJob = ({
           </Grid>
         </Container>
       </DialogContent>
-      <DialogActions>
+      <DialogActions className={specialСlasses.dialogActionsWrapper}>
         <Button onClick={onClose} size="small" variant="contained" color="secondary" disabled={isLoading}>
           Отмена
         </Button>

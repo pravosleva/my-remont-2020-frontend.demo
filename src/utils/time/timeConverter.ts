@@ -1,6 +1,6 @@
 //See also: https://github.com/pravosleva/pravosleva-blog-frontend-nextjs/blob/master/utils/timeConverter.js
 
-// 09.11.2020 в 18:15
+// 18:15
 const getHoursMinutesBySeconds = (date: string) => {
   // const dt = new Date(sec * 10 ** 3)
   const dt = new Date(date)
@@ -9,6 +9,8 @@ const getHoursMinutesBySeconds = (date: string) => {
 
   return `${hr}:${min}`
 }
+
+// 09.11.2020 в 18:15
 export const formatDateBySeconds2 = (date: string) => {
   // const dt = new Date(sec * 10 ** 3)
   const dt = new Date(date)
@@ -19,6 +21,8 @@ export const formatDateBySeconds2 = (date: string) => {
 
   return `${dateIndex}.${monthNames[monthIndex]}.${year} в ${getHoursMinutesBySeconds(date)}`
 }
+
+// 09.11.2020 18:15
 export const formatDateBySeconds3 = (date: string) => {
   // const dt = new Date(sec * 10 ** 3)
   const dt = new Date(date)

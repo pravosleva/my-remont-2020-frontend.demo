@@ -1,5 +1,7 @@
 import { IJob } from '~/common/context/MainContext'
+import { formatDateBySeconds3 } from '../time/timeConverter'
 import { JobsLogic } from './JobsLogic'
+
 
 export class RemontLogic extends Object {
   remont: any | null
@@ -14,6 +16,12 @@ export class RemontLogic extends Object {
   }
   get name() {
     return this.remont?.name || null
+  }
+  get lastUpdate(): string | null {
+    return this.remont?.updatedAt || null
+  }
+  get lastUpdateReadable(): string | null {
+    return !!this.remont?.updatedAt ? formatDateBySeconds3(this.remont?.updatedAt) : null
   }
   get joblist() {
     return this.remont?.joblist || []
