@@ -112,6 +112,7 @@ export const GlobalCss = withStyles((theme) => ({
       lineHeight: 1.6,
       position: 'relative',
       background: '#ededed',
+      quotes: '"“" "’" "“" "”" "“" "’" "“" "”"',
       '&::before': {
         fontFamily: 'Arial',
         content: 'open-quote',
