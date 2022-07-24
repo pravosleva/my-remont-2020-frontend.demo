@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { Button, Container, CircularProgress } from '@material-ui/core'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 // import { NavLink } from 'react-router-dom'
@@ -21,6 +21,8 @@ export const SiteHeader = () => {
       router.push('/auth/login')
     })
   }, [logout, history])
+  const { userData } = useUserAuthContext()
+  const username = useMemo(() => userData?.username || 'Loading...', [userData?.username])
 
   return (
     <Container maxWidth="md">
@@ -77,7 +79,7 @@ export const SiteHeader = () => {
                 endIcon={<AccountCircleIcon />}
                 disabled={router.pathname === '/profile'}
               >
-                <span>Профиль</span>
+                <span>{username}</span>
               </Button>
               <Button
                 style={{ marginLeft: '10px' }}
