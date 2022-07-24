@@ -15,6 +15,7 @@ const baseNotif: Partial<IReactNotificationOptions> = {
 type TTypes = 'success' | 'danger' | 'warning' | 'default' | 'info'
 
 const addNotif = (props: Partial<IReactNotificationOptions>, type: TTypes): void => {
+  if (!window || !document || document?.hidden) return
   // @ts-ignore
   store.addNotification({
     ...baseNotif,
