@@ -26,6 +26,7 @@ export const useStyles = makeStyles((theme: Theme) =>
     circularProgressCentered: {
       display: 'flex',
       justifyContent: 'center',
+      marginBottom: theme.spacing(2),
     },
 
     // Widget:

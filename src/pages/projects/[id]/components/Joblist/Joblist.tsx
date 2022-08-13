@@ -496,7 +496,7 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
             </div>
           )}
           {displayedJoblist.map((data, i) => {
-            const isGood = data.payed - (data.priceMaterials + data.priceJobs) > 0
+            const isGood = data.payed - (data.priceMaterials + data.priceJobs + data.priceDelivery) > 0
             return (
               <React.Fragment key={data._id}>
                 <Accordion
@@ -521,16 +521,16 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
                       <div
                         className={clsx({
                           [classes.greyText]: !data.isStarted,
-                          [classes.dangerText]: data.isStarted && data.payed - (data.priceMaterials + data.priceJobs) < 0,
+                          [classes.dangerText]: data.isStarted && data.payed - (data.priceMaterials + data.priceJobs + data.priceDelivery) < 0,
                           [classes.defaultText]:
-                            data.isStarted && data.payed - (data.priceMaterials + data.priceJobs) >= 0,
+                            data.isStarted && data.payed - (data.priceMaterials + data.priceJobs + data.priceDelivery) >= 0,
                         })}
                       >
-                        {data.payed - (data.priceMaterials + data.priceJobs) !== 0 && (
+                        {data.payed - (data.priceMaterials + data.priceJobs + data.priceDelivery) !== 0 && (
                           <>
                             {/* <span style={{ marginRight: '8px' }}>⚙️</span> */}
                             {/* <span className="price">({getPrettyPrice(getDifference(data))})</span> */}
-                            {data.isStarted && !data.isDone && (
+                            {data.isStarted && !data.isDone && !!getDifference(data) && (
                               <Chip
                                 size='small'
                                 label={`${isGood ? '+' : ''}${getPrettyPrice(getDifference(data))}`}
