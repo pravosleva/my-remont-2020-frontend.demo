@@ -5,6 +5,7 @@ import { HttpError } from '~/utils/errors/http/HttpError'
 import { httpErrorHandler } from '~/utils/errors/http/axios'
 import { IJob } from '~/common/context/MainContext'
 import { TFile } from '~/utils/strapi/files'
+import axiosRetry from 'axios-retry'
 
 const CancelToken = axios.CancelToken
 
@@ -16,6 +17,7 @@ class HttpClientSingletone {
   getRemontController: FetcherController
   putRemontController: FetcherController
   uploadFilesController: FetcherController
+  api: any
   // deleteFileController: FetcherController;
 
   constructor() {
@@ -23,6 +25,8 @@ class HttpClientSingletone {
       throw new Error('Instantiation failed: use HttpClientSingletone.getInstance() instead of new.')
     }
     this.apiUrl = getApiUrl()
+    this.api = axios.create({ baseURL: this.apiUrl })
+    axiosRetry(this.api, { retries: 10 })
     this.getMeController = null
     this.getRemontController = null
     this.putRemontController = null
@@ -98,9 +102,9 @@ class HttpClientSingletone {
       }
     }
 
-    const response = await axios({
+    const response = await this.api({
       method: 'GET',
-      url: `${this.apiUrl}/users/me`,
+      url: '/users/me',
       headers,
       cancelToken: this.getMeController.token,
       validateStatus: (status) => status >= 200 && status < 500,

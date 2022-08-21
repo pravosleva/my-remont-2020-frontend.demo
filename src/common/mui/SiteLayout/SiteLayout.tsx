@@ -24,7 +24,7 @@ import Headroom from 'react-headroom'
 import { Footer } from './components/Footer'
 import { FixedScrollTopButton } from './components/FixedScrollTopButton'
 import { httpClient } from '~/utils/httpClient'
-import axiosRetry from 'axios-retry'
+
 // import { useRouter } from '~/common/hooks'
 // import { getNormalizedUserDataResponse } from '~/utils/strapi/getNormalizedUserDataResponse'
 import { UserAuthContextProvider } from '~/common/context/UserAuthContext'
@@ -33,9 +33,7 @@ import {
   // useBaseStyles,
 } from '~/common/mui/baseStyles'
 import clsx from 'clsx'
-import { RemontLogic } from '~/utils/logic'
-
-axiosRetry(axios, { retries: 5 })
+// import { RemontLogic } from '~/utils/logic'
 
 const apiUrl = getApiUrl()
 // const isDev = process.env.NODE_ENV === 'development'
