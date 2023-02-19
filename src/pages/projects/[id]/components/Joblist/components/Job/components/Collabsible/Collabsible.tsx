@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, memo } from 'react'
 import { useStyles } from './styles'
 import clsx from 'clsx'
 import Icon from '@mdi/react'
@@ -10,7 +10,7 @@ interface IProps {
   isOpenedByDefault?: boolean
 }
 
-export const Collabsible = ({ title, contentRenderer, isOpenedByDefault }: IProps): any => {
+const _Collabsible = ({ title, contentRenderer, isOpenedByDefault }: IProps): any => {
   const classes = useStyles()
   const [isOpened, setIsOpened] = useState<boolean>(isOpenedByDefault || false)
   const handleToggle = () => {
@@ -29,3 +29,5 @@ export const Collabsible = ({ title, contentRenderer, isOpenedByDefault }: IProp
     </div>
   )
 }
+
+export const Collabsible = memo(_Collabsible)

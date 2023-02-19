@@ -1,31 +1,32 @@
 export function getPrettyPrice(price: number): string {
-  let result: any = Math.round(+price * 100) / 100
-  var parts = price.toString().split('.')
-  result = parts[0]
+  // let result: any = Math.round(+price * 100) / 100
+  // var parts = price.toString().split('.')
+  // result = parts[0]
 
-  let tmp = ''
-  let len = result.length
+  // let tmp = ''
+  // let len = result.length
 
-  for (var i = 0; i < len; ++i) {
-    if (i > 0 && i % 3 === 0) {
-      tmp += ' '
-    }
+  // for (var i = 0; i < len; ++i) {
+  //   if (i > 0 && i % 3 === 0) {
+  //     tmp += ' '
+  //   }
 
-    tmp += result[len - 1 - i]
-  }
+  //   tmp += result[len - 1 - i]
+  // }
 
-  len = tmp.length
-  let out = ''
+  // len = tmp.length
+  // let out = ''
 
-  for (i = 0; i < len; ++i) {
-    out += tmp[len - 1 - i]
-  }
+  // for (i = 0; i < len; ++i) {
+  //   out += tmp[len - 1 - i]
+  // }
 
-  parts[0] = out
+  // parts[0] = out
 
-  if (parts.length > 1 && parts[1].length == 1) {
-    parts[1] += '0'
-  }
+  // if (parts.length > 1 && parts[1].length == 1) {
+  //   parts[1] += '0'
+  // }
 
-  return parts.join('.')
+  // return parts.join('.')
+  return new Intl.NumberFormat().format(price)
 }

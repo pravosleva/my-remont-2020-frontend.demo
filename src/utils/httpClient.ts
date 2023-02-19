@@ -6,10 +6,14 @@ import { httpErrorHandler } from '~/utils/errors/http/axios'
 import { IJob } from '~/common/context/MainContext'
 import { TFile } from '~/utils/strapi/files'
 import axiosRetry from 'axios-retry'
+import { groupLog } from '~/utils/groupLog'
 
 const CancelToken = axios.CancelToken
 
 type TCbOpts = { on401?: (msg: string) => void }
+
+let interceptorCount = 0
+
 class HttpClientSingletone {
   static _instance = new HttpClientSingletone()
   apiUrl: string
@@ -26,6 +30,16 @@ class HttpClientSingletone {
     }
     this.apiUrl = getApiUrl()
     this.api = axios.create({ baseURL: this.apiUrl })
+    // NOTE: See also about axios interceptors https://axios-http.com/docs/interceptors
+    this.api.interceptors.response.use(function(config) {
+      interceptorCount += 1
+
+      groupLog({
+        spaceName: `API interceptor: ${interceptorCount}`,
+        items: [interceptorCount, config]
+      })
+      return config
+    })
     axiosRetry(this.api, { retries: 10 })
     this.getMeController = null
     this.getRemontController = null

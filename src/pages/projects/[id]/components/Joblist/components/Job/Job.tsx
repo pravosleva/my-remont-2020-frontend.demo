@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect, useState, useCallback } from 'react'
+import React, { useMemo, useEffect, useState, useCallback, memo } from 'react'
 import { IJob } from '~/common/context/MainContext'
 import { useStyles } from './styles'
 import { Button, CircularProgress, Typography } from '@material-ui/core'
@@ -48,7 +48,7 @@ interface IProps {
   remontId: string
 }
 
-export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IProps) => {
+const _Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IProps) => {
   const baseClasses = useBaseStyles()
   const { remontLogic, changeJobFieldPromise, jobsLogic } = useMainContext()
   const { toast } = useCustomToastContext()
@@ -695,3 +695,5 @@ export const Job = ({ remontId, data, onSetDates, isLoading, setIsLoading }: IPr
     </LocalizationProvider>
   )
 }
+
+export const Job = memo(_Job)

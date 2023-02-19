@@ -1,4 +1,4 @@
-import React, { useMemo, useContext } from 'react'
+import React, { useMemo, useContext, memo } from 'react'
 import { useStyles } from './styles'
 import { Paper, Typography } from '@material-ui/core'
 import { getPrettyPrice } from '~/utils/getPrettyPrice'
@@ -8,7 +8,7 @@ import { MainContext } from '~/common/context/MainContext'
 import CountUp from 'react-countup'
 import { Collabsible } from '~/pages/projects/[id]/components/Joblist/components/Job/components/Collabsible'
 
-export const TotalInfo = () => {
+const _TotalInfo = () => {
   const { jobsLogic, remontLogic } = useContext(MainContext)
   const classes = useStyles()
   const totalPriceJobs = useMemo(() => jobsLogic?.totalPriceJobs || 0, [jobsLogic])
@@ -75,3 +75,5 @@ export const TotalInfo = () => {
     </Paper>
   )
 }
+
+export const TotalInfo = memo(_TotalInfo)

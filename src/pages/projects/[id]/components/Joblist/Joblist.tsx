@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect, useMemo } from 'react'
+import React, { useCallback, useState, useEffect, useMemo, memo } from 'react'
 import { Job } from './components/Job'
 import { IJob } from '~/common/context/MainContext'
 import { IProps } from './interfaces'
@@ -88,7 +88,7 @@ const getUniqueKey = (data: IJob): string => {
   return `${data._id}_${data.payed}_${data.priceDelivery}_${data.priceJobs}_${data.priceMaterials}`
 }
 
-export const Joblist = ({ remontId, removeJob }: IProps) => {
+const _Joblist = ({ remontId, removeJob }: IProps) => {
   const classes = useStyles()
   const baseClasses = useBaseStyles()
   const {
@@ -1000,3 +1000,5 @@ export const Joblist = ({ remontId, removeJob }: IProps) => {
     </>
   )
 }
+
+export const Joblist = memo(_Joblist)

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, memo } from 'react'
 import { Button, CircularProgress } from '@material-ui/core'
 import SaveIcon from '@material-ui/icons/Save'
 
@@ -7,7 +7,7 @@ interface IProps {
   isLoading: boolean
 }
 
-export const AssignBtn = ({ click, isLoading }: IProps) => {
+const _AssignBtn = ({ click, isLoading }: IProps) => {
   const ref = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
@@ -37,3 +37,5 @@ export const AssignBtn = ({ click, isLoading }: IProps) => {
     </>
   )
 }
+
+export const AssignBtn = memo(_AssignBtn)

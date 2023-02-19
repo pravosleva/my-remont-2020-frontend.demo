@@ -5,7 +5,7 @@ export const useStyles = makeStyles((theme) => ({
   titleBox: {
     cursor: 'pointer',
     '&:hover': {
-      color: '#3882C4',
+      color: '#008cff',
     },
 
     display: 'flex',

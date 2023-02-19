@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import {
   Grid,
   Button,
@@ -28,7 +28,7 @@ const TransitionUp = React.forwardRef(function Transition(props, ref) {
 //   return <Slide direction="left" ref={ref} {...props} />;
 // });
 
-export const CreateNewJob = ({
+const _CreateNewJob = ({
   isOpened,
   name,
   comment,
@@ -119,3 +119,5 @@ export const CreateNewJob = ({
     </Dialog>
   )
 }
+
+export const CreateNewJob = memo(_CreateNewJob)
