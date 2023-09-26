@@ -5,6 +5,10 @@ import grey from '@material-ui/core/colors/grey'
 
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
+    title: {
+      fontWeight: 'bold',
+      fontSize: '16px',
+    },
     truncate: {
       '& > h2': {
         whiteSpace: 'nowrap',

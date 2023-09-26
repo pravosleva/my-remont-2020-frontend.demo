@@ -519,7 +519,7 @@ const _Joblist = ({ remontId, removeJob }: IProps) => {
                   >
                     {
                       <div
-                        className={clsx({
+                        className={clsx(classes.title, {
                           [classes.greyText]: !data.isStarted,
                           [classes.dangerText]: data.isStarted && data.payed - (data.priceMaterials + data.priceJobs + data.priceDelivery) < 0,
                           [classes.defaultText]:
