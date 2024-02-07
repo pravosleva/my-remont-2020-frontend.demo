@@ -8,6 +8,14 @@ export const useStyles = makeStyles((theme: Theme) =>
     title: {
       fontWeight: 'bold',
       fontSize: '16px',
+
+      // display: 'flex',
+      // gap: '8px',
+      // flexWrap: 'wrap',
+
+      '& > *:not(:first-child)': {
+        marginLeft: '8px',
+      },
     },
     truncate: {
       '& > h2': {

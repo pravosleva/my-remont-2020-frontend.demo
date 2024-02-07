@@ -8,6 +8,7 @@ import { Container } from '@material-ui/core'
 import { useStyles } from './styles'
 // import clsx from 'clsx'
 import { useWindowSize } from '~/common/hooks'
+import clsx from 'clsx'
 
 export const BreadCrumbs = () => {
   const classes = useStyles()
@@ -20,10 +21,11 @@ export const BreadCrumbs = () => {
   } = router
   const { isDesktop } = useWindowSize()
   const displayedName = useMemo(() => {
-    if (!remontLogic?.name) return null
-    if (isDesktop) return remontLogic.name
+    return remontLogic?.name || null
+    // if (!remontLogic?.name) return null
+    // if (isDesktop) return remontLogic.name
 
-    return remontLogic.name.length <= 15 ? remontLogic.name : `${remontLogic.name.slice(0, 15)}...`
+    // return remontLogic.name.length <= 15 ? remontLogic.name : `${remontLogic.name.slice(0, 15)}...`
   }, [remontLogic?.name, isDesktop])
 
   return (
@@ -46,7 +48,7 @@ export const BreadCrumbs = () => {
           </div>
         )}
         {pathname.includes('/projects/') && pathname.length > 10 && (
-          <div className={classes.rightSide}>
+          <div className={clsx(classes.rightSide, 'truncate')}>
             <Link to="/">Главная</Link>
             <span className={classes.muted}>/</span>
             <Link to="/projects">Проекты</Link>

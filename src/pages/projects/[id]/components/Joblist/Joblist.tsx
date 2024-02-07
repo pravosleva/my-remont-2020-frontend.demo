@@ -526,7 +526,7 @@ const _Joblist = ({ remontId, removeJob }: IProps) => {
                             data.isStarted && data.payed - (data.priceMaterials + data.priceJobs + data.priceDelivery) >= 0,
                         })}
                       >
-                        {data.payed - (data.priceMaterials + data.priceJobs + data.priceDelivery) !== 0 && (
+                        {(data.payed - (data.priceMaterials + data.priceJobs + data.priceDelivery) !== 0) ? (
                           <>
                             {/* <span style={{ marginRight: '8px' }}>⚙️</span> */}
                             {/* <span className="price">({getPrettyPrice(getDifference(data))})</span> */}
@@ -538,10 +538,17 @@ const _Joblist = ({ remontId, removeJob }: IProps) => {
                                 className={clsx(classes.price, { [classes.redChip]: !isGood, 'custom-success': isGood })}
                               />
                             )}
-                            &nbsp;&nbsp;
+                            {/* &nbsp;&nbsp; */}
                           </>
+                        ) : !!data.payed && (
+                          <Chip
+                            size='small'
+                            label={getPrettyPrice(data.payed)}
+                            color='default'
+                          />
                         )}
-                        {data.name}
+                        {data.isStarted && !data.isDone && <span>🔥</span>}
+                        <span>{data.name}</span>
                       </div>
                     }
                   </AccordionSummary>
